@@ -105,6 +105,41 @@ class GreyCat:
         def write_f64(self, f: c_double) -> None:
             self.write_i64(c_int64(unpack('q', pack('d', c_double.value))))
 
+        def write_object(self, o: object) -> None:
+            if o is None:
+                self.write_i8(GreyCat.PrimitiveType.NULL)
+            elif o is bool:
+                self.write_i8(GreyCat.PrimitiveType.BOOL)
+                self.write_bool(o)
+            elif o is c_char:
+                c: c_char = o
+                self.write_i8(GreyCat.PrimitiveType.CHAR)
+                self.write_i8(c_byte(c.value[0]))
+            elif o is int:
+                self.write_i8(GreyCat.PrimitiveType.Integer)
+                self.write_i64(c_int64(o))
+            elif o is float:
+                self.write_i8(GreyCat.PrimitiveType.FLOAT)
+                self.write_f64(c_double(o))
+            elif o is str:
+                string: str = o
+                symbolOffset: int = self.greycat.__symbols_off_by_value[string]
+                if symbolOffset is not None:
+                    self.write_i8(GreyCat.PrimitiveType.STRING_LIT)
+                    self.write_i32(c_int32(symbolOffset))
+                else:
+                    self.write_i8(GreyCat.PrimitiveType.OBJECT)
+                    self.write_i32(
+                        c_int32(self.greycat.type_offset_core_string))
+                    self.write_i32(c_int32(len(string)))
+                    data = string.encode('utf-8')
+                    self.write_i8_array(data, 0, len(data))
+            elif o is GreyCat.Object:
+                gco: GreyCat.Object = o
+                gco.save(self)
+            else:
+                raise ValueError('wrong state')
+
         def close(self) -> None:
             self.__io.close()
 
@@ -271,7 +306,10 @@ class GreyCat:
                 self.loader = GreyCat.Type.object_loader
 
     class Object:
-        def __init__(self, type: GreyCat.Type, attributes: list[object]):
+        type: GreyCat.Type
+        attributes: list[object] | None
+
+        def __init__(self, type: GreyCat.Type, attributes: list[object] | None):
             self.type = type
             self.attributes = attributes
 
@@ -281,7 +319,12 @@ class GreyCat:
         def set(self, attributeName: str, value: object) -> None:
             self.attributes[self.type.attribute_off_by_name[attributeName]] = value
 
-        # TODO
+        def save(self, stream: GreyCat.Stream) -> None:
+            stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+            stream.write_i32(self.type.offset)
+            if self.attributes is not None:
+                for offset in len(self.attributes):
+                    stream.write_object(self.attributes[offset])
 
     class Enum(Object):
         def __init__(self, type: GreyCat.Type, attributes: list[object]):
@@ -294,8 +337,6 @@ class GreyCat:
             stream.write_i8(GreyCat.PrimitiveType.ENUM)
             stream.write_i32(self.type.offset)
             stream.write_i32(self.__offset)
-
-        # TODO
 
     class Library:
         def __init__(self):
