@@ -32,12 +32,12 @@ class std_n:
                 return array
 
         class Date(GreyCat.Object):
-            localizedEpochS: c_int64
-            epochUs: c_int64
-            timeZone: c_int32
 
             def __init__(self: std_n.core.Date, type: GreyCat.Type) -> None:
                 super(type, None)
+                self.localizedEpochS: c_int64
+                self.epochUs: c_int64
+                self.timeZone: c_int32
 
             def save(self: std_n.core.Date, stream: GreyCat.Stream) -> None:
                 stream.write_i8(GreyCat.PrimitiveType.OBJECT)
@@ -55,10 +55,9 @@ class std_n:
                 return res
 
         class duration(GreyCat.Object):
-            value: c_int64
-
             def __init__(self: std_n.core.duration, type: GreyCat.Type) -> None:
                 super(type, None)
+                self.value: c_int64
 
             def save(self: std_n.core.duration, stream: GreyCat.Stream) -> None:
                 stream.write_i8(GreyCat.PrimitiveType.DURATION)
@@ -71,13 +70,12 @@ class std_n:
                 return res
 
         class Error(GreyCat.Object):
-            code: c_int32
-            frames: list[std_n.core.Error.Frame]
-            msg: str
-            value: object
-
             def __init__(self: std_n.core.Error, type: GreyCat.Type):
                 super(type, None)
+                self.code: c_int32
+                self.frames: list[std_n.core.Error.Frame]
+                self.msg: str
+                self.value: object
 
             def save(self: std_n.core.Error, stream: GreyCat.Stream) -> None:
                 stream.write_i8(GreyCat.PrimitiveType.OBJECT)
@@ -97,7 +95,7 @@ class std_n:
                 stream.write_object(self.value)
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream)->object:
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
                 code: c_int32 = stream.read_i32()
                 framesLen: c_int32 = stream.read_i32()
                 msgLen: c_int32 = stream.read_i32()
@@ -108,7 +106,8 @@ class std_n:
                     fnSymbol: c_int32 = stream.read_i32()
                     line: c_int32 = stream.read_i32()
                     column: c_int32 = stream.read_i32()
-                    frames[offset] = std_n.core.Error.Frame(modSymbol, typeSymbol, fnSymbol, line, column)
+                    frames[offset] = std_n.core.Error.Frame(
+                        modSymbol, typeSymbol, fnSymbol, line, column)
                 res: std_n.core.Error = type.factory(type)
                 res.code = code
                 res.frames = frames
@@ -117,15 +116,24 @@ class std_n:
                 return res
 
             class Frame:
-                modSymbol: c_int32
-                typeSymbol: c_int32
-                fnSymbol: c_int32
-                line: c_int32
-                column: c_int32
-
                 def __init__(self: std_n.core.Error.Frame, modSymbol: c_int32, typeSymbol: c_int32, fnSymbol: c_int32, line: c_int32, column: c_int32) -> None:
                     self.modSymbol = modSymbol
                     self.typeSymbol = typeSymbol
                     self.fnSymbol = fnSymbol
                     self.line = line
                     self.column = column
+
+        class geo(GreyCat.Object):
+            GC_CORE_GEO_LAT_EPS: c_double = c_double(0.00000001)
+            GC_CORE_GEO_LAT_MIN: c_double = c_double(-85.05112878)
+            GC_CORE_GEO_LAT_MAX: c_double = c_double(85.05112878)
+            GC_CORE_GEO_LNG_MIN: c_double = c_double(-180)
+            GC_CORE_GEO_LNG_MAX: c_double = c_double(180)
+
+            def __init__(self: std_n.core.geo, type: GreyCat.Type) -> None:
+                super(type, None)
+                self.geocode: c_int64
+                self.lat: c_double
+                self.lng: c_double
+            
+            # TODO

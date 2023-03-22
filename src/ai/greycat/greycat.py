@@ -108,22 +108,21 @@ class GreyCat:
         def write_object(self, o: object) -> None:
             if o is None:
                 self.write_i8(GreyCat.PrimitiveType.NULL)
-            elif o is bool:
+            elif type(o) is bool:
                 self.write_i8(GreyCat.PrimitiveType.BOOL)
                 self.write_bool(o)
-            elif o is c_char:
+            elif type(o) is c_char:
                 c: c_char = o
                 self.write_i8(GreyCat.PrimitiveType.CHAR)
                 self.write_i8(c_byte(c.value[0]))
-            elif o is int:
+            elif type(o) is int:
                 self.write_i8(GreyCat.PrimitiveType.Integer)
                 self.write_i64(c_int64(o))
-            elif o is float:
+            elif type(o) is float:
                 self.write_i8(GreyCat.PrimitiveType.FLOAT)
                 self.write_f64(c_double(o))
-            elif o is str:
-                string: str = o
-                symbolOffset: int = self.greycat.__symbols_off_by_value[string]
+            elif type(o) is str:
+                symbolOffset: int = self.greycat.__symbols_off_by_value[o]
                 if symbolOffset is not None:
                     self.write_i8(GreyCat.PrimitiveType.STRING_LIT)
                     self.write_i32(c_int32(symbolOffset))
@@ -131,12 +130,11 @@ class GreyCat:
                     self.write_i8(GreyCat.PrimitiveType.OBJECT)
                     self.write_i32(
                         c_int32(self.greycat.type_offset_core_string))
-                    self.write_i32(c_int32(len(string)))
-                    data = string.encode('utf-8')
+                    self.write_i32(c_int32(len(o)))
+                    data = o.encode('utf-8')
                     self.write_i8_array(data, 0, len(data))
-            elif o is GreyCat.Object:
-                gco: GreyCat.Object = o
-                gco.save(self)
+            elif type(o) is GreyCat.Object:
+                o.save(self)
             else:
                 raise ValueError('wrong state')
 
@@ -306,9 +304,6 @@ class GreyCat:
                 self.loader = GreyCat.Type.object_loader
 
     class Object:
-        type: GreyCat.Type
-        attributes: list[object] | None
-
         def __init__(self, type: GreyCat.Type, attributes: list[object] | None):
             self.type = type
             self.attributes = attributes
