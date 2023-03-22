@@ -124,16 +124,68 @@ class std_n:
                     self.column = column
 
         class geo(GreyCat.Object):
-            GC_CORE_GEO_LAT_EPS: c_double = c_double(0.00000001)
-            GC_CORE_GEO_LAT_MIN: c_double = c_double(-85.05112878)
-            GC_CORE_GEO_LAT_MAX: c_double = c_double(85.05112878)
-            GC_CORE_GEO_LNG_MIN: c_double = c_double(-180)
-            GC_CORE_GEO_LNG_MAX: c_double = c_double(180)
+            GC_CORE_GEO_LAT_EPS: float = 0.00000001
+            GC_CORE_GEO_LAT_MIN: float = -85.05112878
+            GC_CORE_GEO_LAT_MAX: float = 85.05112878
+            GC_CORE_GEO_LNG_MIN: float = -180
+            GC_CORE_GEO_LNG_MAX: float = 180
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                geo: std_n.core.geo = type.factory(type)
+                geocode: c_int64 = stream.read_i64()
+                geo.geocode = geocode
+                decoded: Tuple[int, int] = std_n.core.geo.deinterleave64(
+                    geocode.value)
+                geo.lat = std_n.core.geo.GC_CORE_GEO_LAT_MIN + ((decoded[0] + 0.5) / 4294967296.0) * (
+                    std_n.core.geo.GC_CORE_GEO_LAT_MAX + std_n.core.geo.GC_CORE_GEO_LAT_MIN)
+                geo.lng = std_n.core.geo.GC_CORE_GEO_LNG_MIN + ((decoded[1] + 0.5) / 4294967296.0) * (
+                    std_n.core.geo.GC_CORE_GEO_LNG_MAX + std_n.core.geo.GC_CORE_GEO_LNG_MIN)
+                return geo
+
+            def interleave64(xlo: int, ylo: int) -> int:
+                pass  # TODO
+
+            @staticmethod
+            def deinterleave64(interleaved: int) -> Tuple[int, int]:
+                pass  # TODO
 
             def __init__(self: std_n.core.geo, type: GreyCat.Type) -> None:
                 super(type, None)
                 self.geocode: c_int64
-                self.lat: c_double
-                self.lng: c_double
-            
-            # TODO
+                self.lat: float
+                self.lng: float
+
+            def save(self: std_n.core.geo, stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.GEO)
+                stream.write_i64(self.geocode)
+
+        class GeoPoly(GreyCat.Object):
+            type_name: str = 'core.GeoPoly'
+
+            def __init__(self: std_n.core.GeoPoly, type: GreyCat.Type) -> None:
+                super(type, None)
+
+            def save(self: std_n.core.GeoPoly, stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i32(self.type.offset)
+                if self.attributes is None:
+                    stream.write_i32(c_int32(0))
+                else:
+                    stream.write_i32(c_int32(len(self.attributes)))
+                    for offset in range(len(self.attributes)):
+                        point: std_n.core.geo = self.attributes[offset]
+                        stream.write_i64(point.geocode)
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream)->object:
+                size: int = stream.read_i32().value
+                geoType: GreyCat.Type = type.greycat.types[type.greycat.type_offset_core_geo]
+                points: list[std_n.core.geo] = [None] * size
+                for offset in range(size):
+                    points[offset] = std_n.core.geo(geoType)
+                    points[offset].geocode = stream.read_i64()
+                    # TODO: update
+                gp: std_n.core.GeoPoly = type.factory(type)
+                gp.attributes = points
+                return gp
