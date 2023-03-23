@@ -985,3 +985,31 @@ class std_n:
                 sw.toHead = toHead
                 sw.toTail = toTail
                 sw.values = values
+
+    class io:
+        class Directory(GreyCat.Object):
+            def __init__(self: std_n.io.Directory, type: GreyCat.Type) -> None:
+                super(type, None)
+                raise NotImplementedError
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                raise NotImplementedError
+
+        class File(GreyCat.Object):
+            def __init__(self: std_n.io.File, type: GreyCat.Type) -> None:
+                super(type, None)
+                raise NotImplementedError
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                raise NotImplementedError
+
+        class FileWriter(GreyCat.Object):
+            def __init__(self: std_n.io.FileWriter, type: GreyCat.Type) -> None:
+                super(type, None)
+                raise NotImplementedError
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                raise NotImplementedError
