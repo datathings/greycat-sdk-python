@@ -601,9 +601,9 @@ class std_n:
                 stream.write_i64(self.totalCount)
                 for offset in len(self.counts):
                     stream.write_i64(self.counts[offset])
-            
+
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream)->object:
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
                 realMin = stream.read_f64()
                 realMax = stream.read_f64()
                 min = stream.read_f64()
@@ -652,3 +652,336 @@ class std_n:
                 h.totalCount = totalCount
                 h.counts = counts
                 return h
+
+        class HistogramF64(GreyCat.Object):
+            def __init__(self: std_n.util.HistogramF64, type: GreyCat.Type) -> None:
+                super(type, None)
+                self.realMin: c_int64
+                self.realMax: c_int64
+                self.min: c_int64
+                self.max: c_int64
+                self.size: c_int64
+                self.nullCount: c_int64
+                self.maxRange: c_int64
+                self.sum: c_double
+                self.sumSq: c_double
+                self.unitMagnitude: c_int32
+                self.significantFigures: c_int32
+                self.subBucketHalfCountMagnitude: c_int32
+                self.subBucketHalfCount: c_int32
+                self.subBucketMask: c_int64
+                self.subBucketCount: c_int32
+                self.bucketCount: c_int32
+                self.minValue: c_int64
+                self.maxValue: c_int64
+                self.normalizingIndexOffset: c_int32
+                self.countsLen: c_int32
+                self.totalCount: c_int64
+                self.counts: list[c_int64]
+
+            def save(self: std_n.util.HistogramF64, stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i32(self.type.offset)
+                stream.write_i64(self.realMin)
+                stream.write_i64(self.realMax)
+                stream.write_i64(self.min)
+                stream.write_i64(self.max)
+                stream.write_i64(self.size)
+                stream.write_i64(self.nullCount)
+                stream.write_i64(self.maxRange)
+                stream.write_f64(self.sum)
+                stream.write_f64(self.sumSq)
+                stream.write_i32(self.unitMagnitude)
+                stream.write_i32(self.significantFigures)
+                stream.write_i32(self.subBucketHalfCountMagnitude)
+                stream.write_i32(self.subBucketHalfCount)
+                stream.write_i64(self.subBucketMask)
+                stream.write_i32(self.subBucketCount)
+                stream.write_i32(self.bucketCount)
+                stream.write_i64(self.minValue)
+                stream.write_i64(self.maxValue)
+                stream.write_i32(self.normalizingIndexOffset)
+                stream.write_i32(self.countsLen)
+                stream.write_i64(self.totalCount)
+                for offset in len(self.counts):
+                    stream.write_i64(self.counts[offset])
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                realMin = stream.read_i64()
+                realMax = stream.read_i64()
+                min = stream.read_i64()
+                max = stream.read_i64
+                size = stream.read_i64()
+                nullCount = stream.read_i64()
+                maxRange = stream.read_i64()
+                sum = stream.read_f64()
+                sumSq = stream.read_f64()
+                unitMagnitude = stream.read_i32()
+                significantFigures = stream.read_i32()
+                subBucketHalfCountMagnitude = stream.read_i32()
+                subBucketHalfCount = stream.read_i32()
+                subBucketMask = stream.read_i64()
+                subBucketCount = stream.read_i32()
+                bucketCount = stream.read_i32()
+                minValue = stream.read_i64()
+                maxValue = stream.read_i64()
+                normalizingIndexOffset = stream.read_i32()
+                countsLen = stream.read_i32()
+                totalCount = stream.read_i64()
+                counts = [None] * countsLen.value
+                for offset in range(countsLen.value):
+                    counts[offset] = stream.read_i64()
+                h: std_n.util.HistogramF64 = type.factory(type)
+                h.realMin = realMin
+                h.realMax = realMax
+                h.min = min
+                h.max = max
+                h.size = size
+                h.nullCount = nullCount
+                h.maxRange = maxRange
+                h.sum = sum
+                h.sumSq = sumSq
+                h.unitMagnitude = unitMagnitude
+                h.significantFigures = significantFigures
+                h.subBucketHalfCountMagnitude = subBucketHalfCountMagnitude
+                h.subBucketCount = subBucketHalfCount
+                h.subBucketMask = subBucketMask
+                h.subBucketCount = subBucketCount
+                h.bucketCount = bucketCount
+                h.minValue = minValue
+                h.maxValue = maxValue
+                h.normalizingIndexOffset = normalizingIndexOffset
+                h.countsLen = countsLen
+                h.totalCount = totalCount
+                h.counts = counts
+                return h
+
+        class ProgressTracker(GreyCat.Object):
+            def __init__(self: std_n.util.ProgressTracker, type: GreyCat.Type) -> None:
+                super(type, None)
+                self.initialTime: c_int64
+                self.lastTime: c_int64
+                self.previousTime: c_int64
+                self.previousSteps: c_int64
+                self.maxStep: c_int64
+                self.nbStep: c_int64
+                self.duration: c_int64
+                self.lapDuration: c_int64
+                self.totalSpeed: c_double
+                self.stepSpeed: c_double
+                self.progress: c_double
+                self.remainingTime: c_int64
+
+            def save(self: std_n.util.ProgressTracker, stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i32(self.type.offset)
+                stream.write_i64(self.initialTime)
+                stream.write_i64(self.lastTime)
+                stream.write_i64(self.previousTime)
+                stream.write_i64(self.previousSteps)
+                stream.write_i64(self.maxStep)
+                stream.write_i64(self.nbStep)
+                stream.write_i64(self.duration)
+                stream.write_i64(self.lapDuration)
+                stream.write_f64(self.totalSpeed)
+                stream.write_f64(self.stepSpeed)
+                stream.write_f64(self.progress)
+                stream.write_i64(self.remainingTime)
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                initialTime: c_int64 = stream.read_i64()
+                lastTime: c_int64 = stream.read_i64()
+                previousTime: c_int64 = stream.read_i64()
+                previousSteps: c_int64 = stream.read_i64()
+                maxStep: c_int64 = stream.read_i64()
+                nbStep: c_int64 = stream.read_i64()
+                duration: c_int64 = stream.read_i64()
+                lapDuration: c_int64 = stream.read_i64()
+                totalSpeed: c_double = stream.read_f64()
+                stepSpeed: c_double = stream.read_f64()
+                progress: c_double = stream.read_f64()
+                remainingTime: c_int64 = stream.read_i64()
+                pt: std_n.util.ProgressTracker = type.factory(type)
+                pt.initialTime = initialTime
+                pt.lastTime = lastTime
+                pt.previousTime = previousTime
+                pt.previousSteps = previousSteps
+                pt.maxStep = maxStep
+                pt.nbStep = nbStep
+                pt.duration = duration
+                pt.lapDuration = lapDuration
+                pt.totalSpeed = totalSpeed
+                pt.stepSpeed = stepSpeed
+                pt.progress = progress
+                pt.remainingTime = remainingTime
+                return pt
+
+        class Iban(GreyCat.Object):
+            def __init__(self: std_n.util.Iban, type: GreyCat.Type) -> None:
+                super(type, None)
+                self.infoOff: c_int32
+                self.data: bytes
+
+            def save(self: std_n.util.Iban, stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i32(self.type.offset)
+                stream.write_i32(self.infoOff)
+                stream.write_i32(c_int32(len(self.data)))
+                stream.write_i8_array(self.data, 0, len(self.data))
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                iban: std_n.util.Iban = type.factory(type)
+                iban.infoOff = stream.read_i32()
+                iban.data = stream.read_i8_array(stream.read_i32())
+                return iban
+
+        class Queue(Generic[T], GreyCat.Object):
+            def __init__(self: std_n.util.Queue[T], type: GreyCat.Type) -> None:
+                super(type, None)
+                self.__queue: list[T]
+
+            def save(self: std_n.util.Queue[T], stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i32(self.type.offset)
+                stream.write_i64(c_int64(self.size()))  # width
+                stream.write_i32(c_int32(self.size()))  # size
+                stream.write_i64(c_int32(self.size()))  # capacity
+                stream.write_i64(c_int64(self.size()))  # TODO: head - values
+                stream.write_i64(c_int64(0))  # TODO: tail - values
+                for t in self.__queue:
+                    stream.write_object(t)
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                stream.read_i64()  # width
+                size: int = stream.read_i32().value
+                capacity: int = stream.read_i32().value
+                queue: std_n.util.Queue[object] = type.factory(type)
+                for _ in range(size):
+                    queue.enqueue(stream.read())
+                for _ in range(size, capacity):
+                    stream.read()
+                return queue
+
+            def size(self: std_n.util.Queue[T]) -> int:
+                return len(self.__queue)
+
+            def enqueue(self: std_n.util.Queue[T], t: T) -> None:
+                self.__queue.append(t)
+
+            def dequeue(self: std_n.util.Queue[T]) -> T | None:
+                t: T = self.head()
+                if len(self.__queue) > 0:
+                    self.__queue = self.__queue[1:]
+                return t
+
+            def head(self: std_n.util.Queue[T]) -> T | None:
+                return self.__queue[0] if len(self.__queue) > 0 else None
+
+        class SlidingWindow(GreyCat.Object):
+            def __init__(self: std_n.util.SlidingWindow, type: GreyCat.Type) -> None:
+                super(type, None)
+                self.width: c_int64
+                self.sumType: c_byte
+                self.sum: c_double
+                self.sumSq: c_double
+                self.size: c_int32
+                self.capacity: c_int32
+                self.toHead: c_int64
+                self.toTail: c_int64
+                self.values: list[object]
+
+            def save(self: std_n.util.SlidingWindow, stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i32(self.type.offset)
+                stream.write_i64(self.width)
+                stream.write_i8(self.sumType)
+                stream.write_f64(self.sum)
+                stream.write_f64(self.sumSq)
+                stream.write_i32(self.size)
+                stream.write_i32(self.capacity)
+                stream.write_i64(self.toHead)
+                stream.write_i64(self.toTail)
+                for offset in range(len(self.values)):
+                    stream.write_object(self.values[offset])
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                width: c_int64 = stream.read_i64()
+                sumType: c_byte = stream.read_i8()
+                sum: c_double = stream.read_f64()
+                sumSq: c_double = stream.read_f64()
+                size: c_int32 = stream.read_i32()
+                capacity: c_int32 = stream.read_i32()
+                toHead: c_int64 = stream.read_i64()
+                toTail: c_int64 = stream.read_i64()
+                values: list[object] = [None] * capacity
+                for offset in range(capacity):
+                    values[offset] = stream.read()
+                sw: std_n.util.SlidingWindow = type.factory(type)
+                sw.width = width
+                sw.sumType = sumType
+                sw.sum = sum
+                sw.sumSq = sumSq
+                sw.size = size
+                sw.capacity = capacity
+                sw.toHead = toHead
+                sw.toTail = toTail
+                sw.values = values
+
+        class TimeWindow(GreyCat.Object):
+            def __init__(self: std_n.util.TimeWindow, type: GreyCat.Type) -> None:
+                super(type, None)
+                self.width: c_int64
+                self.sumType: c_byte
+                self.sum: c_double
+                self.sumSq: c_double
+                self.size: c_int32
+                self.capacity: c_int32
+                self.toHead: c_int64
+                self.toTail: c_int64
+                self.values: list[Tuple[object, c_int64]]
+
+            def save(self: std_n.util.TimeWindow, stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i32(self.type.offset)
+                stream.write_i64(self.width)
+                stream.write_i8(self.sumType)
+                stream.write_f64(self.sum)
+                stream.write_f64(self.sumSq)
+                stream.write_i32(self.size)
+                stream.write_i32(self.capacity)
+                stream.write_i64(self.toHead)
+                stream.write_i64(self.toTail)
+                for offset in range(len(self.values)):
+                    valueTime = self.values[offset]
+                    stream.write_object(valueTime[0])
+                    stream.write_i64(valueTime[1])
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                width: c_int64 = stream.read_i64()
+                sumType: c_byte = stream.read_i8()
+                sum: c_double = stream.read_f64()
+                sumSq: c_double = stream.read_f64()
+                size: c_int32 = stream.read_i32()
+                capacity: c_int32 = stream.read_i32()
+                toHead: c_int64 = stream.read_i64()
+                toTail: c_int64 = stream.read_i64()
+                values: list[Tuple[object, c_int64]] = [
+                    None] * capacity
+                for offset in range(capacity):
+                    values[offset] = (stream.read(), stream.read_i64())
+                sw: std_n.util.TimeWindow = type.factory(type)
+                sw.width = width
+                sw.sumType = sumType
+                sw.sum = sum
+                sw.sumSq = sumSq
+                sw.size = size
+                sw.capacity = capacity
+                sw.toHead = toHead
+                sw.toTail = toTail
+                sw.values = values
