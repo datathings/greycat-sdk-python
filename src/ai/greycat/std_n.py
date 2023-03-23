@@ -456,5 +456,199 @@ class std_n:
                 super(type, None)
 
             @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                return stream.read_string(stream.read_i32().value)
+
+    class util:
+        class Quantizer(GreyCat.Object):
+            def __init__(self: std_n.util.Quantizer, type: GreyCat.Type) -> None:
+                super(type, None)
+                raise NotImplementedError
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                raise NotImplementedError
+
+        class Buffer(GreyCat.Object):
+            def __init__(self: std_n.util.Buffer, type: GreyCat.Type) -> None:
+                super(type, None)
+                self.data = bytes
+
+            def save(self: std_n.util.Buffer, stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i32(self.type.offset)
+                stream.write_i32(len(self.data))
+                stream.write_i8_array(self.data, 0, len(self.data))
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                buf: std_n.util.Buffer = type.factory(type)
+                buf.data = stream.read_i8_array(stream.read_i32().value)
+                return buf
+
+        class Gaussian(GreyCat.Object):
+            def __init__(self: std_n.util.Gaussian, type: GreyCat.Type) -> None:
+                super(type, None)
+                self.sum: c_double
+                self.sumSq: c_double
+                self.size: c_int64
+                self.nbAccepted: c_int64
+                self.nbRejected: c_int64
+                self.nbNull: c_int64
+                self.min: c_double
+                self.max: c_double
+                self.minBound: c_double
+                self.maxBound: c_double
+
+            def save(self: std_n.util.Gaussian, stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i32(self.type.offset)
+                stream.write_f64(self.sum)
+                stream.write_f64(self.sumSq)
+                stream.write_i64(self.size)
+                stream.write_i64(self.nbAccepted)
+                stream.write_i64(self.nbRejected)
+                stream.write_i64(self.nbNull)
+                stream.write_f64(self.min)
+                stream.write_f64(self.max)
+                stream.write_f64(self.minBound)
+                stream.write_f64(self.maxBound)
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                g: std_n.util.Gaussian = type.factory(type)
+                g.sum = stream.read_f64()
+                g.sumSq = stream.read_f64()
+                g.size = stream.read_i64()
+                g.nbAccepted = stream.read_i64()
+                g.nbRejected = stream.read_i64()
+                g.nbNull = stream.read_i64()
+                g.min = stream.read_f64()
+                g.max = stream.read_f64()
+                g.minBound = stream.read_f64()
+                g.maxBound = stream.read_f64()
+                return g
+
+        class GaussianProfile(GreyCat.Object):
+            def __init__(self: std_n.util.GaussianProfile, type: GreyCat.Type) -> None:
+                super(type, None)
+                # self.size: c_int32
+                self.data: bytes
+
+            def save(self: std_n.util.GaussianProfile, stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i32(self.type.offset)
+                # stream.write_i32(self.size)
+                stream.write_i32(c_int32(len(self.data)))
+                stream.write_i8_array(self.data)
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                g: std_n.util.GaussianProfile = type.factory(type)
+                # g.size = stream.read_i32()
+                g.data = stream.read_i8_array(stream.read_i32().value)
+                return g
+
+        class HistogramF64(GreyCat.Object):
+            def __init__(self: std_n.util.HistogramF64, type: GreyCat.Type) -> None:
+                super(type, None)
+                self.realMin: c_double
+                self.realMax: c_double
+                self.min: c_double
+                self.max: c_double
+                self.size: c_int64
+                self.nullCount: c_int64
+                self.maxRange: c_int64
+                self.sum: c_double
+                self.sumSq: c_double
+                self.unitMagnitude: c_int32
+                self.significantFigures: c_int32
+                self.subBucketHalfCountMagnitude: c_int32
+                self.subBucketHalfCount: c_int32
+                self.subBucketMask: c_int64
+                self.subBucketCount: c_int32
+                self.bucketCount: c_int32
+                self.minValue: c_int64
+                self.maxValue: c_int64
+                self.normalizingIndexOffset: c_int32
+                self.countsLen: c_int32
+                self.totalCount: c_int64
+                self.counts: list[c_int64]
+
+            def save(self: std_n.util.HistogramF64, stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i32(self.type.offset)
+                stream.write_f64(self.realMin)
+                stream.write_f64(self.realMax)
+                stream.write_f64(self.min)
+                stream.write_f64(self.max)
+                stream.write_i64(self.size)
+                stream.write_i64(self.nullCount)
+                stream.write_i64(self.maxRange)
+                stream.write_f64(self.sum)
+                stream.write_f64(self.sumSq)
+                stream.write_i32(self.unitMagnitude)
+                stream.write_i32(self.significantFigures)
+                stream.write_i32(self.subBucketHalfCountMagnitude)
+                stream.write_i32(self.subBucketHalfCount)
+                stream.write_i64(self.subBucketMask)
+                stream.write_i32(self.subBucketCount)
+                stream.write_i32(self.bucketCount)
+                stream.write_i64(self.minValue)
+                stream.write_i64(self.maxValue)
+                stream.write_i32(self.normalizingIndexOffset)
+                stream.write_i32(self.countsLen)
+                stream.write_i64(self.totalCount)
+                for offset in len(self.counts):
+                    stream.write_i64(self.counts[offset])
+            
+            @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat.Stream)->object:
-                return stream.read_string(stream.read_i32())
+                realMin = stream.read_f64()
+                realMax = stream.read_f64()
+                min = stream.read_f64()
+                max = stream.read_f64
+                size = stream.read_i64()
+                nullCount = stream.read_i64()
+                maxRange = stream.read_i64()
+                sum = stream.read_f64()
+                sumSq = stream.read_f64()
+                unitMagnitude = stream.read_i32()
+                significantFigures = stream.read_i32()
+                subBucketHalfCountMagnitude = stream.read_i32()
+                subBucketHalfCount = stream.read_i32()
+                subBucketMask = stream.read_i64()
+                subBucketCount = stream.read_i32()
+                bucketCount = stream.read_i32()
+                minValue = stream.read_i64()
+                maxValue = stream.read_i64()
+                normalizingIndexOffset = stream.read_i32()
+                countsLen = stream.read_i32()
+                totalCount = stream.read_i64()
+                counts = [None] * countsLen.value
+                for offset in range(countsLen.value):
+                    counts[offset] = stream.read_i64()
+                h: std_n.util.HistogramF64 = type.factory(type)
+                h.realMin = realMin
+                h.realMax = realMax
+                h.min = min
+                h.max = max
+                h.size = size
+                h.nullCount = nullCount
+                h.maxRange = maxRange
+                h.sum = sum
+                h.sumSq = sumSq
+                h.unitMagnitude = unitMagnitude
+                h.significantFigures = significantFigures
+                h.subBucketHalfCountMagnitude = subBucketHalfCountMagnitude
+                h.subBucketCount = subBucketHalfCount
+                h.subBucketMask = subBucketMask
+                h.subBucketCount = subBucketCount
+                h.bucketCount = bucketCount
+                h.minValue = minValue
+                h.maxValue = maxValue
+                h.normalizingIndexOffset = normalizingIndexOffset
+                h.countsLen = countsLen
+                h.totalCount = totalCount
+                h.counts = counts
+                return h
