@@ -5,6 +5,7 @@ from typing import *
 from ai.greycat.greycat import GreyCat
 
 T = TypeVar('T')
+U = TypeVar('U')
 
 
 class std_n:
@@ -178,7 +179,7 @@ class std_n:
                         stream.write_i64(point.geocode)
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream)->object:
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
                 size: int = stream.read_i32().value
                 geoType: GreyCat.Type = type.greycat.types[type.greycat.type_offset_core_geo]
                 points: list[std_n.core.geo] = [None] * size
@@ -189,3 +190,271 @@ class std_n:
                 gp: std_n.core.GeoPoly = type.factory(type)
                 gp.attributes = points
                 return gp
+
+        class Map(Generic[T, U], GreyCat.Object):
+            type_name: str = 'core.Map'
+
+            def __init__(self: std_n.core.Map[T, U], type: GreyCat.Type) -> None:
+                super(type, None)
+                self.__map: dict[T, U] = dict()
+
+            def save(self: std_n.core.Map[T, U], stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i32(self.type.offset)
+                stream.write_i32(self.size())
+                for key in self.__map:
+                    stream.write_object(key)
+                    stream.write_object(self.__map[key])
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                map: std_n.core.Map = type.factory(type)
+                mapLength = stream.read_i32().value
+                for _ in range(mapLength):
+                    map[stream.read()] = stream.read()
+                return map
+
+            def size(self: std_n.core.Map[T, U]) -> int:
+                return len(self.__map)
+
+            def get(self: std_n.core.Map[T, U], o: object) -> U:
+                return self.__map[o]
+
+            def set(self: std_n.core.Map[T, U], t: T, u: U) -> None:
+                self.__map[t] = u
+
+            def remove(self: std_n.core.Map[T, U], o: object) -> None:
+                self.__map.pop(o, None)
+
+            def clear(self: std_n.core.Map[T, U]) -> None:
+                self.__map.clear()
+
+        class node(GreyCat.Object):
+            def __init__(self: std_n.core.node, type: GreyCat.Type) -> None:
+                super(type, None)
+                self.ref: c_int64
+
+            def save(self: std_n.core.node, stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.NODE)
+                stream.write_i64(self.ref)
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                res: std_n.core.node = type.factory(type)
+                res.ref = stream.read_i64()
+                return res
+
+        class nodeGeo(GreyCat.Object):
+            def __init__(self: std_n.core.nodeGeo, type: GreyCat.Type) -> None:
+                super(type, None)
+                self.ref: c_int64
+
+            def save(self: std_n.core.nodeGeo, stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.NODE_GEO)
+                stream.write_i64(self.ref)
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                res: std_n.core.nodeGeo = type.factory(type)
+                res.ref = stream.read_i64()
+                return res
+
+        class nodeIndex(GreyCat.Object):
+            type_name: str = "core.nodeIndex"
+
+            def __init__(self: std_n.core.nodeIndex, type: GreyCat.Type) -> None:
+                super(type, None)
+                self.ref: c_int64
+
+            def save(self: std_n.core.nodeIndex, stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.NODE_INDEX)
+                stream.write_i64(self.ref)
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                res: std_n.core.nodeIndex = type.factory(type)
+                res.ref = stream.read_i64()
+                return res
+
+        class nodeIndexBucket(GreyCat.Object):
+            def __init__(self: std_n.core.nodeIndexBucket, type: GreyCat.Type) -> None:
+                super(type, None)
+
+            def save(self: std_n.core.nodeIndexBucket, stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i32(self.type.offset)
+                if self.attributes is None:
+                    stream.write_i32(c_int32(0))
+                else:
+                    stream.write_i32(c_int32(len(self.attributes)))
+                    for offset in range(len(self.attributes)):
+                        stream.write_object(self.attributes[offset])
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                size = stream.read_i32()
+                data: list[object] = [None] * size
+                for offset in range(size):
+                    data[offset] = stream.read()
+                res: std_n.core.nodeIndexBucket = type.factory(type)
+                res.attributes = data
+                return res
+
+        class nodeList(GreyCat.Object):
+            def __init__(self: std_n.core.nodeList, type: GreyCat.Type) -> None:
+                super(type, None)
+                self.ref: c_int64
+
+            def save(self: std_n.core.nodeList, stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.NODE_LIST)
+                stream.write_i64(self.ref)
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                res: std_n.core.nodeList = type.factory(type)
+                res.ref = stream.read_i64()
+                return res
+
+        class nodeTime(GreyCat.Object):
+            def __init__(self: std_n.core.nodeTime, type: GreyCat.Type) -> None:
+                super(type, None)
+                self.ref: c_int64
+
+            def save(self: std_n.core.nodeTime, stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.NODE_TIME)
+                stream.write_i64(self.ref)
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                res: std_n.core.nodeTime = type.factory(type)
+                res.ref = stream.read_i64()
+                return res
+
+        class Table(Generic[T], GreyCat.Object):
+            def __init__(self: std_n.core.Table[T], type: GreyCat.Type) -> None:
+                super(type, None)
+                self.cols: c_int32
+                self.rows: c_int32
+                self.meta: list[std_n.core.Table.TableColumnMeta]
+                self.data: list[T]
+
+            def save(self: std_n.core.Table[T], stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i32(self.type.offset)
+                stream.write_i32(self.cols)
+                stream.write_i32(self.rows)
+                stream.write_bool(self.meta is not None)
+                if self.meta is not None:
+                    for offset in len(self.meta):
+                        colMeta: std_n.core.Table.TableColumnMeta = self.meta[offset]
+                        stream.write_i32(colMeta.colType)
+                        stream.write_i32(colMeta.type)
+                        stream.write_i32(colMeta.size)
+                        stream.write_f64(colMeta.sum)
+                        stream.write_f64(colMeta.sumSq)
+                        stream.write_i64(colMeta.min)
+                        stream.write_i64(colMeta.max)
+                        stream.write_bool(colMeta.index)
+                        stream.write_i32(colMeta.tz)
+                for offset in len(self.data):
+                    stream.write_object(self.data[offset])
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                cols: c_int32 = stream.read_i32()
+                rows: c_int32 = stream.read_i32()
+                useMeta: bool = stream.read_bool()
+                meta: list[std_n.core.Table.TableColumnMeta] = None
+                if useMeta:
+                    meta = [None] * cols.value
+                    for col in range(cols.value):
+                        meta[col] = std_n.core.Table.TableColumnMeta(stream.read_i32(), stream.read_i32(), stream.read_i32(
+                        ), stream.read_f64(), stream.read_f64(), stream.read_i64(), stream.read_i64(), stream.read_bool(), stream.read_i32())
+                capacity = cols.value = rows.value
+                data: list[object] = [None] * capacity
+                for offset in range(capacity):
+                    data[offset] = stream.read()
+                t: std_n.core.Table[object] = type.factory(type)
+                t.cols = cols
+                t.rows = rows
+                t.meta = meta
+                t.data = data
+                return t
+
+            class TableColumnMeta:
+                def __init__(self: std_n.core.Table.TableColumnMeta, colType: c_int32, type: c_int32, size: c_int32, sum: c_double, sumSq: c_double, min: c_int64, max: c_int64, index: bool, tz: c_int32) -> None:
+                    self.colType: c_int32 = colType
+                    self.type: c_int32 = type
+                    self.size: c_int32 = size
+                    self.sum: c_double = sum
+                    self.sumSq: c_double = sumSq
+                    self.min: c_int64 = min
+                    self.max: c_int64 = max
+                    self.index: bool = index
+                    self.tz: c_int32 = tz
+
+        class Tensor(GreyCat.Object):
+            def __init__(self: std_n.core.Tensor, type: GreyCat.Type) -> None:
+                super(type, None)
+                self.shape: list[c_int32]
+                self.tensorType: c_byte
+                self.size: c_int32
+                self.data: bytes
+
+            def save(self: std_n.core.Tensor, stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i32(self.type.offset)
+                stream.write_i8(c_byte(len(self.shape)))
+                stream.write_i8(self.tensorType)
+                for offset in range(len(self.shape)):
+                    stream.write_i32(self.shape[offset])
+                stream.write_i32(self.size)
+                stream.write_i8_array(self.data, 0, len(self.data))
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                nbDim: int = stream.read_i8().value
+                tensorType: c_byte = stream.read_i8()
+                shape: list[c_int32] = [None] * nbDim
+                for offset in range(nbDim):
+                    shape[offset] = stream.read_i32()
+                size: c_int32 = stream.read_i32()
+                bin_size: int = size.value
+                match tensorType.value:
+                    case 0 | 2:
+                        size = c_int32(size.value * 4)
+                    case 1 | 3 | 4:
+                        size = c_int32(size.value * 8)
+                    case 5:
+                        size = c_int32(size.value * 16)
+                    case _:
+                        raise ValueError(tensorType)
+                res: std_n.core.Tensor = type.factory(type)
+                res.shape = shape
+                res.tensorType = tensorType
+                res.size = size
+                res.data = stream.read_i8_array(bin_size)
+                return res
+
+        class time(GreyCat.Object):
+            def __init__(self: std_n.core.time, type: GreyCat.Type) -> None:
+                super(type, None)
+                self.value: c_int64
+
+            def save(self: std_n.core.time, stream: GreyCat.Stream) -> None:
+                stream.write_i8(GreyCat.PrimitiveType.TIME)
+                stream.write_i64(self.value)
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+                res: std_n.core.time = type.factory(type)
+                res.value = stream.read_i64()
+                return res
+
+        class String(GreyCat.Object):
+            def __init__(self: std_n.core.String, type: GreyCat.Type) -> None:
+                super(type, None)
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat.Stream)->object:
+                return stream.read_string(stream.read_i32())
