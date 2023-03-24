@@ -422,11 +422,11 @@ class std_n:
                 bin_size: int = size.value
                 match tensorType.value:
                     case 0 | 2:
-                        size = c_int32(size.value * 4)
+                        bin_size = c_int32(size.value * 4)
                     case 1 | 3 | 4:
-                        size = c_int32(size.value * 8)
+                        bin_size = c_int32(size.value * 8)
                     case 5:
-                        size = c_int32(size.value * 16)
+                        bin_size = c_int32(size.value * 16)
                     case _:
                         raise ValueError(tensorType)
                 res: std_n.core.Tensor = type.factory(type)
@@ -532,20 +532,17 @@ class std_n:
         class GaussianProfile(GreyCat.Object):
             def __init__(self: std_n.util.GaussianProfile, type: GreyCat.Type) -> None:
                 super(type, None)
-                # self.size: c_int32
                 self.data: bytes
 
             def save(self: std_n.util.GaussianProfile, stream: GreyCat.Stream) -> None:
                 stream.write_i8(GreyCat.PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
-                # stream.write_i32(self.size)
                 stream.write_i32(c_int32(len(self.data)))
                 stream.write_i8_array(self.data)
 
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
                 g: std_n.util.GaussianProfile = type.factory(type)
-                # g.size = stream.read_i32()
                 g.data = stream.read_i8_array(stream.read_i32().value)
                 return g
 
