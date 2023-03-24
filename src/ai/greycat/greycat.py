@@ -493,6 +493,8 @@ class GreyCat:
         if 200 > status or 300 <= status:
             raise RuntimeError(str(stream.read()))
         res = stream.read()
+        if len(response.read()) > 0:
+            raise IOError('Remaining unread bytes')
         stream.close()
         return res
 
