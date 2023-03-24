@@ -45,7 +45,7 @@ class GreyCat:
             return c_char(self.__io.read(1)[0])
 
         def read_bool(self) -> bool:
-            return self.read_i8() != c_byte(0)
+            return self.read_i8().value != 0
 
         def read_null(self) -> None:  # TODO: check return type
             return None
@@ -69,7 +69,7 @@ class GreyCat:
             return tmp
 
         def read_f64(self) -> c_double:
-            return c_double(unpack('d', pack('q', self.read_i64().value)))
+            return c_double(unpack('d', pack('q', self.read_i64().value))[0])
 
         def read_string(self, len_: int) -> str:
             return self.read_i8_array(len_).decode('utf-8')
@@ -106,7 +106,7 @@ class GreyCat:
             self.__io.write(tmp)
 
         def write_f64(self, f: c_double) -> None:
-            self.write_i64(c_int64(unpack('q', pack('d', c_double.value))))
+            self.write_i64(c_int64(unpack('q', pack('d', c_double.value))[0]))
 
         def write_object(self, o: object) -> None:
             if o is None:
@@ -248,20 +248,20 @@ class GreyCat:
 
         @staticmethod
         def enum_loader(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
-            programType: GreyCat.Type = type.greycat.types[type.mapped_type_off]
+            programType: GreyCat.Type = type.greycat.types[type.mapped_type_off.value]
             valueOffset: c_int32 = stream.read_i32()
-            abiTypeAtt: GreyCat.Type.Attribute = type.attributes[valueOffset]
-            return programType.enum_values[abiTypeAtt.mappedAttOffset]
+            abiTypeAtt: GreyCat.Type.Attribute = type.attributes[valueOffset.value]
+            return programType.enum_values[abiTypeAtt.mappedAttOffset.value]
 
         @staticmethod
         def object_loader(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
-            programType: GreyCat.Type = type.greycat.types[type.mapped_type_off]
-            attributes: list[object] = []
+            programType: GreyCat.Type = type.greycat.types[type.mapped_type_off.value]
+            attributes: list[object] = [None] * len(type.attributes)
             for attOffset in range(len(type.attributes)):
                 att: GreyCat.Type.Attribute = type.attributes[attOffset]
                 loadedField: object = stream.read()
                 if att.mapped:
-                    attributes[att.mappedAttOffset] = loadedField
+                    attributes[att.mappedAttOffset.value] = loadedField
             if programType.factory is None:
                 return GreyCat.Object(programType, attributes)
             else:
@@ -324,6 +324,15 @@ class GreyCat:
                 for offset in len(self.attributes):
                     stream.write_object(self.attributes[offset])
 
+        def __str__(self)-> str:
+            res = f'{self.type.name}{{'
+            for offset in range(len(self.type.attributes)):
+                if offset > 0:
+                    res = f'{res},'
+                res=f'{res}{self.type.attributes[offset].name}={self.attributes[offset]}'
+            res =f'{res}}}'
+            return res
+
     class Enum(Object):
         def __init__(self, type: GreyCat.Type, attributes: list[object]):
             super(type, None)
@@ -349,7 +358,7 @@ class GreyCat:
         def init(self, greycat: GreyCat) -> None:
             raise NotImplementedError
 
-    def __init__(self, url: str, *libraries: GreyCat.Library):
+    def __init__(self: GreyCat, url: str, *libraries: GreyCat.Library):
         loaders = dict()
         factories = dict()
         if 0 == len(libraries):
@@ -387,7 +396,8 @@ class GreyCat:
             isNative: bool = abiStream.read_bool()
             isEnum: bool = abiStream.read_bool()
             isMasked: bool = abiStream.read_bool()
-            typeAttributes: list[GreyCat.Type.Attribute] = [None] * attributesLen
+            typeAttributes: list[GreyCat.Type.Attribute] = [
+                None] * attributesLen
             for enumOffset in range(attributesLen):
                 name: str = self.__symbols[abiStream.read_i32().value]
                 typeModuleName: str = self.__symbols[abiStream.read_i32(
@@ -441,6 +451,36 @@ class GreyCat:
         abiStream.close()
         for i in range(len(libraries)):
             libraries[i].init(self)
+
+    @staticmethod
+    def call(greycat: GreyCat, fqn: str, parameters: list[object]) -> object:
+        connection: http.client.HTTPConnection | http.client.HTTPSConnection
+        if greycat.__runtime_url.startswith('http://'):
+            connection: http.client.HTTPConnection = http.client.HTTPConnection(
+                greycat.__runtime_url.replace('http://', ''))
+        elif greycat.__runtime_url.startswith('https://'):
+            connection: http.client.HTTPSConnection = http.client.HTTPSConnection(
+                greycat.__runtime_url.replace('https://', ''))
+        else:
+            raise ValueError
+        body = None
+        if len(parameters) > 0:
+            pass  # TODO
+        connection.request('POST', fqn.replace(
+            '.', '/'), body, {'Accept': 'application/octet-stream', 'Content-Type': 'application/octet-stream'})
+        response: http.client.HTTPResponse = connection.getresponse()
+        status: int = response.status
+        if 200 > status or 300 <= status:
+            msg = ''
+            line: str = response.readline()
+            while line is not None:
+                msg = f'{msg}{line}\n'
+                line = response.readline()
+            raise RuntimeError(msg)
+        stream = GreyCat.Stream(greycat, response)
+        res = stream.read()
+        stream.close()
+        return res
 
     def getRemoteAbi(self) -> GreyCat.Stream:
         connection: http.client.HTTPConnection | http.client.HTTPSConnection
