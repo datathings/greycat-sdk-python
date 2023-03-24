@@ -6,32 +6,32 @@ from io import *
 from struct import pack, unpack
 from typing import *
 
-from std_n import std_n
+
+class PrimitiveType:
+    NULL: c_byte = c_byte(0)
+    BOOL: c_byte = c_byte(1)
+    CHAR: c_byte = c_byte(2)
+    INT: c_byte = c_byte(3)
+    FLOAT: c_byte = c_byte(4)
+    NODE: c_byte = c_byte(5)
+    NODE_TIME: c_byte = c_byte(6)
+    NODE_INDEX: c_byte = c_byte(7)
+    NODE_LIST: c_byte = c_byte(8)
+    NODE_GEO: c_byte = c_byte(9)
+    GEO: c_byte = c_byte(10)
+    TIME: c_byte = c_byte(11)
+    DURATION: c_byte = c_byte(12)
+    ENUM: c_byte = c_byte(13)
+    OBJECT: c_byte = c_byte(14)
+    BLOCK: c_byte = c_byte(15)
+    BLOCK_REF: c_byte = c_byte(16)
+    FUNCTION_REF: c_byte = c_byte(17)
+    UNDEFINED: c_byte = c_byte(18)
+    STRING_LIT: c_byte = c_byte(19)
+    SIZE: c_byte = c_byte(20)
 
 
 class GreyCat:
-    class PrimitiveType:
-        NULL: c_byte = c_byte(0)
-        BOOL: c_byte = c_byte(1)
-        CHAR: c_byte = c_byte(2)
-        INT: c_byte = c_byte(3)
-        FLOAT: c_byte = c_byte(4)
-        NODE: c_byte = c_byte(5)
-        NODE_TIME: c_byte = c_byte(6)
-        NODE_INDEX: c_byte = c_byte(7)
-        NODE_LIST: c_byte = c_byte(8)
-        NODE_GEO: c_byte = c_byte(9)
-        GEO: c_byte = c_byte(10)
-        TIME: c_byte = c_byte(11)
-        DURATION: c_byte = c_byte(12)
-        ENUM: c_byte = c_byte(13)
-        OBJECT: c_byte = c_byte(14)
-        BLOCK: c_byte = c_byte(15)
-        BLOCK_REF: c_byte = c_byte(16)
-        FUNCTION_REF: c_byte = c_byte(17)
-        UNDEFINED: c_byte = c_byte(18)
-        STRING_LIT: c_byte = c_byte(19)
-        SIZE: c_byte = c_byte(20)
 
     class Stream:
         def __init__(self, greycat: GreyCat, io: BufferedIOBase):
@@ -39,10 +39,10 @@ class GreyCat:
             self.greycat: GreyCat = greycat
 
         def read_i8(self) -> c_byte:
-            return c_byte(self.__io.read(1))
+            return c_byte(self.__io.read(1)[0])
 
         def read_char(self) -> c_char:
-            return c_char(self.__io.read(1))
+            return c_char(self.__io.read(1)[0])
 
         def read_bool(self) -> bool:
             return self.read_i8() != c_byte(0)
@@ -202,28 +202,28 @@ class GreyCat:
         __string_lit_loader: Callable[[GreyCat.Stream],
                                       object] = lambda stream: stream.read_string_lit()
 
-        __PRIMITIVE_LOADERS: list[PrimitiveLoader] = []
-        __PrimitiveType: type[GreyCat.PrimitiveType] = object
-        __PRIMITIVE_LOADERS[__PrimitiveType.NULL] = __null_loader
-        __PRIMITIVE_LOADERS[__PrimitiveType.BOOL] = __bool_loader
-        __PRIMITIVE_LOADERS[__PrimitiveType.CHAR] = __char_loader
-        __PRIMITIVE_LOADERS[__PrimitiveType.INT] = __i64_loader
-        __PRIMITIVE_LOADERS[__PrimitiveType.FLOAT] = __f64_loader
-        __PRIMITIVE_LOADERS[__PrimitiveType.NODE] = __node_loader
-        __PRIMITIVE_LOADERS[__PrimitiveType.NODE_TIME] = __node_time_loader
-        __PRIMITIVE_LOADERS[__PrimitiveType.NODE_INDEX] = __node_index_loader
-        __PRIMITIVE_LOADERS[__PrimitiveType.NODE_LIST] = __node_list_loader
-        __PRIMITIVE_LOADERS[__PrimitiveType.NODE_GEO] = __node_geo_loader
-        __PRIMITIVE_LOADERS[__PrimitiveType.GEO] = __geo_loader
-        __PRIMITIVE_LOADERS[__PrimitiveType.TIME] = __time_loader
-        __PRIMITIVE_LOADERS[__PrimitiveType.DURATION] = __duration_loader
-        __PRIMITIVE_LOADERS[__PrimitiveType.ENUM] = __object_loader
-        __PRIMITIVE_LOADERS[__PrimitiveType.OBJECT] = __object_loader
-        __PRIMITIVE_LOADERS[__PrimitiveType.BLOCK] = __error_loader
-        __PRIMITIVE_LOADERS[__PrimitiveType.BLOCK_REF] = __error_loader
-        __PRIMITIVE_LOADERS[__PrimitiveType.FUNCTION_REF] = __error_loader
-        __PRIMITIVE_LOADERS[__PrimitiveType.UNDEFINED] = __error_loader
-        __PRIMITIVE_LOADERS[__PrimitiveType.STRING_LIT] = __string_lit_loader
+        __PRIMITIVE_LOADERS: list[PrimitiveLoader] = [
+            None] * PrimitiveType.SIZE.value
+        __PRIMITIVE_LOADERS[PrimitiveType.NULL.value] = __null_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.BOOL.value] = __bool_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.CHAR.value] = __char_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.INT.value] = __i64_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.FLOAT.value] = __f64_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.NODE.value] = __node_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.NODE_TIME.value] = __node_time_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.NODE_INDEX.value] = __node_index_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.NODE_LIST.value] = __node_list_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.NODE_GEO.value] = __node_geo_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.GEO.value] = __geo_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.TIME.value] = __time_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.DURATION.value] = __duration_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.ENUM.value] = __object_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.OBJECT.value] = __object_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.BLOCK.value] = __error_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.BLOCK_REF.value] = __error_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.FUNCTION_REF.value] = __error_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.UNDEFINED.value] = __error_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.STRING_LIT.value] = __string_lit_loader
 
     Loader = Callable[[Type, Stream], object]
 
@@ -278,7 +278,7 @@ class GreyCat:
             self.attributes = typeAttributes
             self.attribute_off_by_name = dict()
             for off in range(len(self.attributes)):
-                self.attribute_off_by_name[self.attributes[off].name, off]
+                self.attribute_off_by_name[self.attributes[off].name] = off
             self.greycat = greycat
             self.factory = factory
             if self.offset == self.mapped_type_off:
@@ -353,23 +353,24 @@ class GreyCat:
         loaders = dict()
         factories = dict()
         if 0 == len(libraries):
-            libraries = (std_n())
+            pass
+            # libraries = (std_n()) # TODO
         self.libs_by_name: dict[str, GreyCat.Library] = dict()
         for lib in libraries:
             lib.configure(loaders, factories)
             self.libs_by_name[lib.name()] = lib
         self.__runtime_url = url
-        abiStream: GreyCat.Stream = GreyCat.getRemoteAbi()
-        symbolsCount: c_int32 = abiStream.read_i32()
-        self.__symbols: str = []
+        abiStream: GreyCat.Stream = self.getRemoteAbi()
+        symbolsCount: int = abiStream.read_i32().value
+        self.__symbols: str = [None] * (1 + symbolsCount)
         self.__symbols_off_by_value = dict()
         self.__symbols[0] = None
-        for offset in range(1, 1 + symbolsCount.value):
+        for offset in range(1, 1 + symbolsCount):
             symbol: str = abiStream.read_string(abiStream.read_i32().value)
             self.__symbols[offset] = symbol
             self.__symbols_off_by_value[symbol] = offset
         typeSize: c_int32 = abiStream.read_i32()
-        self.types: list[GreyCat.Type] = []
+        self.types: list[GreyCat.Type] = [None] * typeSize.value
         self.types_by_name: dict[str, GreyCat.Type] = dict()
         for i in range(typeSize.value):
             moduleName: str = self.__symbols[abiStream.read_i32().value]
@@ -378,7 +379,7 @@ class GreyCat:
                 fqn = ''
             else:
                 fqn = f'{moduleName}.{typeName}'
-            attributesLen: c_int32 = abiStream.read_i32()
+            attributesLen: int = abiStream.read_i32().value
             abiStream.read_i32()  # unused field
             abiStream.read_i32()  # unused field
             mappedAbiTypeOffset: c_int32 = abiStream.read_i32()
@@ -386,7 +387,7 @@ class GreyCat:
             isNative: bool = abiStream.read_bool()
             isEnum: bool = abiStream.read_bool()
             isMasked: bool = abiStream.read_bool()
-            typeAttributes: list[GreyCat.Type.Attribute] = []
+            typeAttributes: list[GreyCat.Type.Attribute] = [None] * attributesLen
             for enumOffset in range(attributesLen):
                 name: str = self.__symbols[abiStream.read_i32().value]
                 typeModuleName: str = self.__symbols[abiStream.read_i32(
@@ -401,21 +402,21 @@ class GreyCat:
                 mapped: bool = abiStream.read_bool()
                 typeAttributes[enumOffset] = GreyCat.Type.Attribute(name, typeModuleName, attributeTypeName, progTypeOffset, mappedAnyOffset, mappedAttOffset,
                                                                     sbiType, nullable, mapped)
-            abiType = GreyCat.Type(i, fqn, mappedAbiTypeOffset, maskedAbiTypeOffset, isMasked, isEnum, isNative, typeAttributes, factories[fqn], loaders[fqn],
+            abiType = GreyCat.Type(i, fqn, mappedAbiTypeOffset, maskedAbiTypeOffset, isMasked, isEnum, isNative, typeAttributes, factories.get(fqn, None), loaders.get(fqn, None),
                                    self)
             # only the program-related ABI type (last version) is mapped to itself
-            if abiType.mapped_type_off == i and len(fqn) != 0:
-                self.types_by_name[abiType.name, abiType]
+            if abiType.mapped_type_off.value == i and len(fqn) != 0:
+                self.types_by_name[abiType.name] = abiType
             self.types[i] = abiType
-        type_core_string = self.types_by_name['core.String']
-        type_core_duration = self.types_by_name['core.duration']
-        type_core_time = self.types_by_name['core.time']
-        type_core_geo = self.types_by_name['core.geo']
-        type_core_node_list = self.types_by_name['core.nodeList']
-        type_core_node_index = self.types_by_name['core.nodeIndex']
-        type_core_node_time = self.types_by_name['core.nodeTime']
-        type_core_node_geo = self.types_by_name['core.nodeGeo']
-        type_core_node = self.types_by_name['core.node']
+        type_core_string = self.types_by_name.get('core.String', None)
+        type_core_duration = self.types_by_name.get('core.duration', None)
+        type_core_time = self.types_by_name.get('core.time', None)
+        type_core_geo = self.types_by_name.get('core.geo', None)
+        type_core_node_list = self.types_by_name.get('core.nodeList', None)
+        type_core_node_index = self.types_by_name.get('core.nodeIndex', None)
+        type_core_node_time = self.types_by_name.get('core.nodeTime', None)
+        type_core_node_geo = self.types_by_name.get('core.nodeGeo', None)
+        type_core_node = self.types_by_name.get('core.node', None)
         if None in [
             type_core_string,
             type_core_duration,
@@ -442,8 +443,15 @@ class GreyCat:
             libraries[i].init(self)
 
     def getRemoteAbi(self) -> GreyCat.Stream:
-        connection: http.client.HTTPConnection = http.client.HTTPConnection(
-            self.__runtime_url)
+        connection: http.client.HTTPConnection | http.client.HTTPSConnection
+        if self.__runtime_url.startswith('http://'):
+            connection: http.client.HTTPConnection = http.client.HTTPConnection(
+                self.__runtime_url.replace('http://', ''))
+        elif self.__runtime_url.startswith('https://'):
+            connection: http.client.HTTPSConnection = http.client.HTTPSConnection(
+                self.__runtime_url.replace('https://', ''))
+        else:
+            raise ValueError
         connection.request('POST', 'runtime/Runtime/abi',
                            None, {'Accept': 'application/octet-stream'})
         response: http.client.HTTPResponse = connection.getresponse()
