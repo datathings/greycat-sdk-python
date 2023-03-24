@@ -42,56 +42,56 @@ class ByteArrayIO(BufferedIOBase):
 class GreyCat:
 
     class Stream:
-        def __init__(self, greycat: GreyCat, io: BufferedIOBase):
+        def __init__(self: GreyCat.Stream, greycat: GreyCat, io: BufferedIOBase) -> None:
             self.__io: BufferedIOBase = io
             self.greycat: GreyCat = greycat
 
-        def read_i8(self) -> c_byte:
+        def read_i8(self: GreyCat.Stream) -> c_byte:
             return c_byte(self.__io.read(1)[0])
 
-        def read_char(self) -> c_char:
+        def read_char(self: GreyCat.Stream) -> c_char:
             return c_char(self.__io.read(1)[0])
 
-        def read_bool(self) -> bool:
+        def read_bool(self: GreyCat.Stream) -> bool:
             return self.read_i8().value != 0
 
-        def read_null(self) -> None:  # TODO: check return type
+        def read_null(self: GreyCat.Stream) -> None:  # TODO: check return type
             return None
 
-        def read_i32(self) -> c_int32:
+        def read_i32(self: GreyCat.Stream) -> c_int32:
             tmp: bytes = self.__io.read(4)
             if len(tmp) < 4:
                 raise Exception
             return c_int32((tmp[3] << 24) + ((tmp[2] << 24) >> 8) + ((tmp[1] << 24) >> 16) + ((tmp[0] << 24) >> 24))
 
-        def read_i64(self) -> c_int64:
+        def read_i64(self: GreyCat.Stream) -> c_int64:
             tmp: bytes = self.__io.read(8)
             if len(tmp) < 8:
                 raise Exception
             return c_int64((tmp[7] << 56) + ((tmp[6] << 56) >> 8) + ((tmp[5] << 56) >> 16) + ((tmp[4] << 56) >> 24) + ((tmp[3] << 56) >> 32) + ((tmp[2] << 56) >> 40) + ((tmp[1] << 56) >> 48) + ((tmp[0] << 56) >> 56))
 
-        def read_i8_array(self, len_: int) -> bytes:
+        def read_i8_array(self: GreyCat.Stream, len_: int) -> bytes:
             tmp: bytes = self.__io.read(len_)
             if len(tmp) < len_:
                 raise Exception
             return tmp
 
-        def read_f64(self) -> c_double:
+        def read_f64(self: GreyCat.Stream) -> c_double:
             return c_double(unpack('d', pack('q', self.read_i64().value))[0])
 
-        def read_string(self, len_: int) -> str:
+        def read_string(self: GreyCat.Stream, len_: int) -> str:
             return self.read_i8_array(len_).decode('utf-8')
 
-        def write_i8(self, b: c_byte) -> None:
+        def write_i8(self: GreyCat.Stream, b: c_byte) -> None:
             self.__io.write(bytes(b))
 
-        def write_bool(self, b: bool) -> None:
+        def write_bool(self: GreyCat.Stream, b: bool) -> None:
             self.__io.write(bytes(c_byte(1 if b else 0)))
 
-        def write_i8_array(self, b: bytes, offset: int, len_: int) -> None:
+        def write_i8_array(self: GreyCat.Stream, b: bytes, offset: int, len_: int) -> None:
             self.__io.write(b[slice(offset, offset + len_)])
 
-        def write_i32(self, i: c_int32) -> None:
+        def write_i32(self: GreyCat.Stream, i: c_int32) -> None:
             i = i.value
             tmp: bytearray = bytearray(4)
             tmp[0] = i & 0xFF
@@ -100,7 +100,7 @@ class GreyCat:
             tmp[3] = (i >> 24) & 0xFF
             self.__io.write(tmp)
 
-        def write_i64(self, i: c_int64) -> None:
+        def write_i64(self: GreyCat.Stream, i: c_int64) -> None:
             i = i.value
             tmp: bytearray = bytearray(8)
             tmp[0] = i & 0xFF
@@ -113,10 +113,10 @@ class GreyCat:
             tmp[7] = (i >> 56) & 0xFF
             self.__io.write(tmp)
 
-        def write_f64(self, f: c_double) -> None:
+        def write_f64(self: GreyCat.Stream, f: c_double) -> None:
             self.write_i64(c_int64(unpack('q', pack('d', f.value))[0]))
 
-        def write_object(self, o: object) -> None:
+        def write_object(self: GreyCat.Stream, o: object) -> None:
             if o is None:
                 self.write_i8(PrimitiveType.NULL)
             elif type(o) is bool:
@@ -155,17 +155,17 @@ class GreyCat:
             else:
                 raise ValueError('wrong state')
 
-        def close(self) -> None:
+        def close(self: GreyCat.Stream) -> None:
             self.__io.close()
 
-        def read(self) -> object:
+        def read(self: GreyCat.Stream) -> object:
             return GreyCat.Stream.__PRIMITIVE_LOADERS[self.read_i8().value](self)
 
-        def read_object(self) -> object:
+        def read_object(self: GreyCat.Stream) -> object:
             type: GreyCat.Type = self.greycat.types[self.read_i32().value]
             return type.loader(type, self)
 
-        def read_string_lit(self) -> str:
+        def read_string_lit(self: GreyCat.Stream) -> str:
             offset: int = self.read_i32().value
             if (offset < len(self.greycat.__symbols)):
                 return self.greycat.__symbols[offset]
@@ -245,7 +245,7 @@ class GreyCat:
 
     class Type:
         class Attribute:
-            def __init__(self, name: str, typeModuleName: str, typeName: str, progTypeOffset: c_int32, mappedAnyOffset: c_int32, mappedAttOffset: c_int32, sbiType: c_byte, nullable: bool, mapped: bool):
+            def __init__(self: GreyCat.Type.Attribute, name: str, typeModuleName: str, typeName: str, progTypeOffset: c_int32, mappedAnyOffset: c_int32, mappedAttOffset: c_int32, sbiType: c_byte, nullable: bool, mapped: bool) -> None:
                 self.name = name
                 self.typeModulName = typeModuleName
                 self.typeName = typeName
@@ -281,7 +281,7 @@ class GreyCat:
             else:
                 return programType.factory(programType, attributes)
 
-        def __init__(self, offset: c_int32, name: str, mapped_type_off: c_int32, masked_type_off: c_int32, is_masked: bool, is_enum: bool, is_native: bool, typeAttributes: list[Attribute], loader: GreyCat.Loader, factory: GreyCat.Factory, greycat: GreyCat):
+        def __init__(self: GreyCat.Type, offset: c_int32, name: str, mapped_type_off: c_int32, masked_type_off: c_int32, is_masked: bool, is_enum: bool, is_native: bool, typeAttributes: list[Attribute], loader: GreyCat.Loader, factory: GreyCat.Factory, greycat: GreyCat) -> None:
             self.offset = offset
             self.name = name
             self.mapped_type_off = mapped_type_off
@@ -321,24 +321,24 @@ class GreyCat:
                 self.loader = GreyCat.Type.object_loader
 
     class Object:
-        def __init__(self, type: GreyCat.Type, attributes: list[object] | None):
+        def __init__(self: GreyCat.Object, type: GreyCat.Type, attributes: list[object] | None) -> None:
             self.type = type
             self.attributes = attributes
 
-        def get(self, attributeName: str) -> object:
+        def get(self: GreyCat.Object, attributeName: str) -> object:
             return self.attributes[self.type.attribute_off_by_name[attributeName]]
 
-        def set(self, attributeName: str, value: object) -> None:
+        def set(self: GreyCat.Object, attributeName: str, value: object) -> None:
             self.attributes[self.type.attribute_off_by_name[attributeName]] = value
 
-        def save(self, stream: GreyCat.Stream) -> None:
+        def save(self: GreyCat.Object, stream: GreyCat.Stream) -> None:
             stream.write_i8(PrimitiveType.OBJECT)
             stream.write_i32(self.type.offset)
             if self.attributes is not None:
                 for offset in range(len(self.attributes)):
                     stream.write_object(self.attributes[offset])
 
-        def __str__(self) -> str:
+        def __str__(self: GreyCat.Object) -> str:
             res = f'{self.type.name}{{'
             for offset in range(len(self.type.attributes)):
                 if offset > 0:
@@ -348,31 +348,31 @@ class GreyCat:
             return res
 
     class Enum(Object):
-        def __init__(self, type: GreyCat.Type, attributes: list[object]):
+        def __init__(self: GreyCat.Enum, type: GreyCat.Type, attributes: list[object]) -> None:
             super(type, None)
             self.__offset: int = attributes[0]
             self.key: str = attributes[1]
             self.value: object = attributes[2]
 
-        def save(self, stream: GreyCat.Stream) -> None:
+        def save(self: GreyCat.Enum, stream: GreyCat.Stream) -> None:
             stream.write_i8(PrimitiveType.ENUM)
             stream.write_i32(self.type.offset)
             stream.write_i32(self.__offset)
 
     class Library:
-        def __init__(self):
+        def __init__(self: GreyCat.Library) -> None:
             self.mapped: list[GreyCat.Type] = []
 
-        def name(self) -> str:
+        def name(self: GreyCat.Library) -> str:
             raise NotImplementedError
 
-        def configure(self, loaders: dict[str, GreyCat.Loader], factories: dict[str, GreyCat.Factory]) -> None:
+        def configure(self: GreyCat.Library, loaders: dict[str, GreyCat.Loader], factories: dict[str, GreyCat.Factory]) -> None:
             raise NotImplementedError
 
-        def init(self, greycat: GreyCat) -> None:
+        def init(self: GreyCat.Library, greycat: GreyCat) -> None:
             raise NotImplementedError
 
-    def __init__(self: GreyCat, url: str, *libraries: GreyCat.Library):
+    def __init__(self: GreyCat, url: str, *libraries: GreyCat.Library) -> None:
         loaders = dict()
         factories = dict()
         if 0 == len(libraries):
@@ -470,14 +470,14 @@ class GreyCat:
     def call(greycat: GreyCat, fqn: str, parameters: list[object]) -> object:
         connection: http.client.HTTPConnection | http.client.HTTPSConnection
         if greycat.__runtime_url.startswith('http://'):
-            connection: http.client.HTTPConnection = http.client.HTTPConnection(
+            connection = http.client.HTTPConnection(
                 greycat.__runtime_url.replace('http://', ''))
         elif greycat.__runtime_url.startswith('https://'):
-            connection: http.client.HTTPSConnection = http.client.HTTPSConnection(
+            connection = http.client.HTTPSConnection(
                 greycat.__runtime_url.replace('https://', ''))
         else:
             raise ValueError
-        body = None
+        body: bytes | None = None
         if len(parameters) > 0:
             b = bytearray()
             stream = GreyCat.Stream(greycat, ByteArrayIO(b))
@@ -496,7 +496,7 @@ class GreyCat:
         stream.close()
         return res
 
-    def getRemoteAbi(self) -> GreyCat.Stream:
+    def getRemoteAbi(self: GreyCat) -> GreyCat.Stream:
         connection: http.client.HTTPConnection | http.client.HTTPSConnection
         if self.__runtime_url.startswith('http://'):
             connection: http.client.HTTPConnection = http.client.HTTPConnection(
