@@ -31,6 +31,14 @@ class PrimitiveType:
     SIZE: c_byte = c_byte(20)
 
 
+class ByteArrayIO(BufferedIOBase):
+    def __init__(self: ByteArrayIO, b: bytearray) -> None:
+        self.__b = b
+
+    def write(self: ByteArrayIO, __buffer: bytes) -> None:
+        self.__b += bytearray(__buffer)
+
+
 class GreyCat:
 
     class Stream:
@@ -106,7 +114,7 @@ class GreyCat:
             self.__io.write(tmp)
 
         def write_f64(self, f: c_double) -> None:
-            self.write_i64(c_int64(unpack('q', pack('d', c_double.value))[0]))
+            self.write_i64(c_int64(unpack('q', pack('d', f.value))[0]))
 
         def write_object(self, o: object) -> None:
             if o is None:
@@ -119,11 +127,17 @@ class GreyCat:
                 self.write_i8(PrimitiveType.CHAR)
                 self.write_i8(c_byte(c.value[0]))
             elif type(o) is int:
-                self.write_i8(PrimitiveType.Integer)
+                self.write_i8(PrimitiveType.INT)
                 self.write_i64(c_int64(o))
+            elif type(o) is c_int64:
+                self.write_i8(PrimitiveType.INT)
+                self.write_i64(o)
             elif type(o) is float:
                 self.write_i8(PrimitiveType.FLOAT)
                 self.write_f64(c_double(o))
+            elif type(o) is c_double:
+                self.write_i8(PrimitiveType.FLOAT)
+                self.write_f64(o)
             elif type(o) is str:
                 symbolOffset: int = self.greycat.__symbols_off_by_value[o]
                 if symbolOffset is not None:
@@ -321,16 +335,16 @@ class GreyCat:
             stream.write_i8(PrimitiveType.OBJECT)
             stream.write_i32(self.type.offset)
             if self.attributes is not None:
-                for offset in len(self.attributes):
+                for offset in range(len(self.attributes)):
                     stream.write_object(self.attributes[offset])
 
-        def __str__(self)-> str:
+        def __str__(self) -> str:
             res = f'{self.type.name}{{'
             for offset in range(len(self.type.attributes)):
                 if offset > 0:
                     res = f'{res},'
-                res=f'{res}{self.type.attributes[offset].name}={self.attributes[offset]}'
-            res =f'{res}}}'
+                res = f'{res}{self.type.attributes[offset].name}={self.attributes[offset]}'
+            res = f'{res}}}'
             return res
 
     class Enum(Object):
@@ -412,7 +426,7 @@ class GreyCat:
                 mapped: bool = abiStream.read_bool()
                 typeAttributes[enumOffset] = GreyCat.Type.Attribute(name, typeModuleName, attributeTypeName, progTypeOffset, mappedAnyOffset, mappedAttOffset,
                                                                     sbiType, nullable, mapped)
-            abiType = GreyCat.Type(i, fqn, mappedAbiTypeOffset, maskedAbiTypeOffset, isMasked, isEnum, isNative, typeAttributes, factories.get(fqn, None), loaders.get(fqn, None),
+            abiType = GreyCat.Type(c_int32(i), fqn, mappedAbiTypeOffset, maskedAbiTypeOffset, isMasked, isEnum, isNative, typeAttributes, factories.get(fqn, None), loaders.get(fqn, None),
                                    self)
             # only the program-related ABI type (last version) is mapped to itself
             if abiType.mapped_type_off.value == i and len(fqn) != 0:
@@ -465,19 +479,19 @@ class GreyCat:
             raise ValueError
         body = None
         if len(parameters) > 0:
-            pass  # TODO
+            b = bytearray()
+            stream = GreyCat.Stream(greycat, ByteArrayIO(b))
+            for offset in range(len(parameters)):
+                stream.write_object(parameters[offset])
+            stream.close()
+            body = bytes(b)
         connection.request('POST', fqn.replace(
             '.', '/'), body, {'Accept': 'application/octet-stream', 'Content-Type': 'application/octet-stream'})
         response: http.client.HTTPResponse = connection.getresponse()
         status: int = response.status
-        if 200 > status or 300 <= status:
-            msg = ''
-            line: str = response.readline()
-            while line is not None:
-                msg = f'{msg}{line}\n'
-                line = response.readline()
-            raise RuntimeError(msg)
         stream = GreyCat.Stream(greycat, response)
+        if 200 > status or 300 <= status:
+            raise RuntimeError(str(stream.read()))
         res = stream.read()
         stream.close()
         return res
