@@ -110,27 +110,27 @@ class GreyCat:
 
         def write_object(self, o: object) -> None:
             if o is None:
-                self.write_i8(GreyCat.PrimitiveType.NULL)
+                self.write_i8(PrimitiveType.NULL)
             elif type(o) is bool:
-                self.write_i8(GreyCat.PrimitiveType.BOOL)
+                self.write_i8(PrimitiveType.BOOL)
                 self.write_bool(o)
             elif type(o) is c_char:
                 c: c_char = o
-                self.write_i8(GreyCat.PrimitiveType.CHAR)
+                self.write_i8(PrimitiveType.CHAR)
                 self.write_i8(c_byte(c.value[0]))
             elif type(o) is int:
-                self.write_i8(GreyCat.PrimitiveType.Integer)
+                self.write_i8(PrimitiveType.Integer)
                 self.write_i64(c_int64(o))
             elif type(o) is float:
-                self.write_i8(GreyCat.PrimitiveType.FLOAT)
+                self.write_i8(PrimitiveType.FLOAT)
                 self.write_f64(c_double(o))
             elif type(o) is str:
                 symbolOffset: int = self.greycat.__symbols_off_by_value[o]
                 if symbolOffset is not None:
-                    self.write_i8(GreyCat.PrimitiveType.STRING_LIT)
+                    self.write_i8(PrimitiveType.STRING_LIT)
                     self.write_i32(c_int32(symbolOffset))
                 else:
-                    self.write_i8(GreyCat.PrimitiveType.OBJECT)
+                    self.write_i8(PrimitiveType.OBJECT)
                     self.write_i32(
                         c_int32(self.greycat.type_offset_core_string))
                     self.write_i32(c_int32(len(o)))
@@ -318,7 +318,7 @@ class GreyCat:
             self.attributes[self.type.attribute_off_by_name[attributeName]] = value
 
         def save(self, stream: GreyCat.Stream) -> None:
-            stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+            stream.write_i8(PrimitiveType.OBJECT)
             stream.write_i32(self.type.offset)
             if self.attributes is not None:
                 for offset in len(self.attributes):
@@ -332,7 +332,7 @@ class GreyCat:
             self.value: object = attributes[2]
 
         def save(self, stream: GreyCat.Stream) -> None:
-            stream.write_i8(GreyCat.PrimitiveType.ENUM)
+            stream.write_i8(PrimitiveType.ENUM)
             stream.write_i32(self.type.offset)
             stream.write_i32(self.__offset)
 

@@ -2,7 +2,7 @@ from __future__ import annotations
 from ctypes import *
 from typing import *
 
-from ai.greycat.greycat import GreyCat
+from ai.greycat.greycat import GreyCat, PrimitiveType
 from ai.greycat.std_n import std_n
 core = std_n.core
 
@@ -48,7 +48,7 @@ class algebra_n:
                 self.data: bytes
 
             def save(self: algebra_n.ml.Polynomial, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i8(self.degree)
                 stream.write_i64(c_int64(len(self.data)))
@@ -90,7 +90,7 @@ class algebra_n:
                 self.__dimInfo: core.Tensor
 
             def save(self: algebra_n.ml.PCA, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i32(self.__bestDim)
                 stream.write_i32(self.__selectedDim)
@@ -144,7 +144,7 @@ class algebra_n:
                 self.__sum_sq: core.Tensor
 
             def save(self: algebra_n.ml.GaussianND, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i64(self.__count)
                 stream.write_object(self.__min)

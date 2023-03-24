@@ -2,7 +2,7 @@ from __future__ import annotations
 from ctypes import *
 from typing import *
 
-from ai.greycat.greycat import GreyCat
+from ai.greycat.greycat import GreyCat, PrimitiveType
 
 T = TypeVar('T')
 U = TypeVar('U')
@@ -41,7 +41,7 @@ class std_n:
                 self.timeZone: c_int32
 
             def save(self: std_n.core.Date, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i64(self.localizedEpochS)
                 stream.write_i64(self.epochUs)
@@ -61,7 +61,7 @@ class std_n:
                 self.value: c_int64
 
             def save(self: std_n.core.duration, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.DURATION)
+                stream.write_i8(PrimitiveType.DURATION)
                 stream.write_i64(self.value)
 
             @staticmethod
@@ -79,7 +79,7 @@ class std_n:
                 self.value: object
 
             def save(self: std_n.core.Error, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i32(self.code)
                 stream.write_i32(c_int32(len(self.frames)))
@@ -158,7 +158,7 @@ class std_n:
                 self.lng: float
 
             def save(self: std_n.core.geo, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.GEO)
+                stream.write_i8(PrimitiveType.GEO)
                 stream.write_i64(self.geocode)
 
         class GeoPoly(GreyCat.Object):
@@ -168,7 +168,7 @@ class std_n:
                 super(type, None)
 
             def save(self: std_n.core.GeoPoly, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 if self.attributes is None:
                     stream.write_i32(c_int32(0))
@@ -199,7 +199,7 @@ class std_n:
                 self.__map: dict[T, U] = dict()
 
             def save(self: std_n.core.Map[T, U], stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i32(self.size())
                 for key in self.__map:
@@ -235,7 +235,7 @@ class std_n:
                 self.ref: c_int64
 
             def save(self: std_n.core.node, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.NODE)
+                stream.write_i8(PrimitiveType.NODE)
                 stream.write_i64(self.ref)
 
             @staticmethod
@@ -250,7 +250,7 @@ class std_n:
                 self.ref: c_int64
 
             def save(self: std_n.core.nodeGeo, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.NODE_GEO)
+                stream.write_i8(PrimitiveType.NODE_GEO)
                 stream.write_i64(self.ref)
 
             @staticmethod
@@ -267,7 +267,7 @@ class std_n:
                 self.ref: c_int64
 
             def save(self: std_n.core.nodeIndex, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.NODE_INDEX)
+                stream.write_i8(PrimitiveType.NODE_INDEX)
                 stream.write_i64(self.ref)
 
             @staticmethod
@@ -281,7 +281,7 @@ class std_n:
                 super(type, None)
 
             def save(self: std_n.core.nodeIndexBucket, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 if self.attributes is None:
                     stream.write_i32(c_int32(0))
@@ -306,7 +306,7 @@ class std_n:
                 self.ref: c_int64
 
             def save(self: std_n.core.nodeList, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.NODE_LIST)
+                stream.write_i8(PrimitiveType.NODE_LIST)
                 stream.write_i64(self.ref)
 
             @staticmethod
@@ -321,7 +321,7 @@ class std_n:
                 self.ref: c_int64
 
             def save(self: std_n.core.nodeTime, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.NODE_TIME)
+                stream.write_i8(PrimitiveType.NODE_TIME)
                 stream.write_i64(self.ref)
 
             @staticmethod
@@ -339,7 +339,7 @@ class std_n:
                 self.data: list[T]
 
             def save(self: std_n.core.Table[T], stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i32(self.cols)
                 stream.write_i32(self.rows)
@@ -402,7 +402,7 @@ class std_n:
                 self.data: bytes
 
             def save(self: std_n.core.Tensor, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i8(c_byte(len(self.shape)))
                 stream.write_i8(self.tensorType)
@@ -442,7 +442,7 @@ class std_n:
                 self.value: c_int64
 
             def save(self: std_n.core.time, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.TIME)
+                stream.write_i8(PrimitiveType.TIME)
                 stream.write_i64(self.value)
 
             @staticmethod
@@ -475,7 +475,7 @@ class std_n:
                 self.data = bytes
 
             def save(self: std_n.util.Buffer, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i32(len(self.data))
                 stream.write_i8_array(self.data, 0, len(self.data))
@@ -501,7 +501,7 @@ class std_n:
                 self.maxBound: c_double
 
             def save(self: std_n.util.Gaussian, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_f64(self.sum)
                 stream.write_f64(self.sumSq)
@@ -535,7 +535,7 @@ class std_n:
                 self.data: bytes
 
             def save(self: std_n.util.GaussianProfile, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i32(c_int32(len(self.data)))
                 stream.write_i8_array(self.data)
@@ -573,7 +573,7 @@ class std_n:
                 self.counts: list[c_int64]
 
             def save(self: std_n.util.HistogramF64, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_f64(self.realMin)
                 stream.write_f64(self.realMax)
@@ -677,7 +677,7 @@ class std_n:
                 self.counts: list[c_int64]
 
             def save(self: std_n.util.HistogramF64, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i64(self.realMin)
                 stream.write_i64(self.realMax)
@@ -771,7 +771,7 @@ class std_n:
                 self.remainingTime: c_int64
 
             def save(self: std_n.util.ProgressTracker, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i64(self.initialTime)
                 stream.write_i64(self.lastTime)
@@ -822,7 +822,7 @@ class std_n:
                 self.data: bytes
 
             def save(self: std_n.util.Iban, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i32(self.infoOff)
                 stream.write_i32(c_int32(len(self.data)))
@@ -841,7 +841,7 @@ class std_n:
                 self.__queue: list[T]
 
             def save(self: std_n.util.Queue[T], stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i64(c_int64(self.size()))  # width
                 stream.write_i32(c_int32(self.size()))  # size
@@ -892,7 +892,7 @@ class std_n:
                 self.values: list[object]
 
             def save(self: std_n.util.SlidingWindow, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i64(self.width)
                 stream.write_i8(self.sumType)
@@ -943,7 +943,7 @@ class std_n:
                 self.values: list[Tuple[object, c_int64]]
 
             def save(self: std_n.util.TimeWindow, stream: GreyCat.Stream) -> None:
-                stream.write_i8(GreyCat.PrimitiveType.OBJECT)
+                stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i64(self.width)
                 stream.write_i8(self.sumType)
