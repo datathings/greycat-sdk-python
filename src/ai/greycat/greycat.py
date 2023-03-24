@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 from ctypes import *
+import http.client
 from io import *
 from struct import pack, unpack
 from typing import *
+
+from std_n import std_n
 
 
 class GreyCat:
@@ -439,4 +442,17 @@ class GreyCat:
             libraries[i].init(self)
 
     def getRemoteAbi(self) -> GreyCat.Stream:
-        pass  # TODO
+        connection: http.client.HTTPConnection = http.client.HTTPConnection(
+            self.__runtime_url)
+        connection.request('POST', 'runtime/Runtime/abi',
+                           None, {'Accept': 'application/octet-stream'})
+        response: http.client.HTTPResponse = connection.getresponse()
+        status: int = response.status
+        if 200 > status or 300 <= status:
+            msg = ''
+            line: str = response.readline()
+            while line is not None:
+                msg = f'{msg}{line}\n'
+                line = response.readline()
+            raise RuntimeError(msg)
+        return GreyCat.Stream(self, response)
