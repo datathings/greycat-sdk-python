@@ -144,12 +144,45 @@ class std_n:
                     std_n.core.geo.GC_CORE_GEO_LNG_MAX + std_n.core.geo.GC_CORE_GEO_LNG_MIN)
                 return geo
 
+            @staticmethod
             def interleave64(xlo: int, ylo: int) -> int:
-                pass  # TODO
+                B: list[int] = [6148914691236517205, 3689348814741910323,
+                                1085102592571150095, 71777214294589695, 281470681808895]
+                S: list[int] = [1, 2, 4, 8, 16]
+                x: int = xlo
+                y: int = ylo
+                x = (x | (x << S[4])) & B[4]
+                y = (y | (y << S[4])) & B[4]
+                x = (x | (x << S[3])) & B[3]
+                y = (y | (y << S[3])) & B[3]
+                x = (x | (x << S[2])) & B[2]
+                y = (y | (y << S[2])) & B[2]
+                x = (x | (x << S[1])) & B[1]
+                y = (y | (y << S[1])) & B[1]
+                x = (x | (x << S[0])) & B[0]
+                y = (y | (y << S[0])) & B[0]
+                return x | (y << 1)
 
             @staticmethod
             def deinterleave64(interleaved: int) -> Tuple[int, int]:
-                pass  # TODO
+                B: list[int] = [6148914691236517205, 3689348814741910323,
+                                1085102592571150095, 71777214294589695, 281470681808895, 4294967295]
+                S: list[int] = [0, 1, 2, 4, 8, 16]
+                x: int = interleaved
+                y: int = interleaved >> 1
+                x = (x | (x >> S[0])) & B[0]
+                y = (y | (y >> S[0])) & B[0]
+                x = (x | (x >> S[1])) & B[1]
+                y = (y | (y >> S[1])) & B[1]
+                x = (x | (x >> S[2])) & B[2]
+                y = (y | (y >> S[2])) & B[2]
+                x = (x | (x >> S[3])) & B[3]
+                y = (y | (y >> S[3])) & B[3]
+                x = (x | (x >> S[4])) & B[4]
+                y = (y | (y >> S[4])) & B[4]
+                x = (x | (x >> S[5])) & B[5]
+                y = (y | (y >> S[5])) & B[5]
+                return x, y
 
             def __init__(self: std_n.core.geo, type: GreyCat.Type) -> None:
                 super(type, None)

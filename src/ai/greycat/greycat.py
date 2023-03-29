@@ -55,7 +55,7 @@ class GreyCat:
         def read_bool(self: GreyCat.Stream) -> bool:
             return self.read_i8().value != 0
 
-        def read_null(self: GreyCat.Stream) -> None:  # TODO: check return type
+        def read_null(self: GreyCat.Stream) -> None:
             return None
 
         def read_i32(self: GreyCat.Stream) -> c_int32:
