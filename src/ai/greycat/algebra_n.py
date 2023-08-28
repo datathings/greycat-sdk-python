@@ -47,7 +47,7 @@ class algebra_n:
                 self.tensor_type: c_byte
                 self.data: bytes
 
-            def save(self: algebra_n.ml.Polynomial, stream: GreyCat.Stream) -> None:
+            def _save(self: algebra_n.ml.Polynomial, stream: GreyCat.Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i8(self.degree)
@@ -89,7 +89,7 @@ class algebra_n:
                 self.__spaceCropped: core.Tensor
                 self.__dimInfo: core.Tensor
 
-            def save(self: algebra_n.ml.PCA, stream: GreyCat.Stream) -> None:
+            def _save(self: algebra_n.ml.PCA, stream: GreyCat.Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i32(self.__bestDim)
@@ -143,7 +143,7 @@ class algebra_n:
                 self.__sum: core.Tensor
                 self.__sum_sq: core.Tensor
 
-            def save(self: algebra_n.ml.GaussianND, stream: GreyCat.Stream) -> None:
+            def _save(self: algebra_n.ml.GaussianND, stream: GreyCat.Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i64(self.__count)

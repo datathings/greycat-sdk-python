@@ -3,6 +3,7 @@ from __future__ import annotations
 from ctypes import *
 import http.client
 from io import *
+import os
 from struct import pack, unpack
 from typing import *
 
@@ -31,14 +32,22 @@ class PrimitiveType:
     TU5D: c_byte = c_byte(19)
     TU6D: c_byte = c_byte(20)
     TU10D: c_byte = c_byte(21)
-    TF2D: c_byte = c_byte(22)
-    TF3D: c_byte = c_byte(23)
-    TF4D: c_byte = c_byte(24)
+    TUF2D: c_byte = c_byte(22)
+    TUF3D: c_byte = c_byte(23)
+    TUF4D: c_byte = c_byte(24)
     BLOCK_REF: c_byte = c_byte(25)
     FUNCTION: c_byte = c_byte(26)
     UNDEFINED: c_byte = c_byte(27)
     STRING_LIT: c_byte = c_byte(28)
     SIZE: c_byte = c_byte(29)
+
+
+class ByteArrayIO(BufferedIOBase):
+    def __init__(self: ByteArrayIO, b: bytearray) -> None:
+        self.__b = b
+
+    def write(self: ByteArrayIO, __buffer: bytes) -> None:
+        self.__b += bytearray(__buffer)
 
 
 @final
@@ -78,9 +87,22 @@ class GreyCat:
         __ASCII_MAX: Final[c_byte] = c_byte(127)
 
         def __init__(self, greycat: GreyCat, io: BufferedIOBase) -> None:
-            self.__tmp = Final[list[c_byte]] = [c_byte(0)] * 8
             self.__io: BufferedIOBase = io
             self.greycat: Final[GreyCat] = greycat
+
+        def close(self) -> None:
+            self.__io.close()
+
+        def read_abi_header(self) -> None:
+            abi_major: int = self.read_i16().value
+            if abi_major != GreyCat.ABI_PROTO:
+                raise ("wrong ABI protocol major version")
+            abi_magic: c_int16 = self.read_i16()
+            if abi_magic != self.greycat.__abi_magic:
+                raise ("wrong ABI magic")
+            abi_version: c_int32 = self.read_i32()
+            if abi_version > self.greycat.__abi_version:
+                raise ("larger ABI version, please reload this handler")
 
         def read(self) -> Any:
             primitive_offset: c_byte = self.read_i8()
@@ -124,6 +146,11 @@ class GreyCat:
         def read_vu32(self) -> c_uint32:
             pass  # TODO
 
+        def write_abi_header(self) -> None:
+            self.write_i16(GreyCat.ABI_PROTO)
+            self.write_i16(self.greycat.__abi_magic)
+            self.write_i32(self.greycat.__abi_version)
+
         def write(self, value: Any) -> None:
             if value is None:
                 self.write_i8(PrimitiveType.NULL)
@@ -158,8 +185,8 @@ class GreyCat:
                     self.write_vu32(c_uint32(len(data) << 1))
                     self.write_i8_array(data, 0, len(data))
             elif type(value) is GreyCat.Object:
-                value.saveType(self)
-                value.save(self)
+                value._save_type(self)
+                value._save(self)
 
         def write_bool(self, b: bool) -> None:
             self.__io.write(bytes(c_byte(1 if b else 0)))
@@ -170,7 +197,23 @@ class GreyCat:
         def write_i8_array(self, b: bytearray | bytes, offset: int, len_: int) -> None:
             self.__io.write(b[slice(offset, offset + len_)])
 
-        def write_vu32(self, u: c_uint32):
+        def write_i16(self, i: c_int16) -> None:
+            i = i.value
+            tmp: bytearray = bytearray(2)
+            tmp[0] = i & 0xFF
+            tmp[1] = (i >> 8) & 0xFF
+            self.__io.write(tmp)
+
+        def write_i32(self, i: c_int32) -> None:
+            i = i.value
+            tmp: bytearray = bytearray(2)
+            tmp[0] = i & 0xFF
+            tmp[1] = (i >> 8) & 0xFF
+            tmp[2] = (i >> 16) & 0xFF
+            tmp[3] = (i >> 24) & 0xFF
+            self.__io.write(tmp)
+
+        def write_vu32(self, u: c_uint32) -> None:
             pass  # TODO
 
         def write_i64(self, i: c_int64) -> None:
@@ -412,9 +455,9 @@ class GreyCat:
         PRIMITIVE_LOADERS[PrimitiveType.TU5D.value] = __tu5d_loader
         PRIMITIVE_LOADERS[PrimitiveType.TU6D.value] = __tu6d_loader
         PRIMITIVE_LOADERS[PrimitiveType.TU10D.value] = __tu10d_loader
-        PRIMITIVE_LOADERS[PrimitiveType.TF2D.value] = __tf2d_loader
-        PRIMITIVE_LOADERS[PrimitiveType.TF3D.value] = __tf3d_loader
-        PRIMITIVE_LOADERS[PrimitiveType.TF4D.value] = __tf4d_loader
+        PRIMITIVE_LOADERS[PrimitiveType.TUF2D.value] = __tf2d_loader
+        PRIMITIVE_LOADERS[PrimitiveType.TUF3D.value] = __tf3d_loader
+        PRIMITIVE_LOADERS[PrimitiveType.TUF4D.value] = __tf4d_loader
         PRIMITIVE_LOADERS[PrimitiveType.BLOCK_REF.value] = __error_loader
         PRIMITIVE_LOADERS[PrimitiveType.FUNCTION] = __error_loader  # TODO?
         PRIMITIVE_LOADERS[PrimitiveType.UNDEFINED.value] = __error_loader
@@ -425,6 +468,10 @@ class GreyCat:
     Factory: Final[type[Callable[[Type, list[Any]], Any]]] = Callable[
         [Type, list[object]], Any
     ]
+
+    class Function:
+        def __init__(self, name: str) -> None:
+            self.name: Final[str] = name
 
     class Type:
         class Attribute:
@@ -579,17 +626,158 @@ class GreyCat:
             self.type: Final[GreyCat.Type] = type
             self.attributes: list[Any] = attributes
 
-        def saveType(self, stream: GreyCat.Stream) -> None:
+        def get(self, attribute_name: str) -> Any | None:
+            return self._get(self.type.attribute_off_by_name[attribute_name])
+
+        def set(self, attribute_name: str, value: Any | None) -> None:
+            self._set(self.type.attribute_off_by_name[attribute_name], value)
+
+        def _get(self, offset: int) -> Any | None:
+            return self.attributes[offset]
+
+        def _set(self, offset: int, value: Any | None) -> None:
+            self.attributes[offset] = value
+
+        def _save_type(self, stream: GreyCat.Stream) -> None:
             stream.write_i8(PrimitiveType.OBJECT)
             stream.write_vu32(self.type.offset)
 
-        def save(self, stream: GreyCat.Stream) -> None:
-            pass  # TODO
+        def _save(self, stream: GreyCat.Stream) -> None:
+            nullable_bitset: bytearray = bytearray(self.type.nullable_nb_bytes)
+            nullable_offset: int = 0
+            field: GreyCat.Type.Attribute
+            for offset in len(self.type.attributes):
+                field = self.type.attributes[offset]
+                if field.nullable:
+                    nullable_bitset[nullable_offset >> 3] |= (
+                        0 if self._get(offset) is None else 1
+                    ) << (nullable_offset & 7)
+                    nullable_offset += 1
+            stream.write_i8_array(nullable_bitset, 0, len(nullable_bitset))
+            for offset in len(self.type.attributes):
+                field = self.type.attributes[offset]
+                value = self._get(offset)
+                if field.nullable and (value is None):
+                    continue
+                match field.sbi_type:
+                    case PrimitiveType.NULL:
+                        pass
+                    case PrimitiveType.BOOL:
+                        stream.write_bool(bool(value))
+                    case PrimitiveType.CHAR:
+                        c: c_byte = c_byte(value)
+                        if c > GreyCat.Stream.__ASCII_MAX:
+                            raise ValueError(f"Only ASCII characters are allowed: {c}")
+                        stream.write_i8(c)
+                    case PrimitiveType.INT:
+                        stream.write_vi64(c_int64(value))
+                    case PrimitiveType.FLOAT:
+                        stream.write_f64(c_double(value))
+                    case PrimitiveType.NODE:
+                        o: GreyCat.Object = value
+                        o._save(stream)
+                    case PrimitiveType.NODE_TIME:
+                        o: GreyCat.Object = value
+                        o._save(stream)
+                    case PrimitiveType.NODE_INDEX:
+                        o: GreyCat.Object = value
+                        o._save(stream)
+                    case PrimitiveType.NODE_LIST:
+                        o: GreyCat.Object = value
+                        o._save(stream)
+                    case PrimitiveType.NODE_GEO:
+                        o: GreyCat.Object = value
+                        o._save(stream)
+                    case PrimitiveType.GEO:
+                        o: GreyCat.Object = value
+                        o._save(stream)
+                    case PrimitiveType.TU2D:
+                        o: GreyCat.Object = value
+                        o._save(stream)
+                    case PrimitiveType.TU3D:
+                        o: GreyCat.Object = value
+                        o._save(stream)
+                    case PrimitiveType.TU4D:
+                        o: GreyCat.Object = value
+                        o._save(stream)
+                    case PrimitiveType.TU5D:
+                        o: GreyCat.Object = value
+                        o._save(stream)
+                    case PrimitiveType.TU6D:
+                        o: GreyCat.Object = value
+                        o._save(stream)
+                    case PrimitiveType.TU10D:
+                        o: GreyCat.Object = value
+                        o._save(stream)
+                    case PrimitiveType.TUF2D:
+                        o: GreyCat.Object = value
+                        o._save(stream)
+                    case PrimitiveType.TUF3D:
+                        o: GreyCat.Object = value
+                        o._save(stream)
+                    case PrimitiveType.TUF4D:
+                        o: GreyCat.Object = value
+                        o._save(stream)
+                    case PrimitiveType.DURATION:
+                        o: GreyCat.Object = value
+                        o._save(stream)
+                    case PrimitiveType.ENUM:
+                        o: GreyCat.Object = value
+                        o._save(stream)
+                    case PrimitiveType.OBJECT:
+                        if type(value) is str:
+                            string: str = value
+                            symbol_offset: int | None = (
+                                self.type.greycat.__symbols_off_by_value[string]
+                            )
+                            if not (symbol_offset is None):
+                                stream.write_vu32(c_uint32((symbol_offset << 1) | 1))
+                            else:
+                                data: bytes = string.encode('utf-8')
+                                stream.write_vu32(c_uint32(len(data)))
+                                stream.write_i8_array(bytes, 0, len(data))
+                        else:
+                            o: GreyCat.Object = value
+                            if field.abi_type != o.type.offset:
+                                stream.write_vu32(o.type.offset)
+                            o._save(stream)
+                    # case PrimitiveType.BLOCK_REF: # TODO
+                    # case PrimitiveType.FUNCTION: # TODO
+                    case PrimitiveType.UNDEFINED:
+                        stream.write(value)
+                    case _:
+                        raise ValueError("wrong state")
+        
+        def __str__(self)->str:
+            res = f'{self.type.name}{{'
+            for offset in range(len(self.type.attributes)):
+                if offset > 0:
+                    res = f'{res},'
+                res = f'{res}{self.type.attributes[offset].name}={self.attributes[offset]}'
+            res=f'{res}}}'
+            return res
 
     class Enum(Object):
         def __init__(self, type: GreyCat.Type, attributes: list[Any]) -> None:
             super(type, attributes)
-
+            self.__offset: Final[int] = attributes[0]
+            self.key: Final[str] = attributes[1]
+            self.value: Any = attributes[2]
+        
+        @final
+        def _save_type(self, stream: GreyCat.Stream) -> None:
+            stream.write_i8(PrimitiveType.ENUM)
+            stream.write_vu32(self.type.offset)
+        
+        @final
+        def _save(self, stream: GreyCat.Stream)->None:
+            stream.write_vu32(self.__offset)
+        
+        def __str__(self)->str:
+            if self.value is None:
+                return f'{self.type.name}.{self.key}'
+            return f'{self.type.name}.{self.key}{{value={self.value}}}'
+        
     class Library:
         def __init__(self: GreyCat.Library) -> None:
             self.mapped: list[GreyCat.Type] | None = None
@@ -611,33 +799,34 @@ class GreyCat:
         self.libs_by_name: Final[dict[str, GreyCat.Library]] = {}
         std_: std = std()
         self.libs_by_name[std_.name()] = std
+        self.__is_remote: bool = False
         for i in range(len(*args)):
             lib: GreyCat.Library = args[i]
             self.libs_by_name[lib.name()] = lib
         loaders: Final[dict[str, GreyCat.Loader]] = {}
         factories: Final[dict[str, GreyCat.Factory]] = {}
-        for _, lib in self.libs_by_name:
+        for lib in self.libs_by_name.values():
             lib.configure(loaders, factories)
-        self.runtime_url: Final[str] = url
+        self.__runtime_url: Final[str] = url
         abi_stream: Final[GreyCat.Stream] = self.__get_abi(url)
 
         # step 0: verify abi version
         abi_major: int = abi_stream.read_i16()
         if abi_major != GreyCat.ABI_PROTO:
             raise Exception("wrong ABI proto")
-        self.abi_magic: Final[c_int16] = abi_stream.read_i16()
-        self.abi_version: Final[c_int32] = abi_stream.read_i32()
+        self.__abi_magic: Final[c_int16] = abi_stream.read_i16()
+        self.__abi_version: Final[c_int32] = abi_stream.read_i32()
         crc: c_int64 = abi_stream.read_i64()
 
         # step 1: create all symbols
         symbols_bytes: Final[c_int64] = abi_stream.read_i64()
         symbols_count: Final[int] = abi_stream.read_i32().value
         self.symbols: Final[list[str | None]] = [None] * (symbols_count + 1)
-        self.symbols_off_by_value: Final[dict[str, int]] = {}
+        self.__symbols_off_by_value: Final[dict[str, int]] = {}
         for offset in range(1, symbols_count + 1):
             symbol: str = abi_stream.read_string(abi_stream.read_vu32())
             self.symbols[offset] = symbol
-            self.symbols_off_by_value[symbol] = offset
+            self.__symbols_off_by_value[symbol] = offset
 
         # step 2: create all types
         types_bytes: Final[c_int64] = abi_stream.read_i64()
@@ -645,12 +834,10 @@ class GreyCat:
         self.types: Final[list[GreyCat.Type]] = [None] * types_size
         attributes_size: Final[c_int32] = abi_stream.read_i32()
         for i in range(types_size):
-            module_name: Final[str] = self.symbols[abi_stream.read_vu32().value]
-            type_name: Final[str] = self.symbols[abi_stream.read_vu32().value]
-            lib_name: Final[str] = self.symbols[abi_stream.read_vu32().value]
-            fqn: Final[
-                str
-            ] = f'{"" if module_name is None else f"{module_name}::"}{type_name}'
+            module_name: str = self.symbols[abi_stream.read_vu32().value]
+            type_name: str = self.symbols[abi_stream.read_vu32().value]
+            lib_name: str = self.symbols[abi_stream.read_vu32().value]
+            fqn: str = f'{"" if module_name is None else f"{module_name}::"}{type_name}'
             attributes_len: int = abi_stream.read_vu32().value
             abi_stream.read_vu32()  # unused field
             abi_stream.read_vu32()  # unused field
@@ -705,7 +892,168 @@ class GreyCat:
                 self.types_by_name[abi_type.name, abi_type]
             self.types[i] = abi_type
         # step 3: create all functions
-        # TODO
+        functions_bytes: Final[c_int64] = abi_stream.read_i64()
+        functions_size: Final[int] = abi_stream.read_i32().value
+        self.functions_by_name: Final[dict] = {}
+        for i in range(functions_size):
+            module_name: str = self.symbols[abi_stream.read_vu32().value]
+            type_name: str = self.symbols[abi_stream.read_vu32().value]
+            function_name: str = self.symbols[abi_stream.read_vu32().value]
+            lib_name: str = self.symbols[abi_stream.read_vu32().value]
+            fqn: str = (
+                f'{"" if module_name is None else f"{module_name}::"}{function_name}'
+            )
+            nb_params: int = abi_stream.read_vu32().value
+            for j in range(nb_params):
+                abi_stream.read_i8()
+                abi_stream.read_vu32()
+                abi_stream.read_vu32()
+            abi_stream.read_vu32()
+            abi_stream.read_i8()
+            fn: GreyCat.Function = GreyCat.Function(fqn)
+            self.functions_by_name[fqn, fn]
+        # pre-resolve String type avoid runtime over-head
+        tmp: GreyCat.Type = self.types_by_name["core::String"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_string: Final[int] = tmp.offset
+
+        tmp = self.types_by_name["core::duration"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_duration: Final[int] = tmp.offset
+
+        tmp = self.types_by_name["core::time"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_time: Final[int] = tmp.offset
+
+        tmp = self.types_by_name["core::geo"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_geo: Final[int] = tmp.offset
+
+        tmp = self.types_by_name["core::nodeList"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_node_list: Final[int] = tmp.offset
+
+        tmp = self.types_by_name["core::nodeIndex"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_node_index: Final[int] = tmp.offset
+
+        tmp = self.types_by_name["core::nodeTime"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_node_time: Final[int] = tmp.offset
+
+        tmp = self.types_by_name["core::nodeGeo"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_node_geo: Final[int] = tmp.offset
+
+        tmp = self.types_by_name["core::node"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_node: Final[int] = tmp.offset
+
+        tmp = self.types_by_name["core::ti2d"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_ti2d: Final[int] = tmp.offset
+
+        tmp = self.types_by_name["core::ti3d"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_ti3d: Final[int] = tmp.offset
+
+        tmp = self.types_by_name["core::ti4d"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_ti4d: Final[int] = tmp.offset
+
+        tmp = self.types_by_name["core::ti5d"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_ti5d: Final[int] = tmp.offset
+
+        tmp = self.types_by_name["core::ti6d"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_ti6d: Final[int] = tmp.offset
+
+        tmp = self.types_by_name["core::ti10d"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_ti10d: Final[int] = tmp.offset
+
+        tmp = self.types_by_name["core::tf2d"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_tf2d: Final[int] = tmp.offset
+
+        tmp = self.types_by_name["core::tf3d"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_tf3d: Final[int] = tmp.offset
+
+        tmp = self.types_by_name["core::tf4d"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_tf4d: Final[int] = tmp.offset
+
+        abi_stream.close()
+        for lib in self.libs_by_name.values():
+            lib.init(self)
+
+    @staticmethod
+    def call(greycat: GreyCat, fqn: str, parameters: list[object]) -> object:
+        if not (greycat.__is_remote):
+            raise RuntimeError(
+                "Remote calls are not available on local GreyCat handles"
+            )
+        fn: GreyCat.Function = greycat.functions_by_name[fqn]
+        if fn is None:
+            raise RuntimeError(f"Function not found with name {fqn}")
+        url: str = f"{greycat.__runtime_url}/{fqn}"
+        connection: http.client.HTTPConnection | http.client.HTTPSConnection
+        if url.startswith("http://"):
+            connection = http.client.HTTPConnection(url.replace("http://", ""))
+        elif greycat.__runtime_url.startswith("https://"):
+            connection = http.client.HTTPSConnection(url.replace("https://", ""))
+        else:
+            raise ValueError("wrong state")
+        body: bytes | None = None
+        stream: GreyCat.Stream
+        if len(parameters > 0):
+            b = bytearray()
+            stream = GreyCat.Stream(greycat, ByteArrayIO(b))
+            stream.write_abi_header()
+            for offset in range(len(parameters)):
+                stream.write(parameters[offset])
+            stream.close()
+            body = bytes(b)
+        connection.request(
+            "POST",
+            fqn.replace(".", "/"),
+            body,
+            {
+                "Accept": "application/octet-stream",
+                "Content-Type": "application/octet-stream",
+            },
+        )
+        response: http.client.HTTPResponse = connection.getresponse()
+        status: int = response.status
+        stream = GreyCat.Stream(greycat, response)
+        if 200 > status or 300 <= status:
+            raise RuntimeError(str(stream.read()))
+        stream.read_abi_header()
+        res = stream.read()
+        # if len(response.read(1)) > 0:
+        #     raise IOError('Remaining unread bytes')
+        stream.close()
+        return res
 
     def __get_abi(self, runtime_url: str) -> GreyCat.Stream:
         if runtime_url.startswith("http"):
@@ -714,522 +1062,35 @@ class GreyCat:
             return self.__get_local_abi(runtime_url)
 
     def __get_remote_abi(self, runtime_url: str) -> GreyCat.Stream:
-        pass  # TODO
+        connection: http.client.HTTPConnection | http.client.HTTPSConnection
+        if runtime_url.startswith("http://"):
+            connection: http.client.HTTPConnection = http.client.HTTPConnection(
+                runtime_url.replace("http://", "")
+            )
+        elif runtime_url.startswith("https://"):
+            connection: http.client.HTTPSConnection = http.client.HTTPSConnection(
+                runtime_url.replace("https://", "")
+            )
+        else:
+            raise ValueError
+        connection.request(
+            "POST", "runtime/Runtime/abi", None, {"Accept": "application/octet-stream"}
+        )
+        response: http.client.HTTPResponse = connection.getresponse()
+        status: int = response.status
+        if 200 > status or 300 <= status:
+            msg = ""
+            line: str = response.readline()
+            while line is not None:
+                msg = f"{msg}{line}\n"
+                line = response.readline()
+            raise RuntimeError(msg)
+        self.__is_remote = True
+        return GreyCat.Stream(self, response)
 
     def __get_local_abi(self, runtime_url: str) -> GreyCat.Stream:
-        pass  # TODO
-
-
-# class PrimitiveType:
-#     NULL: c_byte = c_byte(0)
-#     BOOL: c_byte = c_byte(1)
-#     CHAR: c_byte = c_byte(2)
-#     INT: c_byte = c_byte(3)
-#     FLOAT: c_byte = c_byte(4)
-#     NODE: c_byte = c_byte(5)
-#     NODE_TIME: c_byte = c_byte(6)
-#     NODE_INDEX: c_byte = c_byte(7)
-#     NODE_LIST: c_byte = c_byte(8)
-#     NODE_GEO: c_byte = c_byte(9)
-#     GEO: c_byte = c_byte(10)
-#     TIME: c_byte = c_byte(11)
-#     DURATION: c_byte = c_byte(12)
-#     ENUM: c_byte = c_byte(13)
-#     OBJECT: c_byte = c_byte(14)
-#     BLOCK: c_byte = c_byte(15)
-#     BLOCK_REF: c_byte = c_byte(16)
-#     FUNCTION_REF: c_byte = c_byte(17)
-#     UNDEFINED: c_byte = c_byte(18)
-#     STRING_LIT: c_byte = c_byte(19)
-#     SIZE: c_byte = c_byte(20)
-
-
-# class ByteArrayIO(BufferedIOBase):
-#     def __init__(self: ByteArrayIO, b: bytearray) -> None:
-#         self.__b = b
-
-#     def write(self: ByteArrayIO, __buffer: bytes) -> None:
-#         self.__b += bytearray(__buffer)
-
-
-# class GreyCat:
-
-#     class Stream:
-#         def __init__(self: GreyCat.Stream, greycat: GreyCat, io: BufferedIOBase) -> None:
-#             self.__io: BufferedIOBase = io
-#             self.greycat: GreyCat = greycat
-
-#         def read_i8(self: GreyCat.Stream) -> c_byte:
-#             return c_byte(self.__io.read(1)[0])
-
-#         def read_char(self: GreyCat.Stream) -> c_char:
-#             return c_char(self.__io.read(1)[0])
-
-#         def read_bool(self: GreyCat.Stream) -> bool:
-#             return self.read_i8().value != 0
-
-#         def read_null(self: GreyCat.Stream) -> None:
-#             return None
-
-#         def read_i32(self: GreyCat.Stream) -> c_int32:
-#             tmp: bytes = self.__io.read(4)
-#             if len(tmp) < 4:
-#                 raise Exception
-#             return c_int32((tmp[3] << 24) + ((tmp[2] << 24) >> 8) + ((tmp[1] << 24) >> 16) + ((tmp[0] << 24) >> 24))
-
-#         def read_i64(self: GreyCat.Stream) -> c_int64:
-#             tmp: bytes = self.__io.read(8)
-#             if len(tmp) < 8:
-#                 raise Exception
-#             return c_int64((tmp[7] << 56) + ((tmp[6] << 56) >> 8) + ((tmp[5] << 56) >> 16) + ((tmp[4] << 56) >> 24) + ((tmp[3] << 56) >> 32) + ((tmp[2] << 56) >> 40) + ((tmp[1] << 56) >> 48) + ((tmp[0] << 56) >> 56))
-
-#         def read_i8_array(self: GreyCat.Stream, len_: int) -> bytes:
-#             tmp: bytes = self.__io.read(len_)
-#             if len(tmp) < len_:
-#                 raise Exception
-#             return tmp
-
-#         def read_f64(self: GreyCat.Stream) -> c_double:
-#             return c_double(unpack('d', pack('q', self.read_i64().value))[0])
-
-#         def read_string(self: GreyCat.Stream, len_: int) -> str:
-#             return self.read_i8_array(len_).decode('utf-8')
-
-#         def write_i8(self: GreyCat.Stream, b: c_byte) -> None:
-#             self.__io.write(bytes(b))
-
-#         def write_bool(self: GreyCat.Stream, b: bool) -> None:
-#             self.__io.write(bytes(c_byte(1 if b else 0)))
-
-#         def write_i8_array(self: GreyCat.Stream, b: bytes, offset: int, len_: int) -> None:
-#             self.__io.write(b[slice(offset, offset + len_)])
-
-#         def write_i32(self: GreyCat.Stream, i: c_int32) -> None:
-#             i = i.value
-#             tmp: bytearray = bytearray(4)
-#             tmp[0] = i & 0xFF
-#             tmp[1] = (i >> 8) & 0xFF
-#             tmp[2] = (i >> 16) & 0xFF
-#             tmp[3] = (i >> 24) & 0xFF
-#             self.__io.write(tmp)
-
-#         def write_i64(self: GreyCat.Stream, i: c_int64) -> None:
-#             i = i.value
-#             tmp: bytearray = bytearray(8)
-#             tmp[0] = i & 0xFF
-#             tmp[1] = (i >> 8) & 0xFF
-#             tmp[2] = (i >> 16) & 0xFF
-#             tmp[3] = (i >> 24) & 0xFF
-#             tmp[4] = (i >> 32) & 0xFF
-#             tmp[5] = (i >> 40) & 0xFF
-#             tmp[6] = (i >> 48) & 0xFF
-#             tmp[7] = (i >> 56) & 0xFF
-#             self.__io.write(tmp)
-
-#         def write_f64(self: GreyCat.Stream, f: c_double) -> None:
-#             self.write_i64(c_int64(unpack('q', pack('d', f.value))[0]))
-
-#         def write_object(self: GreyCat.Stream, o: object) -> None:
-#             if o is None:
-#                 self.write_i8(PrimitiveType.NULL)
-#             elif type(o) is bool:
-#                 self.write_i8(PrimitiveType.BOOL)
-#                 self.write_bool(o)
-#             elif type(o) is c_char:
-#                 c: c_char = o
-#                 self.write_i8(PrimitiveType.CHAR)
-#                 self.write_i8(c_byte(c.value[0]))
-#             elif type(o) is int:
-#                 self.write_i8(PrimitiveType.INT)
-#                 self.write_i64(c_int64(o))
-#             elif type(o) is c_int64:
-#                 self.write_i8(PrimitiveType.INT)
-#                 self.write_i64(o)
-#             elif type(o) is float:
-#                 self.write_i8(PrimitiveType.FLOAT)
-#                 self.write_f64(c_double(o))
-#             elif type(o) is c_double:
-#                 self.write_i8(PrimitiveType.FLOAT)
-#                 self.write_f64(o)
-#             elif type(o) is str:
-#                 symbolOffset: int = self.greycat.__symbols_off_by_value[o]
-#                 if symbolOffset is not None:
-#                     self.write_i8(PrimitiveType.STRING_LIT)
-#                     self.write_i32(c_int32(symbolOffset))
-#                 else:
-#                     self.write_i8(PrimitiveType.OBJECT)
-#                     self.write_i32(
-#                         c_int32(self.greycat.type_offset_core_string))
-#                     self.write_i32(c_int32(len(o)))
-#                     data = o.encode('utf-8')
-#                     self.write_i8_array(data, 0, len(data))
-#             elif type(o) is GreyCat.Object:
-#                 o.save(self)
-#             else:
-#                 raise ValueError('wrong state')
-
-#         def close(self: GreyCat.Stream) -> None:
-#             self.__io.close()
-
-#         def read(self: GreyCat.Stream) -> object:
-#             return GreyCat.Stream.__PRIMITIVE_LOADERS[self.read_i8().value](self)
-
-#         def read_object(self: GreyCat.Stream) -> object:
-#             type: GreyCat.Type = self.greycat.types[self.read_i32().value]
-#             return type.loader(type, self)
-
-#         def read_string_lit(self: GreyCat.Stream) -> str:
-#             offset: int = self.read_i32().value
-#             if (offset < len(self.greycat.__symbols)):
-#                 return self.greycat.__symbols[offset]
-#             raise ValueError('invalid primitive type')
-
-#         PrimitiveLoader: type[Callable[[GreyCat.Stream],
-#                                        object]] = Callable[[object], object]
-
-#         __null_loader: Callable[[GreyCat.Stream],
-#                                 object] = lambda stream: stream.read_null()
-#         __bool_loader: Callable[[GreyCat.Stream],
-#                                 object] = lambda stream: stream.read_bool()
-#         __char_loader: Callable[[GreyCat.Stream],
-#                                 object] = lambda stream: stream.read_char()
-#         __i64_loader: Callable[[GreyCat.Stream],
-#                                object] = lambda stream: stream.read_i64()
-#         __f64_loader: Callable[[GreyCat.Stream],
-#                                object] = lambda stream: stream.read_f64()
-
-#         @staticmethod
-#         def __type_loader(stream: GreyCat.Stream, type: GreyCat.Type) -> object:
-#             return type.loader(type, stream)
-
-#         __node_loader: Callable[[GreyCat.Stream], object] = lambda stream: GreyCat.Stream.__type_loader(
-#             stream, stream.greycat.type_offset_core_node)
-#         __node_time_loader: Callable[[GreyCat.Stream], object] = lambda stream: GreyCat. Stream.__type_loader(
-#             stream, stream.greycat.type_offset_core_node_time)
-#         __node_index_loader: Callable[[GreyCat.Stream], object] = lambda stream: GreyCat.Stream.__type_loader(
-#             stream, stream.greycat.type_offset_core_node_index)
-#         __node_list_loader: Callable[[GreyCat.Stream], object] = lambda stream: GreyCat.Stream.__type_loader(
-#             stream, stream.greycat.type_offset_core_node_list)
-#         __node_geo_loader: Callable[[GreyCat.Stream], object] = lambda stream: GreyCat.Stream.__type_loader(
-#             stream, stream.greycat.type_offset_core_node_geo)
-#         __geo_loader: Callable[[GreyCat.Stream], object] = lambda stream: GreyCat.Stream.__type_loader(
-#             stream, stream.greycat.type_offset_core_geo)
-#         __time_loader: Callable[[GreyCat.Stream], object] = lambda stream: GreyCat.Stream.__type_loader(
-#             stream, stream.greycat.type_offset_core_time)
-#         __duration_loader: Callable[[GreyCat.Stream], object] = lambda stream: GreyCat.Stream.__type_loader(
-#             stream, stream.greycat.type_offset_core_duration)
-
-#         __object_loader: Callable[[GreyCat.Stream],
-#                                   object] = lambda stream: stream.read_object()
-
-#         @staticmethod
-#         def __error_loader(stream: GreyCat.Stream) -> object:
-#             raise ValueError('invalid primitive type')
-
-#         __string_lit_loader: Callable[[GreyCat.Stream],
-#                                       object] = lambda stream: stream.read_string_lit()
-
-#         __PRIMITIVE_LOADERS: list[PrimitiveLoader] = [
-#             None] * PrimitiveType.SIZE.value
-#         __PRIMITIVE_LOADERS[PrimitiveType.NULL.value] = __null_loader
-#         __PRIMITIVE_LOADERS[PrimitiveType.BOOL.value] = __bool_loader
-#         __PRIMITIVE_LOADERS[PrimitiveType.CHAR.value] = __char_loader
-#         __PRIMITIVE_LOADERS[PrimitiveType.INT.value] = __i64_loader
-#         __PRIMITIVE_LOADERS[PrimitiveType.FLOAT.value] = __f64_loader
-#         __PRIMITIVE_LOADERS[PrimitiveType.NODE.value] = __node_loader
-#         __PRIMITIVE_LOADERS[PrimitiveType.NODE_TIME.value] = __node_time_loader
-#         __PRIMITIVE_LOADERS[PrimitiveType.NODE_INDEX.value] = __node_index_loader
-#         __PRIMITIVE_LOADERS[PrimitiveType.NODE_LIST.value] = __node_list_loader
-#         __PRIMITIVE_LOADERS[PrimitiveType.NODE_GEO.value] = __node_geo_loader
-#         __PRIMITIVE_LOADERS[PrimitiveType.GEO.value] = __geo_loader
-#         __PRIMITIVE_LOADERS[PrimitiveType.TIME.value] = __time_loader
-#         __PRIMITIVE_LOADERS[PrimitiveType.DURATION.value] = __duration_loader
-#         __PRIMITIVE_LOADERS[PrimitiveType.ENUM.value] = __object_loader
-#         __PRIMITIVE_LOADERS[PrimitiveType.OBJECT.value] = __object_loader
-#         __PRIMITIVE_LOADERS[PrimitiveType.BLOCK.value] = __error_loader
-#         __PRIMITIVE_LOADERS[PrimitiveType.BLOCK_REF.value] = __error_loader
-#         __PRIMITIVE_LOADERS[PrimitiveType.FUNCTION_REF.value] = __error_loader
-#         __PRIMITIVE_LOADERS[PrimitiveType.UNDEFINED.value] = __error_loader
-#         __PRIMITIVE_LOADERS[PrimitiveType.STRING_LIT.value] = __string_lit_loader
-
-#     Loader = Callable[[Type, Stream], object]
-
-#     Factory = Callable[[Type, list[object]], object]
-
-#     class Type:
-#         class Attribute:
-#             def __init__(self: GreyCat.Type.Attribute, name: str, typeModuleName: str, typeName: str, progTypeOffset: c_int32, mappedAnyOffset: c_int32, mappedAttOffset: c_int32, sbiType: c_byte, nullable: bool, mapped: bool) -> None:
-#                 self.name = name
-#                 self.typeModulName = typeModuleName
-#                 self.typeName = typeName
-#                 self.progTypeOffset = progTypeOffset
-#                 self.mappedAnyOffset = mappedAnyOffset
-#                 self.mappedAttOffset = mappedAttOffset
-#                 self.sbiType = sbiType
-#                 self.nullable = nullable
-#                 self.mapped = mapped
-
-#         @staticmethod
-#         def error_loader(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
-#             raise ValueError('wrong state')
-
-#         @staticmethod
-#         def enum_loader(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
-#             programType: GreyCat.Type = type.greycat.types[type.mapped_type_off.value]
-#             valueOffset: c_int32 = stream.read_i32()
-#             abiTypeAtt: GreyCat.Type.Attribute = type.attributes[valueOffset.value]
-#             return programType.enum_values[abiTypeAtt.mappedAttOffset.value]
-
-#         @staticmethod
-#         def object_loader(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
-#             programType: GreyCat.Type = type.greycat.types[type.mapped_type_off.value]
-#             attributes: list[object] = [None] * len(type.attributes)
-#             for attOffset in range(len(type.attributes)):
-#                 att: GreyCat.Type.Attribute = type.attributes[attOffset]
-#                 loadedField: object = stream.read()
-#                 if att.mapped:
-#                     attributes[att.mappedAttOffset.value] = loadedField
-#             if programType.factory is None:
-#                 return GreyCat.Object(programType, attributes)
-#             else:
-#                 return programType.factory(programType, attributes)
-
-#         def __init__(self: GreyCat.Type, offset: c_int32, name: str, mapped_type_off: c_int32, masked_type_off: c_int32, is_masked: bool, is_enum: bool, is_native: bool, typeAttributes: list[Attribute], loader: GreyCat.Loader, factory: GreyCat.Factory, greycat: GreyCat) -> None:
-#             self.offset = offset
-#             self.name = name
-#             self.mapped_type_off = mapped_type_off
-#             self.masked_type_off = masked_type_off
-#             self.is_masked = is_masked
-#             self.is_enum = is_enum
-#             self.is_native = is_native
-#             self.attributes = typeAttributes
-#             self.attribute_off_by_name = dict()
-#             for off in range(len(self.attributes)):
-#                 self.attribute_off_by_name[self.attributes[off].name] = off
-#             self.greycat = greycat
-#             self.factory = factory
-#             if self.offset == self.mapped_type_off:
-#                 if self.is_enum:
-#                     self.enum_values: list[GreyCat.Enum] = []
-#                     for enumOffset in range(len(self.attributes)):
-#                         attributes: list[object] = list(
-#                             enumOffset, self.attributes[enumOffset, None])
-#                         if self.factory is None:
-#                             self.enum_values[enumOffset] = GreyCat.Enum(
-#                                 self, attributes)
-#                         else:
-#                             self.enum_values[enumOffset] = self.factory(
-#                                 self, attributes)
-#                 else:
-#                     self.enum_values = None
-#             else:
-#                 self.enum_values = None
-#             if loader is not None:
-#                 self.loader = loader
-#             elif self.is_native:
-#                 self.loader = GreyCat.Type.error_loader
-#             elif self.is_enum:
-#                 self.loader = GreyCat.Type.enum_loader
-#             else:
-#                 self.loader = GreyCat.Type.object_loader
-
-#     class Object:
-#         def __init__(self: GreyCat.Object, type: GreyCat.Type, attributes: list[object] | None) -> None:
-#             self.type = type
-#             self.attributes = attributes
-
-#         def get(self: GreyCat.Object, attributeName: str) -> object:
-#             return self.attributes[self.type.attribute_off_by_name[attributeName]]
-
-#         def set(self: GreyCat.Object, attributeName: str, value: object) -> None:
-#             self.attributes[self.type.attribute_off_by_name[attributeName]] = value
-
-#         def save(self: GreyCat.Object, stream: GreyCat.Stream) -> None:
-#             stream.write_i8(PrimitiveType.OBJECT)
-#             stream.write_i32(self.type.offset)
-#             if self.attributes is not None:
-#                 for offset in range(len(self.attributes)):
-#                     stream.write_object(self.attributes[offset])
-
-#         def __str__(self: GreyCat.Object) -> str:
-#             res = f'{self.type.name}{{'
-#             for offset in range(len(self.type.attributes)):
-#                 if offset > 0:
-#                     res = f'{res},'
-#                 res = f'{res}{self.type.attributes[offset].name}={self.attributes[offset]}'
-#             res = f'{res}}}'
-#             return res
-
-#     class Enum(Object):
-#         def __init__(self: GreyCat.Enum, type: GreyCat.Type, attributes: list[object]) -> None:
-#             super(type, None)
-#             self.__offset: int = attributes[0]
-#             self.key: str = attributes[1]
-#             self.value: object = attributes[2]
-
-#         def save(self: GreyCat.Enum, stream: GreyCat.Stream) -> None:
-#             stream.write_i8(PrimitiveType.ENUM)
-#             stream.write_i32(self.type.offset)
-#             stream.write_i32(self.__offset)
-
-#     class Library:
-#         def __init__(self: GreyCat.Library) -> None:
-#             self.mapped: list[GreyCat.Type] = []
-
-#         def name(self: GreyCat.Library) -> str:
-#             raise NotImplementedError
-
-#         def configure(self: GreyCat.Library, loaders: dict[str, GreyCat.Loader], factories: dict[str, GreyCat.Factory]) -> None:
-#             raise NotImplementedError
-
-#         def init(self: GreyCat.Library, greycat: GreyCat) -> None:
-#             raise NotImplementedError
-
-#     def __init__(self: GreyCat, url: str, *libraries: GreyCat.Library) -> None:
-#         loaders = dict()
-#         factories = dict()
-#         if 0 == len(libraries):
-#             pass
-#             # libraries = (std_n()) # TODO
-#         self.libs_by_name: dict[str, GreyCat.Library] = dict()
-#         for lib in libraries:
-#             lib.configure(loaders, factories)
-#             self.libs_by_name[lib.name()] = lib
-#         self.__runtime_url = url
-#         abiStream: GreyCat.Stream = self.getRemoteAbi()
-#         symbolsCount: int = abiStream.read_i32().value
-#         self.__symbols: str = [None] * (1 + symbolsCount)
-#         self.__symbols_off_by_value = dict()
-#         self.__symbols[0] = None
-#         for offset in range(1, 1 + symbolsCount):
-#             symbol: str = abiStream.read_string(abiStream.read_i32().value)
-#             self.__symbols[offset] = symbol
-#             self.__symbols_off_by_value[symbol] = offset
-#         typeSize: c_int32 = abiStream.read_i32()
-#         self.types: list[GreyCat.Type] = [None] * typeSize.value
-#         self.types_by_name: dict[str, GreyCat.Type] = dict()
-#         for i in range(typeSize.value):
-#             moduleName: str = self.__symbols[abiStream.read_i32().value]
-#             typeName: str = self.__symbols[abiStream.read_i32().value]
-#             if moduleName is None:
-#                 fqn = ''
-#             else:
-#                 fqn = f'{moduleName}.{typeName}'
-#             attributesLen: int = abiStream.read_i32().value
-#             abiStream.read_i32()  # unused field
-#             abiStream.read_i32()  # unused field
-#             mappedAbiTypeOffset: c_int32 = abiStream.read_i32()
-#             maskedAbiTypeOffset: c_int32 = abiStream.read_i32()
-#             isNative: bool = abiStream.read_bool()
-#             isEnum: bool = abiStream.read_bool()
-#             isMasked: bool = abiStream.read_bool()
-#             typeAttributes: list[GreyCat.Type.Attribute] = [
-#                 None] * attributesLen
-#             for enumOffset in range(attributesLen):
-#                 name: str = self.__symbols[abiStream.read_i32().value]
-#                 typeModuleName: str = self.__symbols[abiStream.read_i32(
-#                 ).value]
-#                 attributeTypeName: str = self.__symbols[abiStream.read_i32(
-#                 ).value]
-#                 progTypeOffset: c_int32 = abiStream.read_i32()
-#                 mappedAnyOffset: c_int32 = abiStream.read_i32()
-#                 mappedAttOffset: c_int32 = abiStream.read_i32()
-#                 sbiType: c_byte = abiStream.read_i8()
-#                 nullable: bool = abiStream.read_bool()
-#                 mapped: bool = abiStream.read_bool()
-#                 typeAttributes[enumOffset] = GreyCat.Type.Attribute(name, typeModuleName, attributeTypeName, progTypeOffset, mappedAnyOffset, mappedAttOffset,
-#                                                                     sbiType, nullable, mapped)
-#             abiType = GreyCat.Type(c_int32(i), fqn, mappedAbiTypeOffset, maskedAbiTypeOffset, isMasked, isEnum, isNative, typeAttributes, factories.get(fqn, None), loaders.get(fqn, None),
-#                                    self)
-#             # only the program-related ABI type (last version) is mapped to itself
-#             if abiType.mapped_type_off.value == i and len(fqn) != 0:
-#                 self.types_by_name[abiType.name] = abiType
-#             self.types[i] = abiType
-#         type_core_string = self.types_by_name.get('core.String', None)
-#         type_core_duration = self.types_by_name.get('core.duration', None)
-#         type_core_time = self.types_by_name.get('core.time', None)
-#         type_core_geo = self.types_by_name.get('core.geo', None)
-#         type_core_node_list = self.types_by_name.get('core.nodeList', None)
-#         type_core_node_index = self.types_by_name.get('core.nodeIndex', None)
-#         type_core_node_time = self.types_by_name.get('core.nodeTime', None)
-#         type_core_node_geo = self.types_by_name.get('core.nodeGeo', None)
-#         type_core_node = self.types_by_name.get('core.node', None)
-#         if None in [
-#             type_core_string,
-#             type_core_duration,
-#             type_core_time,
-#             type_core_geo,
-#             type_core_node_list,
-#             type_core_node_index,
-#             type_core_node_time,
-#             type_core_node_geo,
-#             type_core_node,
-#         ]:
-#             raise ValueError('wrong state')
-#         self.type_offset_core_string = type_core_string.offset
-#         self.type_offset_core_duration = type_core_duration.offset
-#         self.type_offset_core_time = type_core_time.offset
-#         self.type_offset_core_geo = type_core_geo.offset
-#         self.type_offset_core_node_list = type_core_node_list.offset
-#         self.type_offset_core_node_index = type_core_node_index.offset
-#         self.type_offset_core_node_time = type_core_node_time.offset
-#         self.type_offset_core_node_geo = type_core_node_geo.offset
-#         self.type_offset_core_node = type_core_node.offset
-#         abiStream.close()
-#         for i in range(len(libraries)):
-#             libraries[i].init(self)
-
-#     @staticmethod
-#     def call(greycat: GreyCat, fqn: str, parameters: list[object]) -> object:
-#         connection: http.client.HTTPConnection | http.client.HTTPSConnection
-#         if greycat.__runtime_url.startswith('http://'):
-#             connection = http.client.HTTPConnection(
-#                 greycat.__runtime_url.replace('http://', ''))
-#         elif greycat.__runtime_url.startswith('https://'):
-#             connection = http.client.HTTPSConnection(
-#                 greycat.__runtime_url.replace('https://', ''))
-#         else:
-#             raise ValueError
-#         body: bytes | None = None
-#         if len(parameters) > 0:
-#             b = bytearray()
-#             stream = GreyCat.Stream(greycat, ByteArrayIO(b))
-#             for offset in range(len(parameters)):
-#                 stream.write_object(parameters[offset])
-#             stream.close()
-#             body = bytes(b)
-#         connection.request('POST', fqn.replace(
-#             '.', '/'), body, {'Accept': 'application/octet-stream', 'Content-Type': 'application/octet-stream'})
-#         response: http.client.HTTPResponse = connection.getresponse()
-#         status: int = response.status
-#         stream = GreyCat.Stream(greycat, response)
-#         if 200 > status or 300 <= status:
-#             raise RuntimeError(str(stream.read()))
-#         res = stream.read()
-#         if len(response.read(1)) > 0:
-#             raise IOError('Remaining unread bytes')
-#         stream.close()
-#         return res
-
-#     def getRemoteAbi(self: GreyCat) -> GreyCat.Stream:
-#         connection: http.client.HTTPConnection | http.client.HTTPSConnection
-#         if self.__runtime_url.startswith('http://'):
-#             connection: http.client.HTTPConnection = http.client.HTTPConnection(
-#                 self.__runtime_url.replace('http://', ''))
-#         elif self.__runtime_url.startswith('https://'):
-#             connection: http.client.HTTPSConnection = http.client.HTTPSConnection(
-#                 self.__runtime_url.replace('https://', ''))
-#         else:
-#             raise ValueError
-#         connection.request('POST', 'runtime/Runtime/abi',
-#                            None, {'Accept': 'application/octet-stream'})
-#         response: http.client.HTTPResponse = connection.getresponse()
-#         status: int = response.status
-#         if 200 > status or 300 <= status:
-#             msg = ''
-#             line: str = response.readline()
-#             while line is not None:
-#                 msg = f'{msg}{line}\n'
-#                 line = response.readline()
-#             raise RuntimeError(msg)
-#         return GreyCat.Stream(self, response)
+        if not (runtime_url.startswith("file://")):
+            runtime_url = f"file://{runtime_url}"
+        return GreyCat.Stream(
+            self, open(os.path.join(runtime_url, "gcdata", "store", "abi"))
+        )
