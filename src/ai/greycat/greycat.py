@@ -85,8 +85,8 @@ class GreyCat:
         __ASCII_MAX: Final[c_byte] = c_byte(127)
 
         def __init__(self, greycat: GreyCat, io: BufferedIOBase) -> None:
-            self.__io: BufferedIOBase = io
             self.greycat: Final[GreyCat] = greycat
+            self.__io: BufferedIOBase = io
 
         def close(self) -> None:
             self.__io.close()
@@ -137,19 +137,6 @@ class GreyCat:
                 + ((tmp[0] << 24) >> 24)
             )
 
-        def read_i64(self) -> c_int64:
-            tmp: bytes = self.read_i8_array(8)
-            return c_int64(
-                (tmp[7] << 56)
-                + ((tmp[6] << 56) >> 8)
-                + ((tmp[5] << 56) >> 16)
-                + ((tmp[4] << 56) >> 24)
-                + ((tmp[3] << 56) >> 32)
-                + ((tmp[2] << 56) >> 40)
-                + ((tmp[1] << 56) >> 48)
-                + ((tmp[0] << 56) >> 56)
-            )
-
         def read_vu32(self) -> c_uint32:
             current: int
             value: int = 0
@@ -187,12 +174,110 @@ class GreyCat:
             current = buf[4]
             value |= (current & 0x7f) << 28
             return value
+
+        def read_i64(self) -> c_int64:
+            tmp: bytes = self.read_i8_array(8)
+            return c_int64(
+                (tmp[7] << 56)
+                + ((tmp[6] << 56) >> 8)
+                + ((tmp[5] << 56) >> 16)
+                + ((tmp[4] << 56) >> 24)
+                + ((tmp[3] << 56) >> 32)
+                + ((tmp[2] << 56) >> 40)
+                + ((tmp[1] << 56) >> 48)
+                + ((tmp[0] << 56) >> 56)
+            )
+        
+        def read_vi64(self) -> c_int64:
+            sign_swapped_value: int = self.read_vu64().value
+            return c_int64((sign_swapped_value >> 1) ^ (-(-sign_swapped_value & 1)))
+        
+        def read_vu64(self) -> c_int64:
+            current: int
+            value: int = 0
+            pos: int = self.__io.tell()
+            buf: bytes = self.__io.read(9)
+
+            current = buf[0]
+            value |= current & 0x7f
+            if 0 == (current & 0x80):
+                self.__io.seek(pos)
+                self.read(1)
+                return value
+            
+            current = buf[1]
+            value |= (current & 0x7f) << 7
+            if 0 == (current & 0x80):
+                self.__io.seek(pos)
+                self.read(2)
+                return value
+            
+            current = buf[2]
+            value |= (current & 0x7f) << 14
+            if 0 == (current & 0x80):
+                self.__io.seek(pos)
+                self.read(3)
+                return value
+            
+            current = buf[3]
+            value |= (current & 0x7f) << 21
+            if 0 == (current & 0x80):
+                self.__io.seek(pos)
+                self.read(4)
+                return value
+            
+            current = buf[4]
+            value |= (current & 0x7f) << 28
+            if 0 == (current & 0x80):
+                self.__io.seek(pos)
+                self.read(5)
+                return value
+            
+            current = buf[5]
+            value |= (current & 0x7f) << 35
+            if 0 == (current & 0x80):
+                self.__io.seek(pos)
+                self.read(6)
+                return value
+            
+            current = buf[6]
+            value |= (current & 0x7f) << 42
+            if 0 == (current & 0x80):
+                self.__io.seek(pos)
+                self.read(7)
+                return value
+            
+            current = buf[7]
+            value |= (current & 0x7f) << 49
+            if 0 == (current & 0x80):
+                self.__io.seek(pos)
+                self.read(8)
+                return value
+            
+            current = buf[8]
+            value |= (current & 0x7f) << 56
+            return value
+
         
         def read_f64(self)->c_double:
             return c_double(unpack("d", pack("q", self.read_i64()))[0])
         
-        def read_string(self, len_: int)->str:
+        def read_string(self, len_: int) -> str:
             self.read_i8_array(len_).decode("utf-8")
+
+        def read_string_lit(self) -> str:
+            offset: int = self.read_vu32().value
+            if 0 == (offset & 1):
+                raise IOError("wrong state")
+            offset >>= 1
+            if offset < len(self.greycat.symbols):
+                return self.greycat.symbols[offset]
+            raise ValueError("invalid primitive type")
+        
+        def read_object(self) -> Any:
+            type_offset: int = self.read_vu32().value
+            type: Final[GreyCat.Type] = self.greycat.types[type_offset]
+            return type.loader(type, self)
 
         def write_abi_header(self) -> None:
             self.write_i16(GreyCat.ABI_PROTO)
@@ -543,12 +628,6 @@ class GreyCat:
         __PRIMITIVE_LOADERS[PrimitiveType.UNDEFINED.value] = __error_loader
         __PRIMITIVE_LOADERS[PrimitiveType.STRING_LIT.value] = __string_lit_loader
 
-    Loader: Final[type[Callable[[Type, _Stream], Any]]] = Callable[[Type, _Stream], Any]
-
-    Factory: Final[type[Callable[[Type, list[Any]], Any]]] = Callable[
-        [Type, list[object]], Any
-    ]
-
     class Function:
         def __init__(self, name: str) -> None:
             self.name: Final[str] = name
@@ -703,6 +782,25 @@ class GreyCat:
                 self.loader = GreyCat.Type.__object_loader
             self.static_values: list[Any] = []
             self.generated_offsets: list[int] | None = None
+
+        def resolve_generated_offsets(self, *args: str) -> None:
+            self.generated_offsets: list[int] = [-1] * len(args)
+            name_offset: int
+            for name_offset in range(len(args)):
+                resolved: int | None = self.attribute_off_by_name.get(args[name_offset])
+                if resolved is None:
+                    raise ValueError("unmapped generated field, please re-generate this code!")
+                self.generated_offsets[name_offset] = resolved
+
+        def resolve_generated_offset_with_values(self, *args: Any) -> None:
+            self.generated_offsets: list[int] = [-1] * (len(args) / 2)
+            name_offset: int
+            for name_offset in range(0, len(args), 2):
+                resolved: int | None = self.attribute_off_by_name.get(args[name_offset])
+                if resolved is None:
+                    raise ValueError("unmapped generated field, please re-generate this code!")
+                self.generated_offsets[name_offset / 2] = resolved
+                self.enum_values[resolved].value = args[name_offset + 1]
 
     class Object:
         def __init__(self, type: GreyCat.Type, attributes: list[Any]) -> None:
@@ -863,6 +961,12 @@ class GreyCat:
                 return f"{self.type.name}.{self.key}"
             return f"{self.type.name}.{self.key}{{value={self.value}}}"
 
+    Loader: Final[type[Callable[[Type, _Stream], Any]]] = Callable[[Type, _Stream], Any]
+
+    Factory: Final[type[Callable[[Type, list[Any]], Any]]] = Callable[
+        [Type, list[object]], Any
+    ]
+
     class Library:
         def __init__(self: GreyCat.Library) -> None:
             self.mapped: list[GreyCat.Type] | None = None
@@ -880,6 +984,9 @@ class GreyCat:
         def init(self: GreyCat.Library, greycat: GreyCat) -> None:
             raise NotImplementedError
 
+    class Files: # TODO?
+        pass
+
     def __init__(self, *args: GreyCat.Library, url: str) -> None:
         self.libs_by_name: Final[dict[str, GreyCat.Library]] = {}
         std_: std = std()
@@ -888,7 +995,7 @@ class GreyCat:
         library_offset: int
         # for declarations
         lib: GreyCat.Library
-        for library_offset in range(len(*args)):
+        for library_offset in range(len(args)):
             lib = args[library_offset]
             self.libs_by_name[lib.name()] = lib
         loaders: Final[dict[str, GreyCat.Loader]] = {}
@@ -1148,11 +1255,30 @@ class GreyCat:
         stream.close()
         return res
 
-    def __get_abi(self, runtime_url: str) -> GreyCat._Stream:
-        if runtime_url.startswith("http"):
-            return self.__get_remote_abi(runtime_url)
-        else:
-            return self.__get_local_abi(runtime_url)
+    def create(self, name: str, parameters: list[Any]) -> Any:
+        type: Final[GreyCat.Type | None] = self.types_by_name[name]
+        if type is None:
+            return None
+        return type.factory[type, parameters]
+    
+    def create_geo(self, lat: c_double, lng: c_double):
+        type: GreyCat.Type = self.types[self.type_offset_core_geo]
+        geo: std.core.geo = type.factory(type)
+        geo.lat = c_double(lat)
+        geo.lng = c_double(lng)
+        return geo
+    
+    def create_time(self, epoch_us: c_int64):
+        type: GreyCat.Type = self.types[self.type_offset_core_geo]
+        t: std.core.time = type.factory(type)
+        t.value = epoch_us
+        return t
+    
+    def create_duration(self, duration_us: c_int64):
+        type: GreyCat.Type = self.types[self.type_offset_core_geo]
+        dur: std.core.duration = type.factory(type)
+        dur.value = duration_us
+        return dur
 
     def __get_remote_abi(self, runtime_url: str) -> GreyCat._Stream:
         connection: http.client.HTTPConnection | http.client.HTTPSConnection
@@ -1187,3 +1313,9 @@ class GreyCat:
         return GreyCat._Stream(
             self, open(os.path.join(runtime_url, "gcdata", "store", "abi"), 'rb')
         )
+    
+    def __get_abi(self, runtime_url: str) -> GreyCat._Stream:
+        if runtime_url.startswith("http"):
+            return self.__get_remote_abi(runtime_url)
+        else:
+            return self.__get_local_abi(runtime_url)
