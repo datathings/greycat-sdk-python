@@ -16,7 +16,7 @@ class std_n:
                 raise NotImplementedError
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 raise NotImplementedError
 
         class Array(Generic[T], GreyCat.Object):
@@ -24,7 +24,7 @@ class std_n:
                 super(type, None)
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 size = stream.read_i32().value
                 array: std_n.core.Array[object] = type.factory(type)
                 array = [None] * size
@@ -40,7 +40,7 @@ class std_n:
                 self.epochUs: c_int64
                 self.timeZone: c_int32
 
-            def _save(self: std_n.core.Date, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.core.Date, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i64(self.localizedEpochS)
@@ -48,7 +48,7 @@ class std_n:
                 stream.write_i32(self.timeZone)
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 res: std_n.core.Date = type.factory(type)
                 res.localizedEpochS = stream.read_i64()
                 res.epochUs = stream.read_i64()
@@ -60,12 +60,12 @@ class std_n:
                 super(type, None)
                 self.value: c_int64
 
-            def _save(self: std_n.core.duration, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.core.duration, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.DURATION)
                 stream.write_i64(self.value)
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 res: std_n.core.duration = type.factory(type)
                 res.value = stream.read_i64()
                 return res
@@ -78,7 +78,7 @@ class std_n:
                 self.msg: str
                 self.value: object
 
-            def _save(self: std_n.core.Error, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.core.Error, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i32(self.code)
@@ -96,7 +96,7 @@ class std_n:
                 stream.write_object(self.value)
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 code: c_int32 = stream.read_i32()
                 framesLen: c_int32 = stream.read_i32()
                 msgLen: c_int32 = stream.read_i32()
@@ -132,7 +132,7 @@ class std_n:
             GC_CORE_GEO_LNG_MAX: float = 180
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 geo: std_n.core.geo = type.factory(type)
                 geocode: c_int64 = stream.read_i64()
                 geo.geocode = geocode
@@ -190,7 +190,7 @@ class std_n:
                 self.lat: float
                 self.lng: float
 
-            def _save(self: std_n.core.geo, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.core.geo, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.GEO)
                 stream.write_i64(self.geocode)
 
@@ -200,7 +200,7 @@ class std_n:
             def __init__(self: std_n.core.GeoPoly, type: GreyCat.Type) -> None:
                 super(type, None)
 
-            def _save(self: std_n.core.GeoPoly, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.core.GeoPoly, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 if self.attributes is None:
@@ -212,7 +212,7 @@ class std_n:
                         stream.write_i64(point.geocode)
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 size: int = stream.read_i32().value
                 geoType: GreyCat.Type = type.greycat.types[type.greycat.type_offset_core_geo]
                 points: list[std_n.core.geo] = [None] * size
@@ -231,7 +231,7 @@ class std_n:
                 super(type, None)
                 self.__map: dict[T, U] = dict()
 
-            def _save(self: std_n.core.Map[T, U], stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.core.Map[T, U], stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i32(self.size())
@@ -240,7 +240,7 @@ class std_n:
                     stream.write_object(self.__map[key])
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 map: std_n.core.Map = type.factory(type)
                 mapLength = stream.read_i32().value
                 for _ in range(mapLength):
@@ -267,12 +267,12 @@ class std_n:
                 super(type, None)
                 self.ref: c_int64
 
-            def _save(self: std_n.core.node, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.core.node, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.NODE)
                 stream.write_i64(self.ref)
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 res: std_n.core.node = type.factory(type)
                 res.ref = stream.read_i64()
                 return res
@@ -282,12 +282,12 @@ class std_n:
                 super(type, None)
                 self.ref: c_int64
 
-            def _save(self: std_n.core.nodeGeo, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.core.nodeGeo, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.NODE_GEO)
                 stream.write_i64(self.ref)
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 res: std_n.core.nodeGeo = type.factory(type)
                 res.ref = stream.read_i64()
                 return res
@@ -299,12 +299,12 @@ class std_n:
                 super(type, None)
                 self.ref: c_int64
 
-            def _save(self: std_n.core.nodeIndex, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.core.nodeIndex, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.NODE_INDEX)
                 stream.write_i64(self.ref)
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 res: std_n.core.nodeIndex = type.factory(type)
                 res.ref = stream.read_i64()
                 return res
@@ -313,7 +313,7 @@ class std_n:
             def __init__(self: std_n.core.nodeIndexBucket, type: GreyCat.Type) -> None:
                 super(type, None)
 
-            def _save(self: std_n.core.nodeIndexBucket, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.core.nodeIndexBucket, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 if self.attributes is None:
@@ -324,7 +324,7 @@ class std_n:
                         stream.write_object(self.attributes[offset])
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 size = stream.read_i32()
                 data: list[object] = [None] * size
                 for offset in range(size):
@@ -338,12 +338,12 @@ class std_n:
                 super(type, None)
                 self.ref: c_int64
 
-            def _save(self: std_n.core.nodeList, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.core.nodeList, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.NODE_LIST)
                 stream.write_i64(self.ref)
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 res: std_n.core.nodeList = type.factory(type)
                 res.ref = stream.read_i64()
                 return res
@@ -353,12 +353,12 @@ class std_n:
                 super(type, None)
                 self.ref: c_int64
 
-            def _save(self: std_n.core.nodeTime, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.core.nodeTime, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.NODE_TIME)
                 stream.write_i64(self.ref)
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 res: std_n.core.nodeTime = type.factory(type)
                 res.ref = stream.read_i64()
                 return res
@@ -371,7 +371,7 @@ class std_n:
                 self.meta: list[std_n.core.Table.TableColumnMeta]
                 self.data: list[T]
 
-            def _save(self: std_n.core.Table[T], stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.core.Table[T], stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i32(self.cols)
@@ -393,7 +393,7 @@ class std_n:
                     stream.write_object(self.data[offset])
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 cols: c_int32 = stream.read_i32()
                 rows: c_int32 = stream.read_i32()
                 useMeta: bool = stream.read_bool()
@@ -434,7 +434,7 @@ class std_n:
                 self.size: c_int32
                 self.data: bytes
 
-            def _save(self: std_n.core.Tensor, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.core.Tensor, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i8(c_byte(len(self.shape)))
@@ -445,7 +445,7 @@ class std_n:
                 stream.write_i8_array(self.data, 0, len(self.data))
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 nbDim: int = stream.read_i8().value
                 tensorType: c_byte = stream.read_i8()
                 shape: list[c_int32] = [None] * nbDim
@@ -474,12 +474,12 @@ class std_n:
                 super(type, None)
                 self.value: c_int64
 
-            def _save(self: std_n.core.time, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.core.time, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.TIME)
                 stream.write_i64(self.value)
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 res: std_n.core.time = type.factory(type)
                 res.value = stream.read_i64()
                 return res
@@ -489,7 +489,7 @@ class std_n:
                 super(type, None)
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 return stream.read_string(stream.read_i32().value)
 
     class util:
@@ -499,7 +499,7 @@ class std_n:
                 raise NotImplementedError
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 raise NotImplementedError
 
         class Buffer(GreyCat.Object):
@@ -507,14 +507,14 @@ class std_n:
                 super(type, None)
                 self.data = bytes
 
-            def _save(self: std_n.util.Buffer, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.util.Buffer, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i32(len(self.data))
                 stream.write_i8_array(self.data, 0, len(self.data))
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 buf: std_n.util.Buffer = type.factory(type)
                 buf.data = stream.read_i8_array(stream.read_i32().value)
                 return buf
@@ -533,7 +533,7 @@ class std_n:
                 self.minBound: c_double
                 self.maxBound: c_double
 
-            def _save(self: std_n.util.Gaussian, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.util.Gaussian, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_f64(self.sum)
@@ -548,7 +548,7 @@ class std_n:
                 stream.write_f64(self.maxBound)
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 g: std_n.util.Gaussian = type.factory(type)
                 g.sum = stream.read_f64()
                 g.sumSq = stream.read_f64()
@@ -567,14 +567,14 @@ class std_n:
                 super(type, None)
                 self.data: bytes
 
-            def _save(self: std_n.util.GaussianProfile, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.util.GaussianProfile, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i32(c_int32(len(self.data)))
                 stream.write_i8_array(self.data)
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 g: std_n.util.GaussianProfile = type.factory(type)
                 g.data = stream.read_i8_array(stream.read_i32().value)
                 return g
@@ -605,7 +605,7 @@ class std_n:
                 self.totalCount: c_int64
                 self.counts: list[c_int64]
 
-            def _save(self: std_n.util.HistogramF64, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.util.HistogramF64, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_f64(self.realMin)
@@ -633,7 +633,7 @@ class std_n:
                     stream.write_i64(self.counts[offset])
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 realMin = stream.read_f64()
                 realMax = stream.read_f64()
                 min = stream.read_f64()
@@ -709,7 +709,7 @@ class std_n:
                 self.totalCount: c_int64
                 self.counts: list[c_int64]
 
-            def _save(self: std_n.util.HistogramF64, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.util.HistogramF64, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i64(self.realMin)
@@ -737,7 +737,7 @@ class std_n:
                     stream.write_i64(self.counts[offset])
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 realMin = stream.read_i64()
                 realMax = stream.read_i64()
                 min = stream.read_i64()
@@ -803,7 +803,7 @@ class std_n:
                 self.progress: c_double
                 self.remainingTime: c_int64
 
-            def _save(self: std_n.util.ProgressTracker, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.util.ProgressTracker, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i64(self.initialTime)
@@ -820,7 +820,7 @@ class std_n:
                 stream.write_i64(self.remainingTime)
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 initialTime: c_int64 = stream.read_i64()
                 lastTime: c_int64 = stream.read_i64()
                 previousTime: c_int64 = stream.read_i64()
@@ -854,7 +854,7 @@ class std_n:
                 self.infoOff: c_int32
                 self.data: bytes
 
-            def _save(self: std_n.util.Iban, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.util.Iban, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i32(self.infoOff)
@@ -862,7 +862,7 @@ class std_n:
                 stream.write_i8_array(self.data, 0, len(self.data))
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 iban: std_n.util.Iban = type.factory(type)
                 iban.infoOff = stream.read_i32()
                 iban.data = stream.read_i8_array(stream.read_i32())
@@ -873,7 +873,7 @@ class std_n:
                 super(type, None)
                 self.__queue: list[T]
 
-            def _save(self: std_n.util.Queue[T], stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.util.Queue[T], stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i64(c_int64(self.size()))  # width
@@ -885,7 +885,7 @@ class std_n:
                     stream.write_object(t)
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 stream.read_i64()  # width
                 size: int = stream.read_i32().value
                 capacity: int = stream.read_i32().value
@@ -924,7 +924,7 @@ class std_n:
                 self.toTail: c_int64
                 self.values: list[object]
 
-            def _save(self: std_n.util.SlidingWindow, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.util.SlidingWindow, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i64(self.width)
@@ -939,7 +939,7 @@ class std_n:
                     stream.write_object(self.values[offset])
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 width: c_int64 = stream.read_i64()
                 sumType: c_byte = stream.read_i8()
                 sum: c_double = stream.read_f64()
@@ -975,7 +975,7 @@ class std_n:
                 self.toTail: c_int64
                 self.values: list[Tuple[object, c_int64]]
 
-            def _save(self: std_n.util.TimeWindow, stream: GreyCat.Stream) -> None:
+            def _save(self: std_n.util.TimeWindow, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i64(self.width)
@@ -992,7 +992,7 @@ class std_n:
                     stream.write_i64(valueTime[1])
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 width: c_int64 = stream.read_i64()
                 sumType: c_byte = stream.read_i8()
                 sum: c_double = stream.read_f64()
@@ -1023,7 +1023,7 @@ class std_n:
                 raise NotImplementedError
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 raise NotImplementedError
 
         class File(GreyCat.Object):
@@ -1032,7 +1032,7 @@ class std_n:
                 raise NotImplementedError
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 raise NotImplementedError
 
         class FileWriter(GreyCat.Object):
@@ -1041,5 +1041,5 @@ class std_n:
                 raise NotImplementedError
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 raise NotImplementedError

@@ -56,8 +56,8 @@ class GreyCat:
 
     @final
     class AbiReader:
-        def __init__(self, stream: GreyCat.Stream) -> None:
-            self.__stream: GreyCat.Stream = stream
+        def __init__(self, stream: GreyCat._Stream) -> None:
+            self.__stream: GreyCat._Stream = stream
 
         def read(self) -> Any:
             return self.__stream.read()
@@ -70,8 +70,8 @@ class GreyCat:
 
     @final
     class AbiWriter:
-        def __init__(self, stream: GreyCat.Stream) -> None:
-            self.__stream: GreyCat.Stream = stream
+        def __init__(self, stream: GreyCat._Stream) -> None:
+            self.__stream: GreyCat._Stream = stream
 
         def write(self, object: Any) -> None:
             return self.__stream.write(object)
@@ -83,7 +83,7 @@ class GreyCat:
         pass  # TODO
 
     @final
-    class Stream:
+    class _Stream:
         __ASCII_MAX: Final[c_byte] = c_byte(127)
 
         def __init__(self, greycat: GreyCat, io: BufferedIOBase) -> None:
@@ -106,7 +106,7 @@ class GreyCat:
 
         def read(self) -> Any:
             primitive_offset: c_byte = self.read_i8()
-            return GreyCat.Stream.PRIMITIVE_LOADERS[primitive_offset.value](self)
+            return GreyCat._Stream.__PRIMITIVE_LOADERS[primitive_offset.value](self)
 
         def read_i8(self) -> c_byte:
             return c_byte(self.__io.read(1)[0])
@@ -298,172 +298,172 @@ class GreyCat:
         def write_f64(self, d: c_double):
             self.write_i64(c_int64(unpack("q", pack("d", d.value))[0]))
 
-        PrimitiveLoader: Final[type[Callable[[GreyCat.Stream], object]]] = Callable[
+        __PrimitiveLoader: Final[type[Callable[[GreyCat._Stream], object]]] = Callable[
             [object], object
         ]
 
         __null_loader: Final[
-            Callable[[GreyCat.Stream], object]
+            Callable[[GreyCat._Stream], object]
         ] = lambda stream: stream.read_null()
         __bool_loader: Final[
-            Callable[[GreyCat.Stream], object]
+            Callable[[GreyCat._Stream], object]
         ] = lambda stream: stream.read_bool()
         __char_loader: Final[
-            Callable[[GreyCat.Stream], object]
+            Callable[[GreyCat._Stream], object]
         ] = lambda stream: stream.read_char()
         __i64_loader: Final[
-            Callable[[GreyCat.Stream], object]
+            Callable[[GreyCat._Stream], object]
         ] = lambda stream: stream.read_i64()
         __f64_loader: Final[
-            Callable[[GreyCat.Stream], object]
+            Callable[[GreyCat._Stream], object]
         ] = lambda stream: stream.read_f64()
 
         @staticmethod
         @final
-        def __type_loader(stream: GreyCat.Stream, type: GreyCat.Type) -> object:
+        def __type_loader(stream: GreyCat._Stream, type: GreyCat.Type) -> object:
             return type.loader(type, stream)
 
         __node_loader: Final[
-            Callable[[GreyCat.Stream], object]
-        ] = lambda stream: GreyCat.Stream.__type_loader(
+            Callable[[GreyCat._Stream], object]
+        ] = lambda stream: GreyCat._Stream.__type_loader(
             stream, stream.greycat.type_offset_core_node
         )
         __node_time_loader: Final[
-            Callable[[GreyCat.Stream], object]
-        ] = lambda stream: GreyCat.Stream.__type_loader(
+            Callable[[GreyCat._Stream], object]
+        ] = lambda stream: GreyCat._Stream.__type_loader(
             stream, stream.greycat.type_offset_core_node_time
         )
         __node_index_loader: Final[
-            Callable[[GreyCat.Stream], object]
-        ] = lambda stream: GreyCat.Stream.__type_loader(
+            Callable[[GreyCat._Stream], object]
+        ] = lambda stream: GreyCat._Stream.__type_loader(
             stream, stream.greycat.type_offset_core_node_index
         )
         __node_list_loader: Final[
-            Callable[[GreyCat.Stream], object]
-        ] = lambda stream: GreyCat.Stream.__type_loader(
+            Callable[[GreyCat._Stream], object]
+        ] = lambda stream: GreyCat._Stream.__type_loader(
             stream, stream.greycat.type_offset_core_node_list
         )
         __node_geo_loader: Final[
-            Callable[[GreyCat.Stream], object]
-        ] = lambda stream: GreyCat.Stream.__type_loader(
+            Callable[[GreyCat._Stream], object]
+        ] = lambda stream: GreyCat._Stream.__type_loader(
             stream, stream.greycat.type_offset_core_node_geo
         )
         __geo_loader: Final[
-            Callable[[GreyCat.Stream], object]
-        ] = lambda stream: GreyCat.Stream.__type_loader(
+            Callable[[GreyCat._Stream], object]
+        ] = lambda stream: GreyCat._Stream.__type_loader(
             stream, stream.greycat.type_offset_core_geo
         )
         __time_loader: Final[
-            Callable[[GreyCat.Stream], object]
-        ] = lambda stream: GreyCat.Stream.__type_loader(
+            Callable[[GreyCat._Stream], object]
+        ] = lambda stream: GreyCat._Stream.__type_loader(
             stream, stream.greycat.type_offset_core_time
         )
         __duration_loader: Final[
-            Callable[[GreyCat.Stream], object]
-        ] = lambda stream: GreyCat.Stream.__type_loader(
+            Callable[[GreyCat._Stream], object]
+        ] = lambda stream: GreyCat._Stream.__type_loader(
             stream, stream.greycat.type_offset_core_duration
         )
 
         __object_loader: Final[
-            Callable[[GreyCat.Stream], object]
+            Callable[[GreyCat._Stream], object]
         ] = lambda stream: stream.read_object()
 
         __tu2d_loader: Final[
-            Callable[[GreyCat.Stream], object]
-        ] = lambda stream: GreyCat.Stream.__type_loader(
+            Callable[[GreyCat._Stream], object]
+        ] = lambda stream: GreyCat._Stream.__type_loader(
             stream, stream.greycat.type_offset_core_ti2d
         )
 
         __tu3d_loader: Final[
-            Callable[[GreyCat.Stream], object]
-        ] = lambda stream: GreyCat.Stream.__type_loader(
+            Callable[[GreyCat._Stream], object]
+        ] = lambda stream: GreyCat._Stream.__type_loader(
             stream, stream.greycat.type_offset_core_ti3d
         )
 
         __tu4d_loader: Final[
-            Callable[[GreyCat.Stream], object]
-        ] = lambda stream: GreyCat.Stream.__type_loader(
+            Callable[[GreyCat._Stream], object]
+        ] = lambda stream: GreyCat._Stream.__type_loader(
             stream, stream.greycat.type_offset_core_ti4d
         )
 
         __tu5d_loader: Final[
-            Callable[[GreyCat.Stream], object]
-        ] = lambda stream: GreyCat.Stream.__type_loader(
+            Callable[[GreyCat._Stream], object]
+        ] = lambda stream: GreyCat._Stream.__type_loader(
             stream, stream.greycat.type_offset_core_ti5d
         )
 
         __tu6d_loader: Final[
-            Callable[[GreyCat.Stream], object]
-        ] = lambda stream: GreyCat.Stream.__type_loader(
+            Callable[[GreyCat._Stream], object]
+        ] = lambda stream: GreyCat._Stream.__type_loader(
             stream, stream.greycat.type_offset_core_ti6d
         )
 
         __tu10d_loader: Final[
-            Callable[[GreyCat.Stream], object]
-        ] = lambda stream: GreyCat.Stream.__type_loader(
+            Callable[[GreyCat._Stream], object]
+        ] = lambda stream: GreyCat._Stream.__type_loader(
             stream, stream.greycat.type_offset_core_ti10d
         )
 
         __tf2d_loader: Final[
-            Callable[[GreyCat.Stream], object]
-        ] = lambda stream: GreyCat.Stream.__type_loader(
+            Callable[[GreyCat._Stream], object]
+        ] = lambda stream: GreyCat._Stream.__type_loader(
             stream, stream.greycat.type_offset_core_tf2d
         )
 
         __tf3d_loader: Final[
-            Callable[[GreyCat.Stream], object]
-        ] = lambda stream: GreyCat.Stream.__type_loader(
+            Callable[[GreyCat._Stream], object]
+        ] = lambda stream: GreyCat._Stream.__type_loader(
             stream, stream.greycat.type_offset_core_tf3d
         )
 
         __tf4d_loader: Final[
-            Callable[[GreyCat.Stream], object]
-        ] = lambda stream: GreyCat.Stream.__type_loader(
+            Callable[[GreyCat._Stream], object]
+        ] = lambda stream: GreyCat._Stream.__type_loader(
             stream, stream.greycat.type_offset_core_tf4d
         )
 
         @staticmethod
         @final
-        def __error_loader(stream: GreyCat.Stream) -> object:
+        def __error_loader(stream: GreyCat._Stream) -> object:
             raise ValueError("invalid primitive type")
 
         __string_lit_loader: Final[
-            Callable[[GreyCat.Stream], object]
+            Callable[[GreyCat._Stream], object]
         ] = lambda stream: stream.read_string_lit()
 
-        PRIMITIVE_LOADERS: Final[list[PrimitiveLoader]] = [
+        __PRIMITIVE_LOADERS: Final[list[__PrimitiveLoader]] = [
             None
         ] * PrimitiveType.SIZE.value
-        PRIMITIVE_LOADERS[PrimitiveType.NULL.value] = __null_loader
-        PRIMITIVE_LOADERS[PrimitiveType.BOOL.value] = __bool_loader
-        PRIMITIVE_LOADERS[PrimitiveType.CHAR.value] = __char_loader
-        PRIMITIVE_LOADERS[PrimitiveType.INT.value] = __i64_loader
-        PRIMITIVE_LOADERS[PrimitiveType.FLOAT.value] = __f64_loader
-        PRIMITIVE_LOADERS[PrimitiveType.NODE.value] = __node_loader
-        PRIMITIVE_LOADERS[PrimitiveType.NODE_TIME.value] = __node_time_loader
-        PRIMITIVE_LOADERS[PrimitiveType.NODE_INDEX.value] = __node_index_loader
-        PRIMITIVE_LOADERS[PrimitiveType.NODE_LIST.value] = __node_list_loader
-        PRIMITIVE_LOADERS[PrimitiveType.NODE_GEO.value] = __node_geo_loader
-        PRIMITIVE_LOADERS[PrimitiveType.GEO.value] = __geo_loader
-        PRIMITIVE_LOADERS[PrimitiveType.TIME.value] = __time_loader
-        PRIMITIVE_LOADERS[PrimitiveType.DURATION.value] = __duration_loader
-        PRIMITIVE_LOADERS[PrimitiveType.ENUM.value] = __object_loader
-        PRIMITIVE_LOADERS[PrimitiveType.OBJECT.value] = __object_loader
-        PRIMITIVE_LOADERS[PrimitiveType.TU2D.value] = __tu2d_loader
-        PRIMITIVE_LOADERS[PrimitiveType.TU3D.value] = __tu3d_loader
-        PRIMITIVE_LOADERS[PrimitiveType.TU4D.value] = __tu4d_loader
-        PRIMITIVE_LOADERS[PrimitiveType.TU5D.value] = __tu5d_loader
-        PRIMITIVE_LOADERS[PrimitiveType.TU6D.value] = __tu6d_loader
-        PRIMITIVE_LOADERS[PrimitiveType.TU10D.value] = __tu10d_loader
-        PRIMITIVE_LOADERS[PrimitiveType.TUF2D.value] = __tf2d_loader
-        PRIMITIVE_LOADERS[PrimitiveType.TUF3D.value] = __tf3d_loader
-        PRIMITIVE_LOADERS[PrimitiveType.TUF4D.value] = __tf4d_loader
-        PRIMITIVE_LOADERS[PrimitiveType.BLOCK_REF.value] = __error_loader
-        PRIMITIVE_LOADERS[PrimitiveType.FUNCTION] = __error_loader  # TODO?
-        PRIMITIVE_LOADERS[PrimitiveType.UNDEFINED.value] = __error_loader
-        PRIMITIVE_LOADERS[PrimitiveType.STRING_LIT.value] = __string_lit_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.NULL.value] = __null_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.BOOL.value] = __bool_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.CHAR.value] = __char_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.INT.value] = __i64_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.FLOAT.value] = __f64_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.NODE.value] = __node_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.NODE_TIME.value] = __node_time_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.NODE_INDEX.value] = __node_index_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.NODE_LIST.value] = __node_list_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.NODE_GEO.value] = __node_geo_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.GEO.value] = __geo_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.TIME.value] = __time_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.DURATION.value] = __duration_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.ENUM.value] = __object_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.OBJECT.value] = __object_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.TU2D.value] = __tu2d_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.TU3D.value] = __tu3d_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.TU4D.value] = __tu4d_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.TU5D.value] = __tu5d_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.TU6D.value] = __tu6d_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.TU10D.value] = __tu10d_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.TUF2D.value] = __tf2d_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.TUF3D.value] = __tf3d_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.TUF4D.value] = __tf4d_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.BLOCK_REF.value] = __error_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.FUNCTION] = __error_loader  # TODO?
+        __PRIMITIVE_LOADERS[PrimitiveType.UNDEFINED.value] = __error_loader
+        __PRIMITIVE_LOADERS[PrimitiveType.STRING_LIT.value] = __string_lit_loader
 
-    Loader: Final[type[Callable[[Type, Stream], Any]]] = Callable[[Type, Stream], Any]
+    Loader: Final[type[Callable[[Type, _Stream], Any]]] = Callable[[Type, _Stream], Any]
 
     Factory: Final[type[Callable[[Type, list[Any]], Any]]] = Callable[
         [Type, list[object]], Any
@@ -497,12 +497,12 @@ class GreyCat:
 
         @staticmethod
         @final
-        def __error_loader(type: GreyCat.Type, stream: GreyCat.Stream) -> Any:
+        def __error_loader(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
             raise ValueError("wrong state")
 
         @staticmethod
         @final
-        def __enum_loader(type: GreyCat.Type, stream: GreyCat.Stream) -> Any:
+        def __enum_loader(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
             program_type: Final[GreyCat.Type] = type.greycat.types[type.mapped_type_off]
             value_offset: Final[int] = stream.read_vu32().value
             abi_type_att: Final[GreyCat.Type.Attribute] = type.attributes[value_offset]
@@ -510,7 +510,7 @@ class GreyCat:
 
         @staticmethod
         @final
-        def __object_loader(type: GreyCat.Type, stream: GreyCat.Stream) -> Any:
+        def __object_loader(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
             program_type: Final[GreyCat.Type] = type.greycat.types[type.mapped_type_off]
             attributes: Final[list[Any]] = [None] * len(program_type.attributes)
             nullable_bitset: bytes = stream.read_i8_array(type.nullable_nb_bytes)
@@ -544,7 +544,7 @@ class GreyCat:
                             field_type = type.greycat.types[stream.read_vu32()]
                         loaded_field = field_type.loader(field_type, stream)
                     case _:
-                        loaded_field = GreyCat.Stream.PRIMITIVE_LOADERS[att.sbi_type](
+                        loaded_field = GreyCat._Stream.__PRIMITIVE_LOADERS[att.sbi_type](
                             stream
                         )
                 if att.mapped:
@@ -638,11 +638,11 @@ class GreyCat:
         def _set(self, offset: int, value: Any | None) -> None:
             self.attributes[offset] = value
 
-        def _save_type(self, stream: GreyCat.Stream) -> None:
+        def _save_type(self, stream: GreyCat._Stream) -> None:
             stream.write_i8(PrimitiveType.OBJECT)
             stream.write_vu32(self.type.offset)
 
-        def _save(self, stream: GreyCat.Stream) -> None:
+        def _save(self, stream: GreyCat._Stream) -> None:
             nullable_bitset: bytearray = bytearray(self.type.nullable_nb_bytes)
             nullable_offset: int = 0
             field: GreyCat.Type.Attribute
@@ -666,7 +666,7 @@ class GreyCat:
                         stream.write_bool(bool(value))
                     case PrimitiveType.CHAR:
                         c: c_byte = c_byte(value)
-                        if c > GreyCat.Stream.__ASCII_MAX:
+                        if c > GreyCat._Stream.__ASCII_MAX:
                             raise ValueError(f"Only ASCII characters are allowed: {c}")
                         stream.write_i8(c)
                     case PrimitiveType.INT:
@@ -733,7 +733,7 @@ class GreyCat:
                             if not (symbol_offset is None):
                                 stream.write_vu32(c_uint32((symbol_offset << 1) | 1))
                             else:
-                                data: bytes = string.encode('utf-8')
+                                data: bytes = string.encode("utf-8")
                                 stream.write_vu32(c_uint32(len(data)))
                                 stream.write_i8_array(bytes, 0, len(data))
                         else:
@@ -747,14 +747,14 @@ class GreyCat:
                         stream.write(value)
                     case _:
                         raise ValueError("wrong state")
-        
-        def __str__(self)->str:
-            res = f'{self.type.name}{{'
+
+        def __str__(self) -> str:
+            res = f"{self.type.name}{{"
             for offset in range(len(self.type.attributes)):
                 if offset > 0:
-                    res = f'{res},'
-                res = f'{res}{self.type.attributes[offset].name}={self.attributes[offset]}'
-            res=f'{res}}}'
+                    res = f"{res},"
+                res = f"{res}{self.type.attributes[offset].name}={self.attributes[offset]}"
+            res = f"{res}}}"
             return res
 
     class Enum(Object):
@@ -763,21 +763,21 @@ class GreyCat:
             self.__offset: Final[int] = attributes[0]
             self.key: Final[str] = attributes[1]
             self.value: Any = attributes[2]
-        
+
         @final
-        def _save_type(self, stream: GreyCat.Stream) -> None:
+        def _save_type(self, stream: GreyCat._Stream) -> None:
             stream.write_i8(PrimitiveType.ENUM)
             stream.write_vu32(self.type.offset)
-        
+
         @final
-        def _save(self, stream: GreyCat.Stream)->None:
+        def _save(self, stream: GreyCat._Stream) -> None:
             stream.write_vu32(self.__offset)
-        
-        def __str__(self)->str:
+
+        def __str__(self) -> str:
             if self.value is None:
-                return f'{self.type.name}.{self.key}'
-            return f'{self.type.name}.{self.key}{{value={self.value}}}'
-        
+                return f"{self.type.name}.{self.key}"
+            return f"{self.type.name}.{self.key}{{value={self.value}}}"
+
     class Library:
         def __init__(self: GreyCat.Library) -> None:
             self.mapped: list[GreyCat.Type] | None = None
@@ -808,7 +808,7 @@ class GreyCat:
         for lib in self.libs_by_name.values():
             lib.configure(loaders, factories)
         self.__runtime_url: Final[str] = url
-        abi_stream: Final[GreyCat.Stream] = self.__get_abi(url)
+        abi_stream: Final[GreyCat._Stream] = self.__get_abi(url)
 
         # step 0: verify abi version
         abi_major: int = abi_stream.read_i16()
@@ -1025,10 +1025,10 @@ class GreyCat:
         else:
             raise ValueError("wrong state")
         body: bytes | None = None
-        stream: GreyCat.Stream
+        stream: GreyCat._Stream
         if len(parameters > 0):
             b = bytearray()
-            stream = GreyCat.Stream(greycat, ByteArrayIO(b))
+            stream = GreyCat._Stream(greycat, ByteArrayIO(b))
             stream.write_abi_header()
             for offset in range(len(parameters)):
                 stream.write(parameters[offset])
@@ -1045,7 +1045,7 @@ class GreyCat:
         )
         response: http.client.HTTPResponse = connection.getresponse()
         status: int = response.status
-        stream = GreyCat.Stream(greycat, response)
+        stream = GreyCat._Stream(greycat, response)
         if 200 > status or 300 <= status:
             raise RuntimeError(str(stream.read()))
         stream.read_abi_header()
@@ -1055,13 +1055,13 @@ class GreyCat:
         stream.close()
         return res
 
-    def __get_abi(self, runtime_url: str) -> GreyCat.Stream:
+    def __get_abi(self, runtime_url: str) -> GreyCat._Stream:
         if runtime_url.startswith("http"):
             return self.__get_remote_abi(runtime_url)
         else:
             return self.__get_local_abi(runtime_url)
 
-    def __get_remote_abi(self, runtime_url: str) -> GreyCat.Stream:
+    def __get_remote_abi(self, runtime_url: str) -> GreyCat._Stream:
         connection: http.client.HTTPConnection | http.client.HTTPSConnection
         if runtime_url.startswith("http://"):
             connection: http.client.HTTPConnection = http.client.HTTPConnection(
@@ -1086,11 +1086,11 @@ class GreyCat:
                 line = response.readline()
             raise RuntimeError(msg)
         self.__is_remote = True
-        return GreyCat.Stream(self, response)
+        return GreyCat._Stream(self, response)
 
-    def __get_local_abi(self, runtime_url: str) -> GreyCat.Stream:
+    def __get_local_abi(self, runtime_url: str) -> GreyCat._Stream:
         if not (runtime_url.startswith("file://")):
             runtime_url = f"file://{runtime_url}"
-        return GreyCat.Stream(
+        return GreyCat._Stream(
             self, open(os.path.join(runtime_url, "gcdata", "store", "abi"))
         )

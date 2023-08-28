@@ -17,7 +17,7 @@ class algebra_n:
                 super(type, None)
                 raise NotImplementedError
 
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 raise NotImplementedError
 
     class compute:
@@ -26,7 +26,7 @@ class algebra_n:
                 super(type, None)
                 raise NotImplementedError
 
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 raise NotImplementedError
 
         class ComputeEngine(GreyCat.Object):
@@ -34,7 +34,7 @@ class algebra_n:
                 super(type, None)
                 raise NotImplementedError
 
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 raise NotImplementedError
 
     class ml:
@@ -47,7 +47,7 @@ class algebra_n:
                 self.tensor_type: c_byte
                 self.data: bytes
 
-            def _save(self: algebra_n.ml.Polynomial, stream: GreyCat.Stream) -> None:
+            def _save(self: algebra_n.ml.Polynomial, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i8(self.degree)
@@ -58,7 +58,7 @@ class algebra_n:
                 stream.write_i8_array(self.data, 0, len(self.data))
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 degree: c_byte = stream.read_i8()
                 coefficientSize: int = stream.read_i64().value
                 xStart: c_double = stream.read_f64()
@@ -89,7 +89,7 @@ class algebra_n:
                 self.__spaceCropped: core.Tensor
                 self.__dimInfo: core.Tensor
 
-            def _save(self: algebra_n.ml.PCA, stream: GreyCat.Stream) -> None:
+            def _save(self: algebra_n.ml.PCA, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i32(self.__bestDim)
@@ -106,7 +106,7 @@ class algebra_n:
                 stream.write_object(self.__dimInfo)
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 bestDim: c_int32 = stream.read_i32()
                 selectedDim: c_int32 = stream.read_i32()
                 threshold: c_double = stream.read_f64()
@@ -143,7 +143,7 @@ class algebra_n:
                 self.__sum: core.Tensor
                 self.__sum_sq: core.Tensor
 
-            def _save(self: algebra_n.ml.GaussianND, stream: GreyCat.Stream) -> None:
+            def _save(self: algebra_n.ml.GaussianND, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type.offset)
                 stream.write_i64(self.__count)
@@ -153,7 +153,7 @@ class algebra_n:
                 stream.write_object(self.__sum_sq)
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat.Stream) -> object:
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 count: c_int64 = stream.read_i64()
                 min: core.Tensor = stream.read_object()
                 max: core.Tensor = stream.read_object()
