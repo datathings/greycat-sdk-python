@@ -249,6 +249,7 @@ class std_n:
 
         class _ti2d(GreyCat.Object):
             __UINT32_MIN: int = 2147483648
+            __INT32_MIN: int = -2147483648
 
             def __init__(self, type: GreyCat.Type) -> None:
                 self.x0: int
@@ -270,14 +271,12 @@ class std_n:
                 return res
             
             def __interleave(self) -> c_int64:
-                return std_n.core.__interleave64_2d(self.x0, self.x1)
+                return std_n.core.__interleave64_2d(self.x0 + std_n.core._ti2d.__UINT32_MIN, self.x1 + std_n.core._ti2d.__UINT32_MIN)
             
             def __deinterleave(self, interleaved: c_int64)->None:
                 dc: int = std_n.core.__deinterleave64_2d(interleaved)
-                self.x0 = c_int32(dc + std_n.core.__INT32_MIN).value
-                self.x1 = c_int32((dc >> 32) + std_n.core.__INT32_MIN).value
-        
-        __INT32_MIN: int = -2147483648
+                self.x0 = c_int32(dc + std_n.core._ti2d.__INT32_MIN).value
+                self.x1 = c_int32((dc >> 32) + std_n.core._ti2d.__INT32_MIN).value
 
         __B_2D: list[int] = [0x5555555555555555, 0x3333333333333333, 0x0F0F0F0F0F0F0F0F,
                 0x00FF00FF00FF00FF, 0x0000FFFF0000FFFF, 0x00000000FFFFFFFF]
@@ -301,6 +300,31 @@ class std_n:
             y = (y | (y << std_n.core.__S_2D[1])) & std_n.core.__B_2D[0]
 
             return x | (y << 1)
+        
+        @staticmethod
+        def __deinterleave64_2d(interleaved: c_int64)->int:
+            x: int = interleaved.value
+            y: int = interleaved.value >> 1
+
+            x = (x | (x >> std_n.core.__S_2D[0])) & std_n.core.__B_2D[0]
+            y = (y | (y >> std_n.core.__S_2D[0])) & std_n.core.__B_2D[0]
+
+            x = (x | (x >> std_n.core.__S_2D[1])) & std_n.core.__B_2D[1]
+            y = (y | (y >> std_n.core.__S_2D[1])) & std_n.core.__B_2D[1]
+
+            x = (x | (x >> std_n.core.__S_2D[2])) & std_n.core.__B_2D[2]
+            y = (y | (y >> std_n.core.__S_2D[2])) & std_n.core.__B_2D[2]
+
+            x = (x | (x >> std_n.core.__S_2D[3])) & std_n.core.__B_2D[3]
+            y = (y | (y >> std_n.core.__S_2D[3])) & std_n.core.__B_2D[3]
+
+            x = (x | (x >> std_n.core.__S_2D[4])) & std_n.core.__B_2D[4]
+            y = (y | (y >> std_n.core.__S_2D[4])) & std_n.core.__B_2D[4]
+
+            x = (x | (x >> std_n.core.__S_2D[5])) & std_n.core.__B_2D[5]
+            y = (y | (y >> std_n.core.__S_2D[5])) & std_n.core.__B_2D[5]
+
+            return x | (y << 32)
 
 # class std_n:
 #     class core:
