@@ -595,6 +595,7 @@ class GreyCat:
             attributes: Final[list[Any]] = [None] * len(program_type.attributes)
             nullable_bitset: bytes = stream.read_i8_array(type.nullable_nb_bytes)
             nullable_offset: int = -1
+            att_offset: int
             for att_offset in range(type.attributes):
                 att: GreyCat.Type.Attribute = type.attributes[att_offset]
                 loaded_field: Any
@@ -661,6 +662,7 @@ class GreyCat:
             self.is_native: Final[bool] = is_native
             self.attributes: Final[list[GreyCat.Type.Attribute]] = type_attributes
             self.attribute_off_by_name: Final[dict[str, int]] = {}
+            att_offset: int
             for att_offset in range(len(type_attributes)):
                 self.attribute_off_by_name[
                     type_attributes[att_offset].name
@@ -671,6 +673,7 @@ class GreyCat:
             if offset == mapped_type_off:
                 if self.is_enum:
                     self.enum_values = [None] * len(type_attributes)
+                    enum_offset: int
                     for enum_offset in range(len(type_attributes)):
                         attributes: list[Any] = [
                             enum_offset,
@@ -726,6 +729,7 @@ class GreyCat:
             nullable_bitset: bytearray = bytearray(self.type.nullable_nb_bytes)
             nullable_offset: int = 0
             field: GreyCat.Type.Attribute
+            offset: int
             for offset in len(self.type.attributes):
                 field = self.type.attributes[offset]
                 if field.nullable:
@@ -830,6 +834,7 @@ class GreyCat:
 
         def __str__(self) -> str:
             res = f"{self.type.name}{{"
+            offset: int
             for offset in range(len(self.type.attributes)):
                 if offset > 0:
                     res = f"{res},"
@@ -880,8 +885,11 @@ class GreyCat:
         std_: std = std()
         self.libs_by_name[std_.name()] = std
         self.__is_remote: bool = False
-        for i in range(len(*args)):
-            lib: GreyCat.Library = args[i]
+        library_offset: int
+        # for declarations
+        lib: GreyCat.Library
+        for library_offset in range(len(*args)):
+            lib = args[library_offset]
             self.libs_by_name[lib.name()] = lib
         loaders: Final[dict[str, GreyCat.Loader]] = {}
         factories: Final[dict[str, GreyCat.Factory]] = {}
@@ -903,6 +911,7 @@ class GreyCat:
         symbols_count: Final[int] = abi_stream.read_i32().value
         self.symbols: Final[list[str | None]] = [None] * (symbols_count + 1)
         self.__symbols_off_by_value: Final[dict[str, int]] = {}
+        offset: int
         for offset in range(1, symbols_count + 1):
             symbol: str = abi_stream.read_string(abi_stream.read_vu32())
             self.symbols[offset] = symbol
@@ -913,7 +922,8 @@ class GreyCat:
         types_size: Final[int] = abi_stream.read_i32().value
         self.types: Final[list[GreyCat.Type]] = [None] * types_size
         attributes_size: Final[c_int32] = abi_stream.read_i32()
-        for i in range(types_size):
+        type_offset: int
+        for type_offset in range(types_size):
             module_name: str = self.symbols[abi_stream.read_vu32().value]
             type_name: str = self.symbols[abi_stream.read_vu32().value]
             lib_name: str = self.symbols[abi_stream.read_vu32().value]
@@ -932,6 +942,7 @@ class GreyCat:
             type_attributes: Final[list[GreyCat.Type.Attribute]] = [
                 None
             ] * attributes_len
+            enum_offset: int
             for enum_offset in range(attributes_len):
                 name: Final[str] = self.symbols[abi_stream.read_vu32().value]
                 att_abi_type: Final[int] = abi_stream.read_vu32().value
@@ -953,7 +964,7 @@ class GreyCat:
                     mapped,
                 )
             abi_type: GreyCat.Type = Type(
-                i,
+                type_offset,
                 fqn,
                 mapped_abi_type_offset,
                 masked_abi_type_offset,
@@ -968,14 +979,15 @@ class GreyCat:
                 self,
             )
             self.types_by_name: Final[dict[str, GreyCat.Type]] = {}
-            if abi_type.mapped_type_off == i and len(fqn) != 0:
+            if abi_type.mapped_type_off == type_offset and len(fqn) != 0:
                 self.types_by_name[abi_type.name, abi_type]
-            self.types[i] = abi_type
+            self.types[type_offset] = abi_type
         # step 3: create all functions
         functions_bytes: Final[c_int64] = abi_stream.read_i64()
         functions_size: Final[int] = abi_stream.read_i32().value
         self.functions_by_name: Final[dict] = {}
-        for i in range(functions_size):
+        function_offset: int
+        for function_offset in range(functions_size):
             module_name: str = self.symbols[abi_stream.read_vu32().value]
             type_name: str = self.symbols[abi_stream.read_vu32().value]
             function_name: str = self.symbols[abi_stream.read_vu32().value]
@@ -984,7 +996,8 @@ class GreyCat:
                 f'{"" if module_name is None else f"{module_name}::"}{function_name}'
             )
             nb_params: int = abi_stream.read_vu32().value
-            for j in range(nb_params):
+            param_offset: int
+            for param_offset in range(nb_params):
                 abi_stream.read_i8()
                 abi_stream.read_vu32()
                 abi_stream.read_vu32()
