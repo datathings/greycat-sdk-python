@@ -62,12 +62,6 @@ class GreyCat:
         def read(self) -> Any:
             return self.__stream.read()
 
-        def available(self) -> int:
-            try:
-                pass  # TODO
-            except:  # TODO: specific exception
-                return 0
-
     @final
     class AbiWriter:
         def __init__(self, stream: GreyCat._Stream) -> None:
@@ -77,10 +71,14 @@ class GreyCat:
             return self.__stream.write(object)
 
     def openAbiRead(self, path: str) -> GreyCat.AbiReader:
-        pass  # TODO
+        s: GreyCat._Stream = GreyCat._Stream(self, open(path, 'rb'))
+        s.read_abi_header()
+        return GreyCat.AbiReader(s)
 
     def openAbiWrite(self, path: str) -> GreyCat.AbiWriter:
-        pass  # TODO
+        s: GreyCat._Stream = GreyCat._Stream(self, open(path, 'wb'))
+        s.write_abi_header()
+        return GreyCat.AbiWriter(s)
 
     @final
     class _Stream:
@@ -107,6 +105,15 @@ class GreyCat:
         def read(self) -> Any:
             primitive_offset: c_byte = self.read_i8()
             return GreyCat._Stream.__PRIMITIVE_LOADERS[primitive_offset.value](self)
+        
+        def read_null(self) -> type(None):
+            return None
+        
+        def read_bool(self) -> bool:
+            return self.read_i8().value != 0
+        
+        def read_char(self) -> c_char:
+            return c_char(self.read_i8())
 
         def read_i8(self) -> c_byte:
             return c_byte(self.__io.read(1)[0])
@@ -144,7 +151,48 @@ class GreyCat:
             )
 
         def read_vu32(self) -> c_uint32:
-            pass  # TODO
+            current: int
+            value: int = 0
+            pos: int = self.__io.tell()
+            buf: bytes = self.__io.read(5)
+
+            current = buf[0]
+            value |= current & 0x7f
+            if 0 == (current & 0x80):
+                self.__io.seek(pos)
+                self.read(1)
+                return value
+            
+            current = buf[1]
+            value |= (current & 0x7f) << 7
+            if 0 == (current & 0x80):
+                self.__io.seek(pos)
+                self.read(2)
+                return value
+            
+            current = buf[2]
+            value |= (current & 0x7f) << 14
+            if 0 == (current & 0x80):
+                self.__io.seek(pos)
+                self.read(3)
+                return value
+            
+            current = buf[3]
+            value |= (current & 0x7f) << 21
+            if 0 == (current & 0x80):
+                self.__io.seek(pos)
+                self.read(4)
+                return value
+            
+            current = buf[4]
+            value |= (current & 0x7f) << 28
+            return value
+        
+        def read_f64(self)->c_double:
+            return c_double(unpack("d", pack("q", self.read_i64()))[0])
+        
+        def read_string(self, len_: int)->str:
+            self.read_i8_array(len_).decode("utf-8")
 
         def write_abi_header(self) -> None:
             self.write_i16(GreyCat.ABI_PROTO)
@@ -214,7 +262,39 @@ class GreyCat:
             self.__io.write(tmp)
 
         def write_vu32(self, u: c_uint32) -> None:
-            pass  # TODO
+            packed_value: bytearray = bytearray[5]
+            value: int = u.value
+
+            packed_value[0] = value & 0x7f
+            if value < 0x80:
+                self.write_i8_array(packed_value, 0, 1)
+                return
+            
+            packed_value[0] |= 0x80
+            value >>= 7
+            packed_value[1] = value & 0x7f
+            if value < 0x80:
+                self.write_i8_array(packed_value, 0, 2)
+                return
+            
+            packed_value[1] |= 0x80
+            value >>= 7
+            packed_value[2] = value & 0x7f
+            if value < 0x80:
+                self.write_i8_array(packed_value, 0, 3)
+                return
+            
+            packed_value[2] |= 0x80
+            value >>= 7
+            packed_value[3] = value & 0x7f
+            if value < 0x80:
+                self.write_i8_array(packed_value, 0, 4)
+                return
+            
+            packed_value[3] |= 0x80
+            value >>= 7
+            packed_value[4] = value & 0x7f
+            self.write_i8_array(packed_value, 0, 5)
 
         def write_i64(self, i: c_int64) -> None:
             i = i.value
@@ -366,7 +446,7 @@ class GreyCat:
 
         __object_loader: Final[
             Callable[[GreyCat._Stream], object]
-        ] = lambda stream: stream.read_object()
+        ] = lambda stream: stream.read()
 
         __tu2d_loader: Final[
             Callable[[GreyCat._Stream], object]
@@ -1092,5 +1172,5 @@ class GreyCat:
         if not (runtime_url.startswith("file://")):
             runtime_url = f"file://{runtime_url}"
         return GreyCat._Stream(
-            self, open(os.path.join(runtime_url, "gcdata", "store", "abi"))
+            self, open(os.path.join(runtime_url, "gcdata", "store", "abi"), 'rb')
         )
