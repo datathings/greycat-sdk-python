@@ -803,9 +803,9 @@ class GreyCat:
                 self.enum_values[resolved].value = args[name_offset + 1]
 
     class Object:
-        def __init__(self, type: GreyCat.Type, attributes: list[Any]) -> None:
+        def __init__(self, type: GreyCat.Type, attributes: list[Any] | None) -> None:
             self.type: Final[GreyCat.Type] = type
-            self.attributes: list[Any] = attributes
+            self.attributes: list[Any] | None = attributes
 
         def get(self, attribute_name: str) -> Any | None:
             return self._get(self.type.attribute_off_by_name[attribute_name])
