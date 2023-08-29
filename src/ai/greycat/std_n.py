@@ -655,10 +655,10 @@ class std_n:
 
             @final
             def _save(self, stream: GreyCat._Stream) -> None:
-                stream.write_vu32(c_uint32(len(self.attributes)))
+                stream.write_vu32(c_uint32(len(self)))
                 offset: int
-                for offset in range(len(self.attributes)):
-                    stream.write(self.attributes[offset])
+                for offset in range(len(self)):
+                    stream.write(self[offset])
 
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
@@ -669,6 +669,34 @@ class std_n:
                 for offset in range(size):
                     array.set(offset, stream.read())
                 return array
+            
+            def __len__(self) -> int:
+                return len(self.attributes)
+            
+            def __iter__(self) -> Iterator[__T]:
+                return self.attributes.__iter__()
+            
+            @overload
+            def __getitem__(self, __i: SupportsIndex) -> __T:
+                return self.attributes[__i]
+            
+            @overload
+            def __getitem__(self, __s: slice) -> list[__T]:
+                return self.attributes[__s]
+            
+            @overload
+            def __setitem__(self, __key: SupportsIndex, __value: __T) -> None:
+                self.attributes[__key] = __value
+
+            @overload
+            def __setitem__(self, __key: slice, __value: Iterable[__T]) -> None:
+                self.attributes[__key] = __value
+            
+            def __delitem__(self, __key: SupportsIndex | slice) -> None:
+                del self.attributes[__key]
+
+            def __contains__(self, __key: object) -> bool:
+                return __key in self.attributes
             
             def __str__(self) -> str:
                 res: str = '['
