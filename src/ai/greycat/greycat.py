@@ -7,6 +7,7 @@ import os
 from struct import pack, unpack
 from typing import *
 
+from std import std
 
 @final
 class PrimitiveType:
@@ -71,12 +72,12 @@ class GreyCat:
             return self.__stream.write(object)
 
     def openAbiRead(self, path: str) -> GreyCat.AbiReader:
-        s: GreyCat._Stream = GreyCat._Stream(self, open(path, 'rb'))
+        s: GreyCat._Stream = GreyCat._Stream(self, open(path, "rb"))
         s.read_abi_header()
         return GreyCat.AbiReader(s)
 
     def openAbiWrite(self, path: str) -> GreyCat.AbiWriter:
-        s: GreyCat._Stream = GreyCat._Stream(self, open(path, 'wb'))
+        s: GreyCat._Stream = GreyCat._Stream(self, open(path, "wb"))
         s.write_abi_header()
         return GreyCat.AbiWriter(s)
 
@@ -105,13 +106,13 @@ class GreyCat:
         def read(self) -> Any:
             primitive_offset: c_byte = self.read_i8()
             return GreyCat._Stream.__PRIMITIVE_LOADERS[primitive_offset.value](self)
-        
+
         def read_null(self) -> type(None):
             return None
-        
+
         def read_bool(self) -> bool:
             return self.read_i8().value != 0
-        
+
         def read_char(self) -> c_char:
             return c_char(self.read_i8())
 
@@ -144,35 +145,35 @@ class GreyCat:
             buf: bytes = self.__io.read(5)
 
             current = buf[0]
-            value |= current & 0x7f
+            value |= current & 0x7F
             if 0 == (current & 0x80):
                 self.__io.seek(pos)
                 self.read(1)
                 return value
-            
+
             current = buf[1]
-            value |= (current & 0x7f) << 7
+            value |= (current & 0x7F) << 7
             if 0 == (current & 0x80):
                 self.__io.seek(pos)
                 self.read(2)
                 return value
-            
+
             current = buf[2]
-            value |= (current & 0x7f) << 14
+            value |= (current & 0x7F) << 14
             if 0 == (current & 0x80):
                 self.__io.seek(pos)
                 self.read(3)
                 return value
-            
+
             current = buf[3]
-            value |= (current & 0x7f) << 21
+            value |= (current & 0x7F) << 21
             if 0 == (current & 0x80):
                 self.__io.seek(pos)
                 self.read(4)
                 return value
-            
+
             current = buf[4]
-            value |= (current & 0x7f) << 28
+            value |= (current & 0x7F) << 28
             return value
 
         def read_i64(self) -> c_int64:
@@ -187,11 +188,11 @@ class GreyCat:
                 + ((tmp[1] << 56) >> 48)
                 + ((tmp[0] << 56) >> 56)
             )
-        
+
         def read_vi64(self) -> c_int64:
             sign_swapped_value: int = self.read_vu64().value
             return c_int64((sign_swapped_value >> 1) ^ (-(-sign_swapped_value & 1)))
-        
+
         def read_vu64(self) -> c_int64:
             current: int
             value: int = 0
@@ -199,69 +200,68 @@ class GreyCat:
             buf: bytes = self.__io.read(9)
 
             current = buf[0]
-            value |= current & 0x7f
+            value |= current & 0x7F
             if 0 == (current & 0x80):
                 self.__io.seek(pos)
                 self.read(1)
                 return value
-            
+
             current = buf[1]
-            value |= (current & 0x7f) << 7
+            value |= (current & 0x7F) << 7
             if 0 == (current & 0x80):
                 self.__io.seek(pos)
                 self.read(2)
                 return value
-            
+
             current = buf[2]
-            value |= (current & 0x7f) << 14
+            value |= (current & 0x7F) << 14
             if 0 == (current & 0x80):
                 self.__io.seek(pos)
                 self.read(3)
                 return value
-            
+
             current = buf[3]
-            value |= (current & 0x7f) << 21
+            value |= (current & 0x7F) << 21
             if 0 == (current & 0x80):
                 self.__io.seek(pos)
                 self.read(4)
                 return value
-            
+
             current = buf[4]
-            value |= (current & 0x7f) << 28
+            value |= (current & 0x7F) << 28
             if 0 == (current & 0x80):
                 self.__io.seek(pos)
                 self.read(5)
                 return value
-            
+
             current = buf[5]
-            value |= (current & 0x7f) << 35
+            value |= (current & 0x7F) << 35
             if 0 == (current & 0x80):
                 self.__io.seek(pos)
                 self.read(6)
                 return value
-            
+
             current = buf[6]
-            value |= (current & 0x7f) << 42
+            value |= (current & 0x7F) << 42
             if 0 == (current & 0x80):
                 self.__io.seek(pos)
                 self.read(7)
                 return value
-            
+
             current = buf[7]
-            value |= (current & 0x7f) << 49
+            value |= (current & 0x7F) << 49
             if 0 == (current & 0x80):
                 self.__io.seek(pos)
                 self.read(8)
                 return value
-            
+
             current = buf[8]
-            value |= (current & 0x7f) << 56
+            value |= (current & 0x7F) << 56
             return value
 
-        
-        def read_f64(self)->c_double:
+        def read_f64(self) -> c_double:
             return c_double(unpack("d", pack("q", self.read_i64()))[0])
-        
+
         def read_string(self, len_: int) -> str:
             self.read_i8_array(len_).decode("utf-8")
 
@@ -273,7 +273,7 @@ class GreyCat:
             if offset < len(self.greycat.symbols):
                 return self.greycat.symbols[offset]
             raise ValueError("invalid primitive type")
-        
+
         def read_object(self) -> Any:
             type_offset: int = self.read_vu32().value
             type: Final[GreyCat.Type] = self.greycat.types[type_offset]
@@ -350,35 +350,35 @@ class GreyCat:
             packed_value: bytearray = bytearray[5]
             value: int = u.value
 
-            packed_value[0] = value & 0x7f
+            packed_value[0] = value & 0x7F
             if value < 0x80:
                 self.write_i8_array(packed_value, 0, 1)
                 return
-            
+
             packed_value[0] |= 0x80
             value >>= 7
-            packed_value[1] = value & 0x7f
+            packed_value[1] = value & 0x7F
             if value < 0x80:
                 self.write_i8_array(packed_value, 0, 2)
                 return
-            
+
             packed_value[1] |= 0x80
             value >>= 7
-            packed_value[2] = value & 0x7f
+            packed_value[2] = value & 0x7F
             if value < 0x80:
                 self.write_i8_array(packed_value, 0, 3)
                 return
-            
+
             packed_value[2] |= 0x80
             value >>= 7
-            packed_value[3] = value & 0x7f
+            packed_value[3] = value & 0x7F
             if value < 0x80:
                 self.write_i8_array(packed_value, 0, 4)
                 return
-            
+
             packed_value[3] |= 0x80
             value >>= 7
-            packed_value[4] = value & 0x7f
+            packed_value[4] = value & 0x7F
             self.write_i8_array(packed_value, 0, 5)
 
         def write_i64(self, i: c_int64) -> None:
@@ -704,9 +704,9 @@ class GreyCat:
                             field_type = type.greycat.types[stream.read_vu32()]
                         loaded_field = field_type.loader(field_type, stream)
                     case _:
-                        loaded_field = GreyCat._Stream.__PRIMITIVE_LOADERS[att.sbi_type](
-                            stream
-                        )
+                        loaded_field = GreyCat._Stream.__PRIMITIVE_LOADERS[
+                            att.sbi_type
+                        ](stream)
                 if att.mapped:
                     attributes[att.mapped_att_offset] = loaded_field
             if program_type.factory is None:
@@ -789,7 +789,9 @@ class GreyCat:
             for name_offset in range(len(args)):
                 resolved: int | None = self.attribute_off_by_name.get(args[name_offset])
                 if resolved is None:
-                    raise ValueError("unmapped generated field, please re-generate this code!")
+                    raise ValueError(
+                        "unmapped generated field, please re-generate this code!"
+                    )
                 self.generated_offsets[name_offset] = resolved
 
         def resolve_generated_offset_with_values(self, *args: Any) -> None:
@@ -798,20 +800,22 @@ class GreyCat:
             for name_offset in range(0, len(args), 2):
                 resolved: int | None = self.attribute_off_by_name.get(args[name_offset])
                 if resolved is None:
-                    raise ValueError("unmapped generated field, please re-generate this code!")
+                    raise ValueError(
+                        "unmapped generated field, please re-generate this code!"
+                    )
                 self.generated_offsets[name_offset / 2] = resolved
                 self.enum_values[resolved].value = args[name_offset + 1]
 
     class Object:
         def __init__(self, type: GreyCat.Type, attributes: list[Any] | None) -> None:
-            self.type: Final[GreyCat.Type] = type
+            self.type_: Final[GreyCat.Type] = type
             self.attributes: list[Any] | None = attributes
 
         def get(self, attribute_name: str) -> Any | None:
-            return self._get(self.type.attribute_off_by_name[attribute_name])
+            return self._get(self.type_.attribute_off_by_name[attribute_name])
 
         def set(self, attribute_name: str, value: Any | None) -> None:
-            self._set(self.type.attribute_off_by_name[attribute_name], value)
+            self._set(self.type_.attribute_off_by_name[attribute_name], value)
 
         def _get(self, offset: int) -> Any | None:
             return self.attributes[offset]
@@ -821,23 +825,23 @@ class GreyCat:
 
         def _save_type(self, stream: GreyCat._Stream) -> None:
             stream.write_i8(PrimitiveType.OBJECT)
-            stream.write_vu32(self.type.offset)
+            stream.write_vu32(self.type_.offset)
 
         def _save(self, stream: GreyCat._Stream) -> None:
-            nullable_bitset: bytearray = bytearray(self.type.nullable_nb_bytes)
+            nullable_bitset: bytearray = bytearray(self.type_.nullable_nb_bytes)
             nullable_offset: int = 0
             field: GreyCat.Type.Attribute
             offset: int
-            for offset in len(self.type.attributes):
-                field = self.type.attributes[offset]
+            for offset in len(self.type_.attributes):
+                field = self.type_.attributes[offset]
                 if field.nullable:
                     nullable_bitset[nullable_offset >> 3] |= (
                         0 if self._get(offset) is None else 1
                     ) << (nullable_offset & 7)
                     nullable_offset += 1
             stream.write_i8_array(nullable_bitset, 0, len(nullable_bitset))
-            for offset in len(self.type.attributes):
-                field = self.type.attributes[offset]
+            for offset in len(self.type_.attributes):
+                field = self.type_.attributes[offset]
                 value = self._get(offset)
                 if field.nullable and (value is None):
                     continue
@@ -910,7 +914,7 @@ class GreyCat:
                         if type(value) is str:
                             string: str = value
                             symbol_offset: int | None = (
-                                self.type.greycat.__symbols_off_by_value[string]
+                                self.type_.greycat.__symbols_off_by_value[string]
                             )
                             if not (symbol_offset is None):
                                 stream.write_vu32(c_uint32((symbol_offset << 1) | 1))
@@ -920,8 +924,8 @@ class GreyCat:
                                 stream.write_i8_array(bytes, 0, len(data))
                         else:
                             o: GreyCat.Object = value
-                            if field.abi_type != o.type.offset:
-                                stream.write_vu32(o.type.offset)
+                            if field.abi_type != o.type_.offset:
+                                stream.write_vu32(o.type_.offset)
                             o._save(stream)
                     # case PrimitiveType.BLOCK_REF: # TODO
                     # case PrimitiveType.FUNCTION: # TODO
@@ -931,12 +935,12 @@ class GreyCat:
                         raise ValueError("wrong state")
 
         def __str__(self) -> str:
-            res = f"{self.type.name}{{"
+            res = f"{self.type_.name}{{"
             offset: int
-            for offset in range(len(self.type.attributes)):
+            for offset in range(len(self.type_.attributes)):
                 if offset > 0:
                     res = f"{res},"
-                res = f"{res}{self.type.attributes[offset].name}={self.attributes[offset]}"
+                res = f"{res}{self.type_.attributes[offset].name}={self.attributes[offset]}"
             res = f"{res}}}"
             return res
 
@@ -950,7 +954,7 @@ class GreyCat:
         @final
         def _save_type(self, stream: GreyCat._Stream) -> None:
             stream.write_i8(PrimitiveType.ENUM)
-            stream.write_vu32(self.type.offset)
+            stream.write_vu32(self.type_.offset)
 
         @final
         def _save(self, stream: GreyCat._Stream) -> None:
@@ -958,8 +962,8 @@ class GreyCat:
 
         def __str__(self) -> str:
             if self.value is None:
-                return f"{self.type.name}.{self.key}"
-            return f"{self.type.name}.{self.key}{{value={self.value}}}"
+                return f"{self.type_.name}.{self.key}"
+            return f"{self.type_.name}.{self.key}{{value={self.value}}}"
 
     Loader: Final[type[Callable[[Type, _Stream], Any]]] = Callable[[Type, _Stream], Any]
 
@@ -968,23 +972,23 @@ class GreyCat:
     ]
 
     class Library:
-        def __init__(self: GreyCat.Library) -> None:
+        def __init__(self) -> None:
             self.mapped: list[GreyCat.Type] | None = None
 
-        def name(self: GreyCat.Library) -> str:
+        def name(self) -> str:
             raise NotImplementedError
 
         def configure(
-            self: GreyCat.Library,
+            self,
             loaders: dict[str, GreyCat.Loader],
             factories: dict[str, GreyCat.Factory],
         ) -> None:
             raise NotImplementedError
 
-        def init(self: GreyCat.Library, greycat: GreyCat) -> None:
+        def init(self, greycat: GreyCat) -> None:
             raise NotImplementedError
 
-    class Files: # TODO?
+    class Files:  # TODO?
         pass
 
     def __init__(self, *args: GreyCat.Library, url: str) -> None:
@@ -1260,20 +1264,20 @@ class GreyCat:
         if type is None:
             return None
         return type.factory[type, parameters]
-    
+
     def create_geo(self, lat: c_double, lng: c_double):
         type: GreyCat.Type = self.types[self.type_offset_core_geo]
         geo: std.core.geo = type.factory(type)
         geo.lat = c_double(lat)
         geo.lng = c_double(lng)
         return geo
-    
+
     def create_time(self, epoch_us: c_int64):
         type: GreyCat.Type = self.types[self.type_offset_core_geo]
         t: std.core.time = type.factory(type)
         t.value = epoch_us
         return t
-    
+
     def create_duration(self, duration_us: c_int64):
         type: GreyCat.Type = self.types[self.type_offset_core_geo]
         dur: std.core.duration = type.factory(type)
@@ -1311,9 +1315,9 @@ class GreyCat:
         if not (runtime_url.startswith("file://")):
             runtime_url = f"file://{runtime_url}"
         return GreyCat._Stream(
-            self, open(os.path.join(runtime_url, "gcdata", "store", "abi"), 'rb')
+            self, open(os.path.join(runtime_url, "gcdata", "store", "abi"), "rb")
         )
-    
+
     def __get_abi(self, runtime_url: str) -> GreyCat._Stream:
         if runtime_url.startswith("http"):
             return self.__get_remote_abi(runtime_url)

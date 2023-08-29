@@ -780,7 +780,7 @@ class std_n:
                 return res
             
             def __str__(self) -> str:
-                return f"{self.type.name}{{msg='{self.msg}', value={self.value}}}"
+                return f"{self.type_.name}{{msg='{self.msg}', value={self.value}}}"
 
             
             class Frame:

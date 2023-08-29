@@ -49,7 +49,7 @@ class algebra_n:
 
             def _save(self: algebra_n.ml.Polynomial, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
-                stream.write_i32(self.type.offset)
+                stream.write_i32(self.type_.offset)
                 stream.write_i8(self.degree)
                 stream.write_i64(c_int64(len(self.data)))
                 stream.write_f64(self.x_start)
@@ -91,7 +91,7 @@ class algebra_n:
 
             def _save(self: algebra_n.ml.PCA, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
-                stream.write_i32(self.type.offset)
+                stream.write_i32(self.type_.offset)
                 stream.write_i32(self.__bestDim)
                 stream.write_i32(self.__selectedDim)
                 stream.write_f64(self.__threshold)
@@ -145,7 +145,7 @@ class algebra_n:
 
             def _save(self: algebra_n.ml.GaussianND, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
-                stream.write_i32(self.type.offset)
+                stream.write_i32(self.type_.offset)
                 stream.write_i64(self.__count)
                 stream.write_object(self.__min)
                 stream.write_object(self.__max)
