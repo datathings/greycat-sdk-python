@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 from ctypes import *
+from struct import pack, unpack
 from typing import *
 
 from ai.greycat.greycat import GreyCat, PrimitiveType
@@ -519,7 +521,129 @@ class std_n:
                 self.x8 = (std_n.core.__deinterleave64_2d(c_int64(std_n.core.__deinterleave64_5d(c_int64(interleaved.value >> 8)))) & 0x3f) + std_n.core._ti10d.__INT6_MIN
                 self.x9 = (std_n.core.__deinterleave64_2d(c_int64(std_n.core.__deinterleave64_5d(c_int64(interleaved.value >> 9)))) & 0x3f) + std_n.core._ti10d.__INT6_MIN
             
+        class _tf2d(GreyCat.Object):
+            def __init__(self, type: GreyCat.Type) -> None:
+                self.x0: float
+                self.x1: float
+                super(type, None)
 
+            @final
+            def _save_type(self, stream: GreyCat._Stream) -> None:
+                stream.write_i8(PrimitiveType.TUF2D)
+
+            @final
+            def _save(self, stream: GreyCat._Stream) -> None:
+                stream.write_i64(self.__interleave())
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
+                res: std_n.core._tf2d = type.factory(type)
+                res.__deinterleave(stream.read_i64())
+                return res
+
+            def __str__(self) -> str:
+                return f'tf2d{{x0={self.x0},x1={self.x1}}}'
+            
+            def __interleave(self) -> c_int64:
+                return std_n.core.__interleave64_2d(
+                    unpack("q", pack("d", self.x0))[0] + std_n.core._ti2d.__UINT32_MIN,
+                    unpack("q", pack("d", self.x1))[0] + std_n.core._ti2d.__UINT32_MIN
+                )
+
+            def __deinterleave(self, interleaved: c_int64) -> None:
+                dc: int = std_n.core.__deinterleave64_2d(interleaved)
+                self.x0 = unpack("d", pack("q", c_int32(dc + std_n.core._ti2d.__INT32_MIN).value))[0]
+                self.x1 = unpack("d", pack("q", c_int32((dc >> 32) + std_n.core._ti2d.__INT32_MIN).value))[0]
+
+        class _tf3d(GreyCat.Object):
+            def __init__(self, type: GreyCat.Type) -> None:
+                self.x0: float
+                self.x1: float
+                self.x2: float
+                super(type, None)
+            
+            @final
+            def _save_type(self, stream: GreyCat._Stream) -> None:
+                stream.write(PrimitiveType.TUF3D)
+
+            @final
+            def _save(self, stream: GreyCat._Stream) -> None:
+                stream.write_i64(self.__interleave())
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
+                res: std_n.core._tf3d = type.factory(type)
+                res.__deinterleave(stream.read_i64())
+                return res
+            
+            def __str__(self) -> str:
+                return f'tf2d{{x0={self.x0},x1={self.x1},x2={self.x2}}}'
+            
+            def __interleave(self) -> c_int64:
+                return std_n.core.__interleave64_3d(
+                    (unpack("q", pack("d", self.x0))[0] >> 11) + std_n.core._ti3d.__UINT21_MIN,
+                    (unpack("q", pack("d", self.x1))[0] >> 11) + std_n.core._ti3d.__UINT21_MIN,
+                    (unpack("q", pack("d", self.x2))[0] >> 11) + std_n.core._ti3d.__UINT21_MIN,
+                )
+
+            def __deinterleave(self, interleaved: c_int64) -> None:
+                self.x0 = unpack("d", pack("q", c_int32(
+                    (std_n.core.__deinterleave64_3d(interleaved) + std_n.core._ti3d.__INT21_MIN) << 11
+                ).value))[0]
+                self.x1 = unpack("d", pack("q", c_int32(
+                    (std_n.core.__deinterleave64_3d(c_int64(interleaved.value >> 1)) + std_n.core._ti3d.__INT21_MIN) << 11
+                ).value))[0]
+                self.x2 = unpack("d", pack("q", c_int32(
+                    (std_n.core.__deinterleave64_3d(c_int64(interleaved.value >> 2)) + std_n.core._ti3d.__INT21_MIN) << 11
+                ).value))[0]
+        
+        class _tf4d(GreyCat.Object):
+            def __init__(self, type: GreyCat.Type) -> None:
+                self.x0: float
+                self.x1: float
+                self.x2: float
+                self.x3: float
+                super(type, None)
+
+            @final
+            def _save_type(self, stream: GreyCat._Stream) -> None:
+                stream.write_i8(PrimitiveType.TUF4D)
+
+            @final
+            def _save(self, stream: GreyCat._Stream) -> None:
+                stream.write_i64(self.__interleave())
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
+                res: std_n.core._tf4d = type.factory(type)
+                res.__deinterleave(stream.read_i64())
+                return res
+            
+            def __str__(self) -> str:
+                return f'tf2d{{x0={self.x0},x1={self.x1},x2={self.x2},x3={self.x3}}}'
+            
+            def __interleave(self) -> c_int64:
+                return std_n.core.__interleave64_2d(
+                    std_n.core.__interleave64_2d(
+                        (unpack("q", pack("d", self.x0))[0] >> 16) + std_n.core._ti4d.__UINT16_MIN,
+                        (unpack("q", pack("d", self.x2))[0] >> 16) + std_n.core._ti4d.__UINT16_MIN
+                    ).value,
+                    std_n.core.__interleave64_2d(
+                        (unpack("q", pack("d", self.x1))[0] >> 16) + std_n.core._ti4d.__UINT16_MIN,
+                        (unpack("q", pack("d", self.x3))[0] >> 16) + std_n.core._ti4d.__UINT16_MIN
+                    ).value
+                )
+            
+            def __deinterleave(self, interleaved: c_int64) -> None:
+                d3120: c_int64 = c_int64(std_n.core.__deinterleave64_2d(interleaved))
+                d20: int = std_n.core.__deinterleave64_2d(d3120 & 0xffffffff)
+                d31: int = std_n.core.__deinterleave64_2d(d3120 >> 32)
+                self.x0 = unpack("d", pack("q", c_int32(((d20 & 0xffff) + std_n.core._ti4d.__INT16_MIN) << 16).value))[0]
+                self.x1 = unpack("d", pack("q", c_int32(((d31 & 0xffff) + std_n.core._ti4d.__INT16_MIN) << 16).value))[0]
+                self.x2 = unpack("d", pack("q", c_int32(((d20 >> 32) + std_n.core._ti4d.__INT16_MIN) << 16).value))[0]
+                self.x3 = unpack("d", pack("q", c_int32(((d31 >> 32) + std_n.core._ti4d.__INT16_MIN) << 16).value))[0]
+
+        
         __B_2D: list[int] = [0x5555555555555555, 0x3333333333333333, 0x0F0F0F0F0F0F0F0F, 0x00FF00FF00FF00FF, 0x0000FFFF0000FFFF, 0x00000000FFFFFFFF]
         __S_2D: list[int] = [0, 1, 2, 4, 8, 16]
                                            
