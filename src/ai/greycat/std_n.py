@@ -838,7 +838,123 @@ class std_n:
             def clear(self) -> None:
                 self.map.clear()
 
+        class _String(GreyCat.Object):
+            def __init__(self, type: GreyCat.Type) -> None:
+                super(type, None)
+            
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
+                len_: int = stream.read_vu32()
+                if 0 != (len_ & 1):
+                    return type.greycat.symbols[len_ >> 1]
+                stream.read_string(len_ >> 1)
         
+        class _Table(Generic[__T], GreyCat.Object):
+            def __init__(self, type: GreyCat.Type) -> None:
+                self.cols: int
+                self.rows: int
+                self.meta: list[std_n.core._Table.TableColumnMeta]
+                self.data: list[__T]
+                super(type, None)
+            
+            def _save(self, stream: GreyCat._Stream) -> None:
+                stream.write_vu32(c_uint32(self.cols))
+                stream.write_vu32(c_uint32(self.rows))
+                meta_offset: int
+                col_meta: std_n.core._Table.TableColumnMeta
+                for meta_offset in range(len(self.meta)):
+                    col_meta = self.meta[meta_offset]
+                    stream.write_i8(col_meta.col_type)
+                    stream.write_bool(col_meta.meta_index)
+                    if col_meta.col_type in [PrimitiveType.OBJECT, PrimitiveType.ENUM]:
+                        stream.write_vu32(col_meta.type)
+                col: int
+                row: int
+                o: GreyCat.Object
+                for col in range(self.cols):
+                    match self.meta[col].col_type:
+                        case PrimitiveType.NULL:
+                            pass
+                        case PrimitiveType.INT:
+                            for row in range(self.rows):
+                                stream.write_vi64(c_int64(self.data[col + row]))
+                        case PrimitiveType.FLOAT:
+                            for row in range(self.rows):
+                                stream.write_f64(c_double(self.data[col + row]))
+                        case PrimitiveType.TIME:
+                            for row in range(self.rows):
+                                o = self.data[col + row]
+                                o._save(stream)
+                        case PrimitiveType.DURATION:
+                            for row in range(self.rows):
+                                o = self.data[col + row]
+                                o._save(stream)
+                        case PrimitiveType.ENUM:
+                            for row in range(self.rows):
+                                o = self.data[col + row]
+                                o._save(stream)
+                        case _:
+                            for row in range(self.rows):
+                                stream.write(self.data[col + row])
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
+                cols: Final[int] = stream.read_vu32().value
+                rows: Final[int] = stream.read_vu32().value
+                meta: list[std_n.core._Table.TableColumnMeta] = [None] * cols
+                meta_offset: int
+                meta_col_type: c_byte
+                meta_index: bool
+                meta_type: c_uint32
+                for meta_offset in range(cols):
+                    meta_col_type = stream.read_i8()
+                    meta_index = stream.read_bool()
+                    meta_type = stream.read_vu32()
+                    if meta_col_type in [PrimitiveType.OBJECT, PrimitiveType.ENUM]:
+                        meta_type = stream.read_vu32()
+                    else:
+                        meta_type = c_uint32(0)
+                    meta[meta_offset] = std_n.core._Table.TableColumnMeta(meta_col_type, meta_type, meta_index)
+                data: list[Any] = [None] * (cols * rows)
+                col: int
+                row: int
+                enum_type: GreyCat.Type
+                for col in range(cols):
+                    match meta[col].col_type:
+                        case PrimitiveType.NULL:
+                            pass
+                        case PrimitiveType.INT:
+                            for row in range(rows):
+                                data[col + row] = stream.read_vi64().value
+                        case PrimitiveType.FLOAT:
+                            for row in range(rows):
+                                data[col + row] = stream.read_f64().value
+                        case PrimitiveType.TIME:
+                            for row in range(rows):
+                                data[col + row] = std_n.core._time.load(type.greycat.types[type.greycat.type_offset_core_time], stream)
+                        case PrimitiveType.DURATION:
+                            for row in range(rows):
+                                data[col + row] = std_n.core._duration.load(type.greycat.types[type.greycat.type_offset_core_duration], stream)
+                        case PrimitiveType.ENUM:
+                            for row in range(rows):
+                                enum_type = type.greycat.types[meta[col].type]
+                                data[col + row] = enum_type.loader(enum_type, stream)
+                        case _:
+                            for row in range(rows):
+                                data[col + row] = stream.read()
+                t: std_n.core._Table = type.factory(type)
+                t.cols = cols
+                t.rows = rows
+                t.meta = meta
+                t.data = data
+                return t
+            
+            class TableColumnMeta:
+                def __init__(self, col_type: c_byte, type: c_uint32, index: bool) -> None:
+                    self.col_type: Final[c_byte] = col_type
+                    self.type: Final[c_uint32] = type
+                    self.meta_index: Final[bool] * index
+
         __B_2D: list[int] = [0x5555555555555555, 0x3333333333333333, 0x0F0F0F0F0F0F0F0F, 0x00FF00FF00FF00FF, 0x0000FFFF0000FFFF, 0x00000000FFFFFFFF]
         __S_2D: list[int] = [0, 1, 2, 4, 8, 16]
                                            
