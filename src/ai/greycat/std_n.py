@@ -955,9 +955,84 @@ class std_n:
                     self.type: Final[c_uint32] = type
                     self.meta_index: Final[bool] * index
 
+        class _Tensor(GreyCat.Object):
+            def __init__(self, type: GreyCat.Type)->None:
+                self.shape: list[c_uint32]
+                self.tensor_type: c_byte
+                self.size: c_uint32
+                self.data: bytes
+                super(type, None)
+
+            @final
+            def _save(self, stream: GreyCat._Stream) -> None:
+                stream.write_i8(c_byte(len(self.shape)))
+                stream.write_i8(self.tensor_type)
+                dim: c_uint32
+                for dim in self.shape:
+                    stream.write_i32(dim)
+                stream.write_i32(self.size)
+                stream.write_i8_array(self.data)
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
+                nb_dim: Final[int] = stream.read_i8().value
+                tensor_type: Final[c_byte] = stream.read_i8()
+                shape: list[int] = [0] * nb_dim
+                offset: int
+                for offset in range(nb_dim):
+                    shape[offset] = stream.read_i32()
+                size: c_uint32 = stream.read_i32()
+                bin_size: int = size.value
+                match tensor_type.value:
+                    case 0:
+                        bin_size *= 4
+                    case 1:
+                        bin_size *= 8
+                    case 2:
+                        bin_size *= 4
+                    case 3:
+                        bin_size *= 8
+                    case 4:
+                        bin_size *= 8
+                    case 5:
+                        bin_size *= 16
+                    case _:
+                        raise ValueError(f'{tensor_type}')
+                res: std_n.core._Tensor = type.factory(type)
+                res.shape = shape
+                res.tensor_type = tensor_type
+                res.size = size
+                res.data = stream.read_i8_array(bin_size)
+                return res
+
+        class _nodeIndexBucket(GreyCat.Object):
+            def __init__(type: GreyCat.Type) -> None:
+                super(type, None)
+
+            @final
+            def _save(self, stream: GreyCat._Stream) -> None:
+                offset: int
+                if self.attributes is None:
+                    stream.write_i32(0)
+                else:
+                    stream.write_i32(len(self.attributes))
+                    for offset in range(len(self.attributes)):
+                        stream.write(self.attributes[offset])
+                
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
+                size: Final[int] = stream.read_i32().value
+                data: Final[list[Any]] = [None] * size
+                offset: int
+                for offset in range(size):
+                    data[offset] = stream.read()
+                res: std_n.core._nodeIndexBucket = type.factory(type)
+                res.attributes = data
+                return res
+        
         __B_2D: list[int] = [0x5555555555555555, 0x3333333333333333, 0x0F0F0F0F0F0F0F0F, 0x00FF00FF00FF00FF, 0x0000FFFF0000FFFF, 0x00000000FFFFFFFF]
         __S_2D: list[int] = [0, 1, 2, 4, 8, 16]
-                                           
+
         @staticmethod
         def __interleave64_2d(x: int, y: int) -> c_int64:
             x = (x | (x << std_n.core.__S_2D[5])) & std_n.core.__B_2D[4]
