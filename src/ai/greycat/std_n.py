@@ -6,13 +6,16 @@ from typing import *
 
 from ai.greycat.greycat import GreyCat, PrimitiveType
 
-T = TypeVar("T")
-U = TypeVar("U")
+__T = TypeVar("__T")
+__U = TypeVar("__U")
 
 
 class std_n:
     class core:
-        class _node(Generic[T], GreyCat.Object):
+
+        # Primitive types
+
+        class _node(Generic[__T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.ref: c_int64
                 super(type, None)
@@ -31,7 +34,7 @@ class std_n:
                 res.ref = stream.read_vu64()
                 return res
 
-        class _nodeTime(Generic[T], GreyCat.Object):
+        class _nodeTime(Generic[__T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.ref: c_int64
                 super(type, None)
@@ -50,7 +53,7 @@ class std_n:
                 res.ref = stream.read_vu64()
                 return res
 
-        class _nodeIndex(Generic[T, U], GreyCat.Object):
+        class _nodeIndex(Generic[__T, __U], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.ref: c_int64
                 super(type, None)
@@ -69,7 +72,7 @@ class std_n:
                 res.ref = stream.read_vu64()
                 return res
 
-        class _nodeList(Generic[T], GreyCat.Object):
+        class _nodeList(Generic[__T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.ref: c_int64
                 super(type, None)
@@ -88,7 +91,7 @@ class std_n:
                 res.ref = stream.read_vu64()
                 return res
 
-        class _nodeGeo(Generic[T], GreyCat.Object):
+        class _nodeGeo(Generic[__T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.ref: c_int64
                 super(type, None)
@@ -642,6 +645,160 @@ class std_n:
                 self.x1 = unpack("d", pack("q", c_int32(((d31 & 0xffff) + std_n.core._ti4d.__INT16_MIN) << 16).value))[0]
                 self.x2 = unpack("d", pack("q", c_int32(((d20 >> 32) + std_n.core._ti4d.__INT16_MIN) << 16).value))[0]
                 self.x3 = unpack("d", pack("q", c_int32(((d31 >> 32) + std_n.core._ti4d.__INT16_MIN) << 16).value))[0]
+
+        # Object types
+
+        class _Array(Generic[__T], GreyCat.Object):
+            def __init__(self, type: GreyCat.Type) -> None:
+                super(type, None)
+
+            @final
+            def _save(self, stream: GreyCat._Stream) -> None:
+                stream.write_vu32(c_uint32(len(self.attributes)))
+                offset: int
+                for offset in range(len(self.attributes)):
+                    stream.write(self.attributes[offset])
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
+                size: int = stream.read_vu32().value
+                array: std_n.core._Array = type.factory(type)
+                array.attributes = [None] * size
+                offset: int
+                for offset in range(size):
+                    array.set(offset, stream.read())
+                return array
+            
+            def __str__(self) -> str:
+                res: str = '['
+                for offset in range(len(self.attributes)):
+                    if (offset > 0):
+                        res = f'{res},'
+                    res = f'{res}{self.attributes[offset]}'
+                return f'{res}]'
+        
+        class _Date(GreyCat.Object):
+            def __init__(self, type: GreyCat.Type) -> None:
+                self.localized_epoch_s: int
+                self.epoch_us: int
+                self.time_zone: int
+                super(type, None)
+
+            @final
+            def _save(self, stream: GreyCat._Stream) -> None:
+                stream.write_vi64(self.localized_epoch_s)
+                stream.write_vi64(self.epoch_us)
+                stream.write_vu32(self.time_zone)
+            
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
+                res: std_n.core._Date = type.factory(type)
+                res.localized_epoch_s = stream.read_vi64()
+                res.epoch_us = stream.read_vi64()
+                res.time_zone = stream.read_vu32()
+                return res
+
+        class _Error(GreyCat.Object):
+            def __init__(self, type: GreyCat.Type) -> None:
+                self.code: int
+                self.frames: list[std_n.core._Error.Frame]
+                self.msg: str
+                self.value: Any | None
+                super(type, None)
+            
+            @final
+            def _save(self, stream: GreyCat._Stream) -> None:
+                stream.write_vu32(c_uint32(self.code))
+                stream.write_vu32(c_uint32(len(self.frames)))
+                bs: Final[bytes] = self.msg.encode("utf-8")
+                stream.write_vu32(c_uint32(len(bs)))
+                offset: int
+                frame: std_n.core._Error.Frame
+                for offset in range(len(self.frames)):
+                    frame = self.frames[offset]
+                    stream.write_vu32(c_uint32(frame.mod_symbol))
+                    stream.write_vu32(c_uint32(frame.type_symbol))
+                    stream.write_vu32(c_uint32(frame.fn_symbol))
+                    stream.write_vu32(c_uint32(frame.line))
+                    stream.write_vu32(c_uint32(frame.column))
+                stream.write_i8_array(bs, 0, len(bs))
+                stream.write(self.value)
+            
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
+                code: Final[int] = stream.read_vu32().value
+                frames_len: Final[int] = stream.read_vu32().value
+                msg_len: Final[int] = stream.read_vu32().value
+                frames: Final[list[std_n.core._Error.Frame]] = [None] * frames_len
+                offset: int
+                mod_symbol: int
+                type_symbol: int
+                fn_symbol: int
+                line: int
+                column: int
+                for offset in range(frames_len):
+                    mod_symbol = stream.read_vu32().value
+                    type_symbol = stream.read_vu32().value
+                    fn_symbol = stream.read_vu32().value
+                    line = stream.read_vu32().value
+                    column = stream.read_vu32().value
+                    frames[offset] = std_n.core._Error.Frame(mod_symbol, type_symbol, fn_symbol, line, column)
+                res: std_n.core._Error = type.factory(type)
+                res.code = code
+                res.frames = frames
+                res.msg = stream.read_string(msg_len)
+                res.value = stream.read()
+                return res
+            
+            def __str__(self) -> str:
+                return f"{self.type.name}{{msg='{self.msg}', value={self.value}}}"
+
+            
+            class Frame:
+                def __init__(self, mod_symbol: int, type_symbol: int, fn_symbol: int, line: int, column: int) -> None:
+                    self.mod_symbol: Final[int] = mod_symbol
+                    self.type_symbol: Final[int] = type_symbol
+                    self.fn_symbol: Final[int] = fn_symbol
+                    self.line: Final[int] = line
+                    self.column: Final[int] = column
+        
+        class _Map(Generic[__T, __U], GreyCat.Object):
+            def __init__(self, type: GreyCat.Type) -> None:
+                self.map: Final[dict] = {}
+                self(type, None)
+            
+            @final
+            def _save(self, stream: GreyCat._Stream) -> None:
+                stream.write_vu32(c_int32(len(self)))
+                key: __T
+                value: __U
+                for key, value in self.map.items():
+                    stream.write(key)
+                    stream.write(value)
+            
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
+                map: Final[std_n.core._Map] = type.factory(type)
+                map_length: int = stream.read_vu32().value
+                for _ in range(map_length):
+                    map[stream.read()] = stream.read()
+                    # map.set(stream.read(), stream.read())
+                return map
+            
+            def __len__(self) -> int:
+                return len(self.map)
+            
+            def __getitem__(self, key: __T) -> __U:
+                return self.map[key]
+            
+            def __setitem__(self, key: __T, value: __U) -> None:
+                self.map[key] = value
+
+            def __delitem__(self, key: __T) -> None:
+                del self.map[key]
+
+            def clear(self) -> None:
+                self.map.clear()
 
         
         __B_2D: list[int] = [0x5555555555555555, 0x3333333333333333, 0x0F0F0F0F0F0F0F0F, 0x00FF00FF00FF00FF, 0x0000FFFF0000FFFF, 0x00000000FFFFFFFF]
