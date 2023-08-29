@@ -248,8 +248,8 @@ class std_n:
                 return res
 
         class _ti2d(GreyCat.Object):
-            __UINT32_MIN: int = 2147483648
             __INT32_MIN: int = -2147483648
+            __UINT32_MIN: int = 2147483648
 
             def __init__(self, type: GreyCat.Type) -> None:
                 self.x0: int
@@ -270,6 +270,9 @@ class std_n:
                 res.__deinterleave(stream.read_i64)
                 return res
             
+            def __str__(self) -> str:
+                return f'ti2d{{x0={self.x0},x1={self.x1}}}'
+            
             def __interleave(self) -> c_int64:
                 return std_n.core.__interleave64_2d(self.x0 + std_n.core._ti2d.__UINT32_MIN, self.x1 + std_n.core._ti2d.__UINT32_MIN)
             
@@ -278,8 +281,246 @@ class std_n:
                 self.x0 = c_int32(dc + std_n.core._ti2d.__INT32_MIN).value
                 self.x1 = c_int32((dc >> 32) + std_n.core._ti2d.__INT32_MIN).value
 
-        __B_2D: list[int] = [0x5555555555555555, 0x3333333333333333, 0x0F0F0F0F0F0F0F0F,
-                0x00FF00FF00FF00FF, 0x0000FFFF0000FFFF, 0x00000000FFFFFFFF]
+        class _ti3d(GreyCat.Object):
+            __INT21_MIN: int = -1048575 - 1
+            __INT21_MAX: int = 1048575
+            __UINT21_MIN: int = 4293918720
+
+            def __init__(self, type: GreyCat.Type)->None:
+                self.x0: int
+                self.x1: int
+                self.x2: int
+                super(type, None)
+
+            @final
+            def _save_type(self, stream: GreyCat._Stream)->None:
+                stream.write_i8(PrimitiveType.TU3D)
+            
+            @final
+            def _save(self, stream: GreyCat._Stream)->None:
+                stream.write_i64(self.__interleave())
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
+                res: std_n.core._ti3d = type.factory(type)
+                res.__deinterleave(stream.read_i64())
+                return res
+
+            def __str__(self) -> str:
+                return f'ti3d{{x0={self.x0},x1={self.x1},x2={self.x2}}}'
+            
+            def __interleave(self) -> c_int64:
+                return std_n.core.__interleave64_3d(self.x0 + std_n.core._ti3d.__UINT21_MIN, self.x1 + std_n.core._ti3d.__UINT21_MIN, self.x2 + std_n.core._ti3d.__UINT21_MIN)
+            
+            def __deinterleave(self, interleaved: c_int64) -> None:
+                B: list[int] = [0x10c30c30c30c30c3, 0x100f00f00f00f00f, 0x001f0000ff0000ff, 0xffff00000000ffff, 0x0001fffff]
+                S: list[int] = [2, 4, 8, 16, 32]
+
+                self.x0 = std_n.core.__deinterleave64_3d(interleaved) + std_n.core._ti3d.__INT21_MIN
+                self.x1 = std_n.core.__deinterleave64_3d(c_int64(interleaved.value >> 1)) + std_n.core._ti3d.__INT21_MIN
+                self.x2 = std_n.core.__deinterleave64_3d(c_int64(interleaved.value >> 2)) + std_n.core._ti3d.__INT21_MIN
+        
+        class _ti4d(GreyCat.Object):
+            __INT16_MIN: int = -32768
+            __INT16_MAX: int = 32767
+            __UINT16_MIN: int = 32768
+
+            def __init__(self, type: GreyCat.Type)->None:
+                self.x0: int
+                self.x1: int
+                self.x2: int
+                self.x3: int
+                super(type, None)
+
+            @final
+            def _save_type(self, stream: GreyCat._Stream) -> None:
+                stream.write_i8(PrimitiveType.TU4D)
+            
+            @final
+            def _save(self, stream: GreyCat._Stream)->None:
+                stream.write_i64(self.__interleave())
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
+                res: std_n.core._ti4d = type.factory(type)
+                res.__deinterleave(stream.read_i64())
+                return res
+            
+            def __str__(self) -> str:
+                return f'ti4d{{x0={self.x0},x1={self.x1},x2={self.x2},x3={self.x3}}}'
+            
+            def __interleave(self) -> c_int64:
+                return std_n.core.__interleave64_2d(
+                    std_n.core.__interleave64_2d(self.x0 + std_n.core._ti4d.__UINT16_MIN, self.x2 + std_n.core._ti4d.__UINT16_MIN).value, 
+                    std_n.core.__interleave64_2d(self.x1 + std_n.core._ti4d.__UINT16_MIN, self.x3 + std_n.core._ti4d.__UINT16_MIN).value
+                )
+            
+            def __deinterleave(self, interleaved: c_int64)->None:
+                x3120: int = std_n.core.__deinterleave64_2d(interleaved)
+                x20: int = std_n.core.__deinterleave64_2d(c_int64(x3120 & 0xffffffff))
+                x31: int = std_n.core.__deinterleave64_2d(c_int64(x3120 >> 32))
+                self.x0 = (x20 & 0xffff) + std_n.core._ti4d.__INT16_MIN
+                self.x1 = (x31 & 0xffff) + std_n.core._ti4d.__INT16_MIN
+                self.x2 = (x20 >> 32) + std_n.core._ti4d.__INT16_MIN
+                self.x3 = (x31 >> 32) + std_n.core._ti4d.__INT16_MIN
+
+        class _ti5d(GreyCat.Object):
+            __INT12_MIN: int = -2047 - 1
+            __INT12_MAX: int = 2047
+            __UINT12_MIN = 63488
+
+            def __init__(self, type: GreyCat.Type) -> None:
+                self.x0: int
+                self.x1: int
+                self.x2: int
+                self.x3: int
+                self.x4: int
+                super(type, None)
+
+            @final
+            def _save_type(self, stream: GreyCat._Stream) -> None:
+                stream.write_i8(PrimitiveType.TU5D)
+
+            @final
+            def _save(self, stream: GreyCat._Stream) -> None:
+                stream.write_i64(self.__interleave())
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat._Stream)->Any:
+                res: std_n.core._ti5d = type.factory(type)
+                res.__deinterleave(stream.read_i64())
+                return res
+            
+            def __str__(self) -> str:
+                return f'ti5d{{x0={self.x0},x1={self.x1},x2={self.x2},x3={self.x3},x4={self.x4}}}'
+            
+            def __interleave(self) -> c_int64:
+                return std_n.core.__interleave64_5d(
+                    self.x0 + std_n.core._ti5d.__UINT12_MIN,
+                    self.x1 + std_n.core._ti5d.__UINT12_MIN,
+                    self.x2 + std_n.core._ti5d.__UINT12_MIN,
+                    self.x3 + std_n.core._ti5d.__UINT12_MIN,
+                    self.x3 + std_n.core._ti5d.__UINT12_MIN
+                    )
+
+            def __deinterleave(self, interleaved: c_int64) -> None:
+                B: list[int] = [0x0c0300c0300c03, 0x0f0000f0000f, 0x00f00000000ff, 0x0fff]
+                S: list[int] = [4, 8, 16, 32]
+
+                self.x0 = std_n.core.__deinterleave64_5d(interleaved) + std_n.core._ti5d.__INT12_MIN
+                self.x1 = std_n.core.__deinterleave64_5d(c_int64(interleaved.value >> 1)) + std_n.core._ti5d.__INT12_MIN
+                self.x2 = std_n.core.__deinterleave64_5d(c_int64(interleaved.value >> 2)) + std_n.core._ti5d.__INT12_MIN
+                self.x3 = std_n.core.__deinterleave64_5d(c_int64(interleaved.value >> 3)) + std_n.core._ti5d.__INT12_MIN
+                self.x4 = std_n.core.__deinterleave64_5d(c_int64(interleaved.value >> 4)) + std_n.core._ti5d.__INT12_MIN
+        
+        class _ti6d(GreyCat.Object):
+            __INT10_MIN: int = -511 - 1
+            __INT10_MAX: int = 511
+            __UINT10_MIN = 65024
+
+            def __init__(self, type: GreyCat.Type) -> None:
+                self.x0: int
+                self.x1: int
+                self.x2: int
+                self.x3: int
+                self.x4: int
+                self.x5: int
+                super(type)
+
+            @final
+            def _save_type(self, stream: GreyCat._Stream) -> None:
+                stream.write_i8(PrimitiveType.TU6D)
+
+            @final
+            def _save(self, stream: GreyCat._Stream) -> None:
+                stream.write_i64(self.__interleave())
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
+                res: std_n.core._ti6d = type.factory(type)
+                res.__deinterleave(stream.read_i64())
+                return res
+            
+            def __str__(self) -> str:
+                return f'ti6d{{x0={self.x0},x1={self.x1},x2={self.x2},x3={self.x3},x4={self.x4},x5={self.x5}}}'
+            
+            def __interleave(self) -> c_int64:
+                return std_n.core.__interleave64_3d(
+                    std_n.core.__interleave64_2d((self.x0 + std_n.core._ti6d.__UINT10_MIN) & 0x3ff, (self.x3 + std_n.core._ti6d.__UINT10_MIN) & 0x3ff).value,
+                    std_n.core.__interleave64_2d((self.x1 + std_n.core._ti6d.__UINT10_MIN) & 0x3ff, (self.x4 + std_n.core._ti6d.__UINT10_MIN) & 0x3ff).value,
+                    std_n.core.__interleave64_2d((self.x2 + std_n.core._ti6d.__UINT10_MIN) & 0x3ff, (self.x5 + std_n.core._ti6d.__UINT10_MIN) & 0x3ff).value,
+                )
+            
+            def __deinterleave(self, interleaved: c_int64) -> None:
+                y30: int = std_n.core.__deinterleave64_2d(c_int64(std_n.core.__deinterleave64_3d(interleaved)))
+                y41: int = std_n.core.__deinterleave64_2d(c_int64(std_n.core.__deinterleave64_3d(c_int64(interleaved.value >> 1))))
+                y52: int = std_n.core.__deinterleave64_2d(c_int64(std_n.core.__deinterleave64_3d(c_int64(interleaved.value >> 2))))
+
+                self.x0 = (y30 & 0x3ff) + std_n.core._ti6d.__INT10_MIN
+                self.x1 = (y41 & 0x3ff) + std_n.core._ti6d.__INT10_MIN
+                self.x2 = (y52 & 0x3ff) + std_n.core._ti6d.__INT10_MIN
+                self.x3 = (y30 >> 32) + std_n.core._ti6d.__INT10_MIN
+                self.x4 = (y41 >> 32) + std_n.core._ti6d.__INT10_MIN
+                self.x5 = (y52 >> 32) + std_n.core._ti6d.__INT10_MIN
+
+        class _ti10d(GreyCat.Object):
+            __INT6_MIN: -31 - 1
+            __INT6_MAX: 31
+            __UINT6_MIN: 224
+
+            def __init__(self, type: GreyCat.Type) -> None:
+                self.x0: int
+                self.x1: int
+                self.x2: int
+                self.x3: int
+                self.x4: int
+                self.x5: int
+                self.x6: int
+                self.x7: int
+                self.x8: int
+                self.x9: int
+                super(type, None)
+            
+            @final
+            def _save_type(self, stream: GreyCat._Stream) -> None:
+                stream.write_i8(PrimitiveType.TU10D)
+
+            @final
+            def _save(self, stream: GreyCat._Stream) -> None:
+                stream.write_i64(self.__interleave())
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
+                res: std_n.core._ti10d = type.factory(type)
+                res.__deinterleave(stream.read_i64())
+                return res
+            
+            def __str__(self) -> str:
+                return f'ti2d{{x0={self.x0},x1={self.x1},x2={self.x2},x3={self.x3},x4={self.x4},x5={self.x5},x6={self.x6},x7={self.x7},x8={self.x8},x9={self.x9}}}'
+            
+            def __interleave(self) -> c_int64:
+                return std_n.core.__interleave64_5d(
+                    std_n.core.__interleave64_2d((self.x0 + std_n.core._ti10d.__UINT6_MIN) & 0x3f, (self.x5 + std_n.core._ti10d.__UINT6_MIN) & 0x3f),
+                    std_n.core.__interleave64_2d((self.x1 + std_n.core._ti10d.__UINT6_MIN) & 0x3f, (self.x6 + std_n.core._ti10d.__UINT6_MIN) & 0x3f),
+                    std_n.core.__interleave64_2d((self.x2 + std_n.core._ti10d.__UINT6_MIN) & 0x3f, (self.x7 + std_n.core._ti10d.__UINT6_MIN) & 0x3f),
+                    std_n.core.__interleave64_2d((self.x3 + std_n.core._ti10d.__UINT6_MIN) & 0x3f, (self.x8 + std_n.core._ti10d.__UINT6_MIN) & 0x3f),
+                    std_n.core.__interleave64_2d((self.x4 + std_n.core._ti10d.__UINT6_MIN) & 0x3f, (self.x9 + std_n.core._ti10d.__UINT6_MIN) & 0x3f)
+                )
+            
+            def __deinterleave(self, interleaved: c_int64) -> None:
+                self.x0 = (std_n.core.__deinterleave64_2d(c_int64(std_n.core.__deinterleave64_5d(interleaved))) & 0x3f) + std_n.core._ti10d.__INT6_MIN
+                self.x1 = (std_n.core.__deinterleave64_2d(c_int64(std_n.core.__deinterleave64_5d(c_int64(interleaved.value >> 1)))) & 0x3f) + std_n.core._ti10d.__INT6_MIN
+                self.x2 = (std_n.core.__deinterleave64_2d(c_int64(std_n.core.__deinterleave64_5d(c_int64(interleaved.value >> 2)))) & 0x3f) + std_n.core._ti10d.__INT6_MIN
+                self.x3 = (std_n.core.__deinterleave64_2d(c_int64(std_n.core.__deinterleave64_5d(c_int64(interleaved.value >> 3)))) & 0x3f) + std_n.core._ti10d.__INT6_MIN
+                self.x4 = (std_n.core.__deinterleave64_2d(c_int64(std_n.core.__deinterleave64_5d(c_int64(interleaved.value >> 4)))) & 0x3f) + std_n.core._ti10d.__INT6_MIN
+                self.x5 = (std_n.core.__deinterleave64_2d(c_int64(std_n.core.__deinterleave64_5d(c_int64(interleaved.value >> 5)))) & 0x3f) + std_n.core._ti10d.__INT6_MIN
+                self.x6 = (std_n.core.__deinterleave64_2d(c_int64(std_n.core.__deinterleave64_5d(c_int64(interleaved.value >> 6)))) & 0x3f) + std_n.core._ti10d.__INT6_MIN
+                self.x7 = (std_n.core.__deinterleave64_2d(c_int64(std_n.core.__deinterleave64_5d(c_int64(interleaved.value >> 7)))) & 0x3f) + std_n.core._ti10d.__INT6_MIN
+                self.x8 = (std_n.core.__deinterleave64_2d(c_int64(std_n.core.__deinterleave64_5d(c_int64(interleaved.value >> 8)))) & 0x3f) + std_n.core._ti10d.__INT6_MIN
+                self.x9 = (std_n.core.__deinterleave64_2d(c_int64(std_n.core.__deinterleave64_5d(c_int64(interleaved.value >> 9)))) & 0x3f) + std_n.core._ti10d.__INT6_MIN
+            
+
+        __B_2D: list[int] = [0x5555555555555555, 0x3333333333333333, 0x0F0F0F0F0F0F0F0F, 0x00FF00FF00FF00FF, 0x0000FFFF0000FFFF, 0x00000000FFFFFFFF]
         __S_2D: list[int] = [0, 1, 2, 4, 8, 16]
                                            
         @staticmethod
@@ -299,7 +540,7 @@ class std_n:
             x = (x | (x << std_n.core.__S_2D[1])) & std_n.core.__B_2D[0]
             y = (y | (y << std_n.core.__S_2D[1])) & std_n.core.__B_2D[0]
 
-            return x | (y << 1)
+            return c_int64(x | (y << 1))
         
         @staticmethod
         def __deinterleave64_2d(interleaved: c_int64)->int:
@@ -325,6 +566,90 @@ class std_n:
             y = (y | (y >> std_n.core.__S_2D[5])) & std_n.core.__B_2D[5]
 
             return x | (y << 32)
+
+        __B_3D: list[int] = [0x1249249249249249, 0x10C30C30C30C30C3, 0x100F00F00F00F00F, 0x001F0000FF0000FF, 0xFFFF00000000FFFF, 0x00000000001FFFFF]
+        __S_3D: list[int] = [2, 4, 8, 16, 32]
+        
+        @staticmethod
+        def __interleave64_3d(x: int, y: int, z: int) -> c_int64:
+            x &= std_n.core.__B_3D[5]
+            x = (x ^ (x << std_n.core.__S_3D[4])) & std_n.core.__B_3D[4]
+            x = (x ^ (x << std_n.core.__S_3D[3])) & std_n.core.__B_3D[3]
+            x = (x ^ (x << std_n.core.__S_3D[2])) & std_n.core.__B_3D[2]
+            x = (x ^ (x << std_n.core.__S_3D[1])) & std_n.core.__B_3D[1]
+            x = (x ^ (x << std_n.core.__S_3D[0])) & std_n.core.__B_3D[0]
+
+            y &= std_n.core.__B_3D[5]
+            y = (y ^ (y << std_n.core.__S_3D[4])) & std_n.core.__B_3D[4]
+            y = (y ^ (y << std_n.core.__S_3D[3])) & std_n.core.__B_3D[3]
+            y = (y ^ (y << std_n.core.__S_3D[2])) & std_n.core.__B_3D[2]
+            y = (y ^ (y << std_n.core.__S_3D[1])) & std_n.core.__B_3D[1]
+            y = (y ^ (y << std_n.core.__S_3D[0])) & std_n.core.__B_3D[0]
+
+            z &= std_n.core.__B_3D[5]
+            z = (z ^ (z << std_n.core.__S_3D[4])) & std_n.core.__B_3D[4]
+            z = (z ^ (z << std_n.core.__S_3D[3])) & std_n.core.__B_3D[3]
+            z = (z ^ (z << std_n.core.__S_3D[2])) & std_n.core.__B_3D[2]
+            z = (z ^ (z << std_n.core.__S_3D[1])) & std_n.core.__B_3D[1]
+            z = (z ^ (z << std_n.core.__S_3D[0])) & std_n.core.__B_3D[0]
+
+            return c_int64(x | (y << 1) | (z << 2))
+        
+        @staticmethod
+        def __deinterleave64_3d(interleaved: c_int64) -> int:
+            x: int = interleaved & std_n.core.__B_3D[0]
+            x = (x ^ (x >> std_n.core.__S_3D[0])) & std_n.core.__B_3D[1]
+            x = (x ^ (x >> std_n.core.__S_3D[1])) & std_n.core.__B_3D[2]
+            x = (x ^ (x >> std_n.core.__S_3D[2])) & std_n.core.__B_3D[3]
+            x = (x ^ (x >> std_n.core.__S_3D[3])) & std_n.core.__B_3D[4]
+            x = (x ^ (x >> std_n.core.__S_3D[4])) & std_n.core.__B_3D[5]
+            return x
+
+        __B_5D: list[int] = [0x0084210842108421, 0x000C0300C0300C03, 0x00000F0000F0000F, 0x0000FF00000000FF, 0x0000000000000FFF]
+        __S_5D: list[int] = [4, 8, 16, 32]
+        
+        @staticmethod
+        def __interleave64_5d(x0: int, x1: int, x2: int, x3: int, x4: int) -> c_int64:
+            x0 &= std_n.core.__B_5D[4]
+            x0 = (x0 ^ (x0 << std_n.core.__S_5D[3])) & std_n.core.__B_5D[3]
+            x0 = (x0 ^ (x0 << std_n.core.__S_5D[2])) & std_n.core.__B_5D[2]
+            x0 = (x0 ^ (x0 << std_n.core.__S_5D[1])) & std_n.core.__B_5D[1]
+            x0 = (x0 ^ (x0 << std_n.core.__S_5D[0])) & std_n.core.__B_5D[0]
+
+            x1 &= std_n.core.__B_5D[4]
+            x1 = (x1 ^ (x1 << std_n.core.__S_5D[3])) & std_n.core.__B_5D[3]
+            x1 = (x1 ^ (x1 << std_n.core.__S_5D[2])) & std_n.core.__B_5D[2]
+            x1 = (x1 ^ (x1 << std_n.core.__S_5D[1])) & std_n.core.__B_5D[1]
+            x1 = (x1 ^ (x1 << std_n.core.__S_5D[0])) & std_n.core.__B_5D[0]
+
+            x2 &= std_n.core.__B_5D[4]
+            x2 = (x2 ^ (x2 << std_n.core.__S_5D[3])) & std_n.core.__B_5D[3]
+            x2 = (x2 ^ (x2 << std_n.core.__S_5D[2])) & std_n.core.__B_5D[2]
+            x2 = (x2 ^ (x2 << std_n.core.__S_5D[1])) & std_n.core.__B_5D[1]
+            x2 = (x2 ^ (x2 << std_n.core.__S_5D[0])) & std_n.core.__B_5D[0]
+
+            x3 &= std_n.core.__B_5D[4]
+            x3 = (x3 ^ (x3 << std_n.core.__S_5D[3])) & std_n.core.__B_5D[3]
+            x3 = (x3 ^ (x3 << std_n.core.__S_5D[2])) & std_n.core.__B_5D[2]
+            x3 = (x3 ^ (x3 << std_n.core.__S_5D[1])) & std_n.core.__B_5D[1]
+            x3 = (x3 ^ (x3 << std_n.core.__S_5D[0])) & std_n.core.__B_5D[0]
+
+            x4 &= std_n.core.__B_5D[4]
+            x4 = (x4 ^ (x4 << std_n.core.__S_5D[3])) & std_n.core.__B_5D[3]
+            x4 = (x4 ^ (x4 << std_n.core.__S_5D[2])) & std_n.core.__B_5D[2]
+            x4 = (x4 ^ (x4 << std_n.core.__S_5D[1])) & std_n.core.__B_5D[1]
+            x4 = (x4 ^ (x4 << std_n.core.__S_5D[0])) & std_n.core.__B_5D[0]
+
+            return c_int64(x0 | (x1 << 1) | (x2 << 2) | (x3 << 3) | (x4 << 4))
+
+        @staticmethod
+        def __deinterleave64_5d(interleaved: c_int64) -> int:
+            x: int = interleaved.value & std_n.core.__B_5D[0]
+            x = (x ^ (x >> std_n.core.__S_5D[0])) & std_n.core.__B_5D[1]
+            x = (x ^ (x >> std_n.core.__S_5D[1])) & std_n.core.__B_5D[2]
+            x = (x ^ (x >> std_n.core.__S_5D[2])) & std_n.core.__B_5D[3]
+            x = (x ^ (x >> std_n.core.__S_5D[3])) & std_n.core.__B_5D[4]
+            return  x;
 
 # class std_n:
 #     class core:
