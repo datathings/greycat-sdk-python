@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from _collections_abc import dict_keys, dict_values, dict_items
 from ctypes import *
 from struct import pack, unpack
 from typing import *
@@ -772,7 +773,7 @@ class std_n:
                 stream.write_vu32(c_int32(len(self)))
                 key: __T
                 value: __U
-                for key, value in self.map.items():
+                for key, value in self.items():
                     stream.write(key)
                     stream.write(value)
             
@@ -784,6 +785,15 @@ class std_n:
                     map[stream.read()] = stream.read()
                     # map.set(stream.read(), stream.read())
                 return map
+            
+            def keys(self) -> dict_keys[__T]:
+                return self.map.keys()
+            
+            def values(self) -> dict_values[__U]:
+                return self.map.values()
+            
+            def items(self) -> dict_items[__T, __U]:
+                return self.map.items()
             
             def __len__(self) -> int:
                 return len(self.map)
