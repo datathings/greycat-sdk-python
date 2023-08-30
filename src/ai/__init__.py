@@ -12,4 +12,4 @@ sys.path.insert(0, parent_dir)
 __path__.append(module_dir)
 
 # Import submodules so that they are available when the package is imported
-from .greycat import algebra_n, greycat, std_n
+from .greycat import algebra_n, greycat, std_n, std

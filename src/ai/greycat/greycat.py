@@ -7,8 +7,6 @@ import os
 from struct import pack, unpack
 from typing import *
 
-from std import std
-
 @final
 class PrimitiveType:
     NULL: c_byte = c_byte(0)
@@ -62,6 +60,9 @@ class GreyCat:
 
         def read(self) -> Any:
             return self.__stream.read()
+        
+        def available(self) -> int:
+            return len(BufferedReader(self.__stream.__io).peek())
 
     @final
     class AbiWriter:
@@ -624,7 +625,7 @@ class GreyCat:
         __PRIMITIVE_LOADERS[PrimitiveType.TUF3D.value] = __tf3d_loader
         __PRIMITIVE_LOADERS[PrimitiveType.TUF4D.value] = __tf4d_loader
         __PRIMITIVE_LOADERS[PrimitiveType.BLOCK_REF.value] = __error_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.FUNCTION] = __error_loader  # TODO?
+        __PRIMITIVE_LOADERS[PrimitiveType.FUNCTION.value] = __error_loader  # TODO?
         __PRIMITIVE_LOADERS[PrimitiveType.UNDEFINED.value] = __error_loader
         __PRIMITIVE_LOADERS[PrimitiveType.STRING_LIT.value] = __string_lit_loader
 
@@ -981,7 +982,7 @@ class GreyCat:
         def configure(
             self,
             loaders: dict[str, GreyCat.Loader],
-            factories: dict[str, GreyCat.Factory],
+            factories: dict[str, GreyCat.Factory]
         ) -> None:
             raise NotImplementedError
 
@@ -991,7 +992,7 @@ class GreyCat:
     class Files:  # TODO?
         pass
 
-    def __init__(self, *args: GreyCat.Library, url: str) -> None:
+    def __init__(self, url: str, libraries: list[GreyCat.Library] = []) -> None:
         self.libs_by_name: Final[dict[str, GreyCat.Library]] = {}
         std_: std = std()
         self.libs_by_name[std_.name()] = std
@@ -999,13 +1000,14 @@ class GreyCat:
         library_offset: int
         # for declarations
         lib: GreyCat.Library
-        for library_offset in range(len(args)):
-            lib = args[library_offset]
+        for library_offset in range(len(libraries)):
+            lib = libraries[library_offset]
             self.libs_by_name[lib.name()] = lib
         loaders: Final[dict[str, GreyCat.Loader]] = {}
         factories: Final[dict[str, GreyCat.Factory]] = {}
         for lib in self.libs_by_name.values():
-            lib.configure(loaders, factories)
+            # lib.configure(loaders, factories)
+            lib.configure(self=lib,loaders=loaders, factories=factories)
         self.__runtime_url: Final[str] = url
         abi_stream: Final[GreyCat._Stream] = self.__get_abi(url)
 
@@ -1323,3 +1325,5 @@ class GreyCat:
             return self.__get_remote_abi(runtime_url)
         else:
             return self.__get_local_abi(runtime_url)
+
+from .std import std
