@@ -10,36 +10,36 @@ from typing import *
 
 @final
 class PrimitiveType:
-    NULL: c_byte = c_byte(0)
-    BOOL: c_byte = c_byte(1)
-    CHAR: c_byte = c_byte(2)
-    INT: c_byte = c_byte(3)
-    FLOAT: c_byte = c_byte(4)
-    NODE: c_byte = c_byte(5)
-    NODE_TIME: c_byte = c_byte(6)
-    NODE_INDEX: c_byte = c_byte(7)
-    NODE_LIST: c_byte = c_byte(8)
-    NODE_GEO: c_byte = c_byte(9)
-    GEO: c_byte = c_byte(10)
-    TIME: c_byte = c_byte(11)
-    DURATION: c_byte = c_byte(12)
-    CUBIC: c_byte = c_byte(13)
-    ENUM: c_byte = c_byte(14)
-    OBJECT: c_byte = c_byte(15)
-    TU2D: c_byte = c_byte(16)
-    TU3D: c_byte = c_byte(17)
-    TU4D: c_byte = c_byte(18)
-    TU5D: c_byte = c_byte(19)
-    TU6D: c_byte = c_byte(20)
-    TU10D: c_byte = c_byte(21)
-    TUF2D: c_byte = c_byte(22)
-    TUF3D: c_byte = c_byte(23)
-    TUF4D: c_byte = c_byte(24)
-    BLOCK_REF: c_byte = c_byte(25)
-    FUNCTION: c_byte = c_byte(26)
-    UNDEFINED: c_byte = c_byte(27)
-    STRING_LIT: c_byte = c_byte(28)
-    SIZE: c_byte = c_byte(29)
+    NULL: c_ubyte = c_ubyte(0)
+    BOOL: c_ubyte = c_ubyte(1)
+    CHAR: c_ubyte = c_ubyte(2)
+    INT: c_ubyte = c_ubyte(3)
+    FLOAT: c_ubyte = c_ubyte(4)
+    NODE: c_ubyte = c_ubyte(5)
+    NODE_TIME: c_ubyte = c_ubyte(6)
+    NODE_INDEX: c_ubyte = c_ubyte(7)
+    NODE_LIST: c_ubyte = c_ubyte(8)
+    NODE_GEO: c_ubyte = c_ubyte(9)
+    GEO: c_ubyte = c_ubyte(10)
+    TIME: c_ubyte = c_ubyte(11)
+    DURATION: c_ubyte = c_ubyte(12)
+    CUBIC: c_ubyte = c_ubyte(13)
+    ENUM: c_ubyte = c_ubyte(14)
+    OBJECT: c_ubyte = c_ubyte(15)
+    TU2D: c_ubyte = c_ubyte(16)
+    TU3D: c_ubyte = c_ubyte(17)
+    TU4D: c_ubyte = c_ubyte(18)
+    TU5D: c_ubyte = c_ubyte(19)
+    TU6D: c_ubyte = c_ubyte(20)
+    TU10D: c_ubyte = c_ubyte(21)
+    TUF2D: c_ubyte = c_ubyte(22)
+    TUF3D: c_ubyte = c_ubyte(23)
+    TUF4D: c_ubyte = c_ubyte(24)
+    BLOCK_REF: c_ubyte = c_ubyte(25)
+    FUNCTION: c_ubyte = c_ubyte(26)
+    UNDEFINED: c_ubyte = c_ubyte(27)
+    STRING_LIT: c_ubyte = c_ubyte(28)
+    SIZE: c_ubyte = c_ubyte(29)
 
 
 class ByteArrayIO(BufferedIOBase):
@@ -63,7 +63,7 @@ class GreyCat:
             return self.__stream.read()
 
         def available(self) -> int:
-            return len(BufferedReader(self.__stream.__io).peek())
+            return len(self.__stream._io.peek())
 
     @final
     class AbiWriter:
@@ -85,28 +85,28 @@ class GreyCat:
 
     @final
     class _Stream:
-        __ASCII_MAX: Final[c_byte] = c_byte(127)
+        __ASCII_MAX: Final[c_ubyte] = c_ubyte(127)
 
-        def __init__(self, greycat: GreyCat, io: BufferedIOBase) -> None:
+        def __init__(self, greycat: GreyCat, io: BufferedReader | BufferedWriter) -> None:
             self.greycat: Final[GreyCat] = greycat
-            self.__io: BufferedIOBase = io
+            self._io: BufferedReader | BufferedWriter = io
 
         def close(self) -> None:
-            self.__io.close()
+            self._io.close()
 
         def read_abi_header(self) -> None:
             abi_major: int = self.read_i16().value
             if abi_major != GreyCat.ABI_PROTO:
-                raise ("wrong ABI protocol major version")
+                raise RuntimeError("wrong ABI protocol major version")
             abi_magic: c_int16 = self.read_i16()
-            if abi_magic != self.greycat.__abi_magic:
-                raise ("wrong ABI magic")
+            if abi_magic.value != self.greycat._abi_magic.value:
+                raise RuntimeError(f"wrong ABI magic: expected {self.greycat._abi_magic.value}, got {abi_magic.value}")
             abi_version: c_int32 = self.read_i32()
-            if abi_version > self.greycat.__abi_version:
-                raise ("larger ABI version, please reload this handler")
+            if abi_version.value > self.greycat._abi_version.value:
+                raise RuntimeError("larger ABI version, please reload this handler")
 
         def read(self) -> Any:
-            primitive_offset: c_byte = self.read_i8()
+            primitive_offset: c_ubyte = self.read_i8()
             return GreyCat._Stream.__PRIMITIVE_LOADERS[primitive_offset.value](self)
 
         def read_null(self) -> type(None):
@@ -116,13 +116,13 @@ class GreyCat:
             return self.read_i8().value != 0
 
         def read_char(self) -> c_char:
-            return c_char(self.read_i8())
+            return c_char(self.read_i8().value)
 
-        def read_i8(self) -> c_byte:
-            return c_byte(self.__io.read(1)[0])
+        def read_i8(self) -> c_ubyte:
+            return c_ubyte(self._io.read(1)[0])
 
         def read_i8_array(self, len_: int) -> bytes:
-            tmp: bytes = self.__io.read(len_)
+            tmp: bytes = self._io.read(len_)
             if len(tmp) < len_:
                 raise Exception
             return tmp
@@ -143,35 +143,35 @@ class GreyCat:
         def read_vu32(self) -> c_uint32:
             current: int
             value: int = 0
-            pos: int = self.__io.tell()
-            buf: bytes = self.__io.read(5)
+            pos: int = self._io.tell()
+            buf: bytes = self._io.read(5)
 
             current = buf[0]
             value |= current & 0x7F
             if 0 == (current & 0x80):
-                self.__io.seek(pos)
-                self.__io.read(1)
+                self._io.seek(pos)
+                self._io.read(1)
                 return c_uint32(value)
 
             current = buf[1]
             value |= (current & 0x7F) << 7
             if 0 == (current & 0x80):
-                self.__io.seek(pos)
-                self.__io.read(2)
+                self._io.seek(pos)
+                self._io.read(2)
                 return c_uint32(value)
 
             current = buf[2]
             value |= (current & 0x7F) << 14
             if 0 == (current & 0x80):
-                self.__io.seek(pos)
-                self.__io.read(3)
+                self._io.seek(pos)
+                self._io.read(3)
                 return c_uint32(value)
 
             current = buf[3]
             value |= (current & 0x7F) << 21
             if 0 == (current & 0x80):
-                self.__io.seek(pos)
-                self.__io.read(4)
+                self._io.seek(pos)
+                self._io.read(4)
                 return c_uint32(value)
 
             current = buf[4]
@@ -198,62 +198,62 @@ class GreyCat:
         def read_vu64(self) -> c_int64:
             current: int
             value: int = 0
-            pos: int = self.__io.tell()
-            buf: bytes = self.__io.read(9)
+            pos: int = self._io.tell()
+            buf: bytes = self._io.read(9)
 
             current = buf[0]
             value |= current & 0x7F
             if 0 == (current & 0x80):
-                self.__io.seek(pos)
+                self._io.seek(pos)
                 self.read(1)
                 return value
 
             current = buf[1]
             value |= (current & 0x7F) << 7
             if 0 == (current & 0x80):
-                self.__io.seek(pos)
+                self._io.seek(pos)
                 self.read(2)
                 return value
 
             current = buf[2]
             value |= (current & 0x7F) << 14
             if 0 == (current & 0x80):
-                self.__io.seek(pos)
+                self._io.seek(pos)
                 self.read(3)
                 return value
 
             current = buf[3]
             value |= (current & 0x7F) << 21
             if 0 == (current & 0x80):
-                self.__io.seek(pos)
+                self._io.seek(pos)
                 self.read(4)
                 return value
 
             current = buf[4]
             value |= (current & 0x7F) << 28
             if 0 == (current & 0x80):
-                self.__io.seek(pos)
+                self._io.seek(pos)
                 self.read(5)
                 return value
 
             current = buf[5]
             value |= (current & 0x7F) << 35
             if 0 == (current & 0x80):
-                self.__io.seek(pos)
+                self._io.seek(pos)
                 self.read(6)
                 return value
 
             current = buf[6]
             value |= (current & 0x7F) << 42
             if 0 == (current & 0x80):
-                self.__io.seek(pos)
+                self._io.seek(pos)
                 self.read(7)
                 return value
 
             current = buf[7]
             value |= (current & 0x7F) << 49
             if 0 == (current & 0x80):
-                self.__io.seek(pos)
+                self._io.seek(pos)
                 self.read(8)
                 return value
 
@@ -282,9 +282,9 @@ class GreyCat:
             return type.loader(type, self)
 
         def write_abi_header(self) -> None:
-            self.write_i16(GreyCat.ABI_PROTO)
-            self.write_i16(self.greycat.__abi_magic)
-            self.write_i32(self.greycat.__abi_version)
+            self.write_i16(c_int16(GreyCat.ABI_PROTO))
+            self.write_i16(self.greycat._abi_magic)
+            self.write_i32(self.greycat._abi_version)
 
         def write(self, value: Any) -> None:
             if value is None:
@@ -295,7 +295,7 @@ class GreyCat:
             elif type(value) is c_char:
                 c: c_char = value
                 self.write_i8(PrimitiveType.CHAR)
-                self.write_i8(c_byte(c.value[0]))
+                self.write_i8(c_ubyte(c.value[0]))
             elif type(value) is int:
                 self.write_i8(PrimitiveType.INT)
                 self.write_vi64(c_int64(value))
@@ -324,29 +324,29 @@ class GreyCat:
                 value._save(self)
 
         def write_bool(self, b: bool) -> None:
-            self.__io.write(bytes(c_byte(1 if b else 0)))
+            self._io.write(bytes(c_ubyte(1 if b else 0)))
 
-        def write_i8(self, b: c_byte) -> None:
-            self.__io.write(bytes(b))
+        def write_i8(self, b: c_ubyte) -> None:
+            self._io.write(bytes(b))
 
         def write_i8_array(self, b: bytearray | bytes, offset: int, len_: int) -> None:
-            self.__io.write(b[slice(offset, offset + len_)])
+            self._io.write(b[slice(offset, offset + len_)])
 
         def write_i16(self, i: c_int16) -> None:
             i = i.value
             tmp: bytearray = bytearray(2)
             tmp[0] = i & 0xFF
             tmp[1] = (i >> 8) & 0xFF
-            self.__io.write(tmp)
+            self._io.write(tmp)
 
         def write_i32(self, i: c_int32) -> None:
             i = i.value
-            tmp: bytearray = bytearray(2)
+            tmp: bytearray = bytearray(4)
             tmp[0] = i & 0xFF
             tmp[1] = (i >> 8) & 0xFF
             tmp[2] = (i >> 16) & 0xFF
             tmp[3] = (i >> 24) & 0xFF
-            self.__io.write(tmp)
+            self._io.write(tmp)
 
         def write_vu32(self, u: c_uint32) -> None:
             packed_value: bytearray = bytearray[5]
@@ -394,7 +394,7 @@ class GreyCat:
             tmp[5] = (i >> 40) & 0xFF
             tmp[6] = (i >> 48) & 0xFF
             tmp[7] = (i >> 56) & 0xFF
-            self.__io.write(tmp)
+            self._io.write(tmp)
 
         def write_vi64(self, i: c_int64) -> None:
             self.write_vu64(c_uint64((i.value << 1) ^ (i.value >> 63)))
@@ -403,63 +403,63 @@ class GreyCat:
             packed_value: Final[bytearray] = bytearray(9)
             value: int = u.value
 
-            packed_value[0] = c_byte(value & 0x7F).value
+            packed_value[0] = c_ubyte(value & 0x7F).value
             if value < 0x80:
                 self.write_i8_array(packed_value, 0, 1)
                 return
 
             packed_value[0] |= 0x80
             value >>= 7
-            packed_value[1] = c_byte(value).value
+            packed_value[1] = c_ubyte(value).value
             if value < 0x80:
                 self.write_i8_array(packed_value, 0, 2)
                 return
 
             packed_value[1] |= 0x80
             value >>= 7
-            packed_value[2] = c_byte(value).value
+            packed_value[2] = c_ubyte(value).value
             if value < 0x80:
                 self.write_i8_array(packed_value, 0, 3)
                 return
 
             packed_value[2] |= 0x80
             value >>= 7
-            packed_value[3] = c_byte(value).value
+            packed_value[3] = c_ubyte(value).value
             if value < 0x80:
                 self.write_i8_array(packed_value, 0, 4)
                 return
 
             packed_value[3] |= 0x80
             value >>= 7
-            packed_value[4] = c_byte(value).value
+            packed_value[4] = c_ubyte(value).value
             if value < 0x80:
                 self.write_i8_array(packed_value, 0, 5)
                 return
 
             packed_value[4] |= 0x80
             value >>= 7
-            packed_value[5] = c_byte(value).value
+            packed_value[5] = c_ubyte(value).value
             if value < 0x80:
                 self.write_i8_array(packed_value, 0, 6)
                 return
 
             packed_value[5] |= 0x80
             value >>= 7
-            packed_value[6] = c_byte(value).value
+            packed_value[6] = c_ubyte(value).value
             if value < 0x80:
                 self.write_i8_array(packed_value, 0, 7)
                 return
 
             packed_value[6] |= 0x80
             value >>= 7
-            packed_value[7] = c_byte(value).value
+            packed_value[7] = c_ubyte(value).value
             if value < 0x80:
                 self.write_i8_array(packed_value, 0, 8)
                 return
 
             packed_value[7] |= 0x80
             value >>= 7
-            packed_value[8] = c_byte(value).value
+            packed_value[8] = c_ubyte(value).value
             self.write_i8_array(packed_value, 0, 9)
 
         def write_f64(self, d: c_double):
@@ -643,7 +643,7 @@ class GreyCat:
                 prog_type_offset: int,
                 mapped_any_offset: int,
                 mapped_att_offset: int,
-                sbi_type: c_byte,
+                sbi_type: c_ubyte,
                 nullable: bool,
                 mapped: bool,
             ):
@@ -652,7 +652,7 @@ class GreyCat:
                 self.prog_type_offset: Final[int] = prog_type_offset
                 self.mapped_any_offset: Final[int] = mapped_any_offset
                 self.mapped_att_offset: Final[int] = mapped_att_offset
-                self.sbi_type: Final[c_byte] = sbi_type
+                self.sbi_type: Final[c_ubyte] = sbi_type
                 self.nullable: Final[bool] = nullable
                 self.mapped: Final[bool] = mapped
 
@@ -690,7 +690,7 @@ class GreyCat:
                         & 1
                     ):
                         continue
-                load_type: c_byte = att.sbi_type
+                load_type: c_ubyte = att.sbi_type
                 if load_type == PrimitiveType.UNDEFINED:
                     load_type = stream.read_i8()
                 match load_type:
@@ -853,7 +853,7 @@ class GreyCat:
                     case PrimitiveType.BOOL:
                         stream.write_bool(bool(value))
                     case PrimitiveType.CHAR:
-                        c: c_byte = c_byte(value)
+                        c: c_ubyte = c_ubyte(value)
                         if c > GreyCat._Stream.__ASCII_MAX:
                             raise ValueError(f"Only ASCII characters are allowed: {c}")
                         stream.write_i8(c)
@@ -1015,8 +1015,8 @@ class GreyCat:
         abi_major: int = abi_stream.read_i16().value
         if abi_major != GreyCat.ABI_PROTO:
             raise Exception(f"wrong ABI proto: expected ${GreyCat.ABI_PROTO}, got {abi_major}")
-        self.__abi_magic: Final[c_int16] = abi_stream.read_i16()
-        self.__abi_version: Final[c_int32] = abi_stream.read_i32()
+        self._abi_magic: Final[c_int16] = abi_stream.read_i16()
+        self._abi_version: Final[c_int32] = abi_stream.read_i32()
         crc: c_int64 = abi_stream.read_i64()
 
         # step 1: create all symbols
@@ -1063,7 +1063,7 @@ class GreyCat:
                 prog_type_offset: Final[int] = abi_stream.read_vu32().value
                 mapped_any_offset: Final[int] = abi_stream.read_vu32().value
                 mapped_att_offset: Final[int] = abi_stream.read_vu32().value
-                sbi_type: Final[c_byte] = abi_stream.read_i8()
+                sbi_type: Final[c_ubyte] = abi_stream.read_i8()
                 att_flags: Final[int] = abi_stream.read_i8().value
                 nullable: Final[bool] = 0 != (att_flags & 1)
                 mapped: Final[bool] = 0 != (att_flags & (1 << 1))
