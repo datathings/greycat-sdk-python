@@ -254,7 +254,7 @@ class GreyCat:
             return c_int64(value)
 
         def read_f64(self) -> c_double:
-            return c_double(unpack("d", pack("q", self.read_i64()))[0])
+            return c_double(unpack("d", pack("q", self.read_i64().value))[0])
 
         def read_string(self, len_: int) -> str:
             return self.read_i8_array(len_).decode("utf-8")
@@ -301,7 +301,7 @@ class GreyCat:
                 self.write_i8(PrimitiveType.FLOAT)
                 self.write_f64(value)
             elif type(value) is str:
-                symbolOffset: int = self.greycat.__symbols_off_by_value[value]
+                symbolOffset: int = self.greycat._symbols_off_by_value[value]
                 if symbolOffset is not None:
                     self.write_i8(PrimitiveType.STRING_LIT)
                     self.write_vu32(c_uint32(symbolOffset << 1 | 1))
@@ -341,7 +341,7 @@ class GreyCat:
             self._io.write(tmp)
 
         def write_vu32(self, u: c_uint32) -> None:
-            packed_value: bytearray = bytearray[5]
+            packed_value: bytearray = bytearray(5)
             value: int = u.value
 
             packed_value[0] = value & 0x7F
@@ -525,7 +525,7 @@ class GreyCat:
 
         __object_loader: Final[
             Callable[[GreyCat._Stream], object]
-        ] = lambda stream: stream.read()
+        ] = lambda stream: stream.read_object()
 
         __tu2d_loader: Final[
             Callable[[GreyCat._Stream], object]
@@ -566,7 +566,7 @@ class GreyCat:
         __tf2d_loader: Final[
             Callable[[GreyCat._Stream], object]
         ] = lambda stream: GreyCat._Stream.__type_loader(
-            stream, stream.greycat.type_offset_core_tf2d
+            stream, stream.greycat.types[stream.greycat.type_offset_core_tf2d]
         )
 
         __tf3d_loader: Final[
@@ -908,7 +908,7 @@ class GreyCat:
                         if type(value) is str:
                             string: str = value
                             symbol_offset: int | None = (
-                                self.type_.greycat.__symbols_off_by_value[string]
+                                self.type_.greycat._symbols_off_by_value[string]
                             )
                             if not (symbol_offset is None):
                                 stream.write_vu32(c_uint32((symbol_offset << 1) | 1))
@@ -1015,12 +1015,12 @@ class GreyCat:
         symbols_bytes: Final[c_int64] = abi_stream.read_i64()
         symbols_count: Final[int] = abi_stream.read_i32().value
         self.symbols: Final[list[str | None]] = [None] * (symbols_count + 1)
-        self.__symbols_off_by_value: Final[dict[str, int]] = {}
+        self._symbols_off_by_value: Final[dict[str, int]] = {}
         offset: int
         for offset in range(1, symbols_count + 1):
             symbol: str = abi_stream.read_string(abi_stream.read_vu32().value)
             self.symbols[offset] = symbol
-            self.__symbols_off_by_value[symbol] = offset
+            self._symbols_off_by_value[symbol] = offset
 
         # step 2: create all types
         types_bytes: Final[c_int64] = abi_stream.read_i64()
