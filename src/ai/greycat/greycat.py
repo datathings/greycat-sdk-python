@@ -107,7 +107,7 @@ class GreyCat:
 
         def read(self) -> Any:
             primitive_offset: c_ubyte = self.read_i8()
-            return GreyCat._Stream.__PRIMITIVE_LOADERS[primitive_offset.value](self)
+            return GreyCat._Stream._PRIMITIVE_LOADERS[primitive_offset.value](self)
 
         def read_null(self) -> type(None):
             return None
@@ -301,11 +301,11 @@ class GreyCat:
                 self.write_i8(PrimitiveType.FLOAT)
                 self.write_f64(value)
             elif type(value) is str:
-                symbolOffset: int = self.greycat._symbols_off_by_value[value]
-                if symbolOffset is not None:
+                try:
+                    symbolOffset: int = self.greycat._symbols_off_by_value[value]
                     self.write_i8(PrimitiveType.STRING_LIT)
                     self.write_vu32(c_uint32(symbolOffset << 1 | 1))
-                else:
+                except KeyError:
                     self.write_i8(PrimitiveType.OBJECT)
                     self.write_vu32(c_uint32(self.greycat.type_offset_core_string))
                     data = value.encode("utf-8")
@@ -485,42 +485,42 @@ class GreyCat:
         __node_loader: Final[
             Callable[[GreyCat._Stream], object]
         ] = lambda stream: GreyCat._Stream.__type_loader(
-            stream, stream.greycat.type_offset_core_node
+            stream, stream.greycat.types[stream.greycat.type_offset_core_node]
         )
         __node_time_loader: Final[
             Callable[[GreyCat._Stream], object]
         ] = lambda stream: GreyCat._Stream.__type_loader(
-            stream, stream.greycat.type_offset_core_node_time
+            stream, stream.greycat.types[stream.greycat.type_offset_core_node_time]
         )
         __node_index_loader: Final[
             Callable[[GreyCat._Stream], object]
         ] = lambda stream: GreyCat._Stream.__type_loader(
-            stream, stream.greycat.type_offset_core_node_index
+            stream, stream.greycat.types[stream.greycat.type_offset_core_node_index]
         )
         __node_list_loader: Final[
             Callable[[GreyCat._Stream], object]
         ] = lambda stream: GreyCat._Stream.__type_loader(
-            stream, stream.greycat.type_offset_core_node_list
+            stream, stream.greycat.types[stream.greycat.type_offset_core_node_list]
         )
         __node_geo_loader: Final[
             Callable[[GreyCat._Stream], object]
         ] = lambda stream: GreyCat._Stream.__type_loader(
-            stream, stream.greycat.type_offset_core_node_geo
+            stream, stream.greycat.types[stream.greycat.type_offset_core_node_geo]
         )
         __geo_loader: Final[
             Callable[[GreyCat._Stream], object]
         ] = lambda stream: GreyCat._Stream.__type_loader(
-            stream, stream.greycat.type_offset_core_geo
+            stream, stream.greycat.types[stream.greycat.type_offset_core_geo]
         )
         __time_loader: Final[
             Callable[[GreyCat._Stream], object]
         ] = lambda stream: GreyCat._Stream.__type_loader(
-            stream, stream.greycat.type_offset_core_time
+            stream, stream.greycat.types[stream.greycat.type_offset_core_time]
         )
         __duration_loader: Final[
             Callable[[GreyCat._Stream], object]
         ] = lambda stream: GreyCat._Stream.__type_loader(
-            stream, stream.greycat.type_offset_core_duration
+            stream, stream.greycat.types[stream.greycat.type_offset_core_duration]
         )
 
         __object_loader: Final[
@@ -530,37 +530,37 @@ class GreyCat:
         __tu2d_loader: Final[
             Callable[[GreyCat._Stream], object]
         ] = lambda stream: GreyCat._Stream.__type_loader(
-            stream, stream.greycat.type_offset_core_ti2d
+            stream, stream.greycat.types[stream.greycat.type_offset_core_ti2d]
         )
 
         __tu3d_loader: Final[
             Callable[[GreyCat._Stream], object]
         ] = lambda stream: GreyCat._Stream.__type_loader(
-            stream, stream.greycat.type_offset_core_ti3d
+            stream, stream.greycat.types[stream.greycat.type_offset_core_ti3d]
         )
 
         __tu4d_loader: Final[
             Callable[[GreyCat._Stream], object]
         ] = lambda stream: GreyCat._Stream.__type_loader(
-            stream, stream.greycat.type_offset_core_ti4d
+            stream, stream.greycat.types[stream.greycat.type_offset_core_ti4d]
         )
 
         __tu5d_loader: Final[
             Callable[[GreyCat._Stream], object]
         ] = lambda stream: GreyCat._Stream.__type_loader(
-            stream, stream.greycat.type_offset_core_ti5d
+            stream, stream.greycat.types[stream.greycat.type_offset_core_ti5d]
         )
 
         __tu6d_loader: Final[
             Callable[[GreyCat._Stream], object]
         ] = lambda stream: GreyCat._Stream.__type_loader(
-            stream, stream.greycat.type_offset_core_ti6d
+            stream, stream.greycat.types[stream.greycat.type_offset_core_ti6d]
         )
 
         __tu10d_loader: Final[
             Callable[[GreyCat._Stream], object]
         ] = lambda stream: GreyCat._Stream.__type_loader(
-            stream, stream.greycat.type_offset_core_ti10d
+            stream, stream.greycat.types[stream.greycat.type_offset_core_ti10d]
         )
 
         __tf2d_loader: Final[
@@ -572,13 +572,13 @@ class GreyCat:
         __tf3d_loader: Final[
             Callable[[GreyCat._Stream], object]
         ] = lambda stream: GreyCat._Stream.__type_loader(
-            stream, stream.greycat.type_offset_core_tf3d
+            stream, stream.greycat.types[stream.greycat.type_offset_core_tf3d]
         )
 
         __tf4d_loader: Final[
             Callable[[GreyCat._Stream], object]
         ] = lambda stream: GreyCat._Stream.__type_loader(
-            stream, stream.greycat.type_offset_core_tf4d
+            stream, stream.greycat.types[stream.greycat.type_offset_core_tf4d]
         )
 
         @staticmethod
@@ -590,37 +590,37 @@ class GreyCat:
             Callable[[GreyCat._Stream], object]
         ] = lambda stream: stream.read_string_lit()
 
-        __PRIMITIVE_LOADERS: Final[list[__PrimitiveLoader]] = [
+        _PRIMITIVE_LOADERS: Final[list[__PrimitiveLoader]] = [
             None
         ] * PrimitiveType.SIZE.value
-        __PRIMITIVE_LOADERS[PrimitiveType.NULL.value] = __null_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.BOOL.value] = __bool_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.CHAR.value] = __char_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.INT.value] = __i64_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.FLOAT.value] = __f64_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.NODE.value] = __node_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.NODE_TIME.value] = __node_time_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.NODE_INDEX.value] = __node_index_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.NODE_LIST.value] = __node_list_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.NODE_GEO.value] = __node_geo_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.GEO.value] = __geo_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.TIME.value] = __time_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.DURATION.value] = __duration_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.ENUM.value] = __object_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.OBJECT.value] = __object_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.TU2D.value] = __tu2d_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.TU3D.value] = __tu3d_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.TU4D.value] = __tu4d_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.TU5D.value] = __tu5d_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.TU6D.value] = __tu6d_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.TU10D.value] = __tu10d_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.TUF2D.value] = __tf2d_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.TUF3D.value] = __tf3d_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.TUF4D.value] = __tf4d_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.BLOCK_REF.value] = __error_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.FUNCTION.value] = __error_loader  # TODO?
-        __PRIMITIVE_LOADERS[PrimitiveType.UNDEFINED.value] = __error_loader
-        __PRIMITIVE_LOADERS[PrimitiveType.STRING_LIT.value] = __string_lit_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.NULL.value] = __null_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.BOOL.value] = __bool_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.CHAR.value] = __char_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.INT.value] = __i64_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.FLOAT.value] = __f64_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.NODE.value] = __node_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.NODE_TIME.value] = __node_time_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.NODE_INDEX.value] = __node_index_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.NODE_LIST.value] = __node_list_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.NODE_GEO.value] = __node_geo_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.GEO.value] = __geo_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.TIME.value] = __time_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.DURATION.value] = __duration_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.ENUM.value] = __object_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.OBJECT.value] = __object_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.TU2D.value] = __tu2d_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.TU3D.value] = __tu3d_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.TU4D.value] = __tu4d_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.TU5D.value] = __tu5d_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.TU6D.value] = __tu6d_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.TU10D.value] = __tu10d_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.TUF2D.value] = __tf2d_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.TUF3D.value] = __tf3d_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.TUF4D.value] = __tf4d_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.BLOCK_REF.value] = __error_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.FUNCTION.value] = __error_loader  # TODO?
+        _PRIMITIVE_LOADERS[PrimitiveType.UNDEFINED.value] = __error_loader
+        _PRIMITIVE_LOADERS[PrimitiveType.STRING_LIT.value] = __string_lit_loader
 
     class Function:
         def __init__(self, name: str) -> None:
@@ -669,7 +669,7 @@ class GreyCat:
             nullable_bitset: bytes = stream.read_i8_array(type.nullable_nb_bytes)
             nullable_offset: int = -1
             att_offset: int
-            for att_offset in range(type.attributes):
+            for att_offset in range(len(type.attributes)):
                 att: GreyCat.Type.Attribute = type.attributes[att_offset]
                 loaded_field: Any
                 if att.nullable:
@@ -698,8 +698,8 @@ class GreyCat:
                             field_type = type.greycat.types[stream.read_vu32()]
                         loaded_field = field_type.loader(field_type, stream)
                     case _:
-                        loaded_field = GreyCat._Stream.__PRIMITIVE_LOADERS[
-                            att.sbi_type
+                        loaded_field = GreyCat._Stream._PRIMITIVE_LOADERS[
+                            att.sbi_type.value
                         ](stream)
                 if att.mapped:
                     attributes[att.mapped_att_offset] = loaded_field
