@@ -797,7 +797,7 @@ class GreyCat:
                 self.generated_offsets[name_offset] = resolved
 
         def resolve_generated_offset_with_values(self, *args: Any) -> None:
-            self.generated_offsets: list[int] = [-1] * (len(args) / 2)
+            self.generated_offsets: list[int] = [-1] * int(len(args) / 2)
             name_offset: int
             for name_offset in range(0, len(args), 2):
                 resolved: int | None = self.attribute_off_by_name.get(args[name_offset])
@@ -805,7 +805,7 @@ class GreyCat:
                     raise ValueError(
                         "unmapped generated field, please re-generate this code!"
                     )
-                self.generated_offsets[name_offset / 2] = resolved
+                self.generated_offsets[int(name_offset / 2)] = resolved
                 self.enum_values[resolved].value = args[name_offset + 1]
 
     class Object:
