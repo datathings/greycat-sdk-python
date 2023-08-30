@@ -7,6 +7,7 @@ import os
 from struct import pack, unpack
 from typing import *
 
+
 @final
 class PrimitiveType:
     NULL: c_byte = c_byte(0)
@@ -60,7 +61,7 @@ class GreyCat:
 
         def read(self) -> Any:
             return self.__stream.read()
-        
+
         def available(self) -> int:
             return len(BufferedReader(self.__stream.__io).peek())
 
@@ -149,33 +150,33 @@ class GreyCat:
             value |= current & 0x7F
             if 0 == (current & 0x80):
                 self.__io.seek(pos)
-                self.read(1)
-                return value
+                self.__io.read(1)
+                return c_uint32(value)
 
             current = buf[1]
             value |= (current & 0x7F) << 7
             if 0 == (current & 0x80):
                 self.__io.seek(pos)
-                self.read(2)
-                return value
+                self.__io.read(2)
+                return c_uint32(value)
 
             current = buf[2]
             value |= (current & 0x7F) << 14
             if 0 == (current & 0x80):
                 self.__io.seek(pos)
-                self.read(3)
-                return value
+                self.__io.read(3)
+                return c_uint32(value)
 
             current = buf[3]
             value |= (current & 0x7F) << 21
             if 0 == (current & 0x80):
                 self.__io.seek(pos)
-                self.read(4)
-                return value
+                self.__io.read(4)
+                return c_uint32(value)
 
             current = buf[4]
             value |= (current & 0x7F) << 28
-            return value
+            return c_uint32(value)
 
         def read_i64(self) -> c_int64:
             tmp: bytes = self.read_i8_array(8)
@@ -264,7 +265,7 @@ class GreyCat:
             return c_double(unpack("d", pack("q", self.read_i64()))[0])
 
         def read_string(self, len_: int) -> str:
-            self.read_i8_array(len_).decode("utf-8")
+            return self.read_i8_array(len_).decode("utf-8")
 
         def read_string_lit(self) -> str:
             offset: int = self.read_vu32().value
@@ -727,7 +728,7 @@ class GreyCat:
             is_enum: bool,
             is_native: bool,
             type_attributes: list[GreyCat.Type.Attribute],
-            factory: GreyCat.Factory,
+            factory: GreyCat.Factory | None,
             loader: GreyCat.Loader | None,
             greycat: GreyCat,
         ) -> None:
@@ -982,7 +983,7 @@ class GreyCat:
         def configure(
             self,
             loaders: dict[str, GreyCat.Loader],
-            factories: dict[str, GreyCat.Factory]
+            factories: dict[str, GreyCat.Factory],
         ) -> None:
             raise NotImplementedError
 
@@ -995,7 +996,7 @@ class GreyCat:
     def __init__(self, url: str, libraries: list[GreyCat.Library] = []) -> None:
         self.libs_by_name: Final[dict[str, GreyCat.Library]] = {}
         std_: std = std()
-        self.libs_by_name[std_.name()] = std
+        self.libs_by_name[std_.name()] = std_
         self.__is_remote: bool = False
         library_offset: int
         # for declarations
@@ -1006,15 +1007,14 @@ class GreyCat:
         loaders: Final[dict[str, GreyCat.Loader]] = {}
         factories: Final[dict[str, GreyCat.Factory]] = {}
         for lib in self.libs_by_name.values():
-            # lib.configure(loaders, factories)
-            lib.configure(self=lib,loaders=loaders, factories=factories)
+            lib.configure(loaders, factories)
         self.__runtime_url: Final[str] = url
         abi_stream: Final[GreyCat._Stream] = self.__get_abi(url)
 
         # step 0: verify abi version
-        abi_major: int = abi_stream.read_i16()
+        abi_major: int = abi_stream.read_i16().value
         if abi_major != GreyCat.ABI_PROTO:
-            raise Exception("wrong ABI proto")
+            raise Exception(f"wrong ABI proto: expected ${GreyCat.ABI_PROTO}, got {abi_major}")
         self.__abi_magic: Final[c_int16] = abi_stream.read_i16()
         self.__abi_version: Final[c_int32] = abi_stream.read_i32()
         crc: c_int64 = abi_stream.read_i64()
@@ -1026,7 +1026,7 @@ class GreyCat:
         self.__symbols_off_by_value: Final[dict[str, int]] = {}
         offset: int
         for offset in range(1, symbols_count + 1):
-            symbol: str = abi_stream.read_string(abi_stream.read_vu32())
+            symbol: str = abi_stream.read_string(abi_stream.read_vu32().value)
             self.symbols[offset] = symbol
             self.__symbols_off_by_value[symbol] = offset
 
@@ -1036,6 +1036,7 @@ class GreyCat:
         self.types: Final[list[GreyCat.Type]] = [None] * types_size
         attributes_size: Final[c_int32] = abi_stream.read_i32()
         type_offset: int
+        self.types_by_name: Final[dict[str, GreyCat.Type]] = {}
         for type_offset in range(types_size):
             module_name: str = self.symbols[abi_stream.read_vu32().value]
             type_name: str = self.symbols[abi_stream.read_vu32().value]
@@ -1076,7 +1077,17 @@ class GreyCat:
                     nullable,
                     mapped,
                 )
-            abi_type: GreyCat.Type = Type(
+            factory: GreyCat.Factory | None = None
+            try:
+                factory = factories[fqn]
+            except KeyError:
+                pass
+            loader: GreyCat.Loader | None = None
+            try:
+                loader = loaders[fqn]
+            except KeyError:
+                pass
+            abi_type: GreyCat.Type = GreyCat.Type(
                 type_offset,
                 fqn,
                 mapped_abi_type_offset,
@@ -1087,13 +1098,12 @@ class GreyCat:
                 is_enum,
                 is_native,
                 type_attributes,
-                factories[fqn],
-                loaders[fqn],
+                factory,
+                loader,
                 self,
             )
-            self.types_by_name: Final[dict[str, GreyCat.Type]] = {}
             if abi_type.mapped_type_off == type_offset and len(fqn) != 0:
-                self.types_by_name[abi_type.name, abi_type]
+                self.types_by_name[abi_type.name] = abi_type
             self.types[type_offset] = abi_type
         # step 3: create all functions
         functions_bytes: Final[c_int64] = abi_stream.read_i64()
@@ -1117,7 +1127,7 @@ class GreyCat:
             abi_stream.read_vu32()
             abi_stream.read_i8()
             fn: GreyCat.Function = GreyCat.Function(fqn)
-            self.functions_by_name[fqn, fn]
+            self.functions_by_name[fqn] = fn
         # pre-resolve String type avoid runtime over-head
         tmp: GreyCat.Type = self.types_by_name["core::String"]
         if tmp is None:
@@ -1314,8 +1324,8 @@ class GreyCat:
         return GreyCat._Stream(self, response)
 
     def __get_local_abi(self, runtime_url: str) -> GreyCat._Stream:
-        if not (runtime_url.startswith("file://")):
-            runtime_url = f"file://{runtime_url}"
+        if runtime_url.startswith("file://"):
+            runtime_url = runtime_url.replace("file://", "", 1)
         return GreyCat._Stream(
             self, open(os.path.join(runtime_url, "gcdata", "store", "abi"), "rb")
         )
@@ -1325,5 +1335,6 @@ class GreyCat:
             return self.__get_remote_abi(runtime_url)
         else:
             return self.__get_local_abi(runtime_url)
+
 
 from .std import std
