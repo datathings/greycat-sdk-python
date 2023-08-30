@@ -198,68 +198,60 @@ class GreyCat:
         def read_vu64(self) -> c_int64:
             current: int
             value: int = 0
-            pos: int = self._io.tell()
-            buf: bytes = self._io.read(9)
+            buf: bytes = self._io.peek(9)
 
             current = buf[0]
             value |= current & 0x7F
             if 0 == (current & 0x80):
-                self._io.seek(pos)
-                self.read(1)
-                return value
+                self._io.read(1)
+                return c_int64(value)
 
             current = buf[1]
             value |= (current & 0x7F) << 7
             if 0 == (current & 0x80):
-                self._io.seek(pos)
-                self.read(2)
-                return value
+                self._io.read(2)
+                return c_int64(value)
 
             current = buf[2]
             value |= (current & 0x7F) << 14
             if 0 == (current & 0x80):
-                self._io.seek(pos)
-                self.read(3)
-                return value
+                self._io.read(3)
+                return c_int64(value)
 
             current = buf[3]
             value |= (current & 0x7F) << 21
             if 0 == (current & 0x80):
-                self._io.seek(pos)
-                self.read(4)
-                return value
+                self._io.read(4)
+                return c_int64(value)
 
             current = buf[4]
             value |= (current & 0x7F) << 28
             if 0 == (current & 0x80):
-                self._io.seek(pos)
-                self.read(5)
-                return value
+                self._io.read(5)
+                return c_int64(value)
 
             current = buf[5]
             value |= (current & 0x7F) << 35
             if 0 == (current & 0x80):
-                self._io.seek(pos)
-                self.read(6)
-                return value
+                self._io.read(6)
+                return c_int64(value)
 
             current = buf[6]
             value |= (current & 0x7F) << 42
             if 0 == (current & 0x80):
-                self._io.seek(pos)
-                self.read(7)
-                return value
+                self._io.read(7)
+                return c_int64(value)
 
             current = buf[7]
             value |= (current & 0x7F) << 49
             if 0 == (current & 0x80):
-                self._io.seek(pos)
-                self.read(8)
-                return value
+                self._io.read(8)
+                return c_int64(value)
 
             current = buf[8]
             value |= (current & 0x7F) << 56
-            return value
+            self._io.read(9)
+            return c_int64(value)
 
         def read_f64(self) -> c_double:
             return c_double(unpack("d", pack("q", self.read_i64()))[0])
@@ -480,7 +472,7 @@ class GreyCat:
         ] = lambda stream: stream.read_char()
         __i64_loader: Final[
             Callable[[GreyCat._Stream], object]
-        ] = lambda stream: stream.read_i64()
+        ] = lambda stream: stream.read_vi64()
         __f64_loader: Final[
             Callable[[GreyCat._Stream], object]
         ] = lambda stream: stream.read_f64()
