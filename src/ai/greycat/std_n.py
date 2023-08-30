@@ -914,7 +914,7 @@ class std_n:
                 for meta_offset in range(cols):
                     meta_col_type = stream.read_i8()
                     meta_index = stream.read_bool()
-                    meta_type = stream.read_vu32()
+                    meta_type: c_int32
                     if meta_col_type.value in [PrimitiveType.OBJECT.value, PrimitiveType.ENUM.value]:
                         meta_type = stream.read_vu32()
                     else:
