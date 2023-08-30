@@ -948,7 +948,7 @@ class GreyCat:
 
     class Enum(Object):
         def __init__(self, type: GreyCat.Type, attributes: list[Any]) -> None:
-            super(type, attributes)
+            super().__init__(type, attributes)
             self.__offset: Final[int] = attributes[0]
             self.key: Final[str] = attributes[1]
             self.value: Any = attributes[2]
@@ -1279,20 +1279,20 @@ class GreyCat:
 
     def create_geo(self, lat: c_double, lng: c_double):
         type: GreyCat.Type = self.types[self.type_offset_core_geo]
-        geo: std.core.geo = type.factory(type)
+        geo: std.core.geo = type.factory(type, [])
         geo.lat = c_double(lat)
         geo.lng = c_double(lng)
         return geo
 
     def create_time(self, epoch_us: c_int64):
         type: GreyCat.Type = self.types[self.type_offset_core_geo]
-        t: std.core.time = type.factory(type)
+        t: std.core.time = type.factory(type, [])
         t.value = epoch_us
         return t
 
     def create_duration(self, duration_us: c_int64):
         type: GreyCat.Type = self.types[self.type_offset_core_geo]
-        dur: std.core.duration = type.factory(type)
+        dur: std.core.duration = type.factory(type, [])
         dur.value = duration_us
         return dur
 

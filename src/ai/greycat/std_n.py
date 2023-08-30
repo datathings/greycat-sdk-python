@@ -18,7 +18,7 @@ class std_n:
         class _node(Generic[__T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.ref: c_int64
-                super(type, None)
+                super().__init__(type, None)
 
             @final
             def save_type(self, stream: GreyCat._Stream) -> None:
@@ -37,7 +37,7 @@ class std_n:
         class _nodeTime(Generic[__T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.ref: c_int64
-                super(type, None)
+                super().__init__(type, None)
 
             @final
             def save_type(self, stream: GreyCat._Stream) -> None:
@@ -56,7 +56,7 @@ class std_n:
         class _nodeIndex(Generic[__T, __U], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.ref: c_int64
-                super(type, None)
+                super().__init__(type, None)
 
             @final
             def save_type(self, stream: GreyCat._Stream) -> None:
@@ -75,7 +75,7 @@ class std_n:
         class _nodeList(Generic[__T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.ref: c_int64
-                super(type, None)
+                super().__init__(type, None)
 
             @final
             def save_type(self, stream: GreyCat._Stream) -> None:
@@ -94,7 +94,7 @@ class std_n:
         class _nodeGeo(Generic[__T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.ref: c_int64
-                super(type, None)
+                super().__init__(type, None)
 
             @final
             def save_type(self, stream: GreyCat._Stream) -> None:
@@ -112,7 +112,7 @@ class std_n:
 
         class _function(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
-                super(type, None)
+                super().__init__(type, None)
 
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
@@ -134,7 +134,7 @@ class std_n:
                 self.geocode: c_int64
                 self.lat: float
                 self.lng: float
-                super(type, None)
+                super().__init__(type, None)
                 if lat is not None and lng is not None:
                     self.geocode = std_n.core._geo.__encode(lat, lng)
                     self.lat = lat
@@ -219,7 +219,7 @@ class std_n:
         class _time(GreyCat.Object):
             def __init__(self) -> None:
                 self.value: c_int64
-                super(type, None)
+                super().__init__(type, None)
             
             @final
             def _save_type(self, stream: GreyCat._Stream)->None:
@@ -238,7 +238,7 @@ class std_n:
         class _duration(GreyCat.Object):
             def __init__(self) -> None:
                 self.value: c_int64
-                super(type, None)
+                super().__init__(type, None)
             
             @final
             def _save_type(self, stream: GreyCat._Stream)->None:
@@ -261,7 +261,7 @@ class std_n:
             def __init__(self, type: GreyCat.Type) -> None:
                 self.x0: int
                 self.x1: int
-                super(type, None)
+                super().__init__(type, None)
             
             @final
             def _save_type(self, stream: GreyCat._Stream) -> None:
@@ -297,7 +297,7 @@ class std_n:
                 self.x0: int
                 self.x1: int
                 self.x2: int
-                super(type, None)
+                super().__init__(type, None)
 
             @final
             def _save_type(self, stream: GreyCat._Stream)->None:
@@ -337,7 +337,7 @@ class std_n:
                 self.x1: int
                 self.x2: int
                 self.x3: int
-                super(type, None)
+                super().__init__(type, None)
 
             @final
             def _save_type(self, stream: GreyCat._Stream) -> None:
@@ -382,7 +382,7 @@ class std_n:
                 self.x2: int
                 self.x3: int
                 self.x4: int
-                super(type, None)
+                super().__init__(type, None)
 
             @final
             def _save_type(self, stream: GreyCat._Stream) -> None:
@@ -432,7 +432,7 @@ class std_n:
                 self.x3: int
                 self.x4: int
                 self.x5: int
-                super(type)
+                super().__init__(type)
 
             @final
             def _save_type(self, stream: GreyCat._Stream) -> None:
@@ -486,7 +486,7 @@ class std_n:
                 self.x7: int
                 self.x8: int
                 self.x9: int
-                super(type, None)
+                super().__init__(type, None)
             
             @final
             def _save_type(self, stream: GreyCat._Stream) -> None:
@@ -530,7 +530,7 @@ class std_n:
             def __init__(self, type: GreyCat.Type) -> None:
                 self.x0: float
                 self.x1: float
-                super(type, None)
+                super().__init__(type, None)
 
             @final
             def _save_type(self, stream: GreyCat._Stream) -> None:
@@ -565,7 +565,7 @@ class std_n:
                 self.x0: float
                 self.x1: float
                 self.x2: float
-                super(type, None)
+                super().__init__(type, None)
             
             @final
             def _save_type(self, stream: GreyCat._Stream) -> None:
@@ -608,7 +608,7 @@ class std_n:
                 self.x1: float
                 self.x2: float
                 self.x3: float
-                super(type, None)
+                super().__init__(type, None)
 
             @final
             def _save_type(self, stream: GreyCat._Stream) -> None:
@@ -652,7 +652,7 @@ class std_n:
 
         class _Array(Generic[__T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
-                super(type, None)
+                super().__init__(type, None)
 
             @final
             def _save(self, stream: GreyCat._Stream) -> None:
@@ -712,7 +712,7 @@ class std_n:
                 self.localized_epoch_s: int
                 self.epoch_us: int
                 self.time_zone: int
-                super(type, None)
+                super().__init__(type, None)
 
             @final
             def _save(self, stream: GreyCat._Stream) -> None:
@@ -734,7 +734,7 @@ class std_n:
                 self.frames: list[std_n.core._Error.Frame]
                 self.msg: str
                 self.value: Any | None
-                super(type, None)
+                super().__init__(type, None)
             
             @final
             def _save(self, stream: GreyCat._Stream) -> None:
@@ -841,7 +841,7 @@ class std_n:
 
         class _String(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
-                super(type, None)
+                super().__init__(type, None)
             
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
@@ -856,7 +856,7 @@ class std_n:
                 self.rows: int
                 self.meta: list[std_n.core._Table.TableColumnMeta]
                 self.data: list[__T]
-                super(type, None)
+                super().__init__(type, None)
             
             def _save(self, stream: GreyCat._Stream) -> None:
                 stream.write_vu32(c_uint32(self.cols))
@@ -962,7 +962,7 @@ class std_n:
                 self.tensor_type: c_byte
                 self.size: c_uint32
                 self.data: bytes
-                super(type, None)
+                super().__init__(type, None)
 
             @final
             def _save(self, stream: GreyCat._Stream) -> None:
@@ -1008,7 +1008,7 @@ class std_n:
 
         class _nodeIndexBucket(GreyCat.Object):
             def __init__(type: GreyCat.Type) -> None:
-                super(type, None)
+                super().__init__(type, None)
 
             @final
             def _save(self, stream: GreyCat._Stream) -> None:
