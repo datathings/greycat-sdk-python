@@ -158,6 +158,7 @@ class std_n:
                 lat_offset, lng_offset = std_n.core._geo.__deinterleave64(value)
                 geo.lat = std_n.core._geo.__GC_CORE_GEO_LAT_MIN + ((lat_offset + 0.5) / 4294967296) * (std_n.core._geo.__GC_CORE_GEO_LAT_MAX - std_n.core._geo.__GC_CORE_GEO_LAT_MIN)
                 geo.lng = std_n.core._geo.__GC_CORE_GEO_LNG_MIN + ((lng_offset + 0.5) / 4294967296) * (std_n.core._geo.__GC_CORE_GEO_LNG_MAX - std_n.core._geo.__GC_CORE_GEO_LNG_MIN)
+                return geo
 
             def __str__(self) -> str:
                 return f'geo{{lat={self.lat},lng={self.lng}}}'
@@ -236,7 +237,7 @@ class std_n:
                 return res
 
         class _duration(GreyCat.Object):
-            def __init__(self) -> None:
+            def __init__(self, type: GreyCat.Type) -> None:
                 self.value: c_int64
                 super().__init__(type, None)
             
@@ -795,7 +796,6 @@ class std_n:
         class _Map(Generic[__T, __U], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.map: Final[dict] = {}
-                self(type, None)
             
             @final
             def _save(self, stream: GreyCat._Stream) -> None:
@@ -811,7 +811,7 @@ class std_n:
                 map: Final[std_n.core._Map] = type.factory(type, [])
                 map_length: int = stream.read_vu32().value
                 for _ in range(map_length):
-                    map[stream.read()] = stream.read()
+                    map[std_n.core._Map.__hashable(stream.read())] = stream.read()
                     # map.set(stream.read(), stream.read())
                 return map
             
@@ -838,6 +838,10 @@ class std_n:
 
             def clear(self) -> None:
                 self.map.clear()
+
+            def __hashable(key: Any) -> Any:
+                if type(key) in [c_char, c_int64, c_double, c_ubyte]:
+                    return key.value
 
         class _String(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
@@ -911,7 +915,7 @@ class std_n:
                     meta_col_type = stream.read_i8()
                     meta_index = stream.read_bool()
                     meta_type = stream.read_vu32()
-                    if meta_col_type in [PrimitiveType.OBJECT, PrimitiveType.ENUM]:
+                    if meta_col_type.value in [PrimitiveType.OBJECT.value, PrimitiveType.ENUM.value]:
                         meta_type = stream.read_vu32()
                     else:
                         meta_type = c_uint32(0)
@@ -921,22 +925,22 @@ class std_n:
                 row: int
                 enum_type: GreyCat.Type
                 for col in range(cols):
-                    match meta[col].col_type:
-                        case PrimitiveType.NULL:
+                    match meta[col].col_type.value:
+                        case PrimitiveType.NULL.value:
                             pass
-                        case PrimitiveType.INT:
+                        case PrimitiveType.INT.value:
                             for row in range(rows):
                                 data[col + row] = stream.read_vi64().value
-                        case PrimitiveType.FLOAT:
+                        case PrimitiveType.FLOAT.value:
                             for row in range(rows):
                                 data[col + row] = stream.read_f64().value
-                        case PrimitiveType.TIME:
+                        case PrimitiveType.TIME.value:
                             for row in range(rows):
                                 data[col + row] = std_n.core._time.load(type.greycat.types[type.greycat.type_offset_core_time], stream)
-                        case PrimitiveType.DURATION:
+                        case PrimitiveType.DURATION.value:
                             for row in range(rows):
                                 data[col + row] = std_n.core._duration.load(type.greycat.types[type.greycat.type_offset_core_duration], stream)
-                        case PrimitiveType.ENUM:
+                        case PrimitiveType.ENUM.value:
                             for row in range(rows):
                                 enum_type = type.greycat.types[meta[col].type]
                                 data[col + row] = enum_type.loader(enum_type, stream)
