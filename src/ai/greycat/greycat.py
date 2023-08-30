@@ -124,7 +124,7 @@ class GreyCat:
         def read_i8_array(self, len_: int) -> bytes:
             tmp: bytes = self._io.read(len_)
             if len(tmp) < len_:
-                raise Exception
+                raise Exception(f"{len(tmp)} < {len_}")
             return tmp
 
         def read_i16(self) -> c_int16:
@@ -682,20 +682,20 @@ class GreyCat:
                         & 1
                     ):
                         continue
-                load_type: c_ubyte = att.sbi_type
-                if load_type == PrimitiveType.UNDEFINED:
-                    load_type = stream.read_i8()
+                load_type: c_ubyte = att.sbi_type.value
+                if load_type == PrimitiveType.UNDEFINED.value:
+                    load_type = stream.read_i8().value
                 match load_type:
-                    case PrimitiveType.ENUM:
+                    case PrimitiveType.ENUM.value:
                         field_type: GreyCat.Type = type.greycat.types[att.abi_type]
                         loaded_field = GreyCat.Type.__enum_loader(field_type, stream)
-                    case PrimitiveType.OBJECT:
+                    case PrimitiveType.OBJECT.value:
                         field_type: GreyCat.Type = type.greycat.types[att.abi_type]
                         if (not field_type.is_native) and (
                             field_type.is_abstract
-                            or att.sbi_type == PrimitiveType.UNDEFINED
+                            or att.sbi_type.value == PrimitiveType.UNDEFINED.value
                         ):
-                            field_type = type.greycat.types[stream.read_vu32()]
+                            field_type = type.greycat.types[stream.read_vu32().value]
                         loaded_field = field_type.loader(field_type, stream)
                     case _:
                         loaded_field = GreyCat._Stream._PRIMITIVE_LOADERS[

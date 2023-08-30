@@ -669,7 +669,7 @@ class std_n:
                 array.attributes = [None] * size
                 offset: int
                 for offset in range(size):
-                    array.set(offset, stream.read())
+                    array[offset] = stream.read()
                 return array
             
             def __len__(self) -> int:
@@ -679,19 +679,23 @@ class std_n:
                 return self.attributes.__iter__()
             
             @overload
-            def __getitem__(self, __i: SupportsIndex) -> __T:
-                return self.attributes[__i]
+            def __getitem__(self, __i: SupportsIndex) -> __T: ...
             
             @overload
-            def __getitem__(self, __s: slice) -> list[__T]:
-                return self.attributes[__s]
+            def __getitem__(self, __s: slice) -> list[__T]: ...
+
+            def __getitem__(self, __key):
+                return self.attributes[__key]
             
             @overload
             def __setitem__(self, __key: SupportsIndex, __value: __T) -> None:
-                self.attributes[__key] = __value
+                pass
 
             @overload
             def __setitem__(self, __key: slice, __value: Iterable[__T]) -> None:
+                pass
+
+            def __setitem__(self, __key, __value):
                 self.attributes[__key] = __value
             
             def __delitem__(self, __key: SupportsIndex | slice) -> None:
@@ -796,6 +800,7 @@ class std_n:
         class _Map(Generic[__T, __U], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.map: Final[dict] = {}
+                super().__init__(type, None)
             
             @final
             def _save(self, stream: GreyCat._Stream) -> None:
