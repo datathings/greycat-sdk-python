@@ -143,39 +143,35 @@ class GreyCat:
         def read_vu32(self) -> c_uint32:
             current: int
             value: int = 0
-            pos: int = self._io.tell()
-            buf: bytes = self._io.read(5)
+            buf: bytes = self._io.peek(5)
 
             current = buf[0]
             value |= current & 0x7F
             if 0 == (current & 0x80):
-                self._io.seek(pos)
                 self._io.read(1)
                 return c_uint32(value)
 
             current = buf[1]
             value |= (current & 0x7F) << 7
             if 0 == (current & 0x80):
-                self._io.seek(pos)
                 self._io.read(2)
                 return c_uint32(value)
 
             current = buf[2]
             value |= (current & 0x7F) << 14
             if 0 == (current & 0x80):
-                self._io.seek(pos)
                 self._io.read(3)
                 return c_uint32(value)
 
             current = buf[3]
             value |= (current & 0x7F) << 21
             if 0 == (current & 0x80):
-                self._io.seek(pos)
                 self._io.read(4)
                 return c_uint32(value)
 
             current = buf[4]
-            value |= (current & 0x7F) << 28
+            value |= current << 28
+            self._io.read(5)
             return c_uint32(value)
 
         def read_i64(self) -> c_int64:
@@ -195,7 +191,7 @@ class GreyCat:
             sign_swapped_value: int = self.read_vu64().value
             return c_int64((sign_swapped_value >> 1) ^ (-(-sign_swapped_value & 1)))
 
-        def read_vu64(self) -> c_int64:
+        def read_vu64(self) -> c_uint64:
             current: int
             value: int = 0
             buf: bytes = self._io.peek(9)
@@ -204,54 +200,54 @@ class GreyCat:
             value |= current & 0x7F
             if 0 == (current & 0x80):
                 self._io.read(1)
-                return c_int64(value)
+                return c_uint64(value)
 
             current = buf[1]
             value |= (current & 0x7F) << 7
             if 0 == (current & 0x80):
                 self._io.read(2)
-                return c_int64(value)
+                return c_uint64(value)
 
             current = buf[2]
             value |= (current & 0x7F) << 14
             if 0 == (current & 0x80):
                 self._io.read(3)
-                return c_int64(value)
+                return c_uint64(value)
 
             current = buf[3]
             value |= (current & 0x7F) << 21
             if 0 == (current & 0x80):
                 self._io.read(4)
-                return c_int64(value)
+                return c_uint64(value)
 
             current = buf[4]
             value |= (current & 0x7F) << 28
             if 0 == (current & 0x80):
                 self._io.read(5)
-                return c_int64(value)
+                return c_uint64(value)
 
             current = buf[5]
             value |= (current & 0x7F) << 35
             if 0 == (current & 0x80):
                 self._io.read(6)
-                return c_int64(value)
+                return c_uint64(value)
 
             current = buf[6]
             value |= (current & 0x7F) << 42
             if 0 == (current & 0x80):
                 self._io.read(7)
-                return c_int64(value)
+                return c_uint64(value)
 
             current = buf[7]
             value |= (current & 0x7F) << 49
             if 0 == (current & 0x80):
                 self._io.read(8)
-                return c_int64(value)
+                return c_uint64(value)
 
             current = buf[8]
-            value |= (current & 0x7F) << 56
+            value |= current << 56
             self._io.read(9)
-            return c_int64(value)
+            return c_uint64(value)
 
         def read_f64(self) -> c_double:
             return c_double(unpack("d", pack("q", self.read_i64().value))[0])
@@ -311,7 +307,7 @@ class GreyCat:
                     data = value.encode("utf-8")
                     self.write_vu32(c_uint32(len(data) << 1))
                     self.write_i8_array(data, 0, len(data))
-            elif type(value) is GreyCat.Object:
+            elif issubclass(type(value), GreyCat.Object) or type(value) is GreyCat.Object:
                 value._save_type(self)
                 value._save(self)
 
@@ -819,14 +815,14 @@ class GreyCat:
 
         def _save_type(self, stream: GreyCat._Stream) -> None:
             stream.write_i8(PrimitiveType.OBJECT)
-            stream.write_vu32(self.type_.offset)
+            stream.write_vu32(c_uint32(self.type_.offset))
 
         def _save(self, stream: GreyCat._Stream) -> None:
             nullable_bitset: bytearray = bytearray(self.type_.nullable_nb_bytes)
             nullable_offset: int = 0
             field: GreyCat.Type.Attribute
             offset: int
-            for offset in len(self.type_.attributes):
+            for offset in range(len(self.type_.attributes)):
                 field = self.type_.attributes[offset]
                 if field.nullable:
                     nullable_bitset[nullable_offset >> 3] |= (
@@ -834,77 +830,87 @@ class GreyCat:
                     ) << (nullable_offset & 7)
                     nullable_offset += 1
             stream.write_i8_array(nullable_bitset, 0, len(nullable_bitset))
-            for offset in len(self.type_.attributes):
+            o: GreyCat.Object
+            e: GreyCat.Enum
+            for offset in range(len(self.type_.attributes)):
                 field = self.type_.attributes[offset]
                 value = self._get(offset)
                 if field.nullable and (value is None):
                     continue
-                match field.sbi_type:
-                    case PrimitiveType.NULL:
+                match field.sbi_type.value:
+                    case PrimitiveType.NULL.value:
                         pass
-                    case PrimitiveType.BOOL:
+                    case PrimitiveType.BOOL.value:
                         stream.write_bool(bool(value))
-                    case PrimitiveType.CHAR:
+                    case PrimitiveType.CHAR.value:
                         c: c_ubyte = c_ubyte(value)
                         if c > GreyCat._Stream.__ASCII_MAX:
                             raise ValueError(f"Only ASCII characters are allowed: {c}")
                         stream.write_i8(c)
-                    case PrimitiveType.INT:
-                        stream.write_vi64(c_int64(value))
-                    case PrimitiveType.FLOAT:
-                        stream.write_f64(c_double(value))
-                    case PrimitiveType.NODE:
-                        o: GreyCat.Object = value
+                    case PrimitiveType.INT.value:
+                        if type(value) is c_int64:
+                            stream.write_vi64(value)
+                        else:
+                            stream.write_vi64(c_int64(value))
+                    case PrimitiveType.FLOAT.value:
+                        if type(value) is c_double:
+                            stream.write_f64(value)
+                        else:
+                            stream.write_f64(c_double(value))
+                    case PrimitiveType.NODE.value:
                         o._save(stream)
-                    case PrimitiveType.NODE_TIME:
-                        o: GreyCat.Object = value
+                    case PrimitiveType.NODE_TIME.value:
+                        o = value
                         o._save(stream)
-                    case PrimitiveType.NODE_INDEX:
-                        o: GreyCat.Object = value
+                    case PrimitiveType.NODE_INDEX.value:
+                        o = value
                         o._save(stream)
-                    case PrimitiveType.NODE_LIST:
-                        o: GreyCat.Object = value
+                    case PrimitiveType.NODE_LIST.value:
+                        o = value
                         o._save(stream)
-                    case PrimitiveType.NODE_GEO:
-                        o: GreyCat.Object = value
+                    case PrimitiveType.NODE_GEO.value:
+                        o = value
                         o._save(stream)
-                    case PrimitiveType.GEO:
-                        o: GreyCat.Object = value
+                    case PrimitiveType.GEO.value:
+                        o = value
                         o._save(stream)
-                    case PrimitiveType.TU2D:
-                        o: GreyCat.Object = value
+                    case PrimitiveType.TU2D.value:
+                        o = value
                         o._save(stream)
-                    case PrimitiveType.TU3D:
-                        o: GreyCat.Object = value
+                    case PrimitiveType.TU3D.value:
+                        o = value
                         o._save(stream)
-                    case PrimitiveType.TU4D:
-                        o: GreyCat.Object = value
+                    case PrimitiveType.TU4D.value:
+                        o = value
                         o._save(stream)
-                    case PrimitiveType.TU5D:
-                        o: GreyCat.Object = value
+                    case PrimitiveType.TU5D.value:
+                        o = value
                         o._save(stream)
-                    case PrimitiveType.TU6D:
-                        o: GreyCat.Object = value
+                    case PrimitiveType.TU6D.value:
+                        o = value
                         o._save(stream)
-                    case PrimitiveType.TU10D:
-                        o: GreyCat.Object = value
+                    case PrimitiveType.TU10D.value:
+                        o = value
                         o._save(stream)
-                    case PrimitiveType.TUF2D:
-                        o: GreyCat.Object = value
+                    case PrimitiveType.TUF2D.value:
+                        o = value
                         o._save(stream)
-                    case PrimitiveType.TUF3D:
-                        o: GreyCat.Object = value
+                    case PrimitiveType.TUF3D.value:
+                        o = value
                         o._save(stream)
-                    case PrimitiveType.TUF4D:
-                        o: GreyCat.Object = value
+                    case PrimitiveType.TUF4D.value:
+                        o = value
                         o._save(stream)
-                    case PrimitiveType.DURATION:
-                        o: GreyCat.Object = value
+                    case PrimitiveType.TIME.value:
+                        o = value
                         o._save(stream)
-                    case PrimitiveType.ENUM:
-                        o: GreyCat.Object = value
+                    case PrimitiveType.DURATION.value:
+                        o = value
                         o._save(stream)
-                    case PrimitiveType.OBJECT:
+                    case PrimitiveType.ENUM.value:
+                        o = value
+                        o._save(stream)
+                    case PrimitiveType.OBJECT.value:
                         if type(value) is str:
                             string: str = value
                             symbol_offset: int | None = (
@@ -923,10 +929,10 @@ class GreyCat:
                             o._save(stream)
                     # case PrimitiveType.BLOCK_REF: # TODO
                     # case PrimitiveType.FUNCTION: # TODO
-                    case PrimitiveType.UNDEFINED:
+                    case PrimitiveType.UNDEFINED.value:
                         stream.write(value)
                     case _:
-                        raise ValueError("wrong state")
+                        raise ValueError(f"wrong state: {field.sbi_type.value}")
 
         def __str__(self) -> str:
             res = f"{self.type_.name}{{"
@@ -948,11 +954,11 @@ class GreyCat:
         @final
         def _save_type(self, stream: GreyCat._Stream) -> None:
             stream.write_i8(PrimitiveType.ENUM)
-            stream.write_vu32(self.type_.offset)
+            stream.write_vu32(c_uint32(self.type_.offset))
 
         @final
         def _save(self, stream: GreyCat._Stream) -> None:
-            stream.write_vu32(self.__offset)
+            stream.write_vu32(c_uint32(self.__offset))
 
         def __str__(self) -> str:
             if self.value is None:
