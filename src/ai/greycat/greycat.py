@@ -6,6 +6,7 @@ from io import *
 import os
 from struct import pack, unpack
 from typing import *
+import urllib
 
 
 @final
@@ -87,7 +88,9 @@ class GreyCat:
     class _Stream:
         __ASCII_MAX: Final[c_ubyte] = c_ubyte(127)
 
-        def __init__(self, greycat: GreyCat, io: BufferedReader | BufferedWriter) -> None:
+        def __init__(
+            self, greycat: GreyCat, io: BufferedReader | BufferedWriter
+        ) -> None:
             self.greycat: Final[GreyCat] = greycat
             self._io: BufferedReader | BufferedWriter = io
 
@@ -100,7 +103,9 @@ class GreyCat:
                 raise RuntimeError("wrong ABI protocol major version")
             abi_magic: c_int16 = self.read_i16()
             if abi_magic.value != self.greycat._abi_magic.value:
-                raise RuntimeError(f"wrong ABI magic: expected {self.greycat._abi_magic.value}, got {abi_magic.value}")
+                raise RuntimeError(
+                    f"wrong ABI magic: expected {self.greycat._abi_magic.value}, got {abi_magic.value}"
+                )
             abi_version: c_int32 = self.read_i32()
             if abi_version.value > self.greycat._abi_version.value:
                 raise RuntimeError("larger ABI version, please reload this handler")
@@ -307,7 +312,9 @@ class GreyCat:
                     data = value.encode("utf-8")
                     self.write_vu32(c_uint32(len(data) << 1))
                     self.write_i8_array(data, 0, len(data))
-            elif issubclass(type(value), GreyCat.Object) or type(value) is GreyCat.Object:
+            elif (
+                issubclass(type(value), GreyCat.Object) or type(value) is GreyCat.Object
+            ):
                 value._save_type(self)
                 value._save(self)
 
@@ -1012,7 +1019,9 @@ class GreyCat:
         # step 0: verify abi version
         abi_major: int = abi_stream.read_i16().value
         if abi_major != GreyCat.ABI_PROTO:
-            raise Exception(f"wrong ABI proto: expected ${GreyCat.ABI_PROTO}, got {abi_major}")
+            raise Exception(
+                f"wrong ABI proto: expected ${GreyCat.ABI_PROTO}, got {abi_major}"
+            )
         self._abi_magic: Final[c_int16] = abi_stream.read_i16()
         self._abi_version: Final[c_int32] = abi_stream.read_i32()
         crc: c_int64 = abi_stream.read_i64()
@@ -1221,45 +1230,43 @@ class GreyCat:
         for lib in self.libs_by_name.values():
             lib.init(self)
 
-    @staticmethod
-    def call(greycat: GreyCat, fqn: str, parameters: list[object]) -> object:
-        if not (greycat.__is_remote):
+    def call(self, fqn: str, parameters: list[object]) -> object:
+        if not (self.__is_remote):
             raise RuntimeError(
                 "Remote calls are not available on local GreyCat handles"
             )
-        fn: GreyCat.Function = greycat.functions_by_name[fqn]
+        fn: GreyCat.Function = self.functions_by_name[fqn]
         if fn is None:
             raise RuntimeError(f"Function not found with name {fqn}")
-        url: str = f"{greycat.__runtime_url}/{fqn}"
+        url: str = f"{self.__runtime_url}"
         connection: http.client.HTTPConnection | http.client.HTTPSConnection
         if url.startswith("http://"):
             connection = http.client.HTTPConnection(url.replace("http://", ""))
-        elif greycat.__runtime_url.startswith("https://"):
+        elif self.__runtime_url.startswith("https://"):
             connection = http.client.HTTPSConnection(url.replace("https://", ""))
         else:
             raise ValueError("wrong state")
         body: bytes | None = None
         stream: GreyCat._Stream
-        if len(parameters > 0):
+        if len(parameters) > 0:
             b = bytearray()
-            stream = GreyCat._Stream(greycat, ByteArrayIO(b))
+            stream = GreyCat._Stream(self, ByteArrayIO(b))
             stream.write_abi_header()
             for offset in range(len(parameters)):
                 stream.write(parameters[offset])
             stream.close()
-            body = bytes(b)
+            body: bytes = bytes(b)
         connection.request(
             "POST",
-            fqn.replace(".", "/"),
+            fqn,
             body,
             {
                 "Accept": "application/octet-stream",
-                "Content-Type": "application/octet-stream",
             },
         )
         response: http.client.HTTPResponse = connection.getresponse()
         status: int = response.status
-        stream = GreyCat._Stream(greycat, response)
+        stream = GreyCat._Stream(self, response)
         if 200 > status or 300 <= status:
             raise RuntimeError(str(stream.read()))
         stream.read_abi_header()
@@ -1307,7 +1314,10 @@ class GreyCat:
         else:
             raise ValueError
         connection.request(
-            "POST", "runtime/Runtime/abi", None, {"Accept": "application/octet-stream"}
+            "POST",
+            "runtime::Runtime::abi",
+            None,
+            {"Accept": "application/octet-stream"},
         )
         response: http.client.HTTPResponse = connection.getresponse()
         status: int = response.status

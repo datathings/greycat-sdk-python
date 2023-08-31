@@ -1143,14 +1143,14 @@ class std_n:
             def __hashable(key: Any) -> Any:
                 if type(key) in [c_char, c_int64, c_double, c_ubyte]:
                     return key.value
-                
+
             def __str__(self) -> str:
-                res: str = f'{{'
+                res: str = f"{{"
                 if len(self) > 0:
-                    res = f'{res}\n'
+                    res = f"{res}\n"
                 for key, value in self.items():
-                    res = f'{res}\t{key}: {value},\n'
-                return f'{res}}}'
+                    res = f"{res}\t{key}: {value},\n"
+                return f"{res}}}"
 
         class _String(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
@@ -1527,7 +1527,7 @@ class std_n:
             def _save(self, stream: GreyCat._Stream) -> None:
                 stream.write_vu32(c_uint32(len(self.data)))
                 stream.write_i8_array(self.data, 0, len(self.data))
-            
+
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
                 buf: std_n.util._Buffer = type.factory(type, [])
@@ -1565,11 +1565,11 @@ class std_n:
             pass
 
         class _Iban(GreyCat.Object):
-            def __init__(self, type:GreyCat.Type) -> None:
+            def __init__(self, type: GreyCat.Type) -> None:
                 self.info_off: c_uint32
                 self.data: bytes
                 super().__init__(type, None)
-            
+
             def _save(self, stream: GreyCat._Stream) -> None:
                 stream.write_vu32(self.info_off)
                 stream.write_vu32(c_uint32(len(self.data)))
@@ -1597,7 +1597,7 @@ class std_n:
                 self.to_tail: c_int64
                 self.values: list[Any]
                 super().__init__(type, None)
-            
+
             def _save(self, stream: GreyCat._Stream) -> None:
                 stream.write_vi64(self.time_width)
                 stream.write_i8(self.sum_type)
@@ -1624,7 +1624,9 @@ class std_n:
                 values: list[Any] = [None] * capacity
                 values_offset: int
                 for values_offset in range(capacity):
-                    values[values_offset] = std_n.util._SlidingWindow.ValueTime(stream.read(), stream.read_vi64())
+                    values[values_offset] = std_n.util._SlidingWindow.ValueTime(
+                        stream.read(), stream.read_vi64()
+                    )
                 sw: std_n.util._SlidingWindow = type.factory(type, [])
                 sw.time_width = time_width
                 sw.sum_type = sum_type
@@ -1649,7 +1651,7 @@ class std_n:
                 self.to_tail: c_int64
                 self.value_times: list[std_n.util._TimeWindow.ValueTime]
                 super().__init__(type, None)
-            
+
             def _save(self, stream: GreyCat._Stream) -> None:
                 stream.write_vi64(self.time_width)
                 stream.write_i8(self.sum_type)
@@ -1679,7 +1681,9 @@ class std_n:
                 value_times: list[std_n.util._TimeWindow.ValueTime] = [None] * capacity
                 value_time_offset: int
                 for value_time_offset in range(capacity):
-                    value_times[value_time_offset] = std_n.util._TimeWindow.ValueTime(stream.read(), stream.read_vi64())
+                    value_times[value_time_offset] = std_n.util._TimeWindow.ValueTime(
+                        stream.read(), stream.read_vi64()
+                    )
                 tw: std_n.util._TimeWindow = type.factory(type, [])
                 tw.time_width = time_width
                 tw.sum_type = sum_type

@@ -6,9 +6,8 @@ sys.path.insert(0, os.path.abspath('src'))
 from typing import *
 
 from ai.greycat.greycat import GreyCat
-from ai.greycat.std import std
 
-greycat: GreyCat = GreyCat("/home/agarnier/datathings/greycat/sdk/python", [std()])
+greycat: GreyCat = GreyCat("/home/agarnier/datathings/greycat/sdk/python")
 reader: GreyCat.AbiReader = greycat.openAbiRead("/home/agarnier/datathings/greycat/sdk/python/out.gcb")
 writer: GreyCat.AbiWriter = greycat.openAbiWrite("/home/agarnier/datathings/greycat/sdk/python/check.gcb")
 
