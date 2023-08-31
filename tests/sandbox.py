@@ -9,7 +9,7 @@ from ai.greycat.greycat import GreyCat
 from ai.greycat.std import std
 
 greycat: GreyCat = GreyCat("/home/agarnier/datathings/greycat/sdk/python", [std()])
-reader: GreyCat.AbiReader = greycat.openAbiRead("/home/agarnier/datathings/greycat/sdk/python/out.gcb")
+reader: GreyCat.AbiReader = greycat.openAbiRead("/home/agarnier/datathings/greycat/sdk/python/fail.gcb")
 writer: GreyCat.AbiWriter = greycat.openAbiWrite("/home/agarnier/datathings/greycat/sdk/python/check.gcb")
 
 res: Any
