@@ -1262,6 +1262,7 @@ class GreyCat:
             body,
             {
                 "Accept": "application/octet-stream",
+                "Content-Type": "application/octet-stream",
             },
         )
         response: http.client.HTTPResponse = connection.getresponse()

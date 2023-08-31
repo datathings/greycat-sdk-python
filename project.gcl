@@ -1,0 +1,337 @@
+@library("std", "6.1.82-dev");
+
+// @library("algebra");
+// @library("decisiontrees"); // Non-existent
+// @library("network");
+// @library("patterns");
+// @library("sql"); // reference to sql_n non-existing class
+// @library("useragent"); // Tricky useragent.useragent is tricky
+
+use io;
+use math;
+use runtime;
+use util;
+
+type TestType {
+  static i: int = 12;
+}
+
+fn fail() {
+  var out = GcbWriter::new("fail.gcb");
+}
+
+fn main() {
+  var out = GcbWriter::new("out.gcb");
+  write_std(out);
+}
+
+fn write_std(out: GcbWriter) {
+  write_core(out);
+  write_io(out);
+  write_math(out);
+  write_runtime(out);
+  write_util(out);
+}
+
+@expose
+fn get_gcb(): Array<any?> {
+  var fin = GcbReader::new("out.gcb");
+  var array = Array<any?>::new(0);
+  while (fin.available() > 0) {
+    array.add(fin.read());
+  }
+  return array;
+}
+
+@expose
+fn display(v: any?): any? {
+  println(v);
+  return v;
+}
+
+fn write_core(out: GcbWriter) {
+  out.write(null);
+  out.write(true);
+  out.write('*');
+  // 1 byte
+  out.write(0);
+  out.write(1);
+  out.write(-1);
+  out.write(63);
+  out.write(-64);
+  // 2 bytes
+  out.write(64);
+  out.write(-65);
+  out.write(8191);
+  out.write(-8192);
+  // 3 bytes
+  out.write(8192);
+  out.write(-8193);
+  out.write(1048575);
+  out.write(-1048576);
+  // 4 bytes
+  out.write(1048576);
+  out.write(-1048577);
+  out.write(134217727);
+  out.write(-134217728);
+  // 5 bytes
+  out.write(134217728);
+  out.write(-134217729);
+  out.write(17179869183);
+  out.write(-17179869184);
+  // 6 bytes
+  out.write(17179869184);
+  out.write(-17179869185);
+  out.write(2199023255551);
+  out.write(-2199023255552);
+  // 7 bytes
+  out.write(2199023255552);
+  out.write(-2199023255553);
+  out.write(281474976710655);
+  out.write(-281474976710656);
+  // 8 bytes
+  out.write(281474976710656);
+  out.write(-281474976710657);
+  out.write(36028797018963967);
+  out.write(-36028797018963968);
+  // 9 bytes
+  out.write(36028797018963968);
+  out.write(-36028797018963969);
+  out.write(9223372036854775807);
+  out.write(-9223372036854775808);
+  out.write(13.37);
+  out.write("Hello world");
+  out.write("${"Not"} ${"a"} ${"symbol"}");
+  out.write(42_geo);
+  out.write(GeoBox::new(13_geo, 37_geo));
+  out.write(nodeList<int>::new());
+  out.write(TimeZone::Europe_Luxembourg);
+  out.write(node<float>::new(13.37));
+  out.write(Error::new(""));
+  out.write(ErrorCode::none);
+  out.write(SamplingMode::adaptative);
+  out.write(DurationUnit::days);
+  out.write(TensorType::c128);
+  out.write(Table<node>::new(0));
+  var table = Table::new(2);
+  for (var row = 0; row < 10; ++row) {
+    table.set(row, 0, row);
+    table.set(row, 1, row + 1);
+  }
+  out.write(table);
+  /*out.write(Tensor::new());
+  var tensor = Tensor::new();
+  tensor.init(TensorType::f64, [3, 3, 3]);
+  for (var x = 0; x < 2; ++x) {
+    for (var y = 0; y < 2; ++y) {
+      for (var z = 0; z < 2; ++z) {
+        tensor.set([x, y, z], x + y * z);
+      }
+    }
+  }
+  out.write(tensor);*/
+  out.write(GeoCircle::new(42_geo, 13.37));
+  out.write(Date::new(2012, 12, 12, 12, 12, 12, 12, TimeZone::Europe_Luxembourg));
+  out.write(Map<geo, time>::new());
+  var map = Map::new();
+  map.set(42, 13.37);
+  out.write(map);
+  out.write(duration::new(12, DurationUnit::microseconds));
+  out.write(nodeTime<nodeGeo>::new());
+  out.write(Array<nodeTime>::new(0));
+  out.write([
+      null, true, '*', 12, 13.37, "Hello world", 42_geo, GeoBox::new(13_geo, 37_geo), nodeList<int>::new(),
+      TimeZone::Europe_Luxembourg, node<float>::new(13.37), Error::new(""),
+      duration::new(12, DurationUnit::microseconds), nodeTime<nodeGeo>::new()
+    ]);
+  out.write(Tuple<Array, Map>::new(Array::new(0), Map::new()));
+  out.write(nodeIndex<Tuple>::new());
+  out.write(GeoPoly { points: [13_geo, 37_geo, 13_geo] });
+  out.write(12_time);
+  out.write(DatePart::days);
+  out.write(nodeGeo<DatePart>::new());
+  out.write(ti2d::new(13, 37));
+  out.write(ti3d::new(13, 37, 42));
+  out.write(ti4d::new(13, 37, 42, 12));
+  out.write(ti5d::new(-1, 13, 37, 42, 12));
+  out.write(ti6d::new(-1, 13, 37, 42, 12, -12));
+  out.write(ti10d::new(-1, 13, 27, 22, 12, 1, -13, -27, -22, -12));
+  out.write(tf2d::new(13.37, 12.42));
+  out.write(tf3d::new(13.37, 12.42, -13.37));
+  out.write(tf4d::new(13.37, 12.42, -13.37, -12.42));
+}
+
+fn write_io(out: GcbWriter) {
+  /*
+  // out.write(out); // unsupported
+  // out.write(AbiReader::new("out.gcb")); // segfault
+  out.write(FileDescriptor{
+    uri: "",
+  });
+  out.write(Env{});
+  out.write(TextEncoder::plain);
+  out.write(BinaryFormat{});
+  out.write(JsonFormat{});
+  out.write(TextFormat{});
+  out.write(CSVColumnString{});
+  out.write(CSVColumnInteger{});
+  out.write(CSVColumnFloat{});
+  out.write(CSVColumnBoolean{});
+  out.write(CSVColumnTime{});
+  out.write(CSVColumnDate{});
+  out.write(CSVColumnIgnored{});
+  out.write(CSVFormat{
+    header_lines: 12,
+    infer: true,
+    separator: ',',
+    string_delimiter: '"',
+    decimal_separator: '.',
+    thousands_separator: '_',
+    columns: [],
+  });
+  out.write(JSON{});
+  // out.write(File::open("project.gcl")); // unsupported
+  // out.write(Directory::open(".")); // unsupported
+  // out.write(FileWriter::new("project.gcl", true)); // unsupported
+*/
+}
+
+fn write_math(out: GcbWriter) {
+  out.write(MathConstants::e);
+  out.write(MathConstants::log_2e);
+  out.write(MathConstants::log_10e);
+  out.write(MathConstants::ln2);
+  out.write(MathConstants::ln10);
+  out.write(MathConstants::pi);
+  out.write(MathConstants::pi_2);
+  out.write(MathConstants::pi_4);
+  out.write(MathConstants::m1_pi);
+  out.write(MathConstants::m2_pi);
+  out.write(MathConstants::m2_sqrt_pi);
+  out.write(MathConstants::sqrt2);
+  out.write(MathConstants::sqrt1_2);
+}
+
+fn write_runtime(out: GcbWriter) {
+  out.write(Task {
+      user_id: 13,
+      task_id: 37,
+      creation: 42_time,
+      status: TaskStatus::empty,
+    });
+  out.write(TaskStatus::cancelled);
+  out.write(Runtime {});
+  out.write(RuntimeInfo {
+      version: "",
+      arch: "",
+      timezone: TimeZone::Europe_Luxembourg,
+      license: License {
+        start: 13_time,
+        end: 37_time,
+        max_workers: 12,
+        max_memory: 42,
+      },
+      io_threads: 13,
+      bg_threads: 37,
+      fg_threads: 42,
+      mem_total: 12,
+      mem_worker: 0,
+      nb_ctx: 1,
+    });
+  out.write(SecurityFields {});
+  out.write(UserGroup {
+      id: 12,
+      name: "",
+      activated: false,
+    });
+  out.write(OpenIDConnect {
+      url: "",
+      clientId: "",
+    });
+  out.write(UserRole {
+      name: "",
+      permissions: [],
+    });
+  out.write(PeriodicTask {
+      name: "",
+      user_id: 12,
+      start: 13_time,
+      every: duration::new(37, DurationUnit::microseconds),
+    });
+  out.write(User {
+      id: 12,
+      name: "",
+      activated: false,
+      external: true,
+    });
+  out.write(UserGroupPolicy {
+      group_id: 12,
+      type: UserGroupPolicyType::execute,
+    });
+  out.write(UserGroupPolicyType::read);
+  out.write(License {
+      start: 13_time,
+      end: 37_time,
+      max_workers: 12,
+      max_memory: 42,
+    });
+  out.write(StoreStat {
+      capacity_bytes: 13,
+      allocated_bytes: 37,
+      allocated_ratio: 13.37,
+      remained_bytes: 12,
+      remained_ratio: 4.20,
+      used_bytes: 42,
+      used_ratio: 0.1,
+      available_bytes: 0,
+      available_ratio: 0.2,
+    });
+  out.write(System {});
+  out.write(SecurityPolicy {
+      entities: [],
+      credentials: Map<String, UserCredential>::new(),
+      roles: Map<String, UserRole>::new(),
+    });
+}
+
+fn write_util(out: GcbWriter) {
+  out.write(Random {
+      seed: 42,
+      v: 13.37,
+    });
+  out.write(Buffer::new());
+  out.write(Assert {});
+  out.write(ProgressTracker { start: 0_time });
+  out.write(Iban::new(""));
+  out.write(Gaussian {});
+  // out.write(Quantizer::new()); // unsupported
+  out.write(GaussianProfile::new(0));
+  out.write(TimeWindow::new());
+  out.write(SlidingWindow::new());
+  // out.write(Queue<SlidingWindow>::new()); // Deliberately(?) different on load & save
+  /* wrong null for T fields
+  out.write(BoxPlotF64{
+      min: 0.0,
+      max: 13.37,
+      whiskerLow: 0.37,
+      whiskerHigh: 13.0,
+      percentile1: 1.0,
+      percentile5: 2.0,
+      percentile25: 5.0,
+      percentile50: 6.5,
+      percentile75: 10.0,
+      percentile95: 11.5,
+      percentile99: 12.5,
+      countOutliersLow: 12,
+      countOutliersHigh: 42,
+      percentageOutliersLow: 12.0,
+      percentageOutliersHigh: 42.0,
+      sum: 42.12,
+      avg: 7.2,
+      std: 3.9,
+      size: 42,
+    });
+    */
+  // out.write(ByteArray{}); // segfault
+  out.write(Crypto {});
+}
