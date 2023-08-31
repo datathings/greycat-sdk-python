@@ -5,8 +5,10 @@ from ctypes import *
 from struct import pack, unpack
 from typing import *
 
-from ai.greycat.greycat import GreyCat, PrimitiveType
+import numpy
+import pandas
 
+from ai.greycat.greycat import GreyCat, PrimitiveType
 
 class std_n:
     class core:
@@ -1285,6 +1287,62 @@ class std_n:
                     self.col_type: Final[c_ubyte] = col_type
                     self.type: Final[c_uint32] = type
                     self.meta_index: Final[bool] = index
+
+            try:
+                numpy
+            except NameError:
+                pass
+            else:
+
+                def to_numpy(self) -> numpy.ndarray:
+                    data: Final[list[list[Any]]] = []
+                    row: list[Any]
+                    for r in range(self.rows):
+                        row = []
+                        for c in range(self.cols):
+                            row.append(self.data[r * self.cols + c])
+                        data.append(row)
+                    return numpy.array(data)
+
+                @staticmethod
+                def from_numpy(
+                    type: GreyCat.Type, nda: numpy.ndarray
+                ) -> std_n.core._Table:
+                    table: std_n.core._Table = type.factory(type)
+                    data: Final[list[Any]] = [None] * (nda.shape[0] * nda.shape[1])
+                    for r in range(nda.shape[0]):
+                        for c in range(nda.shape[1]):
+                            data[r * nda.shape[1] + c] = nda[r, c]
+                    table.data = data
+                    return table
+
+            try:
+                pandas
+            except NameError:
+                pass
+            else:
+
+                def to_pandas(self) -> pandas.DataFrame:
+                    data: Final[list[list[Any]]] = []
+                    row: list[Any]
+                    for r in range(self.rows):
+                        row = []
+                        for c in range(self.cols):
+                            row.append(self.data[r * self.cols + c])
+                        data.append(row)
+                    return pandas.DataFrame(data)
+
+                @staticmethod
+                def from_pandas(
+                    type: GreyCat.Type, df: pandas.DataFrame
+                ) -> std_n.core._Table:
+                    table: std_n.core._Table = type.factory(type)
+                    data: Final[list[Any]] = [None] * (df.shape[0] * df.shape[1])
+                    for r in range(df.shape[0]):
+                        for c in range(df.shape[1]):
+                            data[r * df.shape[1] + c] = df.iloc[r, c]
+                    table.data = data
+                    return table
 
         class _Tensor(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
