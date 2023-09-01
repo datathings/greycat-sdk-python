@@ -1214,6 +1214,10 @@ class std_n:
                             for row in range(self.rows):
                                 o = self.data[col * self.rows + row]
                                 o._save(stream)
+                        case PrimitiveType.OBJECT.value:
+                            for row in range(self.rows):
+                                o = self.data[col * self.rows + row]
+                                o._save(stream)
                         case _:
                             for row in range(self.rows):
                                 stream.write(self.data[col * self.rows + row])
