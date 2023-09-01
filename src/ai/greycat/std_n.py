@@ -6,7 +6,12 @@ from struct import pack, unpack
 from typing import *
 
 import numpy
-import pandas
+try:
+    numpy
+except NameError:
+    pass
+else:
+    import pandas
 
 from ai.greycat.greycat import GreyCat, PrimitiveType
 
@@ -1193,25 +1198,25 @@ class std_n:
                             pass
                         case PrimitiveType.INT.value:
                             for row in range(self.rows):
-                                stream.write_vi64(c_int64(self.data[col + row]))
+                                stream.write_vi64(c_int64(self.data[col * self.rows + row]))
                         case PrimitiveType.FLOAT.value:
                             for row in range(self.rows):
-                                stream.write_f64(c_double(self.data[col + row]))
+                                stream.write_f64(c_double(self.data[col * self.rows + row]))
                         case PrimitiveType.TIME.value:
                             for row in range(self.rows):
-                                o = self.data[col + row]
+                                o = self.data[col * self.rows + row]
                                 o._save(stream)
                         case PrimitiveType.DURATION.value:
                             for row in range(self.rows):
-                                o = self.data[col + row]
+                                o = self.data[col * self.rows + row]
                                 o._save(stream)
                         case PrimitiveType.ENUM.value:
                             for row in range(self.rows):
-                                o = self.data[col + row]
+                                o = self.data[col * self.rows + row]
                                 o._save(stream)
                         case _:
                             for row in range(self.rows):
-                                stream.write(self.data[col + row])
+                                stream.write(self.data[col * self.rows + row])
 
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
@@ -1239,20 +1244,20 @@ class std_n:
                 data: list[Any] = [None] * (cols * rows)
                 col: int
                 row: int
-                enum_type: GreyCat.Type
+                greycat_type: GreyCat.Type
                 for col in range(cols):
                     match meta[col].col_type.value:
                         case PrimitiveType.NULL.value:
                             pass
                         case PrimitiveType.INT.value:
                             for row in range(rows):
-                                data[col + row] = stream.read_vi64().value
+                                data[col * rows + row] = stream.read_vi64().value
                         case PrimitiveType.FLOAT.value:
                             for row in range(rows):
-                                data[col + row] = stream.read_f64().value
+                                data[col * rows + row] = stream.read_f64().value
                         case PrimitiveType.TIME.value:
                             for row in range(rows):
-                                data[col + row] = std_n.core._time.load(
+                                data[col * rows + row] = std_n.core._time.load(
                                     type.greycat.types[
                                         type.greycat.type_offset_core_time
                                     ],
@@ -1260,19 +1265,23 @@ class std_n:
                                 )
                         case PrimitiveType.DURATION.value:
                             for row in range(rows):
-                                data[col + row] = std_n.core._duration.load(
+                                data[col * rows + row] = std_n.core._duration.load(
                                     type.greycat.types[
                                         type.greycat.type_offset_core_duration
                                     ],
                                     stream,
                                 )
                         case PrimitiveType.ENUM.value:
+                            greycat_type = type.greycat.types[meta[col].type.value]
                             for row in range(rows):
-                                enum_type = type.greycat.types[meta[col].type]
-                                data[col + row] = enum_type.loader(enum_type, stream)
+                                data[col * rows + row] = greycat_type.loader(greycat_type, stream)
+                        case PrimitiveType.OBJECT.value:
+                            greycat_type = type.greycat.types[meta[col].type.value]
+                            for row in range(rows):
+                                data[col * rows + row] = greycat_type.loader(greycat_type, stream)
                         case _:
                             for row in range(rows):
-                                data[col + row] = stream.read()
+                                data[col * rows + row] = stream.read()
                 t: std_n.core._Table = type.factory(type, [])
                 t.cols = cols
                 t.rows = rows
@@ -1295,54 +1304,33 @@ class std_n:
             else:
 
                 def to_numpy(self) -> numpy.ndarray:
-                    data: Final[list[list[Any]]] = []
-                    row: list[Any]
-                    for r in range(self.rows):
-                        row = []
-                        for c in range(self.cols):
-                            row.append(self.data[r * self.cols + c])
-                        data.append(row)
-                    return numpy.array(data)
+                    return numpy.reshape(self.data, (self.rows, self.cols), 'F')
 
                 @staticmethod
                 def from_numpy(
-                    type: GreyCat.Type, nda: numpy.ndarray
+                    greycat: GreyCat, nda: numpy.ndarray
                 ) -> std_n.core._Table:
-                    table: std_n.core._Table = type.factory(type)
-                    data: Final[list[Any]] = [None] * (nda.shape[0] * nda.shape[1])
-                    for r in range(nda.shape[0]):
-                        for c in range(nda.shape[1]):
-                            data[r * nda.shape[1] + c] = nda[r, c]
-                    table.data = data
+                    type: GreyCat.Type = greycat.types_by_name['core::Table']
+                    table: std_n.core._Table = type.factory(type, None)
+                    table.data = nda.flatten('F').tolist()
+                    table.rows = nda.shape[0]
+                    table.cols = nda.shape[1]
                     return table
 
-            try:
-                pandas
-            except NameError:
-                pass
-            else:
+                try:
+                    pandas
+                except NameError:
+                    pass
+                else:
 
-                def to_pandas(self) -> pandas.DataFrame:
-                    data: Final[list[list[Any]]] = []
-                    row: list[Any]
-                    for r in range(self.rows):
-                        row = []
-                        for c in range(self.cols):
-                            row.append(self.data[r * self.cols + c])
-                        data.append(row)
-                    return pandas.DataFrame(data)
+                    def to_pandas(self) -> pandas.DataFrame:
+                        return pandas.DataFrame(self.to_numpy())
 
-                @staticmethod
-                def from_pandas(
-                    type: GreyCat.Type, df: pandas.DataFrame
-                ) -> std_n.core._Table:
-                    table: std_n.core._Table = type.factory(type)
-                    data: Final[list[Any]] = [None] * (df.shape[0] * df.shape[1])
-                    for r in range(df.shape[0]):
-                        for c in range(df.shape[1]):
-                            data[r * df.shape[1] + c] = df.iloc[r, c]
-                    table.data = data
-                    return table
+                    @staticmethod
+                    def from_pandas(
+                        greycat: GreyCat, df: pandas.DataFrame
+                    ) -> std_n.core._Table:
+                        return std_n.core._Table.from_numpy(greycat, df.to_numpy())
 
         class _Tensor(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
@@ -1529,7 +1517,6 @@ class std_n:
 
         @staticmethod
         def _interleave64_5d(x0: int, x1: int, x2: int, x3: int, x4: int) -> c_int64:
-            print(f"DEBUG: {x0}: {x1}: {x2}: {x3}: {x4}: ")
             x0 &= std_n.core.__B_5D[4]
             x0 = (x0 ^ (x0 << std_n.core.__S_5D[3])) & std_n.core.__B_5D[3]
             x0 = (x0 ^ (x0 << std_n.core.__S_5D[2])) & std_n.core.__B_5D[2]

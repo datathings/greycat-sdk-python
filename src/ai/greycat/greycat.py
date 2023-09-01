@@ -113,7 +113,7 @@ class GreyCat:
         def read(self) -> Any:
             primitive_offset: c_ubyte = self.read_i8()
             return GreyCat._Stream._PRIMITIVE_LOADERS[primitive_offset.value](self)
-
+        
         def read_null(self) -> type(None):
             return None
 
