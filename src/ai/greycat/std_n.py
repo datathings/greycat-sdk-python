@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 from _collections_abc import dict_keys, dict_values, dict_items
+from collections import deque
 from ctypes import *
+from numbers import Number
 from struct import pack, unpack
 from typing import *
 
 import numpy
+
 try:
     numpy
 except NameError:
@@ -15,14 +18,15 @@ else:
 
 from ai.greycat.greycat import GreyCat, PrimitiveType
 
+_T = TypeVar("_T")
+_U = TypeVar("_U")
+
+
 class std_n:
     class core:
-        __T = TypeVar("__T")
-        __U = TypeVar("__U")
-
         # Primitive types
 
-        class _node(Generic[__T], GreyCat.Object):
+        class _node(Generic[_T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.ref: c_uint64
                 super().__init__(type, None)
@@ -41,7 +45,7 @@ class std_n:
                 res.ref = stream.read_vu64()
                 return res
 
-        class _nodeTime(Generic[__T], GreyCat.Object):
+        class _nodeTime(Generic[_T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.ref: c_uint64
                 super().__init__(type, None)
@@ -60,7 +64,7 @@ class std_n:
                 res.ref = stream.read_vu64()
                 return res
 
-        class _nodeIndex(Generic[__T, __U], GreyCat.Object):
+        class _nodeIndex(Generic[_T, _U], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.ref: c_uint64
                 super().__init__(type, None)
@@ -79,7 +83,7 @@ class std_n:
                 res.ref = stream.read_vu64()
                 return res
 
-        class _nodeList(Generic[__T], GreyCat.Object):
+        class _nodeList(Generic[_T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.ref: c_uint64
                 super().__init__(type, None)
@@ -98,7 +102,7 @@ class std_n:
                 res.ref = stream.read_vu64()
                 return res
 
-        class _nodeGeo(Generic[__T], GreyCat.Object):
+        class _nodeGeo(Generic[_T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.ref: c_uint64
                 super().__init__(type, None)
@@ -943,7 +947,7 @@ class std_n:
 
         # Object types
 
-        class _Array(Generic[__T], GreyCat.Object):
+        class _Array(Generic[_T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 super().__init__(type, None)
 
@@ -967,26 +971,26 @@ class std_n:
             def __len__(self) -> int:
                 return len(self.attributes)
 
-            def __iter__(self) -> Iterator[__T]:
+            def __iter__(self) -> Iterator[_T]:
                 return self.attributes.__iter__()
 
             @overload
-            def __getitem__(self, __i: SupportsIndex) -> __T:
+            def __getitem__(self, __i: SupportsIndex) -> _T:
                 ...
 
             @overload
-            def __getitem__(self, __s: slice) -> list[__T]:
+            def __getitem__(self, __s: slice) -> list[_T]:
                 ...
 
             def __getitem__(self, __key):
                 return self.attributes[__key]
 
             @overload
-            def __setitem__(self, __key: SupportsIndex, __value: __T) -> None:
+            def __setitem__(self, __key: SupportsIndex, __value: _T) -> None:
                 pass
 
             @overload
-            def __setitem__(self, __key: slice, __value: Iterable[__T]) -> None:
+            def __setitem__(self, __key: slice, __value: Iterable[_T]) -> None:
                 pass
 
             def __setitem__(self, __key, __value):
@@ -1099,7 +1103,7 @@ class std_n:
                     self.line: Final[int] = line
                     self.column: Final[int] = column
 
-        class _Map(Generic[__T, __U], GreyCat.Object):
+        class _Map(Generic[_T, _U], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.map: Final[dict] = {}
                 super().__init__(type, None)
@@ -1107,8 +1111,8 @@ class std_n:
             @final
             def _save(self, stream: GreyCat._Stream) -> None:
                 stream.write_vu32(c_int32(len(self)))
-                key: __T
-                value: __U
+                key: _T
+                value: _U
                 for key, value in self.items():
                     stream.write(key)
                     stream.write(value)
@@ -1123,25 +1127,25 @@ class std_n:
                     map[key] = stream.read()
                 return map
 
-            def keys(self) -> dict_keys[__T]:
+            def keys(self) -> dict_keys[_T]:
                 return self.map.keys()
 
-            def values(self) -> dict_values[__U]:
+            def values(self) -> dict_values[_U]:
                 return self.map.values()
 
-            def items(self) -> dict_items[__T, __U]:
+            def items(self) -> dict_items[_T, _U]:
                 return self.map.items()
 
             def __len__(self) -> int:
                 return len(self.map)
 
-            def __getitem__(self, key: __T) -> __U:
+            def __getitem__(self, key: _T) -> _U:
                 return self.map[key]
 
-            def __setitem__(self, key: __T, value: __U) -> None:
+            def __setitem__(self, key: _T, value: _U) -> None:
                 self.map[key] = value
 
-            def __delitem__(self, key: __T) -> None:
+            def __delitem__(self, key: _T) -> None:
                 del self.map[key]
 
             def clear(self) -> None:
@@ -1170,12 +1174,12 @@ class std_n:
                     return type.greycat.symbols[len_ >> 1]
                 return stream.read_string(len_ >> 1)
 
-        class _Table(Generic[__T], GreyCat.Object):
+        class _Table(Generic[_T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.cols: int
                 self.rows: int
                 self.meta: list[std_n.core._Table.TableColumnMeta]
-                self.data: list[__T]
+                self.data: list[_T]
                 super().__init__(type, None)
 
             def _save(self, stream: GreyCat._Stream) -> None:
@@ -1198,10 +1202,14 @@ class std_n:
                             pass
                         case PrimitiveType.INT.value:
                             for row in range(self.rows):
-                                stream.write_vi64(c_int64(self.data[col * self.rows + row]))
+                                stream.write_vi64(
+                                    c_int64(self.data[col * self.rows + row])
+                                )
                         case PrimitiveType.FLOAT.value:
                             for row in range(self.rows):
-                                stream.write_f64(c_double(self.data[col * self.rows + row]))
+                                stream.write_f64(
+                                    c_double(self.data[col * self.rows + row])
+                                )
                         case PrimitiveType.TIME.value:
                             for row in range(self.rows):
                                 o = self.data[col * self.rows + row]
@@ -1278,11 +1286,15 @@ class std_n:
                         case PrimitiveType.ENUM.value:
                             greycat_type = type.greycat.types[meta[col].type.value]
                             for row in range(rows):
-                                data[col * rows + row] = greycat_type.loader(greycat_type, stream)
+                                data[col * rows + row] = greycat_type.loader(
+                                    greycat_type, stream
+                                )
                         case PrimitiveType.OBJECT.value:
                             greycat_type = type.greycat.types[meta[col].type.value]
                             for row in range(rows):
-                                data[col * rows + row] = greycat_type.loader(greycat_type, stream)
+                                data[col * rows + row] = greycat_type.loader(
+                                    greycat_type, stream
+                                )
                         case _:
                             for row in range(rows):
                                 data[col * rows + row] = stream.read()
@@ -1308,15 +1320,15 @@ class std_n:
             else:
 
                 def to_numpy(self) -> numpy.ndarray:
-                    return numpy.reshape(self.data, (self.rows, self.cols), 'F')
+                    return numpy.reshape(self.data, (self.rows, self.cols), "F")
 
                 @staticmethod
                 def from_numpy(
                     greycat: GreyCat, nda: numpy.ndarray
                 ) -> std_n.core._Table:
-                    type: GreyCat.Type = greycat.types_by_name['core::Table']
+                    type: GreyCat.Type = greycat.types_by_name["core::Table"]
                     table: std_n.core._Table = type.factory(type, None)
-                    table.data = nda.flatten('F').tolist()
+                    table.data = nda.flatten("F").tolist()
                     table.rows = nda.shape[0]
                     table.cols = nda.shape[1]
                     return table
@@ -1563,10 +1575,14 @@ class std_n:
             return x
 
     class util:
-        __T = TypeVar("__T")
-
         class _Quantizer(GreyCat.Object):
-            pass
+            def __init__(self, type: GreyCat.Type) -> None:
+                super().__init__(type, None)
+                raise RuntimeError("unsupported")
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
+                raise IOError("unsupported")
 
         class _Buffer(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
@@ -1584,7 +1600,45 @@ class std_n:
                 return buf
 
         class _Gaussian(GreyCat.Object):
-            pass
+            def __init__(self, type: GreyCat.Type) -> None:
+                self.sum: c_double
+                self.sum_sq: c_double
+                self.size: c_int64
+                self.nb_accepted: c_int64
+                self.nb_rejected: c_int64
+                self.nb_null: c_int64
+                self.min: c_double
+                self.max: c_double
+                self.min_bound: c_double
+                self.max_bound: c_double
+                super().__init__(type, None)
+
+            def _save(self, stream: GreyCat._Stream) -> None:
+                stream.write_f64(self.sum)
+                stream.write_f64(self.sum_sq)
+                stream.write_vi64(self.size)
+                stream.write_vi64(self.nb_accepted)
+                stream.write_vi64(self.nb_rejected)
+                stream.write_vi64(self.nb_null)
+                stream.write_f64(self.min)
+                stream.write_f64(self.max)
+                stream.write_f64(self.min_bound)
+                stream.write_f64(self.max_bound)
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
+                g: std_n.util._Gaussian = type.factory(type)
+                g.sum = stream.read_f64()
+                g.sum_sq = stream.read_f64()
+                g.size = stream.read_vi64()
+                g.nb_accepted = stream.read_vi64()
+                g.nb_rejected = stream.read_vi64()
+                g.nb_null = stream.read_vi64()
+                g.min = stream.read_f64()
+                g.max = stream.read_f64()
+                g.min_bound = stream.read_f64()
+                g.max_bound = stream.read_f64
+                return g
 
         class _GaussianProfile(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
@@ -1631,8 +1685,43 @@ class std_n:
                 iban.data = stream.read_i8_array(stream.read_vu32().value)
                 return iban
 
-        class _Queue(Generic[__T], GreyCat.Object):
-            pass
+        class _Queue(Generic[_T], GreyCat.Object):
+            def __init__(self, type: GreyCat.Type) -> None:
+                self.queue: Final[deque] = deque()
+                super().__init__(type, None)
+
+            def _save(self, stream: GreyCat._Stream) -> None:
+                stream.write_vi64(len(self))  # width
+                stream.write_vi64(len(self))  # size
+                stream.write_vi64(len(self))  # capacity
+                stream.write_vi64(len(self))  # TODO: head - values
+                stream.write_vi64(0)  # TODO: tail - values
+                t: _T
+                for t in self:
+                    stream.write(t)
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
+                stream.read_vi64()  # width
+                size: Final[int] = stream.read_vi64().value
+                capacity: Final[int] = stream.read_vi64().value
+                stream.read_vi64()  # head - values
+                stream.read_vi64()  # tail - values
+                queue_: std_n.util._Queue = type.factory(type)
+                for _ in range(size):
+                    queue_.put(stream.read())
+                for _ in range(capacity - size):
+                    stream.read()
+                return queue_
+
+            def put(self, item: _T, block: bool = True, timeout: Number | None = None) -> None:
+                self.queue.appendleft(item, block, timeout)
+
+            def __len__(self) -> int:
+                return len(self.queue)
+
+            def __reduce__(self) -> tuple[type[Self], tuple[()], None, Iterator[_T]]:
+                return self.queue.__reduce__()
 
         class _SlidingWindow(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
