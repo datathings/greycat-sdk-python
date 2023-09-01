@@ -148,35 +148,29 @@ class GreyCat:
         def read_vu32(self) -> c_uint32:
             current: int
             value: int = 0
-            buf: bytes = self._io.peek(5)
 
-            current = buf[0]
+            current = self._io.read(1)[0]
             value |= current & 0x7F
             if 0 == (current & 0x80):
-                self._io.read(1)
                 return c_uint32(value)
 
-            current = buf[1]
+            current = self._io.read(1)[0]
             value |= (current & 0x7F) << 7
             if 0 == (current & 0x80):
-                self._io.read(2)
                 return c_uint32(value)
 
-            current = buf[2]
+            current = self._io.read(1)[0]
             value |= (current & 0x7F) << 14
             if 0 == (current & 0x80):
-                self._io.read(3)
                 return c_uint32(value)
 
-            current = buf[3]
+            current = self._io.read(1)[0]
             value |= (current & 0x7F) << 21
             if 0 == (current & 0x80):
-                self._io.read(4)
                 return c_uint32(value)
 
-            current = buf[4]
+            current = self._io.read(1)[0]
             value |= current << 28
-            self._io.read(5)
             return c_uint32(value)
 
         def read_i64(self) -> c_int64:
@@ -199,59 +193,49 @@ class GreyCat:
         def read_vu64(self) -> c_uint64:
             current: int
             value: int = 0
-            buf: bytes = self._io.peek(9)
 
-            current = buf[0]
+            current = self._io.read(1)[0]
             value |= current & 0x7F
             if 0 == (current & 0x80):
-                self._io.read(1)
                 return c_uint64(value)
 
-            current = buf[1]
+            current = self._io.read(1)[0]
             value |= (current & 0x7F) << 7
             if 0 == (current & 0x80):
-                self._io.read(2)
                 return c_uint64(value)
 
-            current = buf[2]
+            current = self._io.read(1)[0]
             value |= (current & 0x7F) << 14
             if 0 == (current & 0x80):
-                self._io.read(3)
                 return c_uint64(value)
 
-            current = buf[3]
+            current = self._io.read(1)[0]
             value |= (current & 0x7F) << 21
             if 0 == (current & 0x80):
-                self._io.read(4)
                 return c_uint64(value)
 
-            current = buf[4]
+            current = self._io.read(1)[0]
             value |= (current & 0x7F) << 28
             if 0 == (current & 0x80):
-                self._io.read(5)
                 return c_uint64(value)
 
-            current = buf[5]
+            current = self._io.read(1)[0]
             value |= (current & 0x7F) << 35
             if 0 == (current & 0x80):
-                self._io.read(6)
                 return c_uint64(value)
 
-            current = buf[6]
+            current = self._io.read(1)[0]
             value |= (current & 0x7F) << 42
             if 0 == (current & 0x80):
-                self._io.read(7)
                 return c_uint64(value)
 
-            current = buf[7]
+            current = self._io.read(1)[0]
             value |= (current & 0x7F) << 49
             if 0 == (current & 0x80):
-                self._io.read(8)
                 return c_uint64(value)
 
-            current = buf[8]
+            current = self._io.read(1)[0]
             value |= current << 56
-            self._io.read(9)
             return c_uint64(value)
 
         def read_f64(self) -> c_double:
