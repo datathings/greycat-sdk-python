@@ -289,6 +289,9 @@ class std_n:
                 res: std_n.core._time = type.factory(type, [])
                 res.value = stream.read_vi64()
                 return res
+            
+            def __str__(self) -> str:
+                return f"time{{timestamp: {int(self.value.value / 1_000_000)}, us_offset: {self.value.value % 1_000_000}}}"
 
         class _duration(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
@@ -1322,10 +1325,11 @@ class std_n:
 
                 def to_numpy(self) -> numpy.ndarray:
                     nda: Final[numpy.ndarray] = numpy.reshape(self.data, (self.rows, self.cols), "F")
-                    metadata: Final[dict] = {'core::Table.meta': self.meta}
+                    metadata: Final[dict] = {}
                     nda_dtype: Final[numpy.dtype] = nda.dtype
                     if nda_dtype.metadata is MappingProxyType:
                         metadata.update(nda_dtype.metadata)
+                    metadata['core::Table.meta'] = self.meta
                     return numpy.array(nda, dtype = numpy.dtype(nda.dtype, metadata=metadata))
 
                 @staticmethod
