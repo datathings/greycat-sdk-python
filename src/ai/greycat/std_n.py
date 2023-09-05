@@ -1323,10 +1323,10 @@ class std_n:
                 def to_numpy(self) -> numpy.ndarray:
                     nda: Final[numpy.ndarray] = numpy.reshape(self.data, (self.rows, self.cols), "F")
                     metadata: Final[dict] = {'core::Table.meta': self.meta}
-                    if nda.dtype.metadata is not None:
-                        metadata.update(nda.dtype.metadata)
-                    dt: Final[numpy.dtype] = numpy.dtype(nda.dtype, metadata=metadata)
-                    return numpy.array(nda, dtype=dt)
+                    nda_dtype: Final[numpy.dtype] = nda.dtype
+                    if nda_dtype.metadata is MappingProxyType:
+                        metadata.update(nda_dtype.metadata)
+                    return numpy.array(nda, dtype = numpy.dtype(nda.dtype, metadata=metadata))
 
                 @staticmethod
                 def from_numpy(
@@ -1337,9 +1337,9 @@ class std_n:
                     table.data = nda.flatten("F").tolist()
                     table.rows = nda.shape[0]
                     table.cols = nda.shape[1]
-                    dt: numpy.dtype = nda.dtype
-                    if isinstance(dt.metadata, MappingProxyType) and 'core::Table.meta' in dt.metadata:
-                            table.meta = dt.metadata['core::Table.meta']
+                    nda_dtype: Final[numpy.dtype] = nda.dtype
+                    if isinstance(nda_dtype.metadata, MappingProxyType) and 'core::Table.meta' in nda_dtype.metadata:
+                            table.meta = nda_dtype.metadata['core::Table.meta']
                     if not hasattr(table, 'meta'):
                         table.meta: list[std_n.core._Table.TableColumnMeta] = [std_n.core._Table.TableColumnMeta(PrimitiveType.UNDEFINED, c_uint32(0), False)] * table.cols
                     return table
