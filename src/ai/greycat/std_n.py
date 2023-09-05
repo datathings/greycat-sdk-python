@@ -5,16 +5,20 @@ from collections import deque
 from ctypes import *
 from numbers import Number
 from struct import pack, unpack
+import sys
+from types import MappingProxyType
 from typing import *
 
-import numpy
-
 try:
-    numpy
-except NameError:
+    import numpy
+except ModuleNotFoundError:
     pass
-else:
-    import pandas
+
+if 'numpy' in sys.modules:
+    try:
+        import pandas
+    except ModuleNotFoundError:
+        pass
 
 from ai.greycat.greycat import GreyCat, PrimitiveType
 
@@ -1313,14 +1317,16 @@ class std_n:
                     self.type: Final[c_uint32] = type
                     self.meta_index: Final[bool] = index
 
-            try:
-                numpy
-            except NameError:
-                pass
-            else:
+            
+            if 'numpy' in sys.modules:
 
                 def to_numpy(self) -> numpy.ndarray:
-                    return numpy.reshape(self.data, (self.rows, self.cols), "F")
+                    nda: Final[numpy.ndarray] = numpy.reshape(self.data, (self.rows, self.cols), "F")
+                    metadata: Final[dict] = {'core::Table.meta': self.meta}
+                    if nda.dtype.metadata is not None:
+                        metadata.update(nda.dtype.metadata)
+                    dt: Final[numpy.dtype] = numpy.dtype(nda.dtype, metadata=metadata)
+                    return numpy.array(nda, dtype=dt)
 
                 @staticmethod
                 def from_numpy(
@@ -1331,13 +1337,15 @@ class std_n:
                     table.data = nda.flatten("F").tolist()
                     table.rows = nda.shape[0]
                     table.cols = nda.shape[1]
+                    dt: numpy.dtype = nda.dtype
+                    if isinstance(dt.metadata, MappingProxyType) and 'core::Table.meta' in dt.metadata:
+                            table.meta = dt.metadata['core::Table.meta']
+                    if not hasattr(table, 'meta'):
+                        table.meta: list[std_n.core._Table.TableColumnMeta] = [std_n.core._Table.TableColumnMeta(PrimitiveType.UNDEFINED, c_uint32(0), False)] * table.cols
                     return table
 
-                try:
-                    pandas
-                except NameError:
-                    pass
-                else:
+                
+                if 'pandas' in sys.modules:
 
                     def to_pandas(self) -> pandas.DataFrame:
                         return pandas.DataFrame(self.to_numpy())

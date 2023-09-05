@@ -286,11 +286,11 @@ class GreyCat:
                 self.write_i8(PrimitiveType.FLOAT)
                 self.write_f64(value)
             elif type(value) is str:
-                try:
+                if value in self.greycat._symbols_off_by_value:
                     symbolOffset: int = self.greycat._symbols_off_by_value[value]
                     self.write_i8(PrimitiveType.STRING_LIT)
                     self.write_vu32(c_uint32(symbolOffset << 1 | 1))
-                except KeyError:
+                else:
                     self.write_i8(PrimitiveType.OBJECT)
                     self.write_vu32(c_uint32(self.greycat.type_offset_core_string))
                     data = value.encode("utf-8")
@@ -1069,15 +1069,11 @@ class GreyCat:
                     mapped,
                 )
             factory: GreyCat.Factory | None = None
-            try:
+            if fqn in factories:
                 factory = factories[fqn]
-            except KeyError:
-                pass
             loader: GreyCat.Loader | None = None
-            try:
+            if fqn in loaders:
                 loader = loaders[fqn]
-            except KeyError:
-                pass
             abi_type: GreyCat.Type = GreyCat.Type(
                 type_offset,
                 fqn,

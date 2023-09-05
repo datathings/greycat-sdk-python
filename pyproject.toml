@@ -6,10 +6,3 @@ build-backend = "hatchling.build"
 name = "greycat"
 version = "0.0.0"
 readme = "README.md"
-
-[tool.poetry]
-name=""
-version = "0.0.0"
-readme = "README.md"
-description = ""
-authors = []
