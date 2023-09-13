@@ -655,9 +655,8 @@ class GreyCat:
             attributes: Final[list[Any]] = [None] * len(program_type.attributes)
             nullable_bitset: bytes = stream.read_i8_array(type.nullable_nb_bytes)
             nullable_offset: int = -1
-            att_offset: int
-            for att_offset in range(len(type.attributes)):
-                att: GreyCat.Type.Attribute = type.attributes[att_offset]
+            att: GreyCat.Type.Attribute
+            for att in type.attributes:
                 loaded_field: Any
                 if att.nullable:
                     nullable_offset += 1
@@ -763,8 +762,8 @@ class GreyCat:
         def resolve_generated_offsets(self, *args: str) -> None:
             self.generated_offsets: list[int] = []
             name_offset: int
-            for name_offset in range(len(args)):
-                resolved: int | None = self.attribute_off_by_name.get(args[name_offset])
+            for arg in args:
+                resolved: int | None = self.attribute_off_by_name.get(arg)
                 if resolved is None:
                     raise ValueError(
                         "unmapped generated field, please re-generate this code!"
@@ -986,8 +985,7 @@ class GreyCat:
         library_offset: int
         # for declarations
         lib: GreyCat.Library
-        for library_offset in range(len(libraries)):
-            lib = libraries[library_offset]
+        for lib in libraries:
             self.libs_by_name[lib.name()] = lib
         loaders: Final[dict[str, GreyCat.Loader]] = {}
         factories: Final[dict[str, GreyCat.Factory]] = {}
@@ -1224,8 +1222,8 @@ class GreyCat:
             b = bytearray()
             stream = GreyCat._Stream(self, ByteArrayIO(b))
             stream.write_abi_header()
-            for offset in range(len(parameters)):
-                stream.write(parameters[offset])
+            for parameter in parameters:
+                stream.write(parameter)
             stream.close()
             body: bytes = bytes(b)
         connection.request(
@@ -1295,12 +1293,12 @@ class GreyCat:
         response: http.client.HTTPResponse = connection.getresponse()
         status: int = response.status
         if 200 > status or 300 <= status:
-            msg = ""
-            line: str = response.readline()
-            while line is not None:
-                msg = f"{msg}{line}\n"
+            msg = f'{status}: "'
+            line: bytes = response.readline()
+            while len(line) > 0:
+                msg = f"{msg}{line.decode()}\n"
                 line = response.readline()
-            raise RuntimeError(msg)
+            raise RuntimeError(f'{msg}"')
         self.__is_remote = True
         return GreyCat._Stream(self, response)
 
