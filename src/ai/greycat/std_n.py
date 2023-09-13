@@ -1253,51 +1253,50 @@ class std_n:
                             meta_col_type, meta_type, meta_index
                         )
                     )
-                data: list[Any] = [None] * (cols * rows)
+                data: list[Any] = []
                 col: int
-                row: int
                 greycat_type: GreyCat.Type
                 for col in range(cols):
                     match meta[col].col_type.value:
                         case PrimitiveType.NULL.value:
                             pass
                         case PrimitiveType.INT.value:
-                            for row in range(rows):
-                                data[col * rows + row] = stream.read_vi64().value
+                            for _ in repeat(None, rows):
+                                data.append(stream.read_vi64().value)
                         case PrimitiveType.FLOAT.value:
-                            for row in range(rows):
-                                data[col * rows + row] = stream.read_f64().value
+                            for _ in repeat(None, rows):
+                                data.append(stream.read_f64().value)
                         case PrimitiveType.TIME.value:
-                            for row in range(rows):
-                                data[col * rows + row] = std_n.core._time.load(
+                            for _ in repeat(None, rows):
+                                data.append(std_n.core._time.load(
                                     type.greycat.types[
                                         type.greycat.type_offset_core_time
                                     ],
                                     stream,
-                                )
+                                ))
                         case PrimitiveType.DURATION.value:
-                            for row in range(rows):
-                                data[col * rows + row] = std_n.core._duration.load(
+                            for _ in repeat(None, rows):
+                                data.append(std_n.core._duration.load(
                                     type.greycat.types[
                                         type.greycat.type_offset_core_duration
                                     ],
                                     stream,
-                                )
+                                ))
                         case PrimitiveType.ENUM.value:
                             greycat_type = type.greycat.types[meta[col].type.value]
-                            for row in range(rows):
-                                data[col * rows + row] = greycat_type.loader(
+                            for _ in repeat(None, rows):
+                                data.append(greycat_type.loader(
                                     greycat_type, stream
-                                )
+                                ))
                         case PrimitiveType.OBJECT.value:
                             greycat_type = type.greycat.types[meta[col].type.value]
-                            for row in range(rows):
-                                data[col * rows + row] = greycat_type.loader(
+                            for _ in repeat(None, rows):
+                                data.append(greycat_type.loader(
                                     greycat_type, stream
-                                )
+                                ))
                         case _:
-                            for row in range(rows):
-                                data[col * rows + row] = stream.read()
+                            for _ in repeat(None, rows):
+                                data.append(stream.read())
                 t: std_n.core._Table = type.factory(type, [])
                 t.cols = cols
                 t.rows = rows
