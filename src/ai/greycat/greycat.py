@@ -671,22 +671,21 @@ class GreyCat:
                 load_type: c_ubyte = att.sbi_type.value
                 if load_type == PrimitiveType.UNDEFINED.value:
                     load_type = stream.read_i8().value
-                match load_type:
-                    case PrimitiveType.ENUM.value:
-                        field_type: GreyCat.Type = type.greycat.types[att.abi_type]
-                        loaded_field = GreyCat.Type.__enum_loader(field_type, stream)
-                    case PrimitiveType.OBJECT.value:
-                        field_type: GreyCat.Type = type.greycat.types[att.abi_type]
-                        if (not field_type.is_native) and (
-                            field_type.is_abstract
-                            or att.sbi_type.value == PrimitiveType.UNDEFINED.value
-                        ):
-                            field_type = type.greycat.types[stream.read_vu32().value]
-                        loaded_field = field_type.loader(field_type, stream)
-                    case _:
-                        loaded_field = GreyCat._Stream._PRIMITIVE_LOADERS[
-                            att.sbi_type.value
-                        ](stream)
+                if load_type == PrimitiveType.ENUM.value:
+                    field_type: GreyCat.Type = type.greycat.types[att.abi_type]
+                    loaded_field = GreyCat.Type.__enum_loader(field_type, stream)
+                elif load_type == PrimitiveType.OBJECT.value:
+                    field_type: GreyCat.Type = type.greycat.types[att.abi_type]
+                    if (not field_type.is_native) and (
+                        field_type.is_abstract
+                        or att.sbi_type.value == PrimitiveType.UNDEFINED.value
+                    ):
+                        field_type = type.greycat.types[stream.read_vu32().value]
+                    loaded_field = field_type.loader(field_type, stream)
+                else:
+                    loaded_field = GreyCat._Stream._PRIMITIVE_LOADERS[
+                        att.sbi_type.value
+                    ](stream)
                 if att.mapped:
                     attributes[att.mapped_att_offset] = loaded_field
             if program_type.factory is None:
@@ -823,102 +822,101 @@ class GreyCat:
                 value = self._get(offset)
                 if field.nullable and (value is None):
                     continue
-                match field.sbi_type.value:
-                    case PrimitiveType.NULL.value:
-                        pass
-                    case PrimitiveType.BOOL.value:
-                        stream.write_bool(bool(value))
-                    case PrimitiveType.CHAR.value:
-                        c: c_ubyte = c_ubyte(value)
-                        if c > GreyCat._Stream.__ASCII_MAX:
-                            raise ValueError(f"Only ASCII characters are allowed: {c}")
-                        stream.write_i8(c)
-                    case PrimitiveType.INT.value:
-                        if type(value) is c_int64:
-                            stream.write_vi64(value)
+                if field.sbi_type.value == PrimitiveType.NULL.value:
+                    pass
+                elif field.sbi_type.value == PrimitiveType.BOOL.value:
+                    stream.write_bool(bool(value))
+                elif field.sbi_type.value == PrimitiveType.CHAR.value:
+                    c: c_ubyte = c_ubyte(value)
+                    if c > GreyCat._Stream.__ASCII_MAX:
+                        raise ValueError(f"Only ASCII characters are allowed: {c}")
+                    stream.write_i8(c)
+                elif field.sbi_type.value == PrimitiveType.INT.value:
+                    if type(value) is c_int64:
+                        stream.write_vi64(value)
+                    else:
+                        stream.write_vi64(c_int64(value))
+                elif field.sbi_type.value == PrimitiveType.FLOAT.value:
+                    if type(value) is c_double:
+                        stream.write_f64(value)
+                    else:
+                        stream.write_f64(c_double(value))
+                elif field.sbi_type.value == PrimitiveType.NODE.value:
+                    o._save(stream)
+                elif field.sbi_type.value == PrimitiveType.NODE_TIME.value:
+                    o = value
+                    o._save(stream)
+                elif field.sbi_type.value == PrimitiveType.NODE_INDEX.value:
+                    o = value
+                    o._save(stream)
+                elif field.sbi_type.value == PrimitiveType.NODE_LIST.value:
+                    o = value
+                    o._save(stream)
+                elif field.sbi_type.value == PrimitiveType.NODE_GEO.value:
+                    o = value
+                    o._save(stream)
+                elif field.sbi_type.value == PrimitiveType.GEO.value:
+                    o = value
+                    o._save(stream)
+                elif field.sbi_type.value == PrimitiveType.TU2D.value:
+                    o = value
+                    o._save(stream)
+                elif field.sbi_type.value == PrimitiveType.TU3D.value:
+                    o = value
+                    o._save(stream)
+                elif field.sbi_type.value == PrimitiveType.TU4D.value:
+                    o = value
+                    o._save(stream)
+                elif field.sbi_type.value == PrimitiveType.TU5D.value:
+                    o = value
+                    o._save(stream)
+                elif field.sbi_type.value == PrimitiveType.TU6D.value:
+                    o = value
+                    o._save(stream)
+                elif field.sbi_type.value == PrimitiveType.TU10D.value:
+                    o = value
+                    o._save(stream)
+                elif field.sbi_type.value == PrimitiveType.TUF2D.value:
+                    o = value
+                    o._save(stream)
+                elif field.sbi_type.value == PrimitiveType.TUF3D.value:
+                    o = value
+                    o._save(stream)
+                elif field.sbi_type.value == PrimitiveType.TUF4D.value:
+                    o = value
+                    o._save(stream)
+                elif field.sbi_type.value == PrimitiveType.TIME.value:
+                    o = value
+                    o._save(stream)
+                elif field.sbi_type.value == PrimitiveType.DURATION.value:
+                    o = value
+                    o._save(stream)
+                elif field.sbi_type.value == PrimitiveType.ENUM.value:
+                    o = value
+                    o._save(stream)
+                elif field.sbi_type.value == PrimitiveType.OBJECT.value:
+                    if type(value) is str:
+                        string: str = value
+                        symbol_offset: int | None = (
+                            self.type_.greycat._symbols_off_by_value[string]
+                        )
+                        if not (symbol_offset is None):
+                            stream.write_vu32(c_uint32((symbol_offset << 1) | 1))
                         else:
-                            stream.write_vi64(c_int64(value))
-                    case PrimitiveType.FLOAT.value:
-                        if type(value) is c_double:
-                            stream.write_f64(value)
-                        else:
-                            stream.write_f64(c_double(value))
-                    case PrimitiveType.NODE.value:
+                            data: bytes = string.encode("utf-8")
+                            stream.write_vu32(c_uint32(len(data)))
+                            stream.write_i8_array(bytes, 0, len(data))
+                    else:
+                        o: GreyCat.Object = value
+                        if field.abi_type != o.type_.offset:
+                            stream.write_vu32(o.type_.offset)
                         o._save(stream)
-                    case PrimitiveType.NODE_TIME.value:
-                        o = value
-                        o._save(stream)
-                    case PrimitiveType.NODE_INDEX.value:
-                        o = value
-                        o._save(stream)
-                    case PrimitiveType.NODE_LIST.value:
-                        o = value
-                        o._save(stream)
-                    case PrimitiveType.NODE_GEO.value:
-                        o = value
-                        o._save(stream)
-                    case PrimitiveType.GEO.value:
-                        o = value
-                        o._save(stream)
-                    case PrimitiveType.TU2D.value:
-                        o = value
-                        o._save(stream)
-                    case PrimitiveType.TU3D.value:
-                        o = value
-                        o._save(stream)
-                    case PrimitiveType.TU4D.value:
-                        o = value
-                        o._save(stream)
-                    case PrimitiveType.TU5D.value:
-                        o = value
-                        o._save(stream)
-                    case PrimitiveType.TU6D.value:
-                        o = value
-                        o._save(stream)
-                    case PrimitiveType.TU10D.value:
-                        o = value
-                        o._save(stream)
-                    case PrimitiveType.TUF2D.value:
-                        o = value
-                        o._save(stream)
-                    case PrimitiveType.TUF3D.value:
-                        o = value
-                        o._save(stream)
-                    case PrimitiveType.TUF4D.value:
-                        o = value
-                        o._save(stream)
-                    case PrimitiveType.TIME.value:
-                        o = value
-                        o._save(stream)
-                    case PrimitiveType.DURATION.value:
-                        o = value
-                        o._save(stream)
-                    case PrimitiveType.ENUM.value:
-                        o = value
-                        o._save(stream)
-                    case PrimitiveType.OBJECT.value:
-                        if type(value) is str:
-                            string: str = value
-                            symbol_offset: int | None = (
-                                self.type_.greycat._symbols_off_by_value[string]
-                            )
-                            if not (symbol_offset is None):
-                                stream.write_vu32(c_uint32((symbol_offset << 1) | 1))
-                            else:
-                                data: bytes = string.encode("utf-8")
-                                stream.write_vu32(c_uint32(len(data)))
-                                stream.write_i8_array(bytes, 0, len(data))
-                        else:
-                            o: GreyCat.Object = value
-                            if field.abi_type != o.type_.offset:
-                                stream.write_vu32(o.type_.offset)
-                            o._save(stream)
-                    # case PrimitiveType.BLOCK_REF: # TODO
-                    # case PrimitiveType.FUNCTION: # TODO
-                    case PrimitiveType.UNDEFINED.value:
-                        stream.write(value)
-                    case _:
-                        raise ValueError(f"wrong state: {field.sbi_type.value}")
+                # elif field.sbi_type.value == PrimitiveType.BLOCK_REF: # TODO
+                # elif field.sbi_type.value == PrimitiveType.FUNCTION: # TODO
+                elif field.sbi_type.value == PrimitiveType.UNDEFINED.value:
+                    stream.write(value)
+                else:
+                    raise ValueError(f"wrong state: {field.sbi_type.value}")
 
         def __str__(self) -> str:
             res = f"{self.type_.name}{{"

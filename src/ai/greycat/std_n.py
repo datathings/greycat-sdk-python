@@ -1195,39 +1195,36 @@ class std_n:
                 col: int
                 row: int
                 o: GreyCat.Object
+                col_type: int
                 for col in range(self.cols):
-                    match self.meta[col].col_type.value:
-                        case PrimitiveType.NULL.value:
-                            pass
-                        case PrimitiveType.INT.value:
-                            for row in range(self.rows):
-                                stream.write_vi64(
-                                    c_int64(self.data[col * self.rows + row])
-                                )
-                        case PrimitiveType.FLOAT.value:
-                            for row in range(self.rows):
-                                stream.write_f64(
-                                    c_double(self.data[col * self.rows + row])
-                                )
-                        case PrimitiveType.TIME.value:
-                            for row in range(self.rows):
-                                o = self.data[col * self.rows + row]
-                                o._save(stream)
-                        case PrimitiveType.DURATION.value:
-                            for row in range(self.rows):
-                                o = self.data[col * self.rows + row]
-                                o._save(stream)
-                        case PrimitiveType.ENUM.value:
-                            for row in range(self.rows):
-                                o = self.data[col * self.rows + row]
-                                o._save(stream)
-                        case PrimitiveType.OBJECT.value:
-                            for row in range(self.rows):
-                                o = self.data[col * self.rows + row]
-                                o._save(stream)
-                        case _:
-                            for row in range(self.rows):
-                                stream.write(self.data[col * self.rows + row])
+                    col_type = self.meta[col].col_type.value
+                    if col_type == PrimitiveType.NULL.value:
+                        pass
+                    elif col_type == PrimitiveType.INT.value:
+                        for row in range(self.rows):
+                            stream.write_vi64(c_int64(self.data[col * self.rows + row]))
+                    elif col_type == PrimitiveType.FLOAT.value:
+                        for row in range(self.rows):
+                            stream.write_f64(c_double(self.data[col * self.rows + row]))
+                    elif col_type == PrimitiveType.TIME.value:
+                        for row in range(self.rows):
+                            o = self.data[col * self.rows + row]
+                            o._save(stream)
+                    elif col_type == PrimitiveType.DURATION.value:
+                        for row in range(self.rows):
+                            o = self.data[col * self.rows + row]
+                            o._save(stream)
+                    elif col_type == PrimitiveType.ENUM.value:
+                        for row in range(self.rows):
+                            o = self.data[col * self.rows + row]
+                            o._save(stream)
+                    elif col_type == PrimitiveType.OBJECT.value:
+                        for row in range(self.rows):
+                            o = self.data[col * self.rows + row]
+                            o._save(stream)
+                    else:
+                        for row in range(self.rows):
+                            stream.write(self.data[col * self.rows + row])
 
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
@@ -1256,47 +1253,48 @@ class std_n:
                 data: list[Any] = []
                 col: int
                 greycat_type: GreyCat.Type
+                col_type: int
                 for col in range(cols):
-                    match meta[col].col_type.value:
-                        case PrimitiveType.NULL.value:
-                            pass
-                        case PrimitiveType.INT.value:
-                            for _ in repeat(None, rows):
-                                data.append(stream.read_vi64().value)
-                        case PrimitiveType.FLOAT.value:
-                            for _ in repeat(None, rows):
-                                data.append(stream.read_f64().value)
-                        case PrimitiveType.TIME.value:
-                            for _ in repeat(None, rows):
-                                data.append(std_n.core._time.load(
+                    col_type= meta[col].col_type.value
+                    if col_type == PrimitiveType.NULL.value:
+                        pass
+                    elif col_type == PrimitiveType.INT.value:
+                        for _ in repeat(None, rows):
+                            data.append(stream.read_vi64().value)
+                    elif col_type == PrimitiveType.FLOAT.value:
+                        for _ in repeat(None, rows):
+                            data.append(stream.read_f64().value)
+                    elif col_type == PrimitiveType.TIME.value:
+                        for _ in repeat(None, rows):
+                            data.append(
+                                std_n.core._time.load(
                                     type.greycat.types[
                                         type.greycat.type_offset_core_time
                                     ],
                                     stream,
-                                ))
-                        case PrimitiveType.DURATION.value:
-                            for _ in repeat(None, rows):
-                                data.append(std_n.core._duration.load(
+                                )
+                            )
+                    elif col_type == PrimitiveType.DURATION.value:
+                        for _ in repeat(None, rows):
+                            data.append(
+                                std_n.core._duration.load(
                                     type.greycat.types[
                                         type.greycat.type_offset_core_duration
                                     ],
                                     stream,
-                                ))
-                        case PrimitiveType.ENUM.value:
-                            greycat_type = type.greycat.types[meta[col].type.value]
-                            for _ in repeat(None, rows):
-                                data.append(greycat_type.loader(
-                                    greycat_type, stream
-                                ))
-                        case PrimitiveType.OBJECT.value:
-                            greycat_type = type.greycat.types[meta[col].type.value]
-                            for _ in repeat(None, rows):
-                                data.append(greycat_type.loader(
-                                    greycat_type, stream
-                                ))
-                        case _:
-                            for _ in repeat(None, rows):
-                                data.append(stream.read())
+                                )
+                            )
+                    elif col_type == PrimitiveType.ENUM.value:
+                        greycat_type = type.greycat.types[meta[col].type.value]
+                        for _ in repeat(None, rows):
+                            data.append(greycat_type.loader(greycat_type, stream))
+                    elif col_type == PrimitiveType.OBJECT.value:
+                        greycat_type = type.greycat.types[meta[col].type.value]
+                        for _ in repeat(None, rows):
+                            data.append(greycat_type.loader(greycat_type, stream))
+                    else:
+                        for _ in repeat(None, rows):
+                            data.append(stream.read())
                 t: std_n.core._Table = type.factory(type, [])
                 t.cols = cols
                 t.rows = rows
@@ -1387,21 +1385,21 @@ class std_n:
                 shape: list[int] = [stream.read_i32() for _ in repeat(None, nb_dim)]
                 size: c_uint32 = stream.read_i32()
                 bin_size: int = size.value
-                match tensor_type.value:
-                    case 0:
-                        bin_size *= 4
-                    case 1:
-                        bin_size *= 8
-                    case 2:
-                        bin_size *= 4
-                    case 3:
-                        bin_size *= 8
-                    case 4:
-                        bin_size *= 8
-                    case 5:
-                        bin_size *= 16
-                    case _:
-                        raise ValueError(f"{tensor_type}")
+                tensor_type_value: Final[int] = tensor_type.value
+                if tensor_type_value == 0:
+                    bin_size *= 4
+                elif tensor_type_value == 1:
+                    bin_size *= 8
+                elif tensor_type_value == 2:
+                    bin_size *= 4
+                elif tensor_type_value == 3:
+                    bin_size *= 8
+                elif tensor_type_value == 4:
+                    bin_size *= 8
+                elif tensor_type_value == 5:
+                    bin_size *= 16
+                else:
+                    raise ValueError(f"{tensor_type}")
                 res: std_n.core._Tensor = type.factory(type, [])
                 res.shape = shape
                 res.tensor_type = tensor_type
@@ -1415,13 +1413,13 @@ class std_n:
 
             @final
             def _save(self, stream: GreyCat._Stream) -> None:
-                offset: int
+                attribute: Any
                 if self.attributes is None:
                     stream.write_i32(0)
                 else:
                     stream.write_i32(len(self.attributes))
-                    for offset in range(len(self.attributes)):
-                        stream.write(self.attributes[offset])
+                    for attribute in self.attributes:
+                        stream.write(attribute)
 
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
