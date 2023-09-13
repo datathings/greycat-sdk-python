@@ -3,6 +3,7 @@ from __future__ import annotations
 from _collections_abc import dict_keys, dict_values, dict_items
 from collections import deque
 from ctypes import *
+from itertools import repeat
 from numbers import Number
 from struct import pack, unpack
 import sys
@@ -14,7 +15,7 @@ try:
 except ModuleNotFoundError:
     pass
 
-if 'numpy' in sys.modules:
+if "numpy" in sys.modules:
     try:
         import pandas
     except ModuleNotFoundError:
@@ -289,7 +290,7 @@ class std_n:
                 res: std_n.core._time = type.factory(type, [])
                 res.value = stream.read_vi64()
                 return res
-            
+
             def __str__(self) -> str:
                 return f"time{{timestamp: {int(self.value.value / 1_000_000)}, us_offset: {self.value.value % 1_000_000}}}"
 
@@ -961,18 +962,15 @@ class std_n:
             @final
             def _save(self, stream: GreyCat._Stream) -> None:
                 stream.write_vu32(c_uint32(len(self)))
-                offset: int
-                for offset in range(len(self)):
-                    stream.write(self[offset])
+                e: _T
+                for e in self:
+                    stream.write(e)
 
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
                 size: int = stream.read_vu32().value
                 array: std_n.core._Array = type.factory(type, [])
-                array.attributes = [None] * size
-                offset: int
-                for offset in range(size):
-                    array[offset] = stream.read()
+                array.attributes = [stream.read() for _ in repeat(None, size)]
                 return array
 
             def __len__(self) -> int:
@@ -1069,22 +1067,16 @@ class std_n:
                 code: Final[int] = stream.read_vu32().value
                 frames_len: Final[int] = stream.read_vu32().value
                 msg_len: Final[int] = stream.read_vu32().value
-                frames: Final[list[std_n.core._Error.Frame]] = [None] * frames_len
-                offset: int
-                mod_symbol: int
-                type_symbol: int
-                fn_symbol: int
-                line: int
-                column: int
-                for offset in range(frames_len):
-                    mod_symbol = stream.read_vu32().value
-                    type_symbol = stream.read_vu32().value
-                    fn_symbol = stream.read_vu32().value
-                    line = stream.read_vu32().value
-                    column = stream.read_vu32().value
-                    frames[offset] = std_n.core._Error.Frame(
-                        mod_symbol, type_symbol, fn_symbol, line, column
+                frames: Final[list[std_n.core._Error.Frame]] = [
+                    std_n.core._Error.Frame(
+                        stream.read_vu32().value,  # mod_symbol
+                        stream.read_vu32().value,  # type_symbol
+                        stream.read_vu32().value,  # fn_symbol
+                        stream.read_vu32().value,  # line
+                        stream.read_vu32().value,  # column
                     )
+                    for _ in repeat(None, frames_len)
+                ]
                 res: std_n.core._Error = type.factory(type, [])
                 res.code = code
                 res.frames = frames
@@ -1241,12 +1233,11 @@ class std_n:
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
                 cols: Final[int] = stream.read_vu32().value
                 rows: Final[int] = stream.read_vu32().value
-                meta: list[std_n.core._Table.TableColumnMeta] = [None] * cols
-                meta_offset: int
+                meta: list[std_n.core._Table.TableColumnMeta] = []
                 meta_col_type: c_ubyte
                 meta_index: bool
                 meta_type: c_uint32
-                for meta_offset in range(cols):
+                for _ in repeat(None, cols):
                     meta_col_type = stream.read_i8()
                     meta_index = stream.read_bool()
                     meta_type: c_int32
@@ -1257,8 +1248,10 @@ class std_n:
                         meta_type = stream.read_vu32()
                     else:
                         meta_type = c_uint32(0)
-                    meta[meta_offset] = std_n.core._Table.TableColumnMeta(
-                        meta_col_type, meta_type, meta_index
+                    meta.append(
+                        std_n.core._Table.TableColumnMeta(
+                            meta_col_type, meta_type, meta_index
+                        )
                     )
                 data: list[Any] = [None] * (cols * rows)
                 col: int
@@ -1320,17 +1313,20 @@ class std_n:
                     self.type: Final[c_uint32] = type
                     self.meta_index: Final[bool] = index
 
-            
-            if 'numpy' in sys.modules:
+            if "numpy" in sys.modules:
 
                 def to_numpy(self) -> numpy.ndarray:
-                    nda: Final[numpy.ndarray] = numpy.reshape(self.data, (self.rows, self.cols), "F")
+                    nda: Final[numpy.ndarray] = numpy.reshape(
+                        self.data, (self.rows, self.cols), "F"
+                    )
                     metadata: Final[dict] = {}
                     nda_dtype: Final[numpy.dtype] = nda.dtype
                     if nda_dtype.metadata is MappingProxyType:
                         metadata.update(nda_dtype.metadata)
-                    metadata['core::Table.meta'] = self.meta
-                    return numpy.array(nda, dtype = numpy.dtype(nda.dtype, metadata=metadata))
+                    metadata["core::Table.meta"] = self.meta
+                    return numpy.array(
+                        nda, dtype=numpy.dtype(nda.dtype, metadata=metadata)
+                    )
 
                 @staticmethod
                 def from_numpy(
@@ -1342,14 +1338,21 @@ class std_n:
                     table.rows = nda.shape[0]
                     table.cols = nda.shape[1]
                     nda_dtype: Final[numpy.dtype] = nda.dtype
-                    if isinstance(nda_dtype.metadata, MappingProxyType) and 'core::Table.meta' in nda_dtype.metadata:
-                            table.meta = nda_dtype.metadata['core::Table.meta']
-                    if not hasattr(table, 'meta'):
-                        table.meta: list[std_n.core._Table.TableColumnMeta] = [std_n.core._Table.TableColumnMeta(PrimitiveType.UNDEFINED, c_uint32(0), False)] * table.cols
+                    if (
+                        isinstance(nda_dtype.metadata, MappingProxyType)
+                        and "core::Table.meta" in nda_dtype.metadata
+                    ):
+                        table.meta = nda_dtype.metadata["core::Table.meta"]
+                    if not hasattr(table, "meta"):
+                        table.meta: list[std_n.core._Table.TableColumnMeta] = [
+                            std_n.core._Table.TableColumnMeta(
+                                PrimitiveType.UNDEFINED, c_uint32(0), False
+                            )
+                            for _ in repeat(None, table.cols)
+                        ]
                     return table
 
-                
-                if 'pandas' in sys.modules:
+                if "pandas" in sys.modules:
 
                     def to_pandas(self) -> pandas.DataFrame:
                         return pandas.DataFrame(self.to_numpy())
@@ -1382,10 +1385,7 @@ class std_n:
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
                 nb_dim: Final[int] = stream.read_i8().value
                 tensor_type: Final[c_byte] = stream.read_i8()
-                shape: list[int] = [0] * nb_dim
-                offset: int
-                for offset in range(nb_dim):
-                    shape[offset] = stream.read_i32()
+                shape: list[int] = [stream.read_i32() for _ in repeat(None, nb_dim)]
                 size: c_uint32 = stream.read_i32()
                 bin_size: int = size.value
                 match tensor_type.value:
@@ -1427,10 +1427,7 @@ class std_n:
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
                 size: Final[int] = stream.read_i32().value
-                data: Final[list[Any]] = [None] * size
-                offset: int
-                for offset in range(size):
-                    data[offset] = stream.read()
+                data: Final[list[Any]] = [stream.read() for _ in repeat(None, size)]
                 res: std_n.core._nodeIndexBucket = type.factory(type, [])
                 res.attributes = data
                 return res
@@ -1726,7 +1723,9 @@ class std_n:
                     stream.read()
                 return queue_
 
-            def put(self, item: _T, block: bool = True, timeout: Number | None = None) -> None:
+            def put(
+                self, item: _T, block: bool = True, timeout: Number | None = None
+            ) -> None:
                 self.queue.appendleft(item, block, timeout)
 
             def __len__(self) -> int:
@@ -1771,12 +1770,7 @@ class std_n:
                 capacity: int = stream.read_vu32().value
                 to_head: c_int64 = stream.read_vi64()
                 to_tail: c_int64 = stream.read_vi64()
-                values: list[Any] = [None] * capacity
-                values_offset: int
-                for values_offset in range(capacity):
-                    values[values_offset] = std_n.util._SlidingWindow.ValueTime(
-                        stream.read(), stream.read_vi64()
-                    )
+                values: list[Any] = [stream.read() for _ in repeat(None, capacity)]
                 sw: std_n.util._SlidingWindow = type.factory(type, [])
                 sw.time_width = time_width
                 sw.sum_type = sum_type
@@ -1828,12 +1822,10 @@ class std_n:
                 capacity: int = stream.read_vu32().value
                 to_head: c_int64 = stream.read_vi64()
                 to_tail: c_int64 = stream.read_vi64()
-                value_times: list[std_n.util._TimeWindow.ValueTime] = [None] * capacity
-                value_time_offset: int
-                for value_time_offset in range(capacity):
-                    value_times[value_time_offset] = std_n.util._TimeWindow.ValueTime(
-                        stream.read(), stream.read_vi64()
-                    )
+                value_times: list[std_n.util._TimeWindow.ValueTime] = [
+                    std_n.util._TimeWindow.ValueTime(stream.read(), stream.read_vi64())
+                    for _ in repeat(None, capacity)
+                ]
                 tw: std_n.util._TimeWindow = type.factory(type, [])
                 tw.time_width = time_width
                 tw.sum_type = sum_type

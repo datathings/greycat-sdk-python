@@ -3,10 +3,10 @@ from __future__ import annotations
 from ctypes import *
 import http.client
 from io import *
+from itertools import repeat
 import os
 from struct import pack, unpack
 from typing import *
-import urllib
 
 
 @final
@@ -113,7 +113,7 @@ class GreyCat:
         def read(self) -> Any:
             primitive_offset: c_ubyte = self.read_i8()
             return GreyCat._Stream._PRIMITIVE_LOADERS[primitive_offset.value](self)
-        
+
         def read_null(self) -> type(None):
             return None
 
@@ -732,7 +732,7 @@ class GreyCat:
             self.enum_values: Final[list[GreyCat.Enum]] | None
             if offset == mapped_type_off:
                 if self.is_enum:
-                    self.enum_values = [None] * len(type_attributes)
+                    self.enum_values = []
                     enum_offset: int
                     for enum_offset in range(len(type_attributes)):
                         attributes: list[Any] = [
@@ -741,13 +741,9 @@ class GreyCat:
                             None,
                         ]
                         if self.factory is None:
-                            self.enum_values[enum_offset] = GreyCat.Enum(
-                                self, attributes
-                            )
+                            self.enum_values.append(GreyCat.Enum(self, attributes))
                         else:
-                            self.enum_values[enum_offset] = self.factory(
-                                self, attributes
-                            )
+                            self.enum_values.append(self.factory(self, attributes))
                 else:
                     self.enum_values = None
             else:
@@ -765,7 +761,7 @@ class GreyCat:
             self.generated_offsets: list[int] | None = None
 
         def resolve_generated_offsets(self, *args: str) -> None:
-            self.generated_offsets: list[int] = [-1] * len(args)
+            self.generated_offsets: list[int] = []
             name_offset: int
             for name_offset in range(len(args)):
                 resolved: int | None = self.attribute_off_by_name.get(args[name_offset])
@@ -773,10 +769,10 @@ class GreyCat:
                     raise ValueError(
                         "unmapped generated field, please re-generate this code!"
                     )
-                self.generated_offsets[name_offset] = resolved
+                self.generated_offsets.append(resolved)
 
         def resolve_generated_offset_with_values(self, *args: Any) -> None:
-            self.generated_offsets: list[int] = [-1] * int(len(args) / 2)
+            self.generated_offsets: list[int] = []
             name_offset: int
             for name_offset in range(0, len(args), 2):
                 resolved: int | None = self.attribute_off_by_name.get(args[name_offset])
@@ -784,7 +780,7 @@ class GreyCat:
                     raise ValueError(
                         "unmapped generated field, please re-generate this code!"
                     )
-                self.generated_offsets[int(name_offset / 2)] = resolved
+                self.generated_offsets.append(resolved)
                 self.enum_values[resolved].value = args[name_offset + 1]
 
     class Object:
@@ -1013,18 +1009,17 @@ class GreyCat:
         # step 1: create all symbols
         symbols_bytes: Final[c_int64] = abi_stream.read_i64()
         symbols_count: Final[int] = abi_stream.read_i32().value
-        self.symbols: Final[list[str | None]] = [None] * (symbols_count + 1)
+        self.symbols: Final[list[str | None]] = [None]
         self._symbols_off_by_value: Final[dict[str, int]] = {}
-        offset: int
         for offset in range(1, symbols_count + 1):
             symbol: str = abi_stream.read_string(abi_stream.read_vu32().value)
-            self.symbols[offset] = symbol
+            self.symbols.append(symbol)
             self._symbols_off_by_value[symbol] = offset
 
         # step 2: create all types
         types_bytes: Final[c_int64] = abi_stream.read_i64()
         types_size: Final[int] = abi_stream.read_i32().value
-        self.types: Final[list[GreyCat.Type]] = [None] * types_size
+        self.types: Final[list[GreyCat.Type]] = []
         attributes_size: Final[c_int32] = abi_stream.read_i32()
         type_offset: int
         self.types_by_name: Final[dict[str, GreyCat.Type]] = {}
@@ -1044,11 +1039,8 @@ class GreyCat:
             is_abstract: bool = 0 != (flags & (1 << 1))
             is_enum: bool = 0 != (flags & (1 << 2))
             is_masked: bool = 0 != (flags & (1 << 3))
-            type_attributes: Final[list[GreyCat.Type.Attribute]] = [
-                None
-            ] * attributes_len
-            enum_offset: int
-            for enum_offset in range(attributes_len):
+            type_attributes: Final[list[GreyCat.Type.Attribute]] = []
+            for _ in repeat(None, attributes_len):
                 name: Final[str] = self.symbols[abi_stream.read_vu32().value]
                 att_abi_type: Final[int] = abi_stream.read_vu32().value
                 prog_type_offset: Final[int] = abi_stream.read_vu32().value
@@ -1058,7 +1050,7 @@ class GreyCat:
                 att_flags: Final[int] = abi_stream.read_i8().value
                 nullable: Final[bool] = 0 != (att_flags & 1)
                 mapped: Final[bool] = 0 != (att_flags & (1 << 1))
-                type_attributes[enum_offset] = GreyCat.Type.Attribute(
+                type_attributes.append(GreyCat.Type.Attribute(
                     name,
                     att_abi_type,
                     prog_type_offset,
@@ -1067,7 +1059,7 @@ class GreyCat:
                     sbi_type,
                     nullable,
                     mapped,
-                )
+                ))
             factory: GreyCat.Factory | None = None
             if fqn in factories:
                 factory = factories[fqn]
@@ -1091,7 +1083,7 @@ class GreyCat:
             )
             if abi_type.mapped_type_off == type_offset and len(fqn) != 0:
                 self.types_by_name[abi_type.name] = abi_type
-            self.types[type_offset] = abi_type
+            self.types.append(abi_type)
         # step 3: create all functions
         functions_bytes: Final[c_int64] = abi_stream.read_i64()
         functions_size: Final[int] = abi_stream.read_i32().value
