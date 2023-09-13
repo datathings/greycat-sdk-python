@@ -577,7 +577,7 @@ class GreyCat:
             Callable[[GreyCat._Stream], object]
         ] = lambda stream: stream.read_string_lit()
 
-        _PRIMITIVE_LOADERS: Final[list[__PrimitiveLoader]] = [
+        _PRIMITIVE_LOADERS: Final[List[__PrimitiveLoader]] = [
             None
         ] * PrimitiveType.SIZE.value
         _PRIMITIVE_LOADERS[PrimitiveType.NULL.value] = __null_loader
@@ -652,7 +652,7 @@ class GreyCat:
         @final
         def __object_loader(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
             program_type: Final[GreyCat.Type] = type.greycat.types[type.mapped_type_off]
-            attributes: Final[list[Any]] = [None] * len(program_type.attributes)
+            attributes: Final[List[Any]] = [None] * len(program_type.attributes)
             nullable_bitset: bytes = stream.read_i8_array(type.nullable_nb_bytes)
             nullable_offset: int = -1
             att: GreyCat.Type.Attribute
@@ -704,7 +704,7 @@ class GreyCat:
             is_abstract: bool,
             is_enum: bool,
             is_native: bool,
-            type_attributes: list[GreyCat.Type.Attribute],
+            type_attributes: List[GreyCat.Type.Attribute],
             factory: GreyCat.Factory | None,
             loader: GreyCat.Loader | None,
             greycat: GreyCat,
@@ -718,7 +718,7 @@ class GreyCat:
             self.is_abstract: Final[bool] = is_abstract
             self.is_enum: Final[bool] = is_enum
             self.is_native: Final[bool] = is_native
-            self.attributes: Final[list[GreyCat.Type.Attribute]] = type_attributes
+            self.attributes: Final[List[GreyCat.Type.Attribute]] = type_attributes
             self.attribute_off_by_name: Final[dict[str, int]] = {}
             att_offset: int
             for att_offset in range(len(type_attributes)):
@@ -727,13 +727,13 @@ class GreyCat:
                 ] = att_offset
             self.greycat: Final[GreyCat] = greycat
             self.factory: Final[GreyCat.Factory] = factory
-            self.enum_values: Final[list[GreyCat.Enum]] | None
+            self.enum_values: Final[List[GreyCat.Enum]] | None
             if offset == mapped_type_off:
                 if self.is_enum:
                     self.enum_values = []
                     enum_offset: int
                     for enum_offset in range(len(type_attributes)):
-                        attributes: list[Any] = [
+                        attributes: List[Any] = [
                             enum_offset,
                             type_attributes[enum_offset].name,
                             None,
@@ -755,11 +755,11 @@ class GreyCat:
                 self.loader = GreyCat.Type.__enum_loader
             else:
                 self.loader = GreyCat.Type.__object_loader
-            self.static_values: list[Any] = []
-            self.generated_offsets: list[int] | None = None
+            self.static_values: List[Any] = []
+            self.generated_offsets: List[int] | None = None
 
         def resolve_generated_offsets(self, *args: str) -> None:
-            self.generated_offsets: list[int] = []
+            self.generated_offsets: List[int] = []
             name_offset: int
             for arg in args:
                 resolved: int | None = self.attribute_off_by_name.get(arg)
@@ -770,7 +770,7 @@ class GreyCat:
                 self.generated_offsets.append(resolved)
 
         def resolve_generated_offset_with_values(self, *args: Any) -> None:
-            self.generated_offsets: list[int] = []
+            self.generated_offsets: List[int] = []
             name_offset: int
             for name_offset in range(0, len(args), 2):
                 resolved: int | None = self.attribute_off_by_name.get(args[name_offset])
@@ -782,9 +782,9 @@ class GreyCat:
                 self.enum_values[resolved].value = args[name_offset + 1]
 
     class Object:
-        def __init__(self, type: GreyCat.Type, attributes: list[Any] | None) -> None:
+        def __init__(self, type: GreyCat.Type, attributes: List[Any] | None) -> None:
             self.type_: Final[GreyCat.Type] = type
-            self.attributes: list[Any] | None = attributes
+            self.attributes: List[Any] | None = attributes
 
         def get(self, attribute_name: str) -> Any | None:
             return self._get(self.type_.attribute_off_by_name[attribute_name])
@@ -929,7 +929,7 @@ class GreyCat:
             return res
 
     class Enum(Object):
-        def __init__(self, type: GreyCat.Type, attributes: list[Any]) -> None:
+        def __init__(self, type: GreyCat.Type, attributes: List[Any]) -> None:
             super().__init__(type, attributes)
             self.__offset: Final[int] = attributes[0]
             self.key: Final[str] = attributes[1]
@@ -951,13 +951,13 @@ class GreyCat:
 
     Loader: Final[type[Callable[[Type, _Stream], Any]]] = Callable[[Type, _Stream], Any]
 
-    Factory: Final[type[Callable[[Type, list[Any]], Any]]] = Callable[
-        [Type, list[object]], Any
+    Factory: Final[type[Callable[[Type, List[Any]], Any]]] = Callable[
+        [Type, List[object]], Any
     ]
 
     class Library:
         def __init__(self) -> None:
-            self.mapped: list[GreyCat.Type] | None = None
+            self.mapped: List[GreyCat.Type] | None = None
 
         def name(self) -> str:
             raise NotImplementedError
@@ -975,7 +975,7 @@ class GreyCat:
     class Files:  # TODO?
         pass
 
-    def __init__(self, url: str, libraries: list[GreyCat.Library] = []) -> None:
+    def __init__(self, url: str, libraries: List[GreyCat.Library] = []) -> None:
         self.libs_by_name: Final[dict[str, GreyCat.Library]] = {}
         std_: std = std()
         self.libs_by_name[std_.name()] = std_
@@ -1005,7 +1005,7 @@ class GreyCat:
         # step 1: create all symbols
         symbols_bytes: Final[c_int64] = abi_stream.read_i64()
         symbols_count: Final[int] = abi_stream.read_i32().value
-        self.symbols: Final[list[str | None]] = [None]
+        self.symbols: Final[List[str | None]] = [None]
         self._symbols_off_by_value: Final[dict[str, int]] = {}
         for offset in range(1, symbols_count + 1):
             symbol: str = abi_stream.read_string(abi_stream.read_vu32().value)
@@ -1015,7 +1015,7 @@ class GreyCat:
         # step 2: create all types
         types_bytes: Final[c_int64] = abi_stream.read_i64()
         types_size: Final[int] = abi_stream.read_i32().value
-        self.types: Final[list[GreyCat.Type]] = []
+        self.types: Final[List[GreyCat.Type]] = []
         attributes_size: Final[c_int32] = abi_stream.read_i32()
         type_offset: int
         self.types_by_name: Final[dict[str, GreyCat.Type]] = {}
@@ -1035,7 +1035,7 @@ class GreyCat:
             is_abstract: bool = 0 != (flags & (1 << 1))
             is_enum: bool = 0 != (flags & (1 << 2))
             is_masked: bool = 0 != (flags & (1 << 3))
-            type_attributes: Final[list[GreyCat.Type.Attribute]] = []
+            type_attributes: Final[List[GreyCat.Type.Attribute]] = []
             for _ in repeat(None, attributes_len):
                 name: Final[str] = self.symbols[abi_stream.read_vu32().value]
                 att_abi_type: Final[int] = abi_stream.read_vu32().value
@@ -1198,7 +1198,7 @@ class GreyCat:
         for lib in self.libs_by_name.values():
             lib.init(self)
 
-    def call(self, fqn: str, parameters: list[object]) -> object:
+    def call(self, fqn: str, parameters: List[object]) -> object:
         if not (self.__is_remote):
             raise RuntimeError(
                 "Remote calls are not available on local GreyCat handles"
@@ -1245,7 +1245,7 @@ class GreyCat:
         stream.close()
         return res
 
-    def create(self, name: str, parameters: list[Any]) -> Any:
+    def create(self, name: str, parameters: List[Any]) -> Any:
         type: Final[GreyCat.Type | None] = self.types_by_name[name]
         if type is None:
             return None

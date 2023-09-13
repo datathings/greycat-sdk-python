@@ -7,7 +7,7 @@ setup(
     author_email="contact@datathings.com",
     package_dir={"": "src"},
     packages=find_packages(where="src"),
-    python_requires=">=3.9",
+    python_requires=">=3.8",
     extras_require={
       "numpy": ["numpy"],
       "pandas": ["numpy", "pandas"],
