@@ -6,7 +6,7 @@ variables:
 
 stages:
   - build
-  - publish
+  # - publish
 
 before_script:
   - export VERSION=`git2version -s`
@@ -14,19 +14,19 @@ before_script:
 build:
   stage: build
   script:
-    - ./build.sh
+    - echo "DEBUG"
   artifacts:
     when: on_success
     expire_in: '30 days'
     paths:
       - dist
 
-publish:
-  stage: publish
-  when: manual
-  script:
-    - ./publish.sh
-  artifacts:
-    expire_in: 1 week
-    paths:
-      - dist
+# publish:
+#   stage: publish
+#   when: manual
+#   script:
+#     - ./publish.sh
+#   artifacts:
+#     expire_in: 1 week
+#     paths:
+#       - dist
