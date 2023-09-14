@@ -12,7 +12,7 @@ token=$(curl -s -d "[\"${base64url_token}\", false]" -X POST https://get.greycat
 
 cd dist
 
-file="greycat-${VERSION}-py2.py3-none-any.whl"
+file="greycat-${VERSION}0-py2.py3-none-any.whl"
 
 curl -s -X PUT -H "Authorization: $token" -T $file "https://get.greycat.io/files/sdk/python/${CI_COMMIT_REF_NAME}/${VERSION_MAJOR_MINOR}/${file}"
 curl -s -X PUT -H "Authorization: $token" -T $file "https://get.greycat.io/files/sdk/python/${CI_COMMIT_REF_NAME}/greycat-latest-py2.py3-none-any.whl"
