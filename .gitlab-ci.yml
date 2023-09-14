@@ -1,4 +1,4 @@
-image: python:3.8.18
+image: oci.datathings.com/greycat/build/python:1.0.1-main
 
 variables:
   GIT_STRATEGY: clone
