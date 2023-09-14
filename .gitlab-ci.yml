@@ -8,8 +8,8 @@ stages:
   - build
   # - publish
 
-before_script:
-  - export VERSION=`git2version -s`
+# before_script:
+#   - export VERSION=`git2version -s`
 
 build:
   stage: build
