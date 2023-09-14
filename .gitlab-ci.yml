@@ -1,9 +1,32 @@
-image: python:3.8.18
+image: image: python:3.8.18
+
+variables:
+  GIT_STRATEGY: clone
+  GIT_DEPTH: "0"
 
 stages:
-  - test
+  - build
+  - publish
 
-test-job:
-  stage: test
+before_script:
+  - export VERSION=`git2version -s`
+
+build:
+  stage: build
   script:
-    - echo "DEBUG"
+    - ./build.sh
+  artifacts:
+    when: on_success
+    expire_in: '30 days'
+    paths:
+      - dist
+
+publish:
+  stage: publish
+  when: manual
+  script:
+    - ./publish.sh
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - dist
