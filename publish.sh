@@ -2,7 +2,7 @@
 set -e
 
 VERSION_MAJOR_MINOR=`cat VERSION`
-VERSION=${VERSION:-"0.0.0"}
+VERSION=${VERSION:-"0.0.0"} | sed 's/-/./'
 
 echo "${VERSION_MAJOR_MINOR} / ${VERSION}"
 
