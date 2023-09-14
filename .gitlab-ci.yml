@@ -1,4 +1,4 @@
-image: fedora:38
+image: python:3.8.18
 
 stages:
   - test
