@@ -12,8 +12,8 @@ before_script:
   - export VERSION=`git2version -s`
 
 build:
-  variables:
-    CI_DEBUG_TRACE: "true"
+  before_script:
+    - echo "DEBUG"
   stage: build
   script:
     - ./build.sh
