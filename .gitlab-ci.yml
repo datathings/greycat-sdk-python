@@ -12,6 +12,8 @@ before_script:
   - export VERSION=`git2version -s`
 
 build:
+  variables:
+    CI_DEBUG_TRACE: "true"
   stage: build
   script:
     - ./build.sh
@@ -30,4 +32,3 @@ publish:
     expire_in: 1 week
     paths:
       - dist
-
