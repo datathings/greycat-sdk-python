@@ -9,9 +9,10 @@ stages:
   - publish
 
 before_script:
-  - echo "DEBUG"
-  - export VERSION=`git2version -s`
-  - echo "DEBUG: ${VERSION}"
+  script:
+    - echo "DEBUG"
+    - export VERSION=`git2version -s`
+    - echo "DEBUG: ${VERSION}"
 
 build:
   stage: build
