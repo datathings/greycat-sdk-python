@@ -1,4 +1,4 @@
-image: oci.datathings.com/greycat/build/python:1.0.0-main
+image: oci.datathings.com/greycat/build/js:1.0.8-main
 
 stages:
   - test
