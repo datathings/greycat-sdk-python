@@ -1,4 +1,4 @@
-image: oci.datathings.com/greycat/build/js:1.0.8-main
+image: fedora:38
 
 stages:
   - test
