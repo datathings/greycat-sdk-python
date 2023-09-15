@@ -1046,16 +1046,18 @@ class GreyCat:
                 att_flags: Final[int] = abi_stream.read_i8().value
                 nullable: Final[bool] = 0 != (att_flags & 1)
                 mapped: Final[bool] = 0 != (att_flags & (1 << 1))
-                type_attributes.append(GreyCat.Type.Attribute(
-                    name,
-                    att_abi_type,
-                    prog_type_offset,
-                    mapped_any_offset,
-                    mapped_att_offset,
-                    sbi_type,
-                    nullable,
-                    mapped,
-                ))
+                type_attributes.append(
+                    GreyCat.Type.Attribute(
+                        name,
+                        att_abi_type,
+                        prog_type_offset,
+                        mapped_any_offset,
+                        mapped_att_offset,
+                        sbi_type,
+                        nullable,
+                        mapped,
+                    )
+                )
             factory: GreyCat.Factory | None = None
             if fqn in factories:
                 factory = factories[fqn]
@@ -1090,9 +1092,7 @@ class GreyCat:
             type_name: str = self.symbols[abi_stream.read_vu32().value]
             function_name: str = self.symbols[abi_stream.read_vu32().value]
             lib_name: str = self.symbols[abi_stream.read_vu32().value]
-            fqn: str = (
-                f'{"" if module_name is None else f"{module_name}::"}{function_name}'
-            )
+            fqn: str = f'{"" if module_name is None else f"{module_name}::"}{"" if type_name is None else f"{type_name}::"}{function_name}'
             nb_params: int = abi_stream.read_vu32().value
             param_offset: int
             for param_offset in range(nb_params):
