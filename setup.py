@@ -1,7 +1,5 @@
 from setuptools import find_packages, setup
 
-print(f'DEBUG: {find_packages(where="src")}')
-
 setup(
     name="greycat",
     version="0.0.0",
