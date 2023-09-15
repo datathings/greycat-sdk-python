@@ -15,5 +15,5 @@ cd dist
 file="greycat-${VERSION}-py3-none-any.whl"
 
 curl -s -X PUT -H "Authorization: $token" -T $file "https://get.greycat.io/files/sdk/python/${CI_COMMIT_REF_NAME}/${VERSION_MAJOR_MINOR}/${file}"
-curl -s -X PUT -H "Authorization: $token" -T $file "https://get.greycat.io/files/sdk/python/${CI_COMMIT_REF_NAME}/latest.whl"
+curl -s -X PUT -H "Authorization: $token" -T $file "https://get.greycat.io/files/sdk/python/${CI_COMMIT_REF_NAME}/greycat-latest-py3-none-any.whl"
 curl -s -X PUT -H "Authorization: $token" -d "${VERSION_MAJOR_MINOR}/${VERSION}" -H "Content-Type: text/plain" "https://get.greycat.io/files/sdk/python/${CI_COMMIT_REF_NAME}/latest"

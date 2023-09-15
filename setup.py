@@ -10,7 +10,7 @@ setup(
     packages=find_packages(where="src"),
     python_requires=">=3.8",
     extras_require={
-      "numpy": ["numpy"],
-      "pandas": ["numpy", "pandas"],
+        "numpy": ["numpy"],
+        "pandas": ["numpy", "pandas"],
     },
 )
