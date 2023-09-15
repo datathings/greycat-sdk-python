@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="greycat",
-    version="0.0.0",
+    version="6.1.10-dev",
     author="DataThings S.A.",
     author_email="contact@datathings.com",
     license="https://creativecommons.org/licenses/by-nd/4.0/",
