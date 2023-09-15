@@ -1198,7 +1198,7 @@ class GreyCat:
         for lib in self.libs_by_name.values():
             lib.init(self)
 
-    def call(self, fqn: str, parameters: List[object]) -> object:
+    def call(self, fqn: str, parameters: List[object] = []) -> object:
         if not (self.__is_remote):
             raise RuntimeError(
                 "Remote calls are not available on local GreyCat handles"
