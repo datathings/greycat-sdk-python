@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="greycat",
+    name="GreyCat",
     version="0.0.0",
     author="DataThings S.A.",
     author_email="contact@datathings.com",
