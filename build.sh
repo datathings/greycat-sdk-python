@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-WHL_VERSION=$(echo ${VERSION:-"0.0."}0 | sed 's/-/./')
+WHL_VERSION=$(echo ${VERSION:-"0.0"}.0 | sed 's/-/./')
 VERSION=${VERSION:-"0.0.0"}
 
 rm -rf build dist src/greycat.egg-info
