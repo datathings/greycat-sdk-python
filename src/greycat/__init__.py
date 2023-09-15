@@ -1,15 +1,32 @@
-import os
-import sys
+from .greycat import *
+from .std import *
 
-# Get the path to the directory containing this module (__init__.py)
-module_dir = os.path.dirname(os.path.abspath(__file__))
+try:
+    from .algebra import *
+except ModuleNotFoundError:
+    pass
 
-# Add the parent directory of the module directory to sys.path
-parent_dir = os.path.dirname(module_dir)
-sys.path.insert(0, parent_dir)
+try:
+    from .decisiontrees import *
+except ModuleNotFoundError:
+    pass
 
-# Add the module directory to the __path__ attribute of the package
-__path__.append(module_dir)
+try:
+    from .patterns import *
+except ModuleNotFoundError:
+    pass
 
-# Import submodules so that they are available when the package is imported
-from . import *
+try:
+    from .sql import *
+except ModuleNotFoundError:
+    pass
+
+try:
+    from .useragent import *
+except ModuleNotFoundError:
+    pass
+
+try:
+    from .project_lib import *
+except ModuleNotFoundError:
+    pass

@@ -1,2 +1,8 @@
-/dist/
 /**/__pycache__/
+/build/
+/dist/
+/gcdata/
+/src/greycat.egg-info/
+
+/*.gcb
+/project.gcp

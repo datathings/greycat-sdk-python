@@ -35,4 +35,4 @@ class project_lib(GreyCat.Library):
 			greycat.types_by_name[project_lib.project.TestType.name_],
 			]
 		self.mapped[0].static_values = [12]
-from greycat. import  as _
+from greycat.project_lib import project_lib as project_lib_
