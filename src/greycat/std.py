@@ -2863,7 +2863,7 @@ class std(GreyCat.Library):
 				return GreyCat.call(greycat,"runtime::SecurityEntity::all")
 			@staticmethod
 			def set(greycat: GreyCat, entity: std_.runtime.SecurityEntity) -> int:
-				return GreyCat.call(greycat,"runtime::SecurityEntity::set", entity)
+				return GreyCat.call(greycat,"runtime::SecurityEntity::set", [entity, ])
 			@staticmethod
 			def create(greycat: GreyCat, id: int, name: str, activated: bool) -> std_.runtime.UserGroup:
 				return std_.runtime.UserGroup(greycat.libs_by_name[std.name_].mapped[39], id, name, activated)
@@ -2889,7 +2889,7 @@ class std(GreyCat.Library):
 				return GreyCat.call(greycat,"runtime::SecurityEntity::all")
 			@staticmethod
 			def set(greycat: GreyCat, entity: std_.runtime.SecurityEntity) -> int:
-				return GreyCat.call(greycat,"runtime::SecurityEntity::set", entity)
+				return GreyCat.call(greycat,"runtime::SecurityEntity::set", [entity, ])
 			@staticmethod
 			def create(greycat: GreyCat, id: int, name: str, activated: bool) -> std_.runtime.SecurityEntity:
 				return std_.runtime.SecurityEntity(greycat.libs_by_name[std.name_].mapped[40], id, name, activated)
@@ -2923,7 +2923,7 @@ class std(GreyCat.Library):
 				return GreyCat.call(greycat,"runtime::PeriodicTask::all")
 			@staticmethod
 			def set(greycat: GreyCat, tasks: std_.core.Array) -> None:
-				return GreyCat.call(greycat,"runtime::PeriodicTask::set", tasks)
+				return GreyCat.call(greycat,"runtime::PeriodicTask::set", [tasks, ])
 			@staticmethod
 			def create(greycat: GreyCat, name: str, user_id: int, args: str, start: std.core.time, every: std.core.duration) -> std_.runtime.PeriodicTask:
 				return std_.runtime.PeriodicTask(greycat.libs_by_name[std.name_].mapped[41], name, user_id, args, start, every)
@@ -3050,7 +3050,7 @@ class std(GreyCat.Library):
 				self._set(self.type_.generated_offsets[5],v)
 			@staticmethod
 			def set(greycat: GreyCat, f: std_.runtime.SecurityFields) -> None:
-				return GreyCat.call(greycat,"runtime::SecurityFields::set", f)
+				return GreyCat.call(greycat,"runtime::SecurityFields::set", [f, ])
 			@staticmethod
 			def get(greycat: GreyCat) -> std_.runtime.SecurityFields:
 				return GreyCat.call(greycat,"runtime::SecurityFields::get")
@@ -3095,13 +3095,13 @@ class std(GreyCat.Library):
 				return GreyCat.call(greycat,"runtime::Task::running")
 			@staticmethod
 			def history(greycat: GreyCat, offset: int, max: int) -> std_.core.Array:
-				return GreyCat.call(greycat,"runtime::Task::history", offset, max)
+				return GreyCat.call(greycat,"runtime::Task::history", [offset, max, ])
 			@staticmethod
 			def cancel(greycat: GreyCat, task_id: int) -> bool:
-				return GreyCat.call(greycat,"runtime::Task::cancel", task_id)
+				return GreyCat.call(greycat,"runtime::Task::cancel", [task_id, ])
 			@staticmethod
 			def info(greycat: GreyCat, user_id: int, task_id: int) -> std_.runtime.TaskInfo:
-				return GreyCat.call(greycat,"runtime::Task::info", user_id, task_id)
+				return GreyCat.call(greycat,"runtime::Task::info", [user_id, task_id, ])
 			@staticmethod
 			def create(greycat: GreyCat, user_id: int, task_id: int, mod: str, type: str, fun: str, creation: std.core.time, status: std_.runtime.TaskStatus) -> std_.runtime.Task:
 				return std_.runtime.Task(greycat.libs_by_name[std.name_].mapped[45], user_id, task_id, mod, type, fun, creation, status)
@@ -3242,16 +3242,16 @@ class std(GreyCat.Library):
 				return GreyCat.call(greycat,"runtime::SecurityEntity::all")
 			@staticmethod
 			def set(greycat: GreyCat, entity: std_.runtime.SecurityEntity) -> int:
-				return GreyCat.call(greycat,"runtime::SecurityEntity::set", entity)
+				return GreyCat.call(greycat,"runtime::SecurityEntity::set", [entity, ])
 			@staticmethod
 			def login(greycat: GreyCat, credentials: str, use_cookie: bool) -> str:
-				return GreyCat.call(greycat,"runtime::User::login", credentials, use_cookie)
+				return GreyCat.call(greycat,"runtime::User::login", [credentials, use_cookie, ])
 			@staticmethod
 			def tokenLogin(greycat: GreyCat, token: str, use_cookie: bool) -> str:
-				return GreyCat.call(greycat,"runtime::User::tokenLogin", token, use_cookie)
+				return GreyCat.call(greycat,"runtime::User::tokenLogin", [token, use_cookie, ])
 			@staticmethod
 			def renew(greycat: GreyCat, use_cookie: bool) -> str:
-				return GreyCat.call(greycat,"runtime::User::renew", use_cookie)
+				return GreyCat.call(greycat,"runtime::User::renew", [use_cookie, ])
 			@staticmethod
 			def logout(greycat: GreyCat) -> None:
 				return GreyCat.call(greycat,"runtime::User::logout")
@@ -3266,10 +3266,10 @@ class std(GreyCat.Library):
 				return GreyCat.call(greycat,"runtime::User::permissions")
 			@staticmethod
 			def setPassword(greycat: GreyCat, name: str, pass_: str) -> bool:
-				return GreyCat.call(greycat,"runtime::User::setPassword", name, pass_)
+				return GreyCat.call(greycat,"runtime::User::setPassword", [name, pass_, ])
 			@staticmethod
 			def getToken(greycat: GreyCat, id: int) -> str:
-				return GreyCat.call(greycat,"runtime::User::getToken", id)
+				return GreyCat.call(greycat,"runtime::User::getToken", [id, ])
 			@staticmethod
 			def create(greycat: GreyCat, id: int, name: str, activated: bool, full_name: str, email: str, role: str, permissions_flags: int, groups: std_.core.Array, groups_flags: int, external: bool) -> std_.runtime.User:
 				return std_.runtime.User(greycat.libs_by_name[std.name_].mapped[49], id, name, activated, full_name, email, role, permissions_flags, groups, groups_flags, external)
@@ -3347,10 +3347,10 @@ class std(GreyCat.Library):
 				return GreyCat.call(greycat,"runtime::UserRole::all")
 			@staticmethod
 			def remove(greycat: GreyCat, name: str) -> None:
-				return GreyCat.call(greycat,"runtime::UserRole::remove", name)
+				return GreyCat.call(greycat,"runtime::UserRole::remove", [name, ])
 			@staticmethod
 			def set(greycat: GreyCat, value: std_.runtime.UserRole) -> None:
-				return GreyCat.call(greycat,"runtime::UserRole::set", value)
+				return GreyCat.call(greycat,"runtime::UserRole::set", [value, ])
 			@staticmethod
 			def create(greycat: GreyCat, name: str, permissions: std_.core.Array) -> std_.runtime.UserRole:
 				return std_.runtime.UserRole(greycat.libs_by_name[std.name_].mapped[53], name, permissions)
@@ -3394,7 +3394,7 @@ class std(GreyCat.Library):
 				return GreyCat.call(greycat,"runtime::Runtime::abi")
 			@staticmethod
 			def readModVar(greycat: GreyCat, module: str, name: str) -> Any:
-				return GreyCat.call(greycat,"runtime::Runtime::readModVar", module, name)
+				return GreyCat.call(greycat,"runtime::Runtime::readModVar", [module, name, ])
 			@staticmethod
 			def create(greycat: GreyCat) -> std_.runtime.Runtime:
 				return std_.runtime.Runtime(greycat.libs_by_name[std.name_].mapped[55])
