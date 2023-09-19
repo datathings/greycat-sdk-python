@@ -1245,6 +1245,43 @@ class GreyCat:
         stream.close()
         return res
 
+    def fetch(self, path: str) -> object:
+        connection: http.client.HTTPConnection | http.client.HTTPSConnection
+        if self.__runtime_url.startswith("http://"):
+            connection: http.client.HTTPConnection = http.client.HTTPConnection(
+                self.__runtime_url.replace("http://", "")
+            )
+        elif self.__runtime_url.startswith("https://"):
+            connection: http.client.HTTPSConnection = http.client.HTTPSConnection(
+                self.__runtime_url.replace("https://", "")
+            )
+        else:
+            raise ValueError
+        connection.request(
+            "GET",
+            path,
+            None,
+            {"Accept": "application/octet-stream"},
+        )
+        response: http.client.HTTPResponse = connection.getresponse()
+        status: int = response.status
+        stream = GreyCat._Stream(self, response)
+        if 200 > status or 300 <= status:
+            raise RuntimeError(str(stream.read()))
+        stream.read_abi_header()
+        res = stream.read()
+        # if len(response.read(1)) > 0:
+        #     raise IOError('Remaining unread bytes')
+        stream.close()
+        return res
+
+
+    def load(self, path: str) -> object:
+        with open(path, 'rb') as fin:
+            stream: GreyCat._Stream = GreyCat._Stream(self, fin)
+            stream.read_abi_header()
+            return stream.read()
+
     def create(self, name: str, parameters: List[Any]) -> Any:
         type: Final[GreyCat.Type | None] = self.types_by_name[name]
         if type is None:
