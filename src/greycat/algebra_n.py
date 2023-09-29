@@ -90,15 +90,15 @@ class algebra_n:
                 stream.write_i32(self.__bestDim)
                 stream.write_i32(self.__selectedDim)
                 stream.write_f64(self.__threshold)
-                stream.write_object(self.__eigenVectors)
-                stream.write_object(self.__eigenValues)
-                stream.write_object(self.__avg)
-                stream.write_object(self.__std)
-                stream.write_object(self.__correlation)
-                stream.write_object(self.__explainedVariance)
-                stream.write_object(self.__spaceOrigin)
-                stream.write_object(self.__spaceCropped)
-                stream.write_object(self.__dimInfo)
+                stream.write(self.__eigenVectors)
+                stream.write(self.__eigenValues)
+                stream.write(self.__avg)
+                stream.write(self.__std)
+                stream.write(self.__correlation)
+                stream.write(self.__explainedVariance)
+                stream.write(self.__spaceOrigin)
+                stream.write(self.__spaceCropped)
+                stream.write(self.__dimInfo)
 
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
@@ -142,10 +142,10 @@ class algebra_n:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type_.offset)
                 stream.write_i64(self.__count)
-                stream.write_object(self.__min)
-                stream.write_object(self.__max)
-                stream.write_object(self.__sum)
-                stream.write_object(self.__sum_sq)
+                stream.write(self.__min)
+                stream.write(self.__max)
+                stream.write(self.__sum)
+                stream.write(self.__sum_sq)
 
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
