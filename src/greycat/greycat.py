@@ -7,6 +7,7 @@ from itertools import repeat
 import os
 from struct import pack, unpack
 from typing import *
+import greycat
 
 
 @final
@@ -977,7 +978,7 @@ class GreyCat:
 
     def __init__(self, url: str, libraries: List[GreyCat.Library] = []) -> None:
         self.libs_by_name: Final[dict[str, GreyCat.Library]] = {}
-        std_: std = std()
+        std_: greycat.std = greycat.std()
         self.libs_by_name[std_.name()] = std_
         self.__is_remote: bool = False
         library_offset: int
@@ -1290,20 +1291,20 @@ class GreyCat:
 
     def create_geo(self, lat: c_double, lng: c_double):
         type: GreyCat.Type = self.types[self.type_offset_core_geo]
-        geo: std.core.geo = type.factory(type, [])
+        geo: greycat.std.core.geo = type.factory(type, [])
         geo.lat = c_double(lat)
         geo.lng = c_double(lng)
         return geo
 
     def create_time(self, epoch_us: c_int64):
         type: GreyCat.Type = self.types[self.type_offset_core_geo]
-        t: std.core.time = type.factory(type, [])
+        t: greycat.std.core.time = type.factory(type, [])
         t.value = epoch_us
         return t
 
     def create_duration(self, duration_us: c_int64):
         type: GreyCat.Type = self.types[self.type_offset_core_geo]
-        dur: std.core.duration = type.factory(type, [])
+        dur: greycat.std.core.duration = type.factory(type, [])
         dur.value = duration_us
         return dur
 
@@ -1349,6 +1350,4 @@ class GreyCat:
             return self.__get_remote_abi(runtime_url)
         else:
             return self.__get_local_abi(runtime_url)
-
-
-from .std import std
+        

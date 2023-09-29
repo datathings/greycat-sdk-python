@@ -2,7 +2,7 @@
 from __future__ import annotations
 from ctypes import *
 from typing import *
-from greycat import GreyCat
+from greycat.greycat import GreyCat
 from greycat.std_n import std_n
 
 
