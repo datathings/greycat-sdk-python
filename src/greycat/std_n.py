@@ -21,7 +21,7 @@ if "numpy" in sys.modules:
     except ModuleNotFoundError:
         pass
 
-from greycat.greycat import GreyCat, PrimitiveType
+from . import GreyCat, PrimitiveType
 
 
 class std_n:
