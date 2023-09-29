@@ -25,8 +25,3 @@ try:
     from .useragent import *
 except ModuleNotFoundError:
     pass
-
-try:
-    from .project_lib import *
-except ModuleNotFoundError:
-    pass
