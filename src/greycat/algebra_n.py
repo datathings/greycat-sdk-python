@@ -105,15 +105,15 @@ class algebra_n:
                 bestDim: c_int32 = stream.read_i32()
                 selectedDim: c_int32 = stream.read_i32()
                 threshold: c_double = stream.read_f64()
-                eigenVectors: std.core.Tensor = stream.read_object()
-                eigenValues: std.core.Tensor = stream.read_object()
-                avg: std.core.Tensor = stream.read_object()
-                std: std.core.Tensor = stream.read_object()
-                correlation: std.core.Tensor = stream.read_object()
-                explainedVariance: std.core.Tensor = stream.read_object()
-                spaceOrigin: std.core.Tensor = stream.read_object()
-                spaceCropped: std.core.Tensor = stream.read_object()
-                dimInfo: std.core.Tensor = stream.read_object()
+                eigenVectors: std.core.Tensor = stream.read()
+                eigenValues: std.core.Tensor = stream.read()
+                avg: std.core.Tensor = stream.read()
+                std: std.core.Tensor = stream.read()
+                correlation: std.core.Tensor = stream.read()
+                explainedVariance: std.core.Tensor = stream.read()
+                spaceOrigin: std.core.Tensor = stream.read()
+                spaceCropped: std.core.Tensor = stream.read()
+                dimInfo: std.core.Tensor = stream.read()
                 pca: algebra_n.ml.PCA = type.factory(type)
                 pca.__bestDim = bestDim
                 pca.__selectedDim = selectedDim
@@ -150,10 +150,10 @@ class algebra_n:
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 count: c_int64 = stream.read_i64()
-                min: std.core.Tensor = stream.read_object()
-                max: std.core.Tensor = stream.read_object()
-                sum: std.core.Tensor = stream.read_object()
-                sum_sq: std.core.Tensor = stream.read_object()
+                min: std.core.Tensor = stream.read()
+                max: std.core.Tensor = stream.read()
+                sum: std.core.Tensor = stream.read()
+                sum_sq: std.core.Tensor = stream.read()
                 g: algebra_n.ml.GaussianND = type.factory(type)
                 g.__count = count
                 g.__min = min
