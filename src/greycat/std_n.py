@@ -23,15 +23,15 @@ if "numpy" in sys.modules:
 
 from greycat.greycat import GreyCat, PrimitiveType
 
-_T = TypeVar("_T")
-_U = TypeVar("_U")
-
 
 class std_n:
     class core:
+        __T = TypeVar("__T")
+        __U = TypeVar("__U")
+
         # Primitive types
 
-        class _node(Generic[_T], GreyCat.Object):
+        class _node(Generic[__T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.ref: c_uint64
                 super().__init__(type, None)
@@ -50,7 +50,7 @@ class std_n:
                 res.ref = stream.read_vu64()
                 return res
 
-        class _nodeTime(Generic[_T], GreyCat.Object):
+        class _nodeTime(Generic[__T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.ref: c_uint64
                 super().__init__(type, None)
@@ -69,7 +69,7 @@ class std_n:
                 res.ref = stream.read_vu64()
                 return res
 
-        class _nodeIndex(Generic[_T, _U], GreyCat.Object):
+        class _nodeIndex(Generic[__T, __U], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.ref: c_uint64
                 super().__init__(type, None)
@@ -88,7 +88,7 @@ class std_n:
                 res.ref = stream.read_vu64()
                 return res
 
-        class _nodeList(Generic[_T], GreyCat.Object):
+        class _nodeList(Generic[__T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.ref: c_uint64
                 super().__init__(type, None)
@@ -107,7 +107,7 @@ class std_n:
                 res.ref = stream.read_vu64()
                 return res
 
-        class _nodeGeo(Generic[_T], GreyCat.Object):
+        class _nodeGeo(Generic[__T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.ref: c_uint64
                 super().__init__(type, None)
@@ -955,14 +955,14 @@ class std_n:
 
         # Object types
 
-        class _Array(Generic[_T], GreyCat.Object):
+        class _Array(Generic[__T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 super().__init__(type, None)
 
             @final
             def _save(self, stream: GreyCat._Stream) -> None:
                 stream.write_vu32(c_uint32(len(self)))
-                e: _T
+                e: std_n.core.__T
                 for e in self:
                     stream.write(e)
 
@@ -976,26 +976,26 @@ class std_n:
             def __len__(self) -> int:
                 return len(self.attributes)
 
-            def __iter__(self) -> Iterator[_T]:
+            def __iter__(self) -> Iterator[std_n.core.__T]:
                 return self.attributes.__iter__()
 
             @overload
-            def __getitem__(self, __i: SupportsIndex) -> _T:
+            def __getitem__(self, __i: SupportsIndex) -> std_n.core.__T:
                 ...
 
             @overload
-            def __getitem__(self, __s: slice) -> list[_T]:
+            def __getitem__(self, __s: slice) -> list[std_n.core.__T]:
                 ...
 
             def __getitem__(self, __key):
                 return self.attributes[__key]
 
             @overload
-            def __setitem__(self, __key: SupportsIndex, __value: _T) -> None:
+            def __setitem__(self, __key: SupportsIndex, __value: std_n.core.__T) -> None:
                 pass
 
             @overload
-            def __setitem__(self, __key: slice, __value: Iterable[_T]) -> None:
+            def __setitem__(self, __key: slice, __value: Iterable[std_n.core.__T]) -> None:
                 pass
 
             def __setitem__(self, __key, __value):
@@ -1102,7 +1102,7 @@ class std_n:
                     self.line: Final[int] = line
                     self.column: Final[int] = column
 
-        class _Map(Generic[_T, _U], GreyCat.Object):
+        class _Map(Generic[__T, __U], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.map: Final[dict] = {}
                 super().__init__(type, None)
@@ -1110,8 +1110,8 @@ class std_n:
             @final
             def _save(self, stream: GreyCat._Stream) -> None:
                 stream.write_vu32(c_int32(len(self)))
-                key: _T
-                value: _U
+                key: std_n.core.__T
+                value: std_n.core.__U
                 for key, value in self.items():
                     stream.write(key)
                     stream.write(value)
@@ -1126,25 +1126,25 @@ class std_n:
                     map[key] = stream.read()
                 return map
 
-            def keys(self) -> dict_keys[_T]:
+            def keys(self) -> dict_keys[std_n.core.__T]:
                 return self.map.keys()
 
-            def values(self) -> dict_values[_U]:
+            def values(self) -> dict_values[std_n.core.__U]:
                 return self.map.values()
 
-            def items(self) -> dict_items[_T, _U]:
+            def items(self) -> dict_items[std_n.core.__T, std_n.core.__U]:
                 return self.map.items()
 
             def __len__(self) -> int:
                 return len(self.map)
 
-            def __getitem__(self, key: _T) -> _U:
+            def __getitem__(self, key: std_n.core.__T) -> std_n.core.__U:
                 return self.map[key]
 
-            def __setitem__(self, key: _T, value: _U) -> None:
+            def __setitem__(self, key: std_n.core.__T, value: std_n.core.__U) -> None:
                 self.map[key] = value
 
-            def __delitem__(self, key: _T) -> None:
+            def __delitem__(self, key: std_n.core.__T) -> None:
                 del self.map[key]
 
             def clear(self) -> None:
@@ -1173,12 +1173,12 @@ class std_n:
                     return type.greycat.symbols[len_ >> 1]
                 return stream.read_string(len_ >> 1)
 
-        class _Table(Generic[_T], GreyCat.Object):
+        class _Table(Generic[__T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.cols: int
                 self.rows: int
                 self.meta: list[std_n.core._Table.TableColumnMeta]
-                self.data: list[_T]
+                self.data: list[std_n.core.__T]
                 super().__init__(type, None)
 
             def _save(self, stream: GreyCat._Stream) -> None:
@@ -1255,7 +1255,7 @@ class std_n:
                 greycat_type: GreyCat.Type
                 col_type: int
                 for col in range(cols):
-                    col_type= meta[col].col_type.value
+                    col_type = meta[col].col_type.value
                     if col_type == PrimitiveType.NULL.value:
                         pass
                     elif col_type == PrimitiveType.INT.value:
@@ -1581,6 +1581,8 @@ class std_n:
             return x
 
     class util:
+        __T = TypeVar("__T")
+
         class _Quantizer(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 super().__init__(type, None)
@@ -1691,7 +1693,7 @@ class std_n:
                 iban.data = stream.read_i8_array(stream.read_vu32().value)
                 return iban
 
-        class _Queue(Generic[_T], GreyCat.Object):
+        class _Queue(Generic[__T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.queue: Final[deque] = deque()
                 super().__init__(type, None)
@@ -1702,7 +1704,7 @@ class std_n:
                 stream.write_vi64(len(self))  # capacity
                 stream.write_vi64(len(self))  # TODO: head - values
                 stream.write_vi64(0)  # TODO: tail - values
-                t: _T
+                t: std_n.core.__T
                 for t in self:
                     stream.write(t)
 
@@ -1721,14 +1723,14 @@ class std_n:
                 return queue_
 
             def put(
-                self, item: _T, block: bool = True, timeout: Number | None = None
+                self, item: std_n.core.__T, block: bool = True, timeout: Number | None = None
             ) -> None:
                 self.queue.appendleft(item, block, timeout)
 
             def __len__(self) -> int:
                 return len(self.queue)
 
-            def __reduce__(self) -> tuple[type[Self], tuple[()], None, Iterator[_T]]:
+            def __reduce__(self) -> tuple[type[Self], tuple[()], None, Iterator[std_n.core.__T]]:
                 return self.queue.__reduce__()
 
         class _SlidingWindow(GreyCat.Object):
