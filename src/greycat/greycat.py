@@ -1276,7 +1276,6 @@ class GreyCat:
         stream.close()
         return res
 
-
     def load(self, path: str) -> object:
         with open(path, 'rb') as fin:
             stream: GreyCat._Stream = GreyCat._Stream(self, fin)
@@ -1350,4 +1349,3 @@ class GreyCat:
             return self.__get_remote_abi(runtime_url)
         else:
             return self.__get_local_abi(runtime_url)
-        
