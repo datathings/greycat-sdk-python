@@ -1,8 +1,9 @@
 /**/__pycache__/
+/.vscode/
 /build/
 /dist/
 /gcdata/
-/src/greycat.egg-info/
+/src/GreyCat.egg-info/
 
 /*.gcb
 /project.gcp

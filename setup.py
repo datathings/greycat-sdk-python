@@ -1,3 +1,4 @@
+from distutils.core import Extension
 from setuptools import find_packages, setup
 
 setup(
@@ -13,4 +14,5 @@ setup(
         "numpy": ["numpy"],
         "pandas": ["numpy", "pandas"],
     },
+    ext_modules=[Extension("gctypes", ["src/greycat/gctypes.c"])]
 )
