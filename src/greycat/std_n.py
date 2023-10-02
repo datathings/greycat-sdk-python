@@ -1202,10 +1202,10 @@ class std_n:
                         pass
                     elif col_type == PrimitiveType.INT.value:
                         for row in range(self.rows):
-                            stream.write_vi64(c_int64(self.data[col * self.rows + row]))
+                            stream.write_vi64(self.data[col * self.rows + row])
                     elif col_type == PrimitiveType.FLOAT.value:
                         for row in range(self.rows):
-                            stream.write_f64(c_double(self.data[col * self.rows + row]))
+                            stream.write_f64(self.data[col * self.rows + row])
                     elif col_type == PrimitiveType.TIME.value:
                         for row in range(self.rows):
                             o = self.data[col * self.rows + row]
@@ -1260,10 +1260,10 @@ class std_n:
                         pass
                     elif col_type == PrimitiveType.INT.value:
                         for _ in repeat(None, rows):
-                            data.append(stream.read_vi64().value)
+                            data.append(stream.read_vi64())
                     elif col_type == PrimitiveType.FLOAT.value:
                         for _ in repeat(None, rows):
-                            data.append(stream.read_f64().value)
+                            data.append(stream.read_f64())
                     elif col_type == PrimitiveType.TIME.value:
                         for _ in repeat(None, rows):
                             data.append(
@@ -1314,7 +1314,7 @@ class std_n:
 
                 def to_numpy(self) -> numpy.ndarray:
                     nda: Final[numpy.ndarray] = numpy.reshape(
-                        self.data, (self.rows, self.cols), "F"
+                        [elem.value if type(elem) in [c_double, c_int64] else elem for elem in self.data], (self.rows, self.cols), "F"
                     )
                     metadata: Final[dict] = {}
                     nda_dtype: Final[numpy.dtype] = nda.dtype
@@ -1331,7 +1331,7 @@ class std_n:
                 ) -> std_n.core._Table:
                     type: GreyCat.Type = greycat.types_by_name["core::Table"]
                     table: std_n.core._Table = type.factory(type, None)
-                    table.data = nda.flatten("F").tolist()
+                    table.data = [c_double(elem) if elem_type is float else c_int64(elem) if elem_type is int else elem for [elem, elem_type] in [[elem, type(elem)] for elem in nda.flatten("F").tolist()]]
                     table.rows = nda.shape[0]
                     table.cols = nda.shape[1]
                     nda_dtype: Final[numpy.dtype] = nda.dtype
