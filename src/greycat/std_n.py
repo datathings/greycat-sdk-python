@@ -1313,9 +1313,22 @@ class std_n:
             if "numpy" in sys.modules:
 
                 def to_numpy(self) -> numpy.ndarray:
-                    nda: Final[numpy.ndarray] = numpy.reshape(
-                        [elem.value if type(elem) in [c_double, c_int64] else elem for elem in self.data], (self.rows, self.cols), "F"
+                    nda: numpy.ndarray = numpy.reshape(
+                        [
+                            elem.value if type(elem) in [c_double, c_int64]
+                            else elem
+                            for elem in self.data
+                        ],
+                        (self.rows, self.cols),
+                        "F",
                     )
+                    null_indices: list[int] = []
+                    for index, col_meta in enumerate(self.meta):
+                        if col_meta.col_type == PrimitiveType.NULL:
+                            null_indices.append(index)
+                    if len(null_indices) > 0:
+                        nda = nda.astype(numpy.dtype(object))
+                        nda = numpy.insert(nda, null_indices, None, axis=1)
                     metadata: Final[dict] = {}
                     nda_dtype: Final[numpy.dtype] = nda.dtype
                     if nda_dtype.metadata is MappingProxyType:
@@ -1331,7 +1344,23 @@ class std_n:
                 ) -> std_n.core._Table:
                     type: GreyCat.Type = greycat.types_by_name["core::Table"]
                     table: std_n.core._Table = type.factory(type, None)
-                    table.data = [c_double(elem) if elem_type is float else c_int64(elem) if elem_type is int else elem for [elem, elem_type] in [[elem, type(elem)] for elem in nda.flatten("F").tolist()]]
+                    if nda.dtype is numpy.dtype(float):
+                        table.data = [c_double(elem) for elem in nda.flatten("F")]
+                    elif nda.dtype is numpy.dtype(int):
+                        table.data = [c_int64(elem) for elem in nda.flatten("F")]
+                    elif nda.dtype is numpy.dtype(object):
+                        if len(filter(lambda elem: type(elem) is int and not -2 ** 63 <= elem < 2 ** 63)) > 0:
+                            raise ValueError("Numpy array contains ints larger than max int64")
+                        table.data = [
+                            c_double(elem) if isinstance(elem, numpy.floating) or elem_type is float
+                            else c_int64(elem) if isinstance(elem, numpy.integer) or elem_type is int
+                            else elem
+                            for [elem, elem_type] in [
+                                [elem, type(elem)] for elem in nda.flatten("F")
+                            ]
+                        ]
+                    else:
+                        raise ValueError(f"Unknow dtype: {nda.dtype}")
                     table.rows = nda.shape[0]
                     table.cols = nda.shape[1]
                     nda_dtype: Final[numpy.dtype] = nda.dtype
