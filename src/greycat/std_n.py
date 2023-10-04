@@ -1325,7 +1325,7 @@ class std_n:
                     null_indices: list[int] = []
                     for index, col_meta in enumerate(self.meta):
                         if col_meta.col_type == PrimitiveType.NULL:
-                            null_indices.append(index)
+                            null_indices.append(index - len(null_indices))
                     if len(null_indices) > 0:
                         nda = nda.astype(numpy.dtype(object))
                         nda = numpy.insert(nda, null_indices, None, axis=1)
