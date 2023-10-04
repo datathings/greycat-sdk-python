@@ -1342,8 +1342,8 @@ class std_n:
                 def from_numpy(
                     greycat: GreyCat, nda: numpy.ndarray
                 ) -> std_n.core._Table:
-                    type: GreyCat.Type = greycat.types_by_name["core::Table"]
-                    table: std_n.core._Table = type.factory(type, None)
+                    type_: GreyCat.Type = greycat.types_by_name["core::Table"]
+                    table: std_n.core._Table = type_.factory(type_, None)
                     if nda.dtype is numpy.dtype(float):
                         table.data = [c_double(elem) for elem in nda.flatten("F")]
                     elif nda.dtype is numpy.dtype(int):
