@@ -29,7 +29,6 @@ static int to_int(PyObject *v, int64_t *res)
     *res = ((i64_t *)v)->x;
     return 0;
   }
-  PyErr_SetString(PyExc_ValueError, "invalid literal for i64()");
   return 1;
 }
 
@@ -55,7 +54,6 @@ static double to_double(PyObject *v, double *res)
     *res = (double)((i64_t *)v)->x;
     return 0;
   }
-  PyErr_SetString(PyExc_ValueError, "invalid literal for f64()");
   return 1;
 }
 
@@ -89,10 +87,18 @@ static PyObject *i64_add(PyObject *x, PyObject *y)
   int64_t i_x, i_y;
   if (0 != to_int(x, &i_x))
   {
+    size_t msg_len = 45 + strlen(x->ob_type->tp_name) + strlen(y->ob_type->tp_name);
+    char msg[msg_len];
+    snprintf(msg, msg_len, "unsupported operand type(s) for +: '%s' and '%s'", x->ob_type->tp_name, y->ob_type->tp_name);
+    PyErr_SetString(PyExc_ValueError, msg);
     return NULL;
   }
   if (0 != to_int(y, &i_y))
   {
+    size_t msg_len = 45 + strlen(x->ob_type->tp_name) + strlen(y->ob_type->tp_name);
+    char msg[msg_len];
+    snprintf(msg, msg_len, "unsupported operand type(s) for +: '%s' and '%s'", x->ob_type->tp_name, y->ob_type->tp_name);
+    PyErr_SetString(PyExc_ValueError, msg);
     return NULL;
   }
   i64_t *new = (i64_t *)i64Type.tp_alloc(&i64Type, 0);
@@ -108,10 +114,18 @@ static PyObject *i64_subtract(PyObject *x, PyObject *y)
   int64_t i_x, i_y;
   if (0 != to_int(x, &i_x))
   {
+    size_t msg_len = 45 + strlen(x->ob_type->tp_name) + strlen(y->ob_type->tp_name);
+    char msg[msg_len];
+    snprintf(msg, msg_len, "unsupported operand type(s) for -: '%s' and '%s'", x->ob_type->tp_name, y->ob_type->tp_name);
+    PyErr_SetString(PyExc_ValueError, msg);
     return NULL;
   }
   if (0 != to_int(y, &i_y))
   {
+    size_t msg_len = 45 + strlen(x->ob_type->tp_name) + strlen(y->ob_type->tp_name);
+    char msg[msg_len];
+    snprintf(msg, msg_len, "unsupported operand type(s) for -: '%s' and '%s'", x->ob_type->tp_name, y->ob_type->tp_name);
+    PyErr_SetString(PyExc_ValueError, msg);
     return NULL;
   }
   i64_t *new = (i64_t *)i64Type.tp_alloc(&i64Type, 0);
@@ -127,10 +141,18 @@ static PyObject *i64_multiply(PyObject *x, PyObject *y)
   int64_t i_x, i_y;
   if (0 != to_int(x, &i_x))
   {
+    size_t msg_len = 45 + strlen(x->ob_type->tp_name) + strlen(y->ob_type->tp_name);
+    char msg[msg_len];
+    snprintf(msg, msg_len, "unsupported operand type(s) for *: '%s' and '%s'", x->ob_type->tp_name, y->ob_type->tp_name);
+    PyErr_SetString(PyExc_ValueError, msg);
     return NULL;
   }
   if (0 != to_int(y, &i_y))
   {
+    size_t msg_len = 45 + strlen(x->ob_type->tp_name) + strlen(y->ob_type->tp_name);
+    char msg[msg_len];
+    snprintf(msg, msg_len, "unsupported operand type(s) for *: '%s' and '%s'", x->ob_type->tp_name, y->ob_type->tp_name);
+    PyErr_SetString(PyExc_ValueError, msg);
     return NULL;
   }
   i64_t *new = (i64_t *)i64Type.tp_alloc(&i64Type, 0);
@@ -146,10 +168,18 @@ static PyObject *i64_modulo(PyObject *x, PyObject *y)
   int64_t i_x, i_y;
   if (0 != to_int(x, &i_x))
   {
+    size_t msg_len = 45 + strlen(x->ob_type->tp_name) + strlen(y->ob_type->tp_name);
+    char msg[msg_len];
+    snprintf(msg, msg_len, "unsupported operand type(s) for %%: '%s' and '%s'", x->ob_type->tp_name, y->ob_type->tp_name);
+    PyErr_SetString(PyExc_ValueError, msg);
     return NULL;
   }
   if (0 != to_int(y, &i_y))
   {
+    size_t msg_len = 45 + strlen(x->ob_type->tp_name) + strlen(y->ob_type->tp_name);
+    char msg[msg_len];
+    snprintf(msg, msg_len, "unsupported operand type(s) for %%: '%s' and '%s'", x->ob_type->tp_name, y->ob_type->tp_name);
+    PyErr_SetString(PyExc_ValueError, msg);
     return NULL;
   }
   i64_t *new = (i64_t *)i64Type.tp_alloc(&i64Type, 0);
@@ -165,10 +195,18 @@ static PyObject *i64_divmod(PyObject *x, PyObject *y)
   int64_t i_x, i_y;
   if (0 != to_int(x, &i_x))
   {
+    size_t msg_len = 50 + strlen(x->ob_type->tp_name) + strlen(y->ob_type->tp_name);
+    char msg[msg_len];
+    snprintf(msg, msg_len, "unsupported operand type(s) for divmod: '%s' and '%s'", x->ob_type->tp_name, y->ob_type->tp_name);
+    PyErr_SetString(PyExc_ValueError, msg);
     return NULL;
   }
   if (0 != to_int(y, &i_y))
   {
+    size_t msg_len = 50 + strlen(x->ob_type->tp_name) + strlen(y->ob_type->tp_name);
+    char msg[msg_len];
+    snprintf(msg, msg_len, "unsupported operand type(s) for divmod: '%s' and '%s'", x->ob_type->tp_name, y->ob_type->tp_name);
+    PyErr_SetString(PyExc_ValueError, msg);
     return NULL;
   }
   PyObject *tuple = PyTuple_New(2);
@@ -186,10 +224,18 @@ static PyObject *i64_power(PyObject *x, PyObject *y, PyObject *z)
   int64_t i_x, i_y, i_z = 1;
   if (0 != to_int(x, &i_x))
   {
+    size_t msg_len = 49 + strlen(x->ob_type->tp_name) + strlen(y->ob_type->tp_name) + strlen(z->ob_type->tp_name);
+    char msg[msg_len];
+    snprintf(msg, msg_len, "unsupported operand type(s) for +: '%s', '%s' and '%s'", x->ob_type->tp_name, y->ob_type->tp_name, z->ob_type->tp_name);
+    PyErr_SetString(PyExc_ValueError, msg);
     return NULL;
   }
   if (0 != to_int(y, &i_y))
   {
+    size_t msg_len = 49 + strlen(x->ob_type->tp_name) + strlen(y->ob_type->tp_name) + strlen(z->ob_type->tp_name);
+    char msg[msg_len];
+    snprintf(msg, msg_len, "unsupported operand type(s) for +: '%s', '%s' and '%s'", x->ob_type->tp_name, y->ob_type->tp_name, z->ob_type->tp_name);
+    PyErr_SetString(PyExc_ValueError, msg);
     return NULL;
   }
   if (!Py_IsNone(z))
@@ -571,42 +617,6 @@ static int f64_bool(f64_t *self)
   return self->x != 0.0 ? 1 : 0;
 }
 
-static PyObject *f64_invert(f64_t *self)
-{
-  PyErr_SetString(PyExc_TypeError, "bad operand type: 'f64'");
-  return NULL;
-}
-
-static PyObject *f64_lshift(PyObject *x, PyObject *y)
-{
-  PyErr_SetString(PyExc_TypeError, "bad operand type: 'f64'");
-  return NULL;
-}
-
-static PyObject *f64_rshift(PyObject *x, PyObject *y)
-{
-  PyErr_SetString(PyExc_TypeError, "bad operand type: 'f64'");
-  return NULL;
-}
-
-static PyObject *f64_and(PyObject *x, PyObject *y)
-{
-  PyErr_SetString(PyExc_TypeError, "bad operand type: 'f64'");
-  return NULL;
-}
-
-static PyObject *f64_xor(PyObject *x, PyObject *y)
-{
-  PyErr_SetString(PyExc_TypeError, "bad operand type: 'f64'");
-  return NULL;
-}
-
-static PyObject *f64_or(PyObject *x, PyObject *y)
-{
-  PyErr_SetString(PyExc_TypeError, "bad operand type: 'f64'");
-  return NULL;
-}
-
 static PyObject *f64_int(f64_t *self)
 {
   return PyLong_FromDouble(self->x);
@@ -657,7 +667,7 @@ static PyObject *f64_divide(PyObject *x, PyObject *y)
 
 static PyObject *f64_repr(f64_t *self)
 {
-  return PyUnicode_FromFormat("%R", PyFloat_FromDouble(self->x)); // TODO: decref
+  return PyUnicode_FromFormat("%R", PyFloat_FromDouble(self->x)); // TODO: decref?
 }
 
 static PyNumberMethods i64NumberMethods = {
@@ -720,24 +730,13 @@ static PyNumberMethods f64NumberMethods = {
     .nb_positive = f64_positive,
     .nb_absolute = f64_absolute,
     .nb_bool = f64_bool,
-    .nb_invert = f64_invert,
-    .nb_lshift = i64_lshift,
-    .nb_rshift = i64_rshift,
-    .nb_and = i64_and,
-    .nb_xor = i64_xor,
-    .nb_or = i64_or,
-    .nb_int = i64_int,
-    .nb_float = i64_float,
+    .nb_int = f64_int,
+    .nb_float = f64_float,
 
-    .nb_inplace_add = i64_add,
-    .nb_inplace_subtract = i64_subtract,
-    .nb_inplace_multiply = i64_multiply,
-    .nb_inplace_remainder = i64_modulo,
-    .nb_inplace_lshift = i64_lshift,
-    .nb_inplace_rshift = i64_rshift,
-    .nb_inplace_and = i64_and,
-    .nb_inplace_xor = i64_xor,
-    .nb_inplace_or = i64_or,
+    .nb_inplace_add = f64_add,
+    .nb_inplace_subtract = f64_subtract,
+    .nb_inplace_multiply = f64_multiply,
+    .nb_inplace_remainder = f64_modulo,
 
     .nb_floor_divide = f64_floor_divide,
     .nb_true_divide = f64_divide,
