@@ -1313,15 +1313,22 @@ class std_n:
             if "numpy" in sys.modules:
 
                 def to_numpy(self) -> numpy.ndarray:
-                    nda: Final[numpy.ndarray] = numpy.reshape(
+                    nda: numpy.ndarray = numpy.reshape(
                         [
                             elem.value if type(elem) in [c_double, c_int64]
                             else elem
                             for elem in self.data
                         ],
                         (self.rows, self.cols),
-                        "F"
+                        "F",
                     )
+                    null_indices: list[int] = []
+                    for index, col_meta in enumerate(self.meta):
+                        if col_meta.col_type == PrimitiveType.NULL:
+                            null_indices.append(index)
+                    if len(null_indices) > 0:
+                        nda = nda.astype(numpy.dtype(object))
+                        nda = numpy.insert(nda, null_indices, None, axis=1)
                     metadata: Final[dict] = {}
                     nda_dtype: Final[numpy.dtype] = nda.dtype
                     if nda_dtype.metadata is MappingProxyType:
