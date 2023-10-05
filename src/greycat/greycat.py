@@ -5,6 +5,7 @@ import http.client
 from io import *
 from itertools import repeat
 import os
+import socket
 from struct import pack, unpack
 from typing import *
 import greycat
@@ -57,6 +58,34 @@ class GreyCat:
     ABI_PROTO: Final[int] = 1
 
     @final
+    class SocketServer:
+        def __init__(self, socket_path: str, greycat: GreyCat) -> None:
+            self.__s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+            self.__s.connect(socket_path)
+            self.__greycat = greycat
+            self.__endpoints: dict[str, Callable[[list[Any]], Any]] = {}
+
+        def register(self, endpoint: str, callback: Callable[[greycat.std.core.Array[Any]], Any]) -> None:
+            self.__endpoints[endpoint] = callback
+        
+        def serve(self) -> Never:
+            conn: socket.socket
+            stream: GreyCat._Stream
+            endpoint: str
+            parameters: List[Any]
+            res: Any
+            while True:
+                conn, _ = self.__s.accept()
+                stream = GreyCat._Stream(self.__greycat, socket.SocketIO(conn, "rwb"))
+                endpoint = stream.read()
+                parameters = list(stream.read())
+                res = self.__endpoints[endpoint](parameters)
+                stream.write(res)
+                stream.close()
+                conn.close()
+
+
+    @final
     class AbiReader:
         def __init__(self, stream: GreyCat._Stream) -> None:
             self.__stream: GreyCat._Stream = stream
@@ -90,10 +119,10 @@ class GreyCat:
         __ASCII_MAX: Final[c_ubyte] = c_ubyte(127)
 
         def __init__(
-            self, greycat: GreyCat, io: BufferedReader | BufferedWriter
+            self, greycat: GreyCat, io: BufferedReader | BufferedWriter | socket.SocketIO
         ) -> None:
             self.greycat: Final[GreyCat] = greycat
-            self._io: BufferedReader | BufferedWriter = io
+            self._io: BufferedReader | BufferedWriter | socket.SocketIO = io
 
         def close(self) -> None:
             self._io.close()

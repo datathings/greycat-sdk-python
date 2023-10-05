@@ -957,7 +957,7 @@ class std_n:
 
         class _Array(Generic[__T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
-                super().__init__(type, None)
+                super().__init__(type, [])
 
             @final
             def _save(self, stream: GreyCat._Stream) -> None:
@@ -1014,6 +1014,9 @@ class std_n:
                         res = f"{res},"
                     res = f"{res}{self.attributes[offset]}"
                 return f"{res}]"
+            
+            def append(self, __value):
+                self.attributes.append(__value)
 
         class _Date(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
