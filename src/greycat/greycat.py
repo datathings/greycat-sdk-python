@@ -65,9 +65,9 @@ class GreyCat:
             self.__greycat = greycat
             self.__endpoints: dict[str, Callable[[list[Any]], Any]] = {}
 
-        def register(self, endpoint: str, callback: Callable[[greycat.std.core.Array[Any]], Any]) -> None:
+        def register(self, endpoint: str, callback: Callable[..., Any]) -> None:
             self.__endpoints[endpoint] = callback
-        
+
         def serve(self) -> Never:
             conn: socket.socket
             stream: GreyCat._Stream
@@ -78,12 +78,11 @@ class GreyCat:
                 conn, _ = self.__s.accept()
                 stream = GreyCat._Stream(self.__greycat, socket.SocketIO(conn, "rwb"))
                 endpoint = stream.read()
-                parameters = list(stream.read())
-                res = self.__endpoints[endpoint](parameters)
+                parameters = stream.read()
+                res = self.__endpoints[endpoint](*parameters)
                 stream.write(res)
                 stream.close()
                 conn.close()
-
 
     @final
     class AbiReader:
