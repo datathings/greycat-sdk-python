@@ -1014,7 +1014,7 @@ class std_n:
                         res = f"{res},"
                     res = f"{res}{self.attributes[offset]}"
                 return f"{res}]"
-            
+
             def append(self, __value):
                 self.attributes.append(__value)
 
@@ -1438,6 +1438,50 @@ class std_n:
                 res.size = size
                 res.data = stream.read_i8_array(bin_size)
                 return res
+
+            if "numpy" in sys.modules:
+                def to_numpy(self) -> numpy.ndarray:
+                    dtype: numpy.dtype
+                    tensor_type_value: Final[int] = self.tensor_type.value
+                    if tensor_type_value == 0:
+                        dtype = numpy.dtype('int32')
+                    elif tensor_type_value == 1:
+                        dtype = numpy.dtype('int64')
+                    elif tensor_type_value == 2:
+                        dtype = numpy.dtype('float32')
+                    elif tensor_type_value == 3:
+                        dtype = numpy.dtype('float64')
+                    elif tensor_type_value == 4:
+                        dtype = numpy.dtype('complex64')
+                    elif tensor_type_value == 5:
+                        dtype = numpy.dtype('complex128')
+                    else:
+                        raise ValueError(f"${self.tensor_type}")
+                    return numpy.reshape(numpy.frombuffer(self.data, dtype=dtype), [dim for dim in self.shape], "F")
+                
+                @staticmethod
+                def from_numpy(greycat: GreyCat, nda: numpy.ndarray) -> std_n.core._Table:
+                    tensor_type: c_byte
+                    if nda.dtype == numpy.dtype('int32'):
+                        tensor_type = c_byte(0)
+                    elif nda.dtype == numpy.dtype('int64'):
+                        tensor_type = c_byte(1)
+                    elif nda.dtype == numpy.dtype('float32'):
+                        tensor_type = c_byte(2)
+                    elif nda.dtype == numpy.dtype('float64'):
+                        tensor_type = c_byte(3)
+                    elif nda.dtype == numpy.dtype('complex64'):
+                        tensor_type = c_byte(4)
+                    elif nda.dtype == numpy.dtype('complex128'):
+                        tensor_type = c_byte(5)
+                    else:
+                        raise ValueError(f"Only {{int,float}}{{32,64}} & complex{{64,128}} dtypes are allowed: {nda.dtype}")
+                    type_: GreyCat.Type = greycat.types_by_name["core::Tensor"]
+                    tensor: std_n.core._Tensor = type_.factory(type_, None)
+                    tensor.shape = [c_uint32(dim) for dim in nda.shape]
+                    tensor.tensor_type = tensor_type
+                    tensor.data = nda.tobytes("F")
+                    tensor.size = len(tensor.data)
 
         class _nodeIndexBucket(GreyCat.Object):
             def __init__(type: GreyCat.Type) -> None:
