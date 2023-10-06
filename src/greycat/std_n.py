@@ -1457,7 +1457,7 @@ class std_n:
                         dtype = numpy.dtype('complex128')
                     else:
                         raise ValueError(f"${self.tensor_type}")
-                    return numpy.reshape(numpy.frombuffer(self.data, dtype=dtype), [dim.value for dim in self.shape], "F")
+                    return numpy.reshape(numpy.frombuffer(self.data, dtype=dtype), [dim.value for dim in self.shape], "C")
                 
                 @staticmethod
                 def from_numpy(greycat: GreyCat, nda: numpy.ndarray) -> std_n.core._Table:
@@ -1480,7 +1480,7 @@ class std_n:
                     tensor: std_n.core._Tensor = type_.factory(type_, None)
                     tensor.shape = [c_uint32(dim) for dim in nda.shape]
                     tensor.tensor_type = tensor_type
-                    tensor.data = nda.tobytes("F")
+                    tensor.data = nda.tobytes("C")
                     tensor.size = len(tensor.data)
 
         class _nodeIndexBucket(GreyCat.Object):
