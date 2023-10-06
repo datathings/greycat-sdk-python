@@ -1482,6 +1482,7 @@ class std_n:
                     tensor.tensor_type = tensor_type
                     tensor.data = nda.tobytes("C")
                     tensor.size = len(tensor.data)
+                    return tensor
 
         class _nodeIndexBucket(GreyCat.Object):
             def __init__(type: GreyCat.Type) -> None:
