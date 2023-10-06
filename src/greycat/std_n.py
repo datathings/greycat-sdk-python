@@ -1457,7 +1457,7 @@ class std_n:
                         dtype = numpy.dtype('complex128')
                     else:
                         raise ValueError(f"${self.tensor_type}")
-                    return numpy.reshape(numpy.frombuffer(self.data, dtype=dtype), [dim for dim in self.shape], "F")
+                    return numpy.reshape(numpy.frombuffer(self.data, dtype=dtype), [dim.value for dim in self.shape], "F")
                 
                 @staticmethod
                 def from_numpy(greycat: GreyCat, nda: numpy.ndarray) -> std_n.core._Table:
