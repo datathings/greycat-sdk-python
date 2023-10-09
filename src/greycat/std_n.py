@@ -1318,7 +1318,6 @@ class std_n:
                     self.meta_index: Final[bool] = index
 
             if "numpy" in sys.modules:
-
                 def to_numpy(self) -> numpy.ndarray:
                     nda: numpy.ndarray = numpy.reshape(
                         [
@@ -1386,7 +1385,6 @@ class std_n:
                     return table
 
                 if "pandas" in sys.modules:
-
                     def to_pandas(self) -> pandas.DataFrame:
                         return pandas.DataFrame(self.to_numpy())
 
@@ -1395,6 +1393,18 @@ class std_n:
                         greycat: GreyCat, df: pandas.DataFrame
                     ) -> std_n.core._Table:
                         return std_n.core._Table.from_numpy(greycat, df.to_numpy())
+
+                if "tensorflow" in sys.modules:
+                    def to_tf_tensor(self) -> tensorflow.Tensor:
+                        return tensorflow.constant(self.to_numpy())
+
+                    @staticmethod
+                    def from_tf_tensor(greycat: GreyCat, tf_tensor: tensorflow.Tensor, session: tensorflow.compat.v1.Session | None = None) -> std_n.core._Table:
+                        if tensorflow.executing_eagerly():
+                            return std_n.core._Table.from_numpy(greycat, tf_tensor.numpy())
+                        if session is not None:
+                            return std_n.core._Table.from_numpy(greycat, session.run(tf_tensor))
+                        return std_n.core._Table.from_numpy(greycat, tensorflow.compat.v1.Session().run(tf_tensor))
 
         class _Tensor(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
@@ -1487,7 +1497,7 @@ class std_n:
                     elif nda.dtype == numpy.dtype('complex128'):
                         tensor_type = c_byte(5)
                     else:
-                        raise ValueError(f"Only {{int,float}}{{32,64}} & complex{{64,128}} dtypes are allowed: {nda.dtype}")
+                        raise ValueError(f"Only int, float and complex dtypes are allowed: {nda.dtype}")
                     type_: GreyCat.Type = greycat.types_by_name["core::Tensor"]
                     tensor: std_n.core._Tensor = type_.factory(type_, None)
                     tensor.shape = [c_uint32(dim) for dim in nda.shape]
