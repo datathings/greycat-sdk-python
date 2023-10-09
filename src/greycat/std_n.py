@@ -20,6 +20,10 @@ if "numpy" in sys.modules:
         import pandas
     except ModuleNotFoundError:
         pass
+    try:
+        import tensorflow
+    except ModuleNotFoundError:
+        pass
 
 from . import GreyCat, PrimitiveType
 
@@ -1458,9 +1462,17 @@ class std_n:
                     else:
                         raise ValueError(f"${self.tensor_type}")
                     return numpy.reshape(numpy.frombuffer(self.data, dtype=dtype), [dim.value for dim in self.shape], "C")
-                
+
                 @staticmethod
                 def from_numpy(greycat: GreyCat, nda: numpy.ndarray) -> std_n.core._Table:
+                    if nda.dtype in (numpy.dtype('int8'), numpy.dtype('int16')):
+                        nda = nda.astype(numpy.dtype('int32'))
+                    elif nda.dtype == numpy.dtype('float16'):
+                        nda = nda.astype(numpy.dtype('float32'))
+                    elif nda.dtype == numpy.dtype('float128'):
+                        nda = nda.astype(numpy.dtype('float64'))
+                    elif nda.dtype == numpy.dtype('complex256'):
+                        nda = nda.astype(numpy.dtype('complex128'))
                     tensor_type: c_byte
                     if nda.dtype == numpy.dtype('int32'):
                         tensor_type = c_byte(0)
@@ -1483,6 +1495,34 @@ class std_n:
                     tensor.data = nda.tobytes("C")
                     tensor.size = len(tensor.data)
                     return tensor
+
+                if "tensorflow" in sys.modules:
+                    def to_tf_tensor(self) -> tensorflow.Tensor:
+                        dtype: numpy.dtype
+                        tensor_type_value: Final[int] = self.tensor_type.value
+                        if tensor_type_value == 0:
+                            dtype = numpy.dtype('int32')
+                        elif tensor_type_value == 1:
+                            dtype = numpy.dtype('int64')
+                        elif tensor_type_value == 2:
+                            dtype = numpy.dtype('float32')
+                        elif tensor_type_value == 3:
+                            dtype = numpy.dtype('float64')
+                        elif tensor_type_value == 4:
+                            dtype = numpy.dtype('complex64')
+                        elif tensor_type_value == 5:
+                            dtype = numpy.dtype('complex128')
+                        else:
+                            raise ValueError(f"${self.tensor_type}")
+                        return tensorflow.constant(numpy.frombuffer(self.data, dtype=dtype), [dim.value for dim in self.shape])
+
+                    @staticmethod
+                    def from_tf_tensor(greycat: GreyCat, tf_tensor: tensorflow.Tensor, tf_session: tensorflow.compat.v1.Session | None = None) -> std_n.core._Tensor:
+                        if tensorflow.executing_eagerly():
+                            return std_n.core._Tensor.from_numpy(greycat, tf_tensor.numpy())
+                        if tf_session is not None:
+                            return std_n.core._Tensor.from_numpy(greycat, tf_session.run(tf_tensor))
+                        return std_n.core._Tensor.from_numpy(greycat, tensorflow.compat.v1.Session().run(tf_tensor))
 
         class _nodeIndexBucket(GreyCat.Object):
             def __init__(type: GreyCat.Type) -> None:
