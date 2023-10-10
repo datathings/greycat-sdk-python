@@ -25,6 +25,11 @@ if "numpy" in sys.modules:
     except ModuleNotFoundError:
         pass
 
+try:
+    import torch
+except ModuleNotFoundError:
+    pass
+
 from . import GreyCat, PrimitiveType
 
 
@@ -1533,6 +1538,55 @@ class std_n:
                         if tf_session is not None:
                             return std_n.core._Tensor.from_numpy(greycat, tf_session.run(tf_tensor))
                         return std_n.core._Tensor.from_numpy(greycat, tensorflow.compat.v1.Session().run(tf_tensor))
+
+            if "torch" in sys.modules:
+                def to_torch_tensor(self) -> torch.Tensor:
+                    dtype: torch.dtype
+                    tensor_type_value: Final[int] = self.tensor_type.value
+                    if tensor_type_value == 0:
+                        dtype = torch.int32
+                    elif tensor_type_value == 1:
+                        dtype = torch.int64
+                    elif tensor_type_value == 2:
+                        dtype = torch.float32
+                    elif tensor_type_value == 3:
+                        dtype = torch.float64
+                    elif tensor_type_value == 4:
+                        dtype = torch.complex64
+                    elif tensor_type_value == 5:
+                        dtype = torch.complex128
+                    else:
+                        raise ValueError(f"${self.tensor_type}")
+                    return torch.frombuffer(self.data, dtype=dtype).reshape([dim.value for dim in self.shape])
+
+                @staticmethod
+                def from_torch_tensor(greycat: GreyCat, torch_tensor: torch.Tensor) -> std_n.core._Table:
+                    if torch_tensor.dtype in (torch.uint8, torch.int8, torch.int16):
+                        torch_tensor = torch_tensor.type(torch.int32)
+                    elif torch_tensor.dtype in (torch.float16, torch.bfloat16):
+                        torch_tensor = torch_tensor.type(torch.float32)
+                    tensor_type: c_byte
+                    if torch_tensor.dtype == torch.int32:
+                        tensor_type = c_byte(0)
+                    elif torch_tensor.dtype == torch.int64:
+                        tensor_type = c_byte(1)
+                    elif torch_tensor.dtype == torch.float32:
+                        tensor_type = c_byte(2)
+                    elif torch_tensor.dtype == torch.float64:
+                        tensor_type = c_byte(3)
+                    elif torch_tensor.dtype == torch.complex64:
+                        tensor_type = c_byte(4)
+                    elif torch_tensor.dtype == torch.complex128:
+                        tensor_type = c_byte(5)
+                    else:
+                        raise ValueError(f"Only int, float and complex dtypes are allowed: {torch_tensor.dtype}")
+                    type_: GreyCat.Type = greycat.types_by_name["core::Tensor"]
+                    tensor: std_n.core._Tensor = type_.factory(type_, None)
+                    tensor.shape = [c_uint32(dim) for dim in torch_tensor.shape]
+                    tensor.tensor_type = tensor_type
+                    tensor.data = bytes(torch_tensor.flatten())
+                    tensor.size = len(tensor.data)
+                    return tensor
 
         class _nodeIndexBucket(GreyCat.Object):
             def __init__(type: GreyCat.Type) -> None:
