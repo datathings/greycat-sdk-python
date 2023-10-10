@@ -61,7 +61,7 @@ class GreyCat:
     class SocketServer:
         __ip: str = '127.0.0.1'
 
-        def __init__(self, port_path: str, greycat: GreyCat) -> None:
+        def __init__(self, greycat: GreyCat, port_path: str = "gcdata/python_port.gcb") -> None:
             sock: socket.socket
             port: int
             for port in range(49_152, 65_536):
@@ -86,7 +86,7 @@ class GreyCat:
             endpoint: str
             parameters: List[Any]
             res: Any
-            self.__sock.listen() # TODO: set backlog?
+            self.__sock.listen()  # TODO: set backlog?
             out: GreyCat._Stream = GreyCat._Stream(self.__greycat, open(self.__port_path, "wb"))
             out.write_abi_header()
             out.write_vu32(c_uint32(self.__port))
