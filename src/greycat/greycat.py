@@ -87,28 +87,8 @@ class GreyCat:
             parameters: List[Any]
             res: Any
             self.__sock.listen()  # TODO: set backlog?
-            with open(self.__port_path, "wb") as out:
-                tmp: bytearray = bytearray(8)
-                pid = os.getpid()
-                tmp[0] = pid & 0xFF
-                tmp[1] = (pid >> 8) & 0xFF
-                tmp[2] = (pid >> 16) & 0xFF
-                tmp[3] = (pid >> 24) & 0xFF
-                tmp[4] = (pid >> 32) & 0xFF
-                tmp[5] = (pid >> 40) & 0xFF
-                tmp[6] = (pid >> 48) & 0xFF
-                tmp[7] = (pid >> 56) & 0xFF
-                out.write(tmp)
-                out.write(socket.inet_aton(GreyCat.SocketServer.__ip))
-                tmp[0] = self.__port & 0xFF
-                tmp[1] = (self.__port >> 8) & 0xFF
-                tmp[2] = (self.__port >> 16) & 0xFF
-                tmp[3] = (self.__port >> 24) & 0xFF
-                tmp[4] = (self.__port >> 32) & 0xFF
-                tmp[5] = (self.__port >> 40) & 0xFF
-                tmp[6] = (self.__port >> 48) & 0xFF
-                tmp[7] = (self.__port >> 56) & 0xFF
-                out.write(tmp)
+            with open(self.__port_path, "w") as out:
+                out.write(f"{os.getpid()},{int.from_bytes(socket.inet_aton(socket.gethostbyname(GreyCat.SocketServer.__ip)))},{self.__port}")
             print(f"Serving at {GreyCat.SocketServer.__ip}:{self.__port}…")
             while True:
                 conn, _ = self.__sock.accept()
