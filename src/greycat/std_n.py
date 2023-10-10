@@ -3,6 +3,7 @@ from __future__ import annotations
 from _collections_abc import dict_keys, dict_values, dict_items
 from collections import deque
 from ctypes import *
+import enum
 from itertools import repeat
 from numbers import Number
 from struct import pack, unpack
@@ -1411,6 +1412,15 @@ class std_n:
                             return std_n.core._Table.from_numpy(greycat, session.run(tf_tensor))
                         return std_n.core._Table.from_numpy(greycat, tensorflow.compat.v1.Session().run(tf_tensor))
 
+        @final
+        class TensorType(enum.Enum):
+            int32 = 0
+            int64 = 1
+            float32 = 2
+            float64 = 3
+            complex64 = 4
+            complex128 = 5
+
         class _Tensor(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.shape: list[c_uint32]
@@ -1457,6 +1467,9 @@ class std_n:
                 res.size = size
                 res.data = stream.read_i8_array(bin_size)
                 return res
+
+            def dtype(self) -> std_n.core.TensorType:
+                return std_n.core.TensorType(self.tensor_type.value)
 
             if "numpy" in sys.modules:
                 def to_numpy(self) -> numpy.ndarray:
