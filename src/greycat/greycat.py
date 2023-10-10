@@ -4,6 +4,7 @@ from ctypes import *
 import http.client
 from io import *
 from itertools import repeat
+import json
 import os
 import socket
 from struct import pack, unpack
@@ -61,7 +62,7 @@ class GreyCat:
     class SocketServer:
         __ip: str = '127.0.0.1'
 
-        def __init__(self, greycat: GreyCat, port_path: str = "gcdata/python_port.gcb") -> None:
+        def __init__(self, greycat: GreyCat, port_path: str = "gcdata/python-server.json") -> None:
             sock: socket.socket
             port: int
             for port in range(49_152, 65_536):
@@ -87,10 +88,12 @@ class GreyCat:
             parameters: List[Any]
             res: Any
             self.__sock.listen()  # TODO: set backlog?
-            out: GreyCat._Stream = GreyCat._Stream(self.__greycat, open(self.__port_path, "wb"))
-            out.write_abi_header()
-            out.write_vu32(c_uint32(self.__port))
-            out.close()
+            with open(self.__port_path, "w") as out:
+                out.write(json.dumps({
+                    "pid": os.getpid(),
+                    "ip": GreyCat.SocketServer.__ip,
+                    "port": self.__port,
+                }))
             print(f"Serving at {GreyCat.SocketServer.__ip}:{self.__port}…")
             while True:
                 conn, _ = self.__sock.accept()
