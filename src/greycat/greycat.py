@@ -59,11 +59,23 @@ class GreyCat:
 
     @final
     class SocketServer:
-        def __init__(self, socket_path: str, greycat: GreyCat) -> None:
-            self.__s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-            self.__s.connect(socket_path)
+        __ip: str = '127.0.0.1'
+
+        def __init__(self, port_path: str, greycat: GreyCat) -> None:
+            sock: socket.socket
+            port: int
+            for port in range(49_152, 65_536):
+                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                if 0 != sock.connect_ex((GreyCat.SocketServer.__ip, port)):
+                    sock.close()
+                    break
+                sock.close()
+            self.__port: Final[int] = port
+            self.__sock: Final[socket.socket] = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.__sock.bind((GreyCat.SocketServer.__ip, port))
             self.__greycat = greycat
             self.__endpoints: dict[str, Callable[[list[Any]], Any]] = {}
+            self.__port_path = port_path
 
         def register(self, endpoint: str, callback: Callable[..., Any]) -> None:
             self.__endpoints[endpoint] = callback
@@ -74,8 +86,14 @@ class GreyCat:
             endpoint: str
             parameters: List[Any]
             res: Any
+            self.__sock.listen() # TODO: set backlog?
+            out: GreyCat._Stream = GreyCat._Stream(self.__greycat, open(self.__port_path, "wb"))
+            out.write_abi_header()
+            out.write_vu32(c_uint32(self.__port))
+            out.close()
+            print(f"Serving at {GreyCat.SocketServer.__ip}:{self.__port}…")
             while True:
-                conn, _ = self.__s.accept()
+                conn, _ = self.__sock.accept()
                 stream = GreyCat._Stream(self.__greycat, socket.SocketIO(conn, "rwb"))
                 endpoint = stream.read()
                 parameters = stream.read()
