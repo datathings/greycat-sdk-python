@@ -1540,7 +1540,7 @@ class std_n:
                         return std_n.core._Tensor.from_numpy(greycat, tensorflow.compat.v1.Session().run(tf_tensor))
 
             if "torch" in sys.modules:
-                def to_torch_tensor(self) -> torch.Tensor:
+                def to_torch_tensor(self, requires_grad: bool = False) -> torch.Tensor:
                     dtype: torch.dtype
                     tensor_type_value: Final[int] = self.tensor_type.value
                     if tensor_type_value == 0:
@@ -1557,7 +1557,7 @@ class std_n:
                         dtype = torch.complex128
                     else:
                         raise ValueError(f"${self.tensor_type}")
-                    return torch.frombuffer(self.data, dtype=dtype).reshape([dim.value for dim in self.shape])
+                    return torch.frombuffer(self.data, dtype=dtype, requires_grad=requires_grad).reshape([dim.value for dim in self.shape])
 
                 @staticmethod
                 def from_torch_tensor(greycat: GreyCat, torch_tensor: torch.Tensor) -> std_n.core._Table:
