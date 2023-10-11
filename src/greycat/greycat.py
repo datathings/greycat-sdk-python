@@ -805,7 +805,6 @@ class GreyCat:
 
         def resolve_generated_offsets(self, *args: str) -> None:
             self.generated_offsets: List[int] = []
-            name_offset: int
             for arg in args:
                 resolved: int | None = self.attribute_off_by_name.get(arg)
                 if resolved is None:
