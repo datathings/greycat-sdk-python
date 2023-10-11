@@ -701,8 +701,8 @@ class GreyCat:
             nullable_bitset: bytes = stream.read_i8_array(type.nullable_nb_bytes)
             nullable_offset: int = -1
             att: GreyCat.Type.Attribute
+            loaded_field: Any
             for att in type.attributes:
-                loaded_field: Any
                 if att.nullable:
                     nullable_offset += 1
                     if 0 == (
@@ -718,7 +718,10 @@ class GreyCat:
                     load_type = stream.read_i8().value
                 if load_type == PrimitiveType.ENUM.value:
                     field_type: GreyCat.Type = type.greycat.types[att.abi_type]
-                    loaded_field = GreyCat.Type.__enum_loader(field_type, stream)
+                    if att.sbi_type.value == PrimitiveType.UNDEFINED.value:
+                        loaded_field = GreyCat.Type.__enum_loader(type.greycat.types[stream.read_vu32().value], stream)
+                    else:
+                        loaded_field = GreyCat.Type.__enum_loader(field_type, stream)
                 elif load_type == PrimitiveType.OBJECT.value:
                     field_type: GreyCat.Type = type.greycat.types[att.abi_type]
                     if (not field_type.is_native) and (
