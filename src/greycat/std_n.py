@@ -1419,6 +1419,8 @@ class std_n:
                 self.tensor_type: c_byte
                 self.size: c_uint32
                 self.data: bytes
+                self.dtype: greycat.std.core.TensorType
+                self.format: str
                 super().__init__(type, None)
 
             @final
@@ -1432,59 +1434,72 @@ class std_n:
                 stream.write_i8_array(self.data)
 
             @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
+            def load(type_: GreyCat.Type, stream: GreyCat._Stream) -> Any:
                 nb_dim: Final[int] = stream.read_i8().value
                 tensor_type: Final[c_byte] = stream.read_i8()
-                shape: list[int] = [stream.read_i32() for _ in repeat(None, nb_dim)]
+                shape: list[c_uint32] = [stream.read_i32() for _ in repeat(None, nb_dim)]
                 size: c_uint32 = stream.read_i32()
-                bin_size: int = size.value
-                tensor_type_value: Final[int] = tensor_type.value
-                if tensor_type_value == 0:
-                    bin_size *= 4
-                elif tensor_type_value == 1:
-                    bin_size *= 8
-                elif tensor_type_value == 2:
-                    bin_size *= 4
-                elif tensor_type_value == 3:
-                    bin_size *= 8
-                elif tensor_type_value == 4:
-                    bin_size *= 8
-                elif tensor_type_value == 5:
-                    bin_size *= 16
+                dtype = type_.greycat.types_by_name[greycat.std.core.TensorType.name_].enum_values[tensor_type.value]
+                format_: str
+                if dtype == greycat.std.core.TensorType.i32(type_.greycat):
+                    format_ = "=i"
+                elif dtype == greycat.std.core.TensorType.i64(type_.greycat):
+                    format_ = "=q"
+                elif dtype == greycat.std.core.TensorType.f32(type_.greycat):
+                    format_ = "=f"
+                elif dtype == greycat.std.core.TensorType.f64(type_.greycat):
+                    format_ = "=d"
+                elif dtype == greycat.std.core.TensorType.c64(type_.greycat):
+                    format_ = "=ff"
+                elif dtype == greycat.std.core.TensorType.c128(type_.greycat):
+                    format_ = "=dd"
                 else:
-                    raise ValueError(f"{tensor_type}")
-                res: std_n.core._Tensor = type.factory(type, [])
+                    raise ValueError(f"${tensor_type}")
+                bin_size: int = size.value * dtype.value
+                res: std_n.core._Tensor = type_.factory(type_, [])
                 res.shape = shape
                 res.tensor_type = tensor_type
+                res.dtype = dtype
+                res.format = format_
                 res.size = size
                 res.data = stream.read_i8_array(bin_size)
                 return res
 
-            def dtype(self) -> greycat.std.core.TensorType:
-                return self.type_.greycat.types_by_name[greycat.std.core.TensorType.name_].enum_values[self.tensor_type.value]
+            def __getitem__(self, key: Iterable[int]):
+                offset: int = 0
+                index: int
+                dim: int
+                for index, dim in enumerate(key):
+                    if index < len(self.shape) - 1:
+                        offset += dim * sum(dim_l.value for dim_l in self.shape[index + 1:])
+                    else:
+                        offset += dim
+                unpacked: Tuple = unpack(self.format, self.data[slice(offset * self.dtype.value, (offset + 1) * self.dtype.value)])
+                if self.dtype in [greycat.std.core.TensorType.c64(self.type_.greycat), greycat.std.core.TensorType.c128(self.type_.greycat)]:
+                    return unpacked
+                return unpacked[0]
 
             if "numpy" in sys.modules:
                 def to_numpy(self) -> numpy.ndarray:
                     dtype: numpy.dtype
-                    tensor_type_value: Final[int] = self.tensor_type.value
-                    if tensor_type_value == 0:
+                    if self.dtype == greycat.std.core.TensorType.i32(self.type_.greycat):
                         dtype = numpy.dtype('int32')
-                    elif tensor_type_value == 1:
+                    elif self.dtype == greycat.std.core.TensorType.i64(self.type_.greycat):
                         dtype = numpy.dtype('int64')
-                    elif tensor_type_value == 2:
+                    elif self.dtype == greycat.std.core.TensorType.f32(self.type_.greycat):
                         dtype = numpy.dtype('float32')
-                    elif tensor_type_value == 3:
+                    elif self.dtype == greycat.std.core.TensorType.f64(self.type_.greycat):
                         dtype = numpy.dtype('float64')
-                    elif tensor_type_value == 4:
+                    elif self.dtype == greycat.std.core.TensorType.c64(self.type_.greycat):
                         dtype = numpy.dtype('complex64')
-                    elif tensor_type_value == 5:
+                    elif self.dtype == greycat.std.core.TensorType.c128(self.type_.greycat):
                         dtype = numpy.dtype('complex128')
                     else:
                         raise ValueError(f"${self.tensor_type}")
-                    return numpy.reshape(numpy.frombuffer(self.data, dtype=dtype), [dim.value for dim in self.shape], "C")
+                    return numpy.frombuffer(self.data, dtype=dtype).reshape([dim.value for dim in self.shape])
 
                 @staticmethod
-                def from_numpy(greycat: GreyCat, nda: numpy.ndarray) -> std_n.core._Table:
+                def from_numpy(greycat_: GreyCat, nda: numpy.ndarray) -> std_n.core._Table:
                     if nda.dtype in (numpy.dtype('int8'), numpy.dtype('int16')):
                         nda = nda.astype(numpy.dtype('int32'))
                     elif nda.dtype == numpy.dtype('float16'):
@@ -1493,44 +1508,52 @@ class std_n:
                         nda = nda.astype(numpy.dtype('float64'))
                     elif nda.dtype == numpy.dtype('complex256'):
                         nda = nda.astype(numpy.dtype('complex128'))
-                    tensor_type: c_byte
+                    dtype: greycat.std.core.TensorType
+                    format_: str
                     if nda.dtype == numpy.dtype('int32'):
-                        tensor_type = c_byte(0)
+                        dtype = greycat.std.core.TensorType.i32(greycat_)
+                        format_ = "=i"
                     elif nda.dtype == numpy.dtype('int64'):
-                        tensor_type = c_byte(1)
+                        dtype = greycat.std.core.TensorType.i64(greycat_)
+                        format_ = "=q"
                     elif nda.dtype == numpy.dtype('float32'):
-                        tensor_type = c_byte(2)
+                        dtype = greycat.std.core.TensorType.f32(greycat_)
+                        format_ = "=f"
                     elif nda.dtype == numpy.dtype('float64'):
-                        tensor_type = c_byte(3)
+                        dtype = greycat.std.core.TensorType.f64(greycat_)
+                        format_ = "=d"
                     elif nda.dtype == numpy.dtype('complex64'):
-                        tensor_type = c_byte(4)
+                        dtype = greycat.std.core.TensorType.c64(greycat_)
+                        format_ = "=ff"
                     elif nda.dtype == numpy.dtype('complex128'):
-                        tensor_type = c_byte(5)
+                        dtype = greycat.std.core.TensorType.c128(greycat_)
+                        format_ = "=dd"
                     else:
                         raise ValueError(f"Only int, float and complex dtypes are allowed: {nda.dtype}")
-                    type_: GreyCat.Type = greycat.types_by_name["core::Tensor"]
+                    type_: GreyCat.Type = greycat_.types_by_name["core::Tensor"]
                     tensor: std_n.core._Tensor = type_.factory(type_, None)
                     tensor.shape = [c_uint32(dim) for dim in nda.shape]
-                    tensor.tensor_type = tensor_type
-                    tensor.data = nda.tobytes("C")
+                    tensor.tensor_type = c_byte(dtype.offset)
+                    tensor.dtype = dtype
+                    tensor.format = format_
+                    tensor.data = nda.tobytes()
                     tensor.size = len(tensor.data)
                     return tensor
 
                 if "tensorflow" in sys.modules:
                     def to_tf_tensor(self) -> tensorflow.Tensor:
                         dtype: numpy.dtype
-                        tensor_type_value: Final[int] = self.tensor_type.value
-                        if tensor_type_value == 0:
+                        if self.dtype == greycat.std.core.TensorType.i32(self.type_.greycat):
                             dtype = numpy.dtype('int32')
-                        elif tensor_type_value == 1:
+                        elif self.dtype == greycat.std.core.TensorType.i64(self.type_.greycat):
                             dtype = numpy.dtype('int64')
-                        elif tensor_type_value == 2:
+                        elif self.dtype == greycat.std.core.TensorType.f32(self.type_.greycat):
                             dtype = numpy.dtype('float32')
-                        elif tensor_type_value == 3:
+                        elif self.dtype == greycat.std.core.TensorType.f64(self.type_.greycat):
                             dtype = numpy.dtype('float64')
-                        elif tensor_type_value == 4:
+                        elif self.dtype == greycat.std.core.TensorType.c64(self.type_.greycat):
                             dtype = numpy.dtype('complex64')
-                        elif tensor_type_value == 5:
+                        elif self.dtype == greycat.std.core.TensorType.c128(self.type_.greycat):
                             dtype = numpy.dtype('complex128')
                         else:
                             raise ValueError(f"${self.tensor_type}")
@@ -1547,51 +1570,25 @@ class std_n:
             if "torch" in sys.modules:
                 def to_torch_tensor(self, requires_grad: bool = False) -> torch.Tensor:
                     dtype: torch.dtype
-                    tensor_type_value: Final[int] = self.tensor_type.value
-                    if tensor_type_value == 0:
+                    if self.dtype == greycat.std.core.TensorType.i32(self.type_.greycat):
                         dtype = torch.int32
-                    elif tensor_type_value == 1:
+                    elif self.dtype == greycat.std.core.TensorType.i64(self.type_.greycat):
                         dtype = torch.int64
-                    elif tensor_type_value == 2:
+                    elif self.dtype == greycat.std.core.TensorType.f32(self.type_.greycat):
                         dtype = torch.float32
-                    elif tensor_type_value == 3:
+                    elif self.dtype == greycat.std.core.TensorType.f64(self.type_.greycat):
                         dtype = torch.float64
-                    elif tensor_type_value == 4:
+                    elif self.dtype == greycat.std.core.TensorType.c64(self.type_.greycat):
                         dtype = torch.complex64
-                    elif tensor_type_value == 5:
+                    elif self.dtype == greycat.std.core.TensorType.c128(self.type_.greycat):
                         dtype = torch.complex128
                     else:
                         raise ValueError(f"${self.tensor_type}")
                     return torch.frombuffer(self.data, dtype=dtype, requires_grad=requires_grad).reshape([dim.value for dim in self.shape])
 
-                # @staticmethod
-                # def from_torch_tensor(greycat: GreyCat, torch_tensor: torch.Tensor) -> std_n.core._Table:
-                #     if torch_tensor.dtype in (torch.uint8, torch.int8, torch.int16):
-                #         torch_tensor = torch_tensor.type(torch.int32)
-                #     elif torch_tensor.dtype in (torch.float16, torch.bfloat16):
-                #         torch_tensor = torch_tensor.type(torch.float32)
-                #     tensor_type: c_byte
-                #     if torch_tensor.dtype == torch.int32:
-                #         tensor_type = c_byte(0)
-                #     elif torch_tensor.dtype == torch.int64:
-                #         tensor_type = c_byte(1)
-                #     elif torch_tensor.dtype == torch.float32:
-                #         tensor_type = c_byte(2)
-                #     elif torch_tensor.dtype == torch.float64:
-                #         tensor_type = c_byte(3)
-                #     elif torch_tensor.dtype == torch.complex64:
-                #         tensor_type = c_byte(4)
-                #     elif torch_tensor.dtype == torch.complex128:
-                #         tensor_type = c_byte(5)
-                #     else:
-                #         raise ValueError(f"Only int, float and complex dtypes are allowed: {torch_tensor.dtype}")
-                #     type_: GreyCat.Type = greycat.types_by_name["core::Tensor"]
-                #     tensor: std_n.core._Tensor = type_.factory(type_, None)
-                #     tensor.shape = [c_uint32(dim) for dim in torch_tensor.shape]
-                #     tensor.tensor_type = tensor_type
-                #     tensor.data = bytes(torch_tensor.flatten())
-                #     tensor.size = len(tensor.data)
-                #     return tensor
+                @staticmethod
+                def from_torch_tensor(greycat: GreyCat, torch_tensor: torch.Tensor) -> std_n.core._Table:
+                    pass
 
         class _nodeIndexBucket(GreyCat.Object):
             def __init__(type: GreyCat.Type) -> None:

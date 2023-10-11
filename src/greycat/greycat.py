@@ -976,7 +976,7 @@ class GreyCat:
     class Enum(Object):
         def __init__(self, type: GreyCat.Type, attributes: List[Any]) -> None:
             super().__init__(type, attributes)
-            self.__offset: Final[int] = attributes[0]
+            self.offset: Final[int] = attributes[0]
             self.key: Final[str] = attributes[1]
             self.value: Any = attributes[2]
 
