@@ -992,7 +992,7 @@ class GreyCat:
 
         @final
         def _save(self, stream: GreyCat._Stream) -> None:
-            stream.write_vu32(c_uint32(self.__offset))
+            stream.write_vu32(c_uint32(self.offset))
 
         def __str__(self) -> str:
             if self.value is None:
@@ -1025,8 +1025,11 @@ class GreyCat:
     class Files:  # TODO?
         pass
 
-    def __init__(self: GreyCat, url: str, libraries: List[GreyCat.Library] = []) -> None:
-        self.token: str | None = None
+    def __init__(self: GreyCat, url: str, libraries: List[GreyCat.Library] = [], username: str | None = None, password: str | None = None, use_cookie: bool = False) -> None:
+        self.__runtime_url: Final[str] = url
+        self.__token: str | None = None
+        if username is not None and password is not None:
+            self.login(username, password, use_cookie)
         self.libs_by_name: Final[dict[str, GreyCat.Library]] = {}
         std_: greycat.std = greycat.std()
         self.libs_by_name[std_.name()] = std_
@@ -1040,7 +1043,6 @@ class GreyCat:
         factories: Final[dict[str, GreyCat.Factory]] = {}
         for lib in self.libs_by_name.values():
             lib.configure(loaders, factories)
-        self.__runtime_url: Final[str] = url
         abi_stream: Final[GreyCat._Stream] = self.__get_abi(url)
 
         # step 0: verify abi version
@@ -1279,8 +1281,8 @@ class GreyCat:
             "Content-Type": "application/octet-stream",
             "Accept": "application/octet-stream",
         }
-        if self.token is not None:
-            headers["Authorization"] = self.token
+        if self.__token is not None:
+            headers["Authorization"] = self.__token
         connection.request(
             "POST",
             fqn,
@@ -1291,7 +1293,7 @@ class GreyCat:
         status: int = response.status
         stream = GreyCat._Stream(self, response)
         if 200 > status or 300 <= status:
-            raise RuntimeError(str(stream.read()))
+            raise RuntimeError(f'HTTP {status}: {response.reason}"')
         stream.read_abi_header()
         res = stream.read()
         # if len(response.read(1)) > 0:
@@ -1314,8 +1316,8 @@ class GreyCat:
         headers: dict[str, str] = {
             "Accept": "application/octet-stream",
         }
-        if self.token is not None:
-            headers["Authorization"] = self.token
+        if self.__token is not None:
+            headers["Authorization"] = self.__token
         connection.request(
             "GET",
             path,
@@ -1326,7 +1328,7 @@ class GreyCat:
         status: int = response.status
         stream = GreyCat._Stream(self, response)
         if 200 > status or 300 <= status:
-            raise RuntimeError(str(stream.read()))
+            raise RuntimeError(f'HTTP {status}: {response.reason}"')
         stream.read_abi_header()
         res = stream.read()
         # if len(response.read(1)) > 0:
@@ -1348,8 +1350,10 @@ class GreyCat:
             raise ValueError
         credentials = base64.b64encode(f"{username}:{hashlib.sha256(password.encode('utf-8')).hexdigest()}".encode("utf-8")).decode("utf-8")
         body = json.dumps([credentials, use_cookie])
+        print(f"DEBUG: {body}")
         connection.request(
             "POST",
+            "runtime::User::login",
             body,
             {
                 "Content-Type": "application/json",
@@ -1359,8 +1363,9 @@ class GreyCat:
         response: http.client.HTTPResponse = connection.getresponse()
         status: int = response.status
         if 200 > status or 300 <= status:
-            raise RuntimeError(f"Unable to login ({status}: {response.reason})")
-        self.token = json.loads(response.read().decode("utf-8"))
+            raise RuntimeError(f'HTTP {status}: {response.reason}"')
+        self.__token = json.loads(response.read().decode("utf-8"))
+        print(f"DEBUG: {self.__token}")
 
     def load(self, path: str) -> object:
         with open(path, 'rb') as fin:
@@ -1408,8 +1413,9 @@ class GreyCat:
         headers: dict[str, str] = {
             "Accept": "application/octet-stream",
         }
-        if self.token is not None:
-            headers["Authorization"] = self.token
+        if self.__token is not None:
+            headers["Authorization"] = self.__token
+        print(f"DEBUG: {headers}")
         connection.request(
             "POST",
             "runtime::Runtime::abi",
@@ -1419,12 +1425,7 @@ class GreyCat:
         response: http.client.HTTPResponse = connection.getresponse()
         status: int = response.status
         if 200 > status or 300 <= status:
-            msg = f'{status}: "'
-            line: bytes = response.readline()
-            while len(line) > 0:
-                msg = f"{msg}{line.decode()}\n"
-                line = response.readline()
-            raise RuntimeError(f'{msg}"')
+            raise RuntimeError(f'HTTP {status}: {response.reason}"')
         self.__is_remote = True
         return GreyCat._Stream(self, response)
 

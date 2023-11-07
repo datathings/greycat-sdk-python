@@ -21,6 +21,17 @@ fn fail() {
 }
 
 fn main() {
+  var user: User = User {
+    id: 0,
+    name: "admin",
+    activated: true,
+    external: false,
+    role: "user",
+  };
+  SecurityEntity::set(user);
+  info(Crypto::sha256hex("admin"));
+  User::setPassword(user.name, Crypto::sha256hex("admin"));
+
   var out = GcbWriter::new("out.gcb");
   write_std(out);
 }
@@ -252,12 +263,12 @@ fn write_runtime(out: GcbWriter) {
       name: "",
       permissions: [],
     });
-  out.write(PeriodicTask {
-      name: "",
-      user_id: 12,
-      start: 13_time,
-      every: duration::new(37, DurationUnit::microseconds),
-    });
+  // out.write(PeriodicTask {
+  //     name: "",
+  //     user_id: 12,
+  //     start: 13_time,
+  //     every: duration::new(37, DurationUnit::microseconds),
+  //   });
   out.write(User {
       id: 12,
       name: "",
@@ -302,7 +313,7 @@ fn write_util(out: GcbWriter) {
   out.write(Buffer::new());
   out.write(Assert {});
   out.write(ProgressTracker { start: 0_time });
-  out.write(Iban::new(""));
+  // out.write(Iban::new(""));
   out.write(Gaussian {});
   // out.write(Quantizer::new()); // unsupported
   out.write(GaussianProfile::new(0));
