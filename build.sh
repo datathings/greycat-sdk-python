@@ -9,4 +9,6 @@ sed -i -e "s/version=\"0.0.0\",/version=\"${VERSION}\",/" setup.py
 
 python -m build -w
 
-mv "dist/GreyCat-${VERSION}-py3-none-any.whl" "dist/greycat-${VERSION}-py3-none-any.whl"
+PY_BUILT_VERSION=$(echo ${VERSION} | sed 's/-/./g')
+
+mv "dist/GreyCat-${PY_BUILT_VERSION}-py3-none-any.whl" "dist/greycat-${VERSION}-py3-none-any.whl"
