@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+import base64
 from ctypes import *
+import hashlib
 import http.client
 from io import *
 from itertools import repeat
+import json
 import os
 import socket
 from struct import pack, unpack
@@ -61,7 +64,7 @@ class GreyCat:
     class SocketServer:
         __ip: str = '127.0.0.1'
 
-        def __init__(self, greycat: GreyCat, port_path: str = "gcdata/python-server") -> None:
+        def __init__(self: GreyCat.SocketServer, greycat: GreyCat, port_path: str = "gcdata/python-server") -> None:
             sock: socket.socket
             port: int
             for port in range(49_152, 65_536):
@@ -102,7 +105,7 @@ class GreyCat:
 
     @final
     class AbiReader:
-        def __init__(self, stream: GreyCat._Stream) -> None:
+        def __init__(self: GreyCat.AbiReader, stream: GreyCat._Stream) -> None:
             self.__stream: GreyCat._Stream = stream
 
         def read(self) -> Any:
@@ -113,7 +116,7 @@ class GreyCat:
 
     @final
     class AbiWriter:
-        def __init__(self, stream: GreyCat._Stream) -> None:
+        def __init__(self: GreyCat.AbiWriter, stream: GreyCat._Stream) -> None:
             self.__stream: GreyCat._Stream = stream
 
         def write(self, object: Any) -> None:
@@ -134,7 +137,7 @@ class GreyCat:
         __ASCII_MAX: Final[c_ubyte] = c_ubyte(127)
 
         def __init__(
-            self, greycat: GreyCat, io: BufferedReader | BufferedWriter | socket.SocketIO
+            self: GreyCat._Stream, greycat: GreyCat, io: BufferedReader | BufferedWriter | socket.SocketIO
         ) -> None:
             self.greycat: Final[GreyCat] = greycat
             self._io: BufferedReader | BufferedWriter | socket.SocketIO = io
@@ -655,13 +658,13 @@ class GreyCat:
         _PRIMITIVE_LOADERS[PrimitiveType.STRING_LIT.value] = __string_lit_loader
 
     class Function:
-        def __init__(self, name: str) -> None:
+        def __init__(self: GreyCat.Function, name: str) -> None:
             self.name: Final[str] = name
 
     class Type:
         class Attribute:
             def __init__(
-                self,
+                self: GreyCat.Type.Attribute,
                 name: str,
                 abi_type: int,
                 prog_type_offset: int,
@@ -742,7 +745,7 @@ class GreyCat:
                 return program_type.factory(program_type, attributes)
 
         def __init__(
-            self,
+            self: GreyCat.Type,
             offset: int,
             name: str,
             mapped_type_off: int,
@@ -829,7 +832,7 @@ class GreyCat:
                 self.enum_values[resolved].value = args[name_offset + 1]
 
     class Object:
-        def __init__(self, type: GreyCat.Type, attributes: List[Any] | None) -> None:
+        def __init__(self: GreyCat.Object, type: GreyCat.Type, attributes: List[Any] | None) -> None:
             self.type_: Final[GreyCat.Type] = type
             self.attributes: List[Any] | None = attributes
 
@@ -976,7 +979,7 @@ class GreyCat:
             return res
 
     class Enum(Object):
-        def __init__(self, type: GreyCat.Type, attributes: List[Any]) -> None:
+        def __init__(self: GreyCat.Enum, type: GreyCat.Type, attributes: List[Any]) -> None:
             super().__init__(type, attributes)
             self.offset: Final[int] = attributes[0]
             self.key: Final[str] = attributes[1]
@@ -1003,7 +1006,7 @@ class GreyCat:
     ]
 
     class Library:
-        def __init__(self) -> None:
+        def __init__(self: GreyCat.Library) -> None:
             self.mapped: List[GreyCat.Type] | None = None
 
         def name(self) -> str:
@@ -1022,7 +1025,8 @@ class GreyCat:
     class Files:  # TODO?
         pass
 
-    def __init__(self, url: str, libraries: List[GreyCat.Library] = []) -> None:
+    def __init__(self: GreyCat, url: str, libraries: List[GreyCat.Library] = []) -> None:
+        self.token: str | None = None
         self.libs_by_name: Final[dict[str, GreyCat.Library]] = {}
         std_: greycat.std = greycat.std()
         self.libs_by_name[std_.name()] = std_
@@ -1271,14 +1275,17 @@ class GreyCat:
                 stream.write(parameter)
             stream.close()
             body: bytes = bytes(b)
+        headers: dict[str, str] = {
+            "Content-Type": "application/octet-stream",
+            "Accept": "application/octet-stream",
+        }
+        if self.token is not None:
+            headers["Authorization"] = self.token
         connection.request(
             "POST",
             fqn,
             body,
-            {
-                "Accept": "application/octet-stream",
-                "Content-Type": "application/octet-stream",
-            },
+            headers,
         )
         response: http.client.HTTPResponse = connection.getresponse()
         status: int = response.status
@@ -1304,11 +1311,16 @@ class GreyCat:
             )
         else:
             raise ValueError
+        headers: dict[str, str] = {
+            "Accept": "application/octet-stream",
+        }
+        if self.token is not None:
+            headers["Authorization"] = self.token
         connection.request(
             "GET",
             path,
             None,
-            {"Accept": "application/octet-stream"},
+            headers
         )
         response: http.client.HTTPResponse = connection.getresponse()
         status: int = response.status
@@ -1321,6 +1333,34 @@ class GreyCat:
         #     raise IOError('Remaining unread bytes')
         stream.close()
         return res
+
+    def login(self, username: str, password: str, use_cookie: bool = False) -> None:
+        connection: http.client.HTTPConnection | http.client.HTTPSConnection
+        if self.__runtime_url.startswith("http://"):
+            connection: http.client.HTTPConnection = http.client.HTTPConnection(
+                self.__runtime_url.replace("http://", "")
+            )
+        elif self.__runtime_url.startswith("https://"):
+            connection: http.client.HTTPSConnection = http.client.HTTPSConnection(
+                self.__runtime_url.replace("https://", "")
+            )
+        else:
+            raise ValueError
+        credentials = base64.b64encode(f"{username}:{hashlib.sha256(password.encode('utf-8')).hexdigest()}".encode("utf-8")).decode("utf-8")
+        body = json.dumps([credentials, use_cookie])
+        connection.request(
+            "POST",
+            body,
+            {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+        )
+        response: http.client.HTTPResponse = connection.getresponse()
+        status: int = response.status
+        if 200 > status or 300 <= status:
+            raise RuntimeError(f"Unable to login ({status}: {response.reason})")
+        self.token = json.loads(response.read())
 
     def load(self, path: str) -> object:
         with open(path, 'rb') as fin:
@@ -1365,11 +1405,16 @@ class GreyCat:
             )
         else:
             raise ValueError
+        headers: dict[str, str] = {
+            "Accept": "application/octet-stream",
+        }
+        if self.token is not None:
+            headers["Authorization"] = self.token
         connection.request(
             "POST",
             "runtime::Runtime::abi",
             None,
-            {"Accept": "application/octet-stream"},
+            headers,
         )
         response: http.client.HTTPResponse = connection.getresponse()
         status: int = response.status
