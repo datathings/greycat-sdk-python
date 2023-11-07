@@ -1360,7 +1360,7 @@ class GreyCat:
         status: int = response.status
         if 200 > status or 300 <= status:
             raise RuntimeError(f"Unable to login ({status}: {response.reason})")
-        self.token = json.loads(response.read())
+        self.token = json.loads(response.read().decode("utf-8"))
 
     def load(self, path: str) -> object:
         with open(path, 'rb') as fin:
