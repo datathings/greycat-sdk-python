@@ -8,7 +8,7 @@ from typing import *
 
 from greycat import *
 
-greycat: GreyCat = GreyCat("http://localhost:8080")
+greycat: GreyCat = GreyCat("http://localhost:8080", username="admin", password="admin")
 gcb: list[Any | None] = greycat.call("project::get_gcb", [])
 for v in gcb:
     print(greycat.call("project::display", [v]))
