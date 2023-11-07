@@ -1207,10 +1207,10 @@ class std_n:
                     stream.write_bool(col_meta.meta_index)
                     if col_meta.col_type in [PrimitiveType.OBJECT, PrimitiveType.ENUM]:
                         stream.write_vu32(col_meta.type)
-                    if len(col_meta.header > 0):
-                        col_meta_header_bytes = str.encode("utf-8")
+                    if len(col_meta.header) > 0:
+                        col_meta_header_bytes = col_meta.header.encode("utf-8")
                         stream.write_vu32(c_uint32(len(col_meta_header_bytes)))
-                        stream.write_i8_array(col_meta.header_bytes, 0, len(col_meta_header_bytes))
+                        stream.write_i8_array(col_meta_header_bytes, 0, len(col_meta_header_bytes))
                     else:
                         stream.write_vu32(c_uint32(0))
                 col: int
