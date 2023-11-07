@@ -1206,6 +1206,9 @@ class std_n:
                     stream.write_bool(col_meta.meta_index)
                     if col_meta.col_type in [PrimitiveType.OBJECT, PrimitiveType.ENUM]:
                         stream.write_vu32(col_meta.type)
+                    stream.write_vu32(c_uint32(len(col_meta.header)))
+                    if len(col_meta.header > 0):
+                        stream.write_i8_array(col_meta.header, 0, len(col_meta.header))
                 col: int
                 row: int
                 o: GreyCat.Object
@@ -1248,6 +1251,8 @@ class std_n:
                 meta_col_type: c_ubyte
                 meta_index: bool
                 meta_type: c_uint32
+                meta_header_len: int
+                meta_header: bytes
                 for _ in repeat(None, cols):
                     meta_col_type = stream.read_i8()
                     meta_index = stream.read_bool()
@@ -1259,11 +1264,17 @@ class std_n:
                         meta_type = stream.read_vu32()
                     else:
                         meta_type = c_uint32(0)
+                    meta_header_len = stream.read_vu32().value
+                    if meta_header_len > 0:
+                        meta_header = stream.read_i8_array(meta_header_len)
+                    else:
+                        meta_header = bytes([])
                     meta.append(
                         std_n.core._Table.TableColumnMeta(
-                            meta_col_type, meta_type, meta_index
+                            meta_col_type, meta_type, meta_index, meta_header
                         )
                     )
+                    
                 data: list[Any] = []
                 col: int
                 greycat_type: GreyCat.Type
@@ -1318,11 +1329,12 @@ class std_n:
 
             class TableColumnMeta:
                 def __init__(
-                    self, col_type: c_ubyte, type: c_uint32, index: bool
+                    self, col_type: c_ubyte, type: c_uint32, index: bool, header: bytes
                 ) -> None:
                     self.col_type: Final[c_ubyte] = col_type
                     self.type: Final[c_uint32] = type
                     self.meta_index: Final[bool] = index
+                    self.header: Final[bytes] = header
 
             if "numpy" in sys.modules:
                 def to_numpy(self) -> numpy.ndarray:
