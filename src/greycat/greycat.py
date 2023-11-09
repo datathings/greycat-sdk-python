@@ -1350,7 +1350,6 @@ class GreyCat:
             raise ValueError
         credentials = base64.b64encode(f"{username}:{hashlib.sha256(password.encode('utf-8')).hexdigest()}".encode("utf-8")).decode("utf-8")
         body = json.dumps([credentials, use_cookie])
-        print(f"DEBUG: {body}")
         connection.request(
             "POST",
             "runtime::User::login",
@@ -1365,7 +1364,6 @@ class GreyCat:
         if 200 > status or 300 <= status:
             raise RuntimeError(f'HTTP {status}: {response.reason}"')
         self.__token = json.loads(response.read().decode("utf-8"))
-        print(f"DEBUG: {self.__token}")
 
     def load(self, path: str) -> object:
         with open(path, 'rb') as fin:
@@ -1415,7 +1413,6 @@ class GreyCat:
         }
         if self.__token is not None:
             headers["Authorization"] = self.__token
-        print(f"DEBUG: {headers}")
         connection.request(
             "POST",
             "runtime::Runtime::abi",
