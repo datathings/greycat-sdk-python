@@ -1401,7 +1401,7 @@ class std_n:
                     if not hasattr(table, "meta"):
                         table.meta: list[std_n.core._Table.TableColumnMeta] = [
                             std_n.core._Table.TableColumnMeta(
-                                PrimitiveType.UNDEFINED, c_uint32(0), False
+                                PrimitiveType.UNDEFINED, c_uint32(0), False, ""
                             )
                             for _ in repeat(None, table.cols)
                         ]
