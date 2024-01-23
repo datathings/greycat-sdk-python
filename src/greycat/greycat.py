@@ -1375,7 +1375,7 @@ class GreyCat:
         type: Final[GreyCat.Type | None] = self.types_by_name[name]
         if type is None:
             return None
-        return type.factory[type, parameters]
+        return type.factory(type, parameters)
 
     def create_geo(self, lat: c_double, lng: c_double):
         type: GreyCat.Type = self.types[self.type_offset_core_geo]
