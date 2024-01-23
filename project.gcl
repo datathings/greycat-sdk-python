@@ -1,6 +1,6 @@
-@library("std", "6.1.82-dev");
+//@library("std", "6.1.82-dev");
 
-// @library("algebra");
+@library("algebra");
 // @library("decisiontrees"); // Non-existent
 // @library("network");
 // @library("patterns");
