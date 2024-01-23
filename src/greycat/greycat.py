@@ -1385,13 +1385,13 @@ class GreyCat:
         return geo
 
     def create_time(self, epoch_us: c_int64):
-        type: GreyCat.Type = self.types[self.type_offset_core_geo]
+        type: GreyCat.Type = self.types[self.type_offset_core_time]
         t: greycat.std.core.time = type.factory(type, [])
         t.value = epoch_us
         return t
 
     def create_duration(self, duration_us: c_int64):
-        type: GreyCat.Type = self.types[self.type_offset_core_geo]
+        type: GreyCat.Type = self.types[self.type_offset_core_duration]
         dur: greycat.std.core.duration = type.factory(type, [])
         dur.value = duration_us
         return dur
