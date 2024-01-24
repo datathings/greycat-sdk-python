@@ -1034,7 +1034,7 @@ class std_n:
 
             @staticmethod
             def from_list(greycat: GreyCat, l: list) -> std_n.core._Array:
-                array: std_n.core._Array = std_n.core._Array(greycat.types["core::Array"])
+                array: std_n.core._Array = std_n.core._Array(greycat.types_by_name["core::Array"])
                 array.extend(l)
                 return array
 
