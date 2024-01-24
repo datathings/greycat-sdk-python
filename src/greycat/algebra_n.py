@@ -7,7 +7,7 @@ from . import GreyCat, PrimitiveType, std
 
 class algebra_n:
     class powerflow:
-        class PowerNetwork(GreyCat.Object):
+        class _PowerNetwork(GreyCat.Object):
             def __init__(self: algebra_n.powerflow.PowerNetwork, type: GreyCat.Type) -> None:
                 super(type, None)
                 raise NotImplementedError
@@ -16,7 +16,7 @@ class algebra_n:
                 raise NotImplementedError
 
     class compute:
-        class ComputeState(GreyCat.Object):
+        class _ComputeState(GreyCat.Object):
             def __init__(self: algebra_n.compute.ComputeState, type: GreyCat.Type) -> None:
                 super(type, None)
                 raise NotImplementedError
@@ -24,7 +24,7 @@ class algebra_n:
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> object:
                 raise NotImplementedError
 
-        class ComputeEngine(GreyCat.Object):
+        class _ComputeEngine(GreyCat.Object):
             def __init__(self: algebra_n.compute.ComputeEngine, type: GreyCat.Type) -> None:
                 super(type, None)
                 raise NotImplementedError
@@ -33,8 +33,8 @@ class algebra_n:
                 raise NotImplementedError
 
     class ml:
-        class Polynomial(GreyCat.Object):
-            def __init__(self: algebra_n.ml.Polynomial, type: GreyCat.Type) -> None:
+        class _Polynomial(GreyCat.Object):
+            def __init__(self: algebra_n.ml._Polynomial, type: GreyCat.Type) -> None:
                 super(type, None)
                 self.degree: c_byte
                 self.x_start: c_double
@@ -42,7 +42,7 @@ class algebra_n:
                 self.tensor_type: c_byte
                 self.data: bytes
 
-            def _save(self: algebra_n.ml.Polynomial, stream: GreyCat._Stream) -> None:
+            def _save(self: algebra_n.ml._Polynomial, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.OBJECT)
                 stream.write_i32(self.type_.offset)
                 stream.write_i8(self.degree)
@@ -60,7 +60,7 @@ class algebra_n:
                 xStep: c_double = stream.read_f64()
                 tensorType: c_byte = stream.read_i8()
                 data: bytes = stream.read_i8_array(coefficientSize)
-                poly: algebra_n.ml.Polynomial = type.factory(type)
+                poly: algebra_n.ml._Polynomial = type.factory(type)
                 poly.degree = degree
                 poly.x_start = xStart
                 poly.x_step = xStep
@@ -68,7 +68,7 @@ class algebra_n:
                 poly.data = data
                 return poly
 
-        class PCA(GreyCat.Object):
+        class _PCA(GreyCat.Object):
             def __init__(self: algebra_n.ml.PCA, type: GreyCat.Type) -> None:
                 super(type, None)
                 self.__bestDim: c_int32
@@ -129,7 +129,7 @@ class algebra_n:
                 pca.__dimInfo = dimInfo
                 return pca
 
-        class GaussianND(GreyCat.Object):
+        class _GaussianND(GreyCat.Object):
             def __init__(self: algebra_n.ml.GaussianND, type: GreyCat.Type) -> None:
                 super(type, None)
                 self.__count: c_int64
