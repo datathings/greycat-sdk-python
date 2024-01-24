@@ -1026,8 +1026,17 @@ class std_n:
                     res = f"{res}{self.attributes[offset]}"
                 return f"{res}]"
 
-            def append(self, __value):
+            def append(self, __value) -> None:
                 self.attributes.append(__value)
+
+            def extend(self, __iterable: Iterable) -> None:
+                self.attributes.extend(__iterable)
+
+            @staticmethod
+            def from_list(greycat: GreyCat, l: list) -> std_n.core._Array:
+                array: std_n.core._Array = std_n.core._Array(greycat.types["core::Array"])
+                array.extend(l)
+                return array
 
         class _Date(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
@@ -1278,7 +1287,7 @@ class std_n:
                             meta_col_type, meta_type, meta_index, meta_header
                         )
                     )
-                    
+
                 data: list[Any] = []
                 col: int
                 greycat_type: GreyCat.Type
