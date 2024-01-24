@@ -1292,10 +1292,10 @@ class GreyCat:
         response: http.client.HTTPResponse = connection.getresponse()
         status: int = response.status
         stream = GreyCat._Stream(self, response)
-        if 200 > status or 300 <= status:
-            raise RuntimeError(f'HTTP {status}: {response.reason}"')
         stream.read_abi_header()
         res = stream.read()
+        if 200 > status or 300 <= status:
+            raise RuntimeError(f'HTTP {status}: {response.reason}\n\t{res}"')
         # if len(response.read(1)) > 0:
         #     raise IOError('Remaining unread bytes')
         stream.close()
