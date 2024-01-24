@@ -1391,7 +1391,7 @@ class std_n:
                     else:
                         raise ValueError(f"Unknow dtype: {nda.dtype}")
                     table.rows = nda.shape[0]
-                    table.cols = nda.shape[1] if len(nda.shape) <= 0 else 0
+                    table.cols = nda.shape[1]
                     nda_dtype: Final[numpy.dtype] = nda.dtype
                     if (
                         isinstance(nda_dtype.metadata, MappingProxyType)
