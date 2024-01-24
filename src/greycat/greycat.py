@@ -1292,10 +1292,10 @@ class GreyCat:
         response: http.client.HTTPResponse = connection.getresponse()
         status: int = response.status
         stream = GreyCat._Stream(self, response)
-        if 200 > status or 300 <= status:
-            raise RuntimeError(f'HTTP {status}: {response.reason}"')
         stream.read_abi_header()
         res = stream.read()
+        if 200 > status or 300 <= status:
+            raise RuntimeError(f'HTTP {status}: {response.reason}\n\t{res}"')
         # if len(response.read(1)) > 0:
         #     raise IOError('Remaining unread bytes')
         stream.close()
@@ -1375,7 +1375,7 @@ class GreyCat:
         type: Final[GreyCat.Type | None] = self.types_by_name[name]
         if type is None:
             return None
-        return type.factory[type, parameters]
+        return type.factory(type, parameters)
 
     def create_geo(self, lat: c_double, lng: c_double):
         type: GreyCat.Type = self.types[self.type_offset_core_geo]
@@ -1385,13 +1385,13 @@ class GreyCat:
         return geo
 
     def create_time(self, epoch_us: c_int64):
-        type: GreyCat.Type = self.types[self.type_offset_core_geo]
+        type: GreyCat.Type = self.types[self.type_offset_core_time]
         t: greycat.std.core.time = type.factory(type, [])
         t.value = epoch_us
         return t
 
     def create_duration(self, duration_us: c_int64):
-        type: GreyCat.Type = self.types[self.type_offset_core_geo]
+        type: GreyCat.Type = self.types[self.type_offset_core_duration]
         dur: greycat.std.core.duration = type.factory(type, [])
         dur.value = duration_us
         return dur
