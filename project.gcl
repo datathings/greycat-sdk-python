@@ -28,9 +28,9 @@ fn main() {
     external: false,
     role: "user",
   };
-  SecurityEntity::set(user);
+  /*SecurityEntity::set(user);*/
   info(Crypto::sha256hex("admin"));
-  User::setPassword(user.name, Crypto::sha256hex("changeme"));
+  /*User::setPassword(user.name, Crypto::sha256hex("changeme"));*/
 
   var out = GcbWriter::new("out.gcb");
   write_std(out);
@@ -232,7 +232,7 @@ fn write_runtime(out: GcbWriter) {
     });
   out.write(TaskStatus::cancelled);
   out.write(Runtime {});
-  out.write(RuntimeInfo {
+  /*out.write(RuntimeInfo {
       version: "",
       arch: "",
       timezone: TimeZone::Europe_Luxembourg,
@@ -248,7 +248,7 @@ fn write_runtime(out: GcbWriter) {
       mem_total: 12,
       mem_worker: 0,
       nb_ctx: 1,
-    });
+    });*/
   out.write(SecurityFields {});
   out.write(UserGroup {
       id: 12,
@@ -280,12 +280,12 @@ fn write_runtime(out: GcbWriter) {
       type: UserGroupPolicyType::execute,
     });
   out.write(UserGroupPolicyType::read);
-  out.write(License {
+  /*out.write(License {
       start: 13_time,
       end: 37_time,
       max_workers: 12,
       max_memory: 42,
-    });
+    });*/
   out.write(StoreStat {
       capacity_bytes: 13,
       allocated_bytes: 37,
