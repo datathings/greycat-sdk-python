@@ -109,8 +109,8 @@ fn write_core(out: GcbWriter) {
   out.write(13.37);
   out.write("Hello world");
   out.write("${"Not"} ${"a"} ${"symbol"}");
-  out.write(42_geo);
-  out.write(GeoBox::new(13_geo, 37_geo));
+  out.write(42_lat_12_lng);
+  out.write(GeoBox::new(13_lat_37_lng, 42_lat_12_lng));
   out.write(nodeList<int>::new());
   out.write(TimeZone::Europe_Luxembourg);
   out.write(node<float>::new(13.37));
@@ -137,7 +137,7 @@ fn write_core(out: GcbWriter) {
   //   }
   // }
   // out.write(tensor);
-  out.write(GeoCircle::new(42_geo, 13.37));
+  out.write(GeoCircle::new(42_lat_12_lng, 13.37));
   out.write(Date::new(2012, 12, 12, 12, 12, 12, 12, TimeZone::Europe_Luxembourg));
   out.write(Map<geo, time>::new());
   var map = Map::new();
@@ -147,13 +147,13 @@ fn write_core(out: GcbWriter) {
   out.write(nodeTime<nodeGeo>::new());
   out.write(Array<nodeTime>::new(0));
   out.write([
-      null, true, '*', 12, 13.37, "Hello world", 42_geo, GeoBox::new(13_geo, 37_geo), nodeList<int>::new(),
+      null, true, '*', 12, 13.37, "Hello world", 42_lat_12_lng, GeoBox::new(13_lat_37_lng, 42_lat_12_lng), nodeList<int>::new(),
       TimeZone::Europe_Luxembourg, node<float>::new(13.37), Error::new(""),
       duration::new(12, DurationUnit::microseconds), nodeTime<nodeGeo>::new()
     ]);
   out.write(Tuple<Array, Map>::new(Array::new(0), Map::new()));
   out.write(nodeIndex<Tuple>::new());
-  out.write(GeoPoly { points: [13_geo, 37_geo, 13_geo] });
+  out.write(GeoPoly { points: [13_lat_37_lng, 42_lat_12_lng, 13_lat_37_lng] });
   out.write(12_time);
   out.write(DatePart::days);
   out.write(nodeGeo<DatePart>::new());
