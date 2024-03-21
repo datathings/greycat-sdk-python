@@ -1436,7 +1436,7 @@ class std_n:
                             ]
                         ]
                     else:
-                        raise ValueError(f"Unknow dtype: {nda.dtype}")
+                        raise ValueError(f"Unknown dtype: {nda.dtype}")
                     table.rows = nda.shape[0]
                     table.cols = nda.shape[1]
                     nda_dtype: Final[numpy.dtype] = nda.dtype
@@ -1446,7 +1446,7 @@ class std_n:
                     ):
                         table.meta = nda_dtype.metadata["core::Table.meta"]
                     if not hasattr(table, "meta"):
-                        table.meta: list[std_n.core._Table.TableColumnMeta] = [
+                        table.meta = [
                             std_n.core._Table.TableColumnMeta(
                                 PrimitiveType.UNDEFINED, c_uint32(0), False, ""
                             )
