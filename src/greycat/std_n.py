@@ -1387,7 +1387,7 @@ class std_n:
                     elif nda.dtype is numpy.dtype(int):
                         table.data = [c_int64(elem) for elem in nda.flatten("F")]
                     elif nda.dtype is numpy.dtype(object):
-                        if len(filter(lambda elem: type(elem) is int and not -2 ** 63 <= elem < 2 ** 63)) > 0:
+                        if len(list(filter(lambda elem: type(elem) is int and not -2 ** 63 <= elem < 2 ** 63, nda))) > 0:
                             raise ValueError("Numpy array contains ints larger than max int64")
                         table.data = [
                             c_double(elem) if isinstance(elem, numpy.floating) or elem_type is float
