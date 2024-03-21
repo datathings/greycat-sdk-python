@@ -304,6 +304,9 @@ class std_n:
                 return res
 
             if "numpy" in sys.modules:
+                def to_numpy(self) -> numpy.datetime64:
+                    return numpy.datetime64(self.value.value, 'us')
+
                 @staticmethod
                 def from_numpy(greycat: GreyCat, dt: numpy.datetime64) -> std_n.core._time:
                     time = std_n.core._time(greycat.type_offset_core_time)
@@ -1384,6 +1387,7 @@ class std_n:
                     nda: numpy.ndarray = numpy.reshape(
                         [
                             elem.value if type(elem) in [c_double, c_int64]
+                            else elem.to_numpy() if isinstance(elem, std_n.core._time)
                             else elem
                             for elem in self.data
                         ],
