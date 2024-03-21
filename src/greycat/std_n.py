@@ -1382,11 +1382,11 @@ class std_n:
                 ) -> std_n.core._Table:
                     type_: GreyCat.Type = greycat.types_by_name["core::Table"]
                     table: std_n.core._Table = type_.factory(type_, None)
-                    if nda.dtype is numpy.dtype(float):
+                    if nda.dtype == numpy.dtype(float):
                         table.data = [c_double(elem) for elem in nda.flatten("F")]
-                    elif nda.dtype is numpy.dtype(int):
+                    elif nda.dtype == numpy.dtype(int):
                         table.data = [c_int64(elem) for elem in nda.flatten("F")]
-                    elif nda.dtype is numpy.dtype(object):
+                    elif nda.dtype == numpy.dtype(object):
                         if len(list(filter(lambda elem: type(elem) is int and not -2 ** 63 <= elem < 2 ** 63, nda))) > 0:
                             raise ValueError("Numpy array contains ints larger than max int64")
                         table.data = [
@@ -1424,7 +1424,28 @@ class std_n:
                     def from_pandas(
                         greycat: GreyCat, df: pandas.DataFrame
                     ) -> std_n.core._Table:
-                        return std_n.core._Table.from_numpy(greycat, df.to_numpy())
+                        nda = df.to_numpy()
+                        meta: list[std_n.core._Table.TableColumnMeta] = []
+                        dtype: numpy.dtype
+                        col_type: c_ubyte
+                        _type = c_uint32(PrimitiveType.UNDEFINED.value)
+                        index: bool = False
+                        header: str
+                        for typed_header in df.dtypes.items():
+                            dtype = typed_header[1]
+                            if dtype is numpy.dtype(float):
+                                col_type = PrimitiveType.FLOAT
+                            elif dtype is numpy.dtype(int):
+                                col_type = PrimitiveType.INT
+                            elif dtype is numpy.dtype(object):
+                                col_type = PrimitiveType.UNDEFINED
+                            # elif dtype is numpy.dtype(datetime64[s]):
+                            elif dtype is numpy.dtype(bool):
+                                col_type = PrimitiveType.BOOL
+                            header = typed_header[0]
+                            meta.append(std_n.core._Table.TableColumnMeta(col_type, _type, index, header))
+                        nda.dtype = numpy.dtype(nda.dtype.type, metadata = {"core::Table.meta": meta})
+                        return std_n.core._Table.from_numpy(greycat, nda)
 
                 if "tensorflow" in sys.modules:
                     def to_tf_tensor(self) -> tensorflow.Tensor:
