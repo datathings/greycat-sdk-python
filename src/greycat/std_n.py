@@ -182,7 +182,8 @@ class std_n:
                 geo.geocode = value
                 lat_offset: int
                 lng_offset: int
-                lat_offset, lng_offset = std_n.core._geo.__deinterleave64(value)
+                lat_offset, lng_offset = std_n.core._geo.__deinterleave64(
+                    value)
                 geo.lat = std_n.core._geo.__GC_CORE_GEO_LAT_MIN + (
                     (lat_offset + 0.5) / 4294967296
                 ) * (
@@ -302,6 +303,14 @@ class std_n:
                 res.value = stream.read_vi64()
                 return res
 
+            if "numpy" in sys.modules:
+                @staticmethod
+                def from_numpy(greycat: GreyCat, dt: numpy.datetime64) -> std_n.core._time:
+                    time = std_n.core._time(greycat.type_offset_core_time)
+                    time.value = c_int64(dt.astype(int)) if numpy.datetime_data(dt)[0] in [
+                        "us", "μs"] else c_int64(dt.astype("datetime64[us]").astype(int))
+                    return time
+
             def __str__(self) -> str:
                 return f"time{{timestamp: {int(self.value.value / 1_000_000)}, us_offset: {self.value.value % 1_000_000}}}"
 
@@ -359,7 +368,8 @@ class std_n:
             def __deinterleave(self, interleaved: c_int64) -> None:
                 dc: int = std_n.core._deinterleave64_2d(interleaved)
                 self.x0 = c_int32(dc + std_n.core._ti2d._INT32_MIN).value
-                self.x1 = c_int32((dc >> 32) + std_n.core._ti2d._INT32_MIN).value
+                self.x1 = c_int32(
+                    (dc >> 32) + std_n.core._ti2d._INT32_MIN).value
 
         class _ti3d(GreyCat.Object):
             _INT21_MIN: int = -1048575 - 1
@@ -411,11 +421,13 @@ class std_n:
                     + std_n.core._ti3d._INT21_MIN
                 )
                 self.x1 = (
-                    std_n.core._deinterleave64_3d(c_int64(interleaved.value >> 1))
+                    std_n.core._deinterleave64_3d(
+                        c_int64(interleaved.value >> 1))
                     + std_n.core._ti3d._INT21_MIN
                 )
                 self.x2 = (
-                    std_n.core._deinterleave64_3d(c_int64(interleaved.value >> 2))
+                    std_n.core._deinterleave64_3d(
+                        c_int64(interleaved.value >> 2))
                     + std_n.core._ti3d._INT21_MIN
                 )
 
@@ -462,7 +474,8 @@ class std_n:
 
             def __deinterleave(self, interleaved: c_int64) -> None:
                 x3120: int = std_n.core._deinterleave64_2d(interleaved)
-                x20: int = std_n.core._deinterleave64_2d(c_int64(x3120 & 0xFFFFFFFF))
+                x20: int = std_n.core._deinterleave64_2d(
+                    c_int64(x3120 & 0xFFFFFFFF))
                 x31: int = std_n.core._deinterleave64_2d(c_int64(x3120 >> 32))
                 self.x0 = (x20 & 0xFFFF) + std_n.core._ti4d._INT16_MIN
                 self.x1 = (x31 & 0xFFFF) + std_n.core._ti4d._INT16_MIN
@@ -522,19 +535,23 @@ class std_n:
                     + std_n.core._ti5d.__INT12_MIN
                 )
                 self.x1 = (
-                    std_n.core._deinterleave64_5d(c_int64(interleaved.value >> 1))
+                    std_n.core._deinterleave64_5d(
+                        c_int64(interleaved.value >> 1))
                     + std_n.core._ti5d.__INT12_MIN
                 )
                 self.x2 = (
-                    std_n.core._deinterleave64_5d(c_int64(interleaved.value >> 2))
+                    std_n.core._deinterleave64_5d(
+                        c_int64(interleaved.value >> 2))
                     + std_n.core._ti5d.__INT12_MIN
                 )
                 self.x3 = (
-                    std_n.core._deinterleave64_5d(c_int64(interleaved.value >> 3))
+                    std_n.core._deinterleave64_5d(
+                        c_int64(interleaved.value >> 3))
                     + std_n.core._ti5d.__INT12_MIN
                 )
                 self.x4 = (
-                    std_n.core._deinterleave64_5d(c_int64(interleaved.value >> 4))
+                    std_n.core._deinterleave64_5d(
+                        c_int64(interleaved.value >> 4))
                     + std_n.core._ti5d.__INT12_MIN
                 )
 
@@ -591,12 +608,14 @@ class std_n:
                 )
                 y41: int = std_n.core._deinterleave64_2d(
                     c_int64(
-                        std_n.core._deinterleave64_3d(c_int64(interleaved.value >> 1))
+                        std_n.core._deinterleave64_3d(
+                            c_int64(interleaved.value >> 1))
                     )
                 )
                 y52: int = std_n.core._deinterleave64_2d(
                     c_int64(
-                        std_n.core._deinterleave64_3d(c_int64(interleaved.value >> 2))
+                        std_n.core._deinterleave64_3d(
+                            c_int64(interleaved.value >> 2))
                     )
                 )
 
@@ -789,18 +808,22 @@ class std_n:
 
             def __interleave(self) -> c_int64:
                 return std_n.core._interleave64_2d(
-                    unpack("q", pack("d", self.x0))[0] + std_n.core._ti2d._UINT32_MIN,
-                    unpack("q", pack("d", self.x1))[0] + std_n.core._ti2d._UINT32_MIN,
+                    unpack("q", pack("d", self.x0))[
+                        0] + std_n.core._ti2d._UINT32_MIN,
+                    unpack("q", pack("d", self.x1))[
+                        0] + std_n.core._ti2d._UINT32_MIN,
                 )
 
             def __deinterleave(self, interleaved: c_int64) -> None:
                 dc: int = std_n.core._deinterleave64_2d(interleaved)
                 self.x0 = unpack(
-                    "d", pack("q", c_int32(dc + std_n.core._ti2d._INT32_MIN).value)
+                    "d", pack("q", c_int32(
+                        dc + std_n.core._ti2d._INT32_MIN).value)
                 )[0]
                 self.x1 = unpack(
                     "d",
-                    pack("q", c_int32((dc >> 32) + std_n.core._ti2d._INT32_MIN).value),
+                    pack("q", c_int32((dc >> 32) +
+                         std_n.core._ti2d._INT32_MIN).value),
                 )[0]
 
         class _tf3d(GreyCat.Object):
@@ -924,8 +947,10 @@ class std_n:
                 )
 
             def __deinterleave(self, interleaved: c_int64) -> None:
-                d3120: int = c_int64(std_n.core._deinterleave64_2d(interleaved)).value
-                d20: int = std_n.core._deinterleave64_2d(c_int64(d3120 & 0xFFFFFFFF))
+                d3120: int = c_int64(
+                    std_n.core._deinterleave64_2d(interleaved)).value
+                d20: int = std_n.core._deinterleave64_2d(
+                    c_int64(d3120 & 0xFFFFFFFF))
                 d31: int = std_n.core._deinterleave64_2d(c_int64(d3120 >> 32))
                 self.x0 = unpack(
                     "f",
@@ -1034,7 +1059,8 @@ class std_n:
 
             @staticmethod
             def from_list(greycat: GreyCat, l: list) -> std_n.core._Array:
-                array: std_n.core._Array = std_n.core._Array(greycat.types_by_name["core::Array"])
+                array: std_n.core._Array = std_n.core._Array(
+                    greycat.types_by_name["core::Array"])
                 array.extend(l)
                 return array
 
@@ -1219,7 +1245,8 @@ class std_n:
                     if len(col_meta.header) > 0:
                         col_meta_header_bytes = col_meta.header.encode("utf-8")
                         stream.write_vu32(c_uint32(len(col_meta_header_bytes)))
-                        stream.write_i8_array(col_meta_header_bytes, 0, len(col_meta_header_bytes))
+                        stream.write_i8_array(
+                            col_meta_header_bytes, 0, len(col_meta_header_bytes))
                     else:
                         stream.write_vu32(c_uint32(0))
                 col: int
@@ -1325,11 +1352,13 @@ class std_n:
                     elif col_type == PrimitiveType.ENUM.value:
                         greycat_type = type.greycat.types[meta[col].type.value]
                         for _ in repeat(None, rows):
-                            data.append(greycat_type.loader(greycat_type, stream))
+                            data.append(greycat_type.loader(
+                                greycat_type, stream))
                     elif col_type == PrimitiveType.OBJECT.value:
                         greycat_type = type.greycat.types[meta[col].type.value]
                         for _ in repeat(None, rows):
-                            data.append(greycat_type.loader(greycat_type, stream))
+                            data.append(greycat_type.loader(
+                                greycat_type, stream))
                     else:
                         for _ in repeat(None, rows):
                             data.append(stream.read())
@@ -1350,6 +1379,7 @@ class std_n:
                     self.header: Final[str] = header
 
             if "numpy" in sys.modules:
+
                 def to_numpy(self) -> numpy.ndarray:
                     nda: numpy.ndarray = numpy.reshape(
                         [
@@ -1383,15 +1413,20 @@ class std_n:
                     type_: GreyCat.Type = greycat.types_by_name["core::Table"]
                     table: std_n.core._Table = type_.factory(type_, None)
                     if nda.dtype == numpy.dtype(float):
-                        table.data = [c_double(elem) for elem in nda.flatten("F")]
+                        table.data = [c_double(elem)
+                                      for elem in nda.flatten("F")]
                     elif nda.dtype == numpy.dtype(int):
-                        table.data = [c_int64(elem) for elem in nda.flatten("F")]
+                        table.data = [c_int64(elem)
+                                      for elem in nda.flatten("F")]
                     elif nda.dtype == numpy.dtype(object):
                         if len(list(filter(lambda elem: type(elem) is int and not -2 ** 63 <= elem < 2 ** 63, nda))) > 0:
-                            raise ValueError("Numpy array contains ints larger than max int64")
+                            raise ValueError(
+                                "Numpy array contains ints larger than max int64")
                         table.data = [
                             c_double(elem) if isinstance(elem, numpy.floating) or elem_type is float
                             else c_int64(elem) if isinstance(elem, numpy.integer) or elem_type is int
+                            else std_n.core._time.from_numpy(greycat, elem) if isinstance(elem, numpy.datetime64)
+                            else std_n.core._time.from_numpy(greycat, elem.to_numpy()) if "pandas" in sys.modules and isinstance(elem, pandas.Timestamp)
                             else elem
                             for [elem, elem_type] in [
                                 [elem, type(elem)] for elem in nda.flatten("F")
@@ -1439,12 +1474,15 @@ class std_n:
                                 col_type = PrimitiveType.INT
                             elif dtype is numpy.dtype(object):
                                 col_type = PrimitiveType.UNDEFINED
-                            # elif dtype is numpy.dtype(datetime64[s]):
+                            elif dtype.type is numpy.datetime64:
+                                col_type = PrimitiveType.TIME
                             elif dtype is numpy.dtype(bool):
                                 col_type = PrimitiveType.BOOL
                             header = typed_header[0]
-                            meta.append(std_n.core._Table.TableColumnMeta(col_type, _type, index, header))
-                        nda.dtype = numpy.dtype(nda.dtype.type, metadata = {"core::Table.meta": meta})
+                            meta.append(std_n.core._Table.TableColumnMeta(
+                                col_type, _type, index, header))
+                        nda.dtype = numpy.dtype(nda.dtype.type, metadata={
+                                                "core::Table.meta": meta})
                         return std_n.core._Table.from_numpy(greycat, nda)
 
                 if "tensorflow" in sys.modules:
@@ -1483,7 +1521,8 @@ class std_n:
             def load(type_: GreyCat.Type, stream: GreyCat._Stream) -> Any:
                 nb_dim: Final[int] = stream.read_i8().value
                 tensor_type: Final[c_byte] = stream.read_i8()
-                shape: list[c_uint32] = [stream.read_i32() for _ in repeat(None, nb_dim)]
+                shape: list[c_uint32] = [stream.read_i32()
+                                         for _ in repeat(None, nb_dim)]
                 size: c_uint32 = stream.read_i32()
                 dtype = type_.greycat.types_by_name[greycat.std.core.TensorType.name_].enum_values[tensor_type.value]
                 format_: str
@@ -1517,10 +1556,12 @@ class std_n:
                 dim_key: int
                 for index, dim_key in enumerate(key):
                     if index < len(self.shape) - 1:
-                        offset += dim_key * sum(dim.value for dim in self.shape[index + 1:])
+                        offset += dim_key * \
+                            sum(dim.value for dim in self.shape[index + 1:])
                     else:
                         offset += dim_key
-                unpacked: Tuple = unpack(self.format, self.data[slice(offset * self.dtype.value, (offset + 1) * self.dtype.value)])
+                unpacked: Tuple = unpack(self.format, self.data[slice(
+                    offset * self.dtype.value, (offset + 1) * self.dtype.value)])
                 if self.dtype in [greycat.std.core.TensorType.c64(self.type_.greycat), greycat.std.core.TensorType.c128(self.type_.greycat)]:
                     return unpacked
                 return unpacked[0]
@@ -1575,7 +1616,8 @@ class std_n:
                         dtype = greycat.std.core.TensorType.c128(greycat_)
                         format_ = "=dd"
                     else:
-                        raise ValueError(f"Only int, float and complex dtypes are allowed: {nda.dtype}")
+                        raise ValueError(
+                            f"Only int, float and complex dtypes are allowed: {nda.dtype}")
                     type_: GreyCat.Type = greycat_.types_by_name["core::Tensor"]
                     tensor: std_n.core._Tensor = type_.factory(type_, None)
                     tensor.shape = [c_uint32(dim) for dim in nda.shape]
@@ -1661,14 +1703,16 @@ class std_n:
                         dtype = greycat.std.core.TensorType.c128(greycat_)
                         format_ = "=dd"
                     else:
-                        raise ValueError(f"Only int, float and complex dtypes are allowed: {torch_tensor.dtype}")
+                        raise ValueError(
+                            f"Only int, float and complex dtypes are allowed: {torch_tensor.dtype}")
                     type_: GreyCat.Type = greycat_.types_by_name["core::Tensor"]
                     tensor: std_n.core._Tensor = type_.factory(type_, None)
                     tensor.shape = [c_uint32(dim) for dim in tensor.shape]
                     tensor.tensor_type = c_byte(dtype.offset)
                     tensor.dtype = dtype
                     tensor.format = format_
-                    tensor.data = bytes(torch_tensor.flatten().view(torch.uint8))
+                    tensor.data = bytes(
+                        torch_tensor.flatten().view(torch.uint8))
                     tensor.size = len(tensor.data)
                     return tensor
 
@@ -1689,7 +1733,8 @@ class std_n:
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
                 size: Final[int] = stream.read_i32().value
-                data: Final[list[Any]] = [stream.read() for _ in repeat(None, size)]
+                data: Final[list[Any]] = [stream.read()
+                                          for _ in repeat(None, size)]
                 res: std_n.core._nodeIndexBucket = type.factory(type, [])
                 res.attributes = data
                 return res
@@ -2034,7 +2079,8 @@ class std_n:
                 capacity: int = stream.read_vu32().value
                 to_head: c_int64 = stream.read_vi64()
                 to_tail: c_int64 = stream.read_vi64()
-                values: list[Any] = [stream.read() for _ in repeat(None, capacity)]
+                values: list[Any] = [stream.read()
+                                     for _ in repeat(None, capacity)]
                 sw: std_n.util._SlidingWindow = type.factory(type, [])
                 sw.time_width = time_width
                 sw.sum_type = sum_type
@@ -2087,7 +2133,8 @@ class std_n:
                 to_head: c_int64 = stream.read_vi64()
                 to_tail: c_int64 = stream.read_vi64()
                 value_times: list[std_n.util._TimeWindow.ValueTime] = [
-                    std_n.util._TimeWindow.ValueTime(stream.read(), stream.read_vi64())
+                    std_n.util._TimeWindow.ValueTime(
+                        stream.read(), stream.read_vi64())
                     for _ in repeat(None, capacity)
                 ]
                 tw: std_n.util._TimeWindow = type.factory(type, [])
