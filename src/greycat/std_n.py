@@ -1406,9 +1406,8 @@ class std_n:
                     if nda_dtype.metadata is MappingProxyType:
                         metadata.update(nda_dtype.metadata)
                     metadata["core::Table.meta"] = self.meta
-                    return numpy.array(
-                        nda, dtype=numpy.dtype(nda.dtype, metadata=metadata)
-                    )
+                    nda.dtype = numpy.dtype(nda.dtype, metadata=metadata)
+                    return nda
 
                 @staticmethod
                 def from_numpy(
@@ -1457,7 +1456,37 @@ class std_n:
 
                 if "pandas" in sys.modules:
                     def to_pandas(self) -> pandas.DataFrame:
-                        return pandas.DataFrame(self.to_numpy())
+                        nda = self.to_numpy()
+                        df: pandas.DataFrame
+                        nda_dtype: numpy.dtype = nda.dtype
+                        columns: list[str]
+                        dtypes: dict[str, numpy.dtype]
+                        meta: std_n.core._Table.TableColumnMeta
+                        dtype: numpy.dtype
+                        if nda_dtype.metadata is not None and "core::Table.meta" in nda_dtype.metadata:
+                            columns = []
+                            dtypes = {}
+                            for meta in nda_dtype.metadata["core::Table.meta"]:
+                                columns.append(meta.header)
+                                if PrimitiveType.FLOAT.value == meta.col_type.value:
+                                    dtype = numpy.dtype(float)
+                                elif PrimitiveType.INT.value == meta.col_type.value:
+                                    dtype = numpy.dtype(int)
+                                elif PrimitiveType.BOOL.value == meta.col_type.value:
+                                    dtype = numpy.dtype(bool)
+                                elif PrimitiveType.TIME.value == meta.col_type.value:
+                                    dtype = numpy.dtype('datetime64[us]')
+                                elif meta.col_type.value in [PrimitiveType.OBJECT.value, PrimitiveType.UNDEFINED.value]:
+                                    dtype = numpy.dtype(object)
+                                else:
+                                    raise ValueError(
+                                        f"Unknown col type: {meta.col_type.value}")
+                                dtypes[meta.header] = dtype
+                            df = pandas.DataFrame(
+                                nda, columns=columns).astype(dtypes)
+                        else:
+                            df = pandas.DataFrame(nda)
+                        return df
 
                     @staticmethod
                     def from_pandas(
