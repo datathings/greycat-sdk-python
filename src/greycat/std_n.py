@@ -345,7 +345,7 @@ class std_n:
                     duration = std_n.core._duration(
                         greycat.type_offset_core_duration)
                     duration.value = c_int64(td.astype(int)) if numpy.datetime_data(td)[0] in [
-                                             "us", "μs"] else c_int64(td.astype("timedelta64[us]").astype(int))
+                        "us", "μs"] else c_int64(td.astype("timedelta64[us]").astype(int))
                     return duration
 
         class _ti2d(GreyCat.Object):
@@ -1423,9 +1423,9 @@ class std_n:
 
                 @staticmethod
                 def from_numpy(
-                    greycat: GreyCat, nda: numpy.ndarray, meta: Optional[list[std_n.core._Table.TableColumnMeta]] = None
+                    gc: GreyCat, nda: numpy.ndarray, meta: Optional[list[std_n.core._Table.TableColumnMeta]] = None
                 ) -> std_n.core._Table:
-                    type_: GreyCat.Type = greycat.types_by_name["core::Table"]
+                    type_: GreyCat.Type = gc.types_by_name["core::Table"]
                     table: std_n.core._Table = type_.factory(type_, None)
                     if nda.dtype == numpy.dtype(float):
                         table.data = [c_double(elem)
@@ -1440,10 +1440,11 @@ class std_n:
                         table.data = [
                             c_double(elem) if isinstance(elem, numpy.floating) or elem_type is float
                             else c_int64(elem) if isinstance(elem, numpy.integer) or elem_type is int
-                            else std_n.core._time.from_numpy(greycat, elem) if isinstance(elem, numpy.datetime64)
-                            else std_n.core._time.from_numpy(greycat, elem.to_numpy()) if "pandas" in sys.modules and isinstance(elem, pandas.Timestamp)
-                            else std_n.core._duration.from_numpy(greycat, elem) if isinstance(elem, numpy.timedelta64)
-                            else std_n.core._duration.from_numpy(greycat, elem.to_numpy()) if "pandas" in sys.modules and isinstance(elem, pandas.Timedelta)
+                            else greycat.std.core.Tuple.create(gc, float(numpy.real(elem)), float(numpy.imag(elem))) if isinstance(elem, numpy.complex128) or elem_type is complex
+                            else std_n.core._time.from_numpy(gc, elem) if isinstance(elem, numpy.datetime64)
+                            else std_n.core._time.from_numpy(gc, elem.to_numpy()) if "pandas" in sys.modules and isinstance(elem, pandas.Timestamp)
+                            else std_n.core._duration.from_numpy(gc, elem) if isinstance(elem, numpy.timedelta64)
+                            else std_n.core._duration.from_numpy(gc, elem.to_numpy()) if "pandas" in sys.modules and isinstance(elem, pandas.Timedelta)
                             else elem
                             for [elem, elem_type] in [
                                 [elem, type(elem)] for elem in nda.flatten("F")

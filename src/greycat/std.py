@@ -3367,7 +3367,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, x: std.core.__T, y: std.core.__U) -> std.core.Tuple[TypeVar("T"), TypeVar("U")]:
-                return std.core.Tuple(greycat.libs_by_name[std.name_].mapped[25], x, y)
+                return std.core.Tuple(greycat.libs_by_name[std.name_].mapped[25], [x, y])
 
         @final
         class tf2d(std_n.core._tf2d):

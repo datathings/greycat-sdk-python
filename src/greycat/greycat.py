@@ -716,7 +716,7 @@ class GreyCat:
                         & 1
                     ):
                         continue
-                load_type: c_ubyte = att.sbi_type.value
+                load_type: int = att.sbi_type.value
                 if load_type == PrimitiveType.UNDEFINED.value:
                     load_type = stream.read_i8().value
                 if load_type == PrimitiveType.ENUM.value:
@@ -735,7 +735,7 @@ class GreyCat:
                     loaded_field = field_type.loader(field_type, stream)
                 else:
                     loaded_field = GreyCat._Stream._PRIMITIVE_LOADERS[
-                        att.sbi_type.value
+                        load_type
                     ](stream)
                 if att.mapped:
                     attributes[att.mapped_att_offset] = loaded_field
