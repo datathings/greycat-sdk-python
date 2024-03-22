@@ -305,7 +305,7 @@ class std_n:
 
             if "numpy" in sys.modules:
                 def to_numpy(self) -> numpy.datetime64:
-                    return numpy.datetime64(self.value.value, 'us')
+                    return numpy.datetime64(self.value.value, "us")
 
                 @staticmethod
                 def from_numpy(greycat: GreyCat, dt: numpy.datetime64) -> std_n.core._time:
@@ -335,6 +335,18 @@ class std_n:
                 res: std_n.core._duration = type.factory(type, [])
                 res.value = stream.read_vi64()
                 return res
+
+            if "numpy" in sys.modules:
+                def to_numpy(self) -> numpy.timedelta64:
+                    return numpy.timedelta64(self.value.value, "us")
+
+                @staticmethod
+                def from_numpy(greycat: GreyCat, td: numpy.timedelta64) -> std_n.core._duration:
+                    duration = std_n.core._duration(
+                        greycat.type_offset_core_duration)
+                    duration.value = c_int64(td.astype(int)) if numpy.datetime_data(td)[0] in [
+                                             "us", "μs"] else c_int64(td.astype("timedelta64[us]").astype(int))
+                    return duration
 
         class _ti2d(GreyCat.Object):
             _INT32_MIN: int = -2147483648
@@ -1393,7 +1405,7 @@ class std_n:
                     nda: numpy.ndarray = numpy.reshape(
                         [
                             elem.value if type(elem) in [c_double, c_int64]
-                            else elem.to_numpy() if isinstance(elem, std_n.core._time)
+                            else elem.to_numpy() if isinstance(elem, std_n.core._time) or isinstance(elem, std_n.core._duration)
                             else elem
                             for elem in self.data
                         ],
@@ -1430,6 +1442,8 @@ class std_n:
                             else c_int64(elem) if isinstance(elem, numpy.integer) or elem_type is int
                             else std_n.core._time.from_numpy(greycat, elem) if isinstance(elem, numpy.datetime64)
                             else std_n.core._time.from_numpy(greycat, elem.to_numpy()) if "pandas" in sys.modules and isinstance(elem, pandas.Timestamp)
+                            else std_n.core._duration.from_numpy(greycat, elem) if isinstance(elem, numpy.timedelta64)
+                            else std_n.core._duration.from_numpy(greycat, elem.to_numpy()) if "pandas" in sys.modules and isinstance(elem, pandas.Timedelta)
                             else elem
                             for [elem, elem_type] in [
                                 [elem, type(elem)] for elem in nda.flatten("F")
@@ -1453,8 +1467,9 @@ class std_n:
                 if "pandas" in sys.modules:
                     def to_pandas(self) -> pandas.DataFrame:
                         nda = self.to_numpy()
-                        columns: list[str|int] = list(map(lambda meta: meta.header, self.meta))
-                        dtypes: map[str|int, numpy.dtype] = {}
+                        columns: list[str | int] = list(
+                            map(lambda meta: meta.header, self.meta))
+                        dtypes: map[str | int, numpy.dtype] = {}
                         dtype: numpy.dtype
                         if len(set(columns)) < len(columns):
                             columns = list(range(len(columns)))
@@ -1467,6 +1482,8 @@ class std_n:
                                 dtype = numpy.dtype(bool)
                             elif PrimitiveType.TIME.value == meta.col_type.value:
                                 dtype = numpy.dtype('datetime64[us]')
+                            elif PrimitiveType.DURATION.value == meta.col_type.value:
+                                dtype = numpy.dtype('timedelta64[us]')
                             elif meta.col_type.value in [PrimitiveType.OBJECT.value, PrimitiveType.UNDEFINED.value]:
                                 dtype = numpy.dtype(object)
                             else:
@@ -1496,6 +1513,8 @@ class std_n:
                                 col_type = PrimitiveType.UNDEFINED
                             elif dtype.type is numpy.datetime64:
                                 col_type = PrimitiveType.TIME
+                            elif dtype.type is numpy.timedelta64:
+                                col_type = PrimitiveType.DURATION
                             elif dtype is numpy.dtype(bool):
                                 col_type = PrimitiveType.BOOL
                             header = typed_header[0]
