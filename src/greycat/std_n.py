@@ -1267,6 +1267,7 @@ class std_n:
                 col: int
                 row: int
                 o: GreyCat.Object
+                s: str
                 col_type: int
                 for col in range(self.cols):
                     col_type = self.meta[col].col_type.value
@@ -1291,9 +1292,13 @@ class std_n:
                             o = self.data[col * self.rows + row]
                             o._save(stream)
                     elif col_type == PrimitiveType.OBJECT.value:
-                        for row in range(self.rows):
-                            o = self.data[col * self.rows + row]
-                            o._save(stream)
+                        if self.meta[col].type.value == self.type_.greycat.type_offset_core_string:
+                            for row in range(self.rows):
+                                stream.write_string(self.data[col * self.rows + row], skip_type=True)
+                        else:
+                            for row in range(self.rows):
+                                o = self.data[col * self.rows + row]
+                                o._save(stream)
                     else:
                         for row in range(self.rows):
                             stream.write(self.data[col * self.rows + row])
@@ -1485,7 +1490,12 @@ class std_n:
                                 dtype = numpy.dtype('datetime64[us]')
                             elif PrimitiveType.DURATION.value == meta.col_type.value:
                                 dtype = numpy.dtype('timedelta64[us]')
-                            elif meta.col_type.value in [PrimitiveType.OBJECT.value, PrimitiveType.UNDEFINED.value]:
+                            elif meta.col_type.value == PrimitiveType.OBJECT.value:
+                                if meta.type.value == self.type_.greycat.type_offset_core_string:
+                                    dtype = pandas.StringDtype()
+                                else:
+                                    dtype = numpy.dtype(object)
+                            elif meta.col_type.value == PrimitiveType.UNDEFINED.value:
                                 dtype = numpy.dtype(object)
                             else:
                                 raise ValueError(
@@ -1501,15 +1511,19 @@ class std_n:
                         meta: list[std_n.core._Table.TableColumnMeta] = []
                         dtype: numpy.dtype
                         col_type: c_ubyte
-                        _type = c_uint32(PrimitiveType.UNDEFINED.value)
+                        _type: c_uint32
                         index: bool = False
                         header: str
                         for typed_header in df.dtypes.items():
                             dtype = typed_header[1]
+                            _type = c_uint32(PrimitiveType.UNDEFINED.value)
                             if dtype is numpy.dtype(float):
                                 col_type = PrimitiveType.FLOAT
                             elif dtype is numpy.dtype(int):
                                 col_type = PrimitiveType.INT
+                            elif dtype == pandas.StringDtype():
+                                col_type = PrimitiveType.OBJECT
+                                _type = c_uint32(greycat.type_offset_core_string)
                             elif dtype is numpy.dtype(object):
                                 col_type = PrimitiveType.UNDEFINED
                             elif dtype.type is numpy.datetime64:
