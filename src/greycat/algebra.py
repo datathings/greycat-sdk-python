@@ -36,7 +36,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeClassificationLoss:
-                return algebra.compute.ComputeClassificationLoss(greycat.libs_by_name[algebra.name_].mapped[0])
+                return algebra.compute.ComputeClassificationLoss(greycat.libs_by_name[algebra.name_].mapped[0], [])
 
         @final
         class ComputeLayerActivation(GreyCat.Object):
@@ -69,7 +69,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str, activation: algebra.compute.ComputeActivation) -> algebra.compute.ComputeLayerActivation:
-                return algebra.compute.ComputeLayerActivation(greycat.libs_by_name[algebra.name_].mapped[1], name, activation)
+                return algebra.compute.ComputeLayerActivation(greycat.libs_by_name[algebra.name_].mapped[1], [name, activation])
 
         @final
         class ComputeOperationClip(GreyCat.Object):
@@ -104,7 +104,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str, min: float, max: float) -> algebra.compute.ComputeOperationClip:
-                return algebra.compute.ComputeOperationClip(greycat.libs_by_name[algebra.name_].mapped[2], input, output, min, max)
+                return algebra.compute.ComputeOperationClip(greycat.libs_by_name[algebra.name_].mapped[2], [input, output, min, max])
 
         @final
         class ComputeInitializerXavier(GreyCat.Object):
@@ -115,7 +115,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerXavier:
-                return algebra.compute.ComputeInitializerXavier(greycat.libs_by_name[algebra.name_].mapped[3])
+                return algebra.compute.ComputeInitializerXavier(greycat.libs_by_name[algebra.name_].mapped[3], [])
 
         @final
         class ComputeOperationAtanh(GreyCat.Object):
@@ -138,7 +138,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationAtanh:
-                return algebra.compute.ComputeOperationAtanh(greycat.libs_by_name[algebra.name_].mapped[4], input, output)
+                return algebra.compute.ComputeOperationAtanh(greycat.libs_by_name[algebra.name_].mapped[4], [input, output])
 
         @final
         class ComputeInitializerRelu(GreyCat.Object):
@@ -149,7 +149,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerRelu:
-                return algebra.compute.ComputeInitializerRelu(greycat.libs_by_name[algebra.name_].mapped[5])
+                return algebra.compute.ComputeInitializerRelu(greycat.libs_by_name[algebra.name_].mapped[5], [])
 
         @final
         class ComputeOperationSoftSign(GreyCat.Object):
@@ -172,7 +172,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationSoftSign:
-                return algebra.compute.ComputeOperationSoftSign(greycat.libs_by_name[algebra.name_].mapped[6], input, output)
+                return algebra.compute.ComputeOperationSoftSign(greycat.libs_by_name[algebra.name_].mapped[6], [input, output])
 
         @final
         class ComputeOperationSinh(GreyCat.Object):
@@ -195,7 +195,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationSinh:
-                return algebra.compute.ComputeOperationSinh(greycat.libs_by_name[algebra.name_].mapped[7], input, output)
+                return algebra.compute.ComputeOperationSinh(greycat.libs_by_name[algebra.name_].mapped[7], [input, output])
 
         @final
         class ComputeState(algebra_n.compute._ComputeState):
@@ -206,7 +206,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra_n.compute._ComputeState:
-                return algebra.compute.ComputeState(greycat.libs_by_name[algebra.name_].mapped[8])
+                return algebra.compute.ComputeState(greycat.libs_by_name[algebra.name_].mapped[8], [ ])
 
         @final
         class ComputeActivationSelu(GreyCat.Object):
@@ -217,7 +217,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeActivationSelu:
-                return algebra.compute.ComputeActivationSelu(greycat.libs_by_name[algebra.name_].mapped[9])
+                return algebra.compute.ComputeActivationSelu(greycat.libs_by_name[algebra.name_].mapped[9], [])
 
         @final
         class ComputeLayerClassification(GreyCat.Object):
@@ -261,7 +261,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str, calculate_probabilities: bool, from_logits: bool) -> algebra.compute.ComputeLayerClassification:
-                return algebra.compute.ComputeLayerClassification(greycat.libs_by_name[algebra.name_].mapped[10], name, calculate_probabilities, from_logits)
+                return algebra.compute.ComputeLayerClassification(greycat.libs_by_name[algebra.name_].mapped[10], [name, calculate_probabilities, from_logits])
 
         @final
         class ComputeInitializerNormalOut(GreyCat.Object):
@@ -272,7 +272,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerNormalOut:
-                return algebra.compute.ComputeInitializerNormalOut(greycat.libs_by_name[algebra.name_].mapped[11])
+                return algebra.compute.ComputeInitializerNormalOut(greycat.libs_by_name[algebra.name_].mapped[11], [])
 
         @final
         class ComputeActivationLeakyRelu(GreyCat.Object):
@@ -311,7 +311,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, alpha: float, max_value: float, threshold: float) -> algebra.compute.ComputeActivationLeakyRelu:
-                return algebra.compute.ComputeActivationLeakyRelu(greycat.libs_by_name[algebra.name_].mapped[12], alpha, max_value, threshold)
+                return algebra.compute.ComputeActivationLeakyRelu(greycat.libs_by_name[algebra.name_].mapped[12], [alpha, max_value, threshold])
 
         @final
         class ComputeOperationFill(GreyCat.Object):
@@ -334,7 +334,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, value: Any) -> algebra.compute.ComputeOperationFill:
-                return algebra.compute.ComputeOperationFill(greycat.libs_by_name[algebra.name_].mapped[13], input, value)
+                return algebra.compute.ComputeOperationFill(greycat.libs_by_name[algebra.name_].mapped[13], [input, value])
 
         @final
         class ComputeOptimizerNadam(GreyCat.Object):
@@ -389,7 +389,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, learning_rate: float, beta1: float, beta2: float, smooth_epsilon: float) -> algebra.compute.ComputeOptimizerNadam:
-                return algebra.compute.ComputeOptimizerNadam(greycat.libs_by_name[algebra.name_].mapped[14], learning_rate, beta1, beta2, smooth_epsilon)
+                return algebra.compute.ComputeOptimizerNadam(greycat.libs_by_name[algebra.name_].mapped[14], [learning_rate, beta1, beta2, smooth_epsilon])
 
         @final
         class ComputeActivationHardSigmoid(GreyCat.Object):
@@ -422,7 +422,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, slope: float, shift: float) -> algebra.compute.ComputeActivationHardSigmoid:
-                return algebra.compute.ComputeActivationHardSigmoid(greycat.libs_by_name[algebra.name_].mapped[15], slope, shift)
+                return algebra.compute.ComputeActivationHardSigmoid(greycat.libs_by_name[algebra.name_].mapped[15], [slope, shift])
 
         @final
         class ComputeLayerStandardScaler(GreyCat.Object):
@@ -471,7 +471,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str, type: std.core.TensorType, inverse_transform: bool) -> algebra.compute.ComputeLayerStandardScaler:
-                return algebra.compute.ComputeLayerStandardScaler(greycat.libs_by_name[algebra.name_].mapped[16], name, type, inverse_transform)
+                return algebra.compute.ComputeLayerStandardScaler(greycat.libs_by_name[algebra.name_].mapped[16], [name, type, inverse_transform])
 
         @final
         class ComputeOperationMatMul(GreyCat.Object):
@@ -539,7 +539,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, input2: str, output: str, transposeA: bool, transposeB: bool, alpha: float, beta: float) -> algebra.compute.ComputeOperationMatMul:
-                return algebra.compute.ComputeOperationMatMul(greycat.libs_by_name[algebra.name_].mapped[17], input, input2, output, transposeA, transposeB, alpha, beta)
+                return algebra.compute.ComputeOperationMatMul(greycat.libs_by_name[algebra.name_].mapped[17], [input, input2, output, transposeA, transposeB, alpha, beta])
 
         @final
         class ComputeLayerSeq(GreyCat.Object):
@@ -568,7 +568,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str, calls: std.core.Array, optimizer: algebra.compute.ComputeOptimizer) -> algebra.compute.ComputeLayerSeq:
-                return algebra.compute.ComputeLayerSeq(greycat.libs_by_name[algebra.name_].mapped[18], name, calls, optimizer)
+                return algebra.compute.ComputeLayerSeq(greycat.libs_by_name[algebra.name_].mapped[18], [name, calls, optimizer])
 
         @final
         class ComputeOperationSoftplus(GreyCat.Object):
@@ -591,7 +591,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationSoftplus:
-                return algebra.compute.ComputeOperationSoftplus(greycat.libs_by_name[algebra.name_].mapped[19], input, output)
+                return algebra.compute.ComputeOperationSoftplus(greycat.libs_by_name[algebra.name_].mapped[19], [input, output])
 
         @final
         class ComputeOperationElu(GreyCat.Object):
@@ -625,7 +625,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str, alpha: float) -> algebra.compute.ComputeOperationElu:
-                return algebra.compute.ComputeOperationElu(greycat.libs_by_name[algebra.name_].mapped[20], input, output, alpha)
+                return algebra.compute.ComputeOperationElu(greycat.libs_by_name[algebra.name_].mapped[20], [input, output, alpha])
 
         @final
         class ComputeOperationLog(GreyCat.Object):
@@ -648,7 +648,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationLog:
-                return algebra.compute.ComputeOperationLog(greycat.libs_by_name[algebra.name_].mapped[21], input, output)
+                return algebra.compute.ComputeOperationLog(greycat.libs_by_name[algebra.name_].mapped[21], [input, output])
 
         @final
         class ComputeOperationSigmoid(GreyCat.Object):
@@ -671,7 +671,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationSigmoid:
-                return algebra.compute.ComputeOperationSigmoid(greycat.libs_by_name[algebra.name_].mapped[22], input, output)
+                return algebra.compute.ComputeOperationSigmoid(greycat.libs_by_name[algebra.name_].mapped[22], [input, output])
 
         @final
         class ComputeLayerPCAScaler(GreyCat.Object):
@@ -725,7 +725,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str, type: std.core.TensorType, inverse_transform: bool) -> algebra.compute.ComputeLayerPCAScaler:
-                return algebra.compute.ComputeLayerPCAScaler(greycat.libs_by_name[algebra.name_].mapped[23], name, type, inverse_transform)
+                return algebra.compute.ComputeLayerPCAScaler(greycat.libs_by_name[algebra.name_].mapped[23], [name, type, inverse_transform])
 
         @final
         class ComputeVarInOut(GreyCat.Object):
@@ -760,7 +760,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str, type: std.core.TensorType, shape: std.core.Array, with_grad: bool) -> algebra.compute.ComputeVarInOut:
-                return algebra.compute.ComputeVarInOut(greycat.libs_by_name[algebra.name_].mapped[24], name, type, shape, with_grad)
+                return algebra.compute.ComputeVarInOut(greycat.libs_by_name[algebra.name_].mapped[24], [name, type, shape, with_grad])
 
         @final
         class ComputeOptimizer(GreyCat.Object):
@@ -777,7 +777,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, learning_rate: float) -> algebra.compute.ComputeOptimizer:
-                return algebra.compute.ComputeOptimizer(greycat.libs_by_name[algebra.name_].mapped[25], learning_rate)
+                return algebra.compute.ComputeOptimizer(greycat.libs_by_name[algebra.name_].mapped[25], [learning_rate])
 
         @final
         class ComputeActivationSoftplus(GreyCat.Object):
@@ -788,7 +788,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeActivationSoftplus:
-                return algebra.compute.ComputeActivationSoftplus(greycat.libs_by_name[algebra.name_].mapped[26])
+                return algebra.compute.ComputeActivationSoftplus(greycat.libs_by_name[algebra.name_].mapped[26], [])
 
         @final
         class ComputeOperationCos(GreyCat.Object):
@@ -811,7 +811,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationCos:
-                return algebra.compute.ComputeOperationCos(greycat.libs_by_name[algebra.name_].mapped[27], input, output)
+                return algebra.compute.ComputeOperationCos(greycat.libs_by_name[algebra.name_].mapped[27], [input, output])
 
         @final
         class ComputeInitializerXavierUniform(GreyCat.Object):
@@ -822,7 +822,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerXavierUniform:
-                return algebra.compute.ComputeInitializerXavierUniform(greycat.libs_by_name[algebra.name_].mapped[28])
+                return algebra.compute.ComputeInitializerXavierUniform(greycat.libs_by_name[algebra.name_].mapped[28], [])
 
         @final
         class ComputeInitializerUniformOut(GreyCat.Object):
@@ -833,7 +833,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerUniformOut:
-                return algebra.compute.ComputeInitializerUniformOut(greycat.libs_by_name[algebra.name_].mapped[29])
+                return algebra.compute.ComputeInitializerUniformOut(greycat.libs_by_name[algebra.name_].mapped[29], [])
 
         @final
         class ComputeOperationArg(GreyCat.Object):
@@ -862,7 +862,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str, output2: str) -> algebra.compute.ComputeOperationArg:
-                return algebra.compute.ComputeOperationArg(greycat.libs_by_name[algebra.name_].mapped[30], input, output, output2)
+                return algebra.compute.ComputeOperationArg(greycat.libs_by_name[algebra.name_].mapped[30], [input, output, output2])
 
         @final
         class ComputeActivationSoftSign(GreyCat.Object):
@@ -873,7 +873,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeActivationSoftSign:
-                return algebra.compute.ComputeActivationSoftSign(greycat.libs_by_name[algebra.name_].mapped[31])
+                return algebra.compute.ComputeActivationSoftSign(greycat.libs_by_name[algebra.name_].mapped[31], [])
 
         @final
         class ComputeOptimizerAdaMax(GreyCat.Object):
@@ -928,7 +928,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, learning_rate: float, beta1: float, beta2: float, smooth_epsilon: float) -> algebra.compute.ComputeOptimizerAdaMax:
-                return algebra.compute.ComputeOptimizerAdaMax(greycat.libs_by_name[algebra.name_].mapped[32], learning_rate, beta1, beta2, smooth_epsilon)
+                return algebra.compute.ComputeOptimizerAdaMax(greycat.libs_by_name[algebra.name_].mapped[32], [learning_rate, beta1, beta2, smooth_epsilon])
 
         @final
         class ComputeInitializerLeCunUniform(GreyCat.Object):
@@ -939,7 +939,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerLeCunUniform:
-                return algebra.compute.ComputeInitializerLeCunUniform(greycat.libs_by_name[algebra.name_].mapped[33])
+                return algebra.compute.ComputeInitializerLeCunUniform(greycat.libs_by_name[algebra.name_].mapped[33], [])
 
         @final
         class ComputeVarOptimize(GreyCat.Object):
@@ -986,7 +986,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str, type: std.core.TensorType, shape: std.core.Array, l1: float, l2: float, init: algebra.compute.ComputeInitializer) -> algebra.compute.ComputeVarOptimize:
-                return algebra.compute.ComputeVarOptimize(greycat.libs_by_name[algebra.name_].mapped[34], name, type, shape, l1, l2, init)
+                return algebra.compute.ComputeVarOptimize(greycat.libs_by_name[algebra.name_].mapped[34], [name, type, shape, l1, l2, init])
 
         @final
         class ComputeInitializerUniformIn(GreyCat.Object):
@@ -997,7 +997,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerUniformIn:
-                return algebra.compute.ComputeInitializerUniformIn(greycat.libs_by_name[algebra.name_].mapped[35])
+                return algebra.compute.ComputeInitializerUniformIn(greycat.libs_by_name[algebra.name_].mapped[35], [])
 
         @final
         class ComputeOperationAsin(GreyCat.Object):
@@ -1020,7 +1020,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationAsin:
-                return algebra.compute.ComputeOperationAsin(greycat.libs_by_name[algebra.name_].mapped[36], input, output)
+                return algebra.compute.ComputeOperationAsin(greycat.libs_by_name[algebra.name_].mapped[36], [input, output])
 
         @final
         class ComputeOperationExp(GreyCat.Object):
@@ -1043,7 +1043,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationExp:
-                return algebra.compute.ComputeOperationExp(greycat.libs_by_name[algebra.name_].mapped[37], input, output)
+                return algebra.compute.ComputeOperationExp(greycat.libs_by_name[algebra.name_].mapped[37], [input, output])
 
         @final
         class ComputeVarConst(GreyCat.Object):
@@ -1072,7 +1072,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str, type: std.core.TensorType, shape: std.core.Array) -> algebra.compute.ComputeVarConst:
-                return algebra.compute.ComputeVarConst(greycat.libs_by_name[algebra.name_].mapped[38], name, type, shape)
+                return algebra.compute.ComputeVarConst(greycat.libs_by_name[algebra.name_].mapped[38], [name, type, shape])
 
         @final
         class ComputeOperationMul(GreyCat.Object):
@@ -1101,7 +1101,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, input2: str, output: str) -> algebra.compute.ComputeOperationMul:
-                return algebra.compute.ComputeOperationMul(greycat.libs_by_name[algebra.name_].mapped[39], input, input2, output)
+                return algebra.compute.ComputeOperationMul(greycat.libs_by_name[algebra.name_].mapped[39], [input, input2, output])
 
         @final
         class ComputeInitializerNormalIn(GreyCat.Object):
@@ -1112,7 +1112,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerNormalIn:
-                return algebra.compute.ComputeInitializerNormalIn(greycat.libs_by_name[algebra.name_].mapped[40])
+                return algebra.compute.ComputeInitializerNormalIn(greycat.libs_by_name[algebra.name_].mapped[40], [])
 
         @final
         class ComputeInitializerLSTM(GreyCat.Object):
@@ -1123,7 +1123,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerLSTM:
-                return algebra.compute.ComputeInitializerLSTM(greycat.libs_by_name[algebra.name_].mapped[41])
+                return algebra.compute.ComputeInitializerLSTM(greycat.libs_by_name[algebra.name_].mapped[41], [])
 
         @final
         class ComputeOperationLeCunTanh(GreyCat.Object):
@@ -1146,7 +1146,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationLeCunTanh:
-                return algebra.compute.ComputeOperationLeCunTanh(greycat.libs_by_name[algebra.name_].mapped[42], input, output)
+                return algebra.compute.ComputeOperationLeCunTanh(greycat.libs_by_name[algebra.name_].mapped[42], [input, output])
 
         @final
         class ComputeOperationPow(GreyCat.Object):
@@ -1175,7 +1175,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, input2: str, output: str) -> algebra.compute.ComputeOperationPow:
-                return algebra.compute.ComputeOperationPow(greycat.libs_by_name[algebra.name_].mapped[43], input, input2, output)
+                return algebra.compute.ComputeOperationPow(greycat.libs_by_name[algebra.name_].mapped[43], [input, input2, output])
 
         @final
         class ComputeLayerLoss(GreyCat.Object):
@@ -1213,7 +1213,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str, reduction: algebra.compute.ComputeReduction) -> algebra.compute.ComputeLayerLoss:
-                return algebra.compute.ComputeLayerLoss(greycat.libs_by_name[algebra.name_].mapped[44], name, reduction)
+                return algebra.compute.ComputeLayerLoss(greycat.libs_by_name[algebra.name_].mapped[44], [name, reduction])
 
         @final
         class ComputeOperation2In1Out(GreyCat.Object):
@@ -1242,7 +1242,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, input2: str, output: str) -> algebra.compute.ComputeOperation2In1Out:
-                return algebra.compute.ComputeOperation2In1Out(greycat.libs_by_name[algebra.name_].mapped[45], input, input2, output)
+                return algebra.compute.ComputeOperation2In1Out(greycat.libs_by_name[algebra.name_].mapped[45], [input, input2, output])
 
         @final
         class ComputeOptimizerNesterov(GreyCat.Object):
@@ -1275,7 +1275,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, learning_rate: float, decay_rate: float) -> algebra.compute.ComputeOptimizerNesterov:
-                return algebra.compute.ComputeOptimizerNesterov(greycat.libs_by_name[algebra.name_].mapped[46], learning_rate, decay_rate)
+                return algebra.compute.ComputeOptimizerNesterov(greycat.libs_by_name[algebra.name_].mapped[46], [learning_rate, decay_rate])
 
         @final
         class ComputeInitializerIdentity(GreyCat.Object):
@@ -1286,7 +1286,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerIdentity:
-                return algebra.compute.ComputeInitializerIdentity(greycat.libs_by_name[algebra.name_].mapped[47])
+                return algebra.compute.ComputeInitializerIdentity(greycat.libs_by_name[algebra.name_].mapped[47], [])
 
         @final
         class ComputeActivation(GreyCat.Object):
@@ -1297,7 +1297,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeActivation:
-                return algebra.compute.ComputeActivation(greycat.libs_by_name[algebra.name_].mapped[48])
+                return algebra.compute.ComputeActivation(greycat.libs_by_name[algebra.name_].mapped[48], [])
 
         @final
         class ComputeOperationSin(GreyCat.Object):
@@ -1320,7 +1320,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationSin:
-                return algebra.compute.ComputeOperationSin(greycat.libs_by_name[algebra.name_].mapped[49], input, output)
+                return algebra.compute.ComputeOperationSin(greycat.libs_by_name[algebra.name_].mapped[49], [input, output])
 
         @final
         class ComputeOperationAbs(GreyCat.Object):
@@ -1343,7 +1343,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationAbs:
-                return algebra.compute.ComputeOperationAbs(greycat.libs_by_name[algebra.name_].mapped[50], input, output)
+                return algebra.compute.ComputeOperationAbs(greycat.libs_by_name[algebra.name_].mapped[50], [input, output])
 
         @final
         class ComputeInitializerConstant(GreyCat.Object):
@@ -1360,7 +1360,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, value: Any) -> algebra.compute.ComputeInitializerConstant:
-                return algebra.compute.ComputeInitializerConstant(greycat.libs_by_name[algebra.name_].mapped[51], value)
+                return algebra.compute.ComputeInitializerConstant(greycat.libs_by_name[algebra.name_].mapped[51], [value])
 
         @final
         class ComputeOperationAvg(GreyCat.Object):
@@ -1389,7 +1389,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, input2: str, output: str) -> algebra.compute.ComputeOperationAvg:
-                return algebra.compute.ComputeOperationAvg(greycat.libs_by_name[algebra.name_].mapped[52], input, input2, output)
+                return algebra.compute.ComputeOperationAvg(greycat.libs_by_name[algebra.name_].mapped[52], [input, input2, output])
 
         @final
         class ComputeOperationSumIf(GreyCat.Object):
@@ -1430,7 +1430,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, ifCondition: str, output: str, counts: str, classes: int) -> algebra.compute.ComputeOperationSumIf:
-                return algebra.compute.ComputeOperationSumIf(greycat.libs_by_name[algebra.name_].mapped[53], input, ifCondition, output, counts, classes)
+                return algebra.compute.ComputeOperationSumIf(greycat.libs_by_name[algebra.name_].mapped[53], [input, ifCondition, output, counts, classes])
 
         @final
         class ComputeOptimizerAdaGrad(GreyCat.Object):
@@ -1474,7 +1474,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, learning_rate: float, initial_accumulator: float, smooth_epsilon: float) -> algebra.compute.ComputeOptimizerAdaGrad:
-                return algebra.compute.ComputeOptimizerAdaGrad(greycat.libs_by_name[algebra.name_].mapped[54], learning_rate, initial_accumulator, smooth_epsilon)
+                return algebra.compute.ComputeOptimizerAdaGrad(greycat.libs_by_name[algebra.name_].mapped[54], [learning_rate, initial_accumulator, smooth_epsilon])
 
         @final
         class ComputeLayerMinMaxScaler(GreyCat.Object):
@@ -1523,7 +1523,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str, type: std.core.TensorType, inverse_transform: bool) -> algebra.compute.ComputeLayerMinMaxScaler:
-                return algebra.compute.ComputeLayerMinMaxScaler(greycat.libs_by_name[algebra.name_].mapped[55], name, type, inverse_transform)
+                return algebra.compute.ComputeLayerMinMaxScaler(greycat.libs_by_name[algebra.name_].mapped[55], [name, type, inverse_transform])
 
         @final
         class ComputeCounter(GreyCat.Object):
@@ -1552,7 +1552,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, epoch: int, optimizationSteps: int, batchNotOptimized: int) -> algebra.compute.ComputeCounter:
-                return algebra.compute.ComputeCounter(greycat.libs_by_name[algebra.name_].mapped[56], epoch, optimizationSteps, batchNotOptimized)
+                return algebra.compute.ComputeCounter(greycat.libs_by_name[algebra.name_].mapped[56], [epoch, optimizationSteps, batchNotOptimized])
 
         @final
         class ComputeVar(GreyCat.Object):
@@ -1569,7 +1569,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str) -> algebra.compute.ComputeVar:
-                return algebra.compute.ComputeVar(greycat.libs_by_name[algebra.name_].mapped[57], name)
+                return algebra.compute.ComputeVar(greycat.libs_by_name[algebra.name_].mapped[57], [name])
 
         @final
         class ComputeReduction(GreyCat.Enum):
@@ -1605,7 +1605,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeReduction:
-                return algebra.compute.ComputeReduction(greycat.libs_by_name[algebra.name_].mapped[58])
+                return algebra.compute.ComputeReduction(greycat.libs_by_name[algebra.name_].mapped[58], [])
 
         @final
         class ComputeInitializerNormal(GreyCat.Object):
@@ -1628,7 +1628,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, avg: float, std: float) -> algebra.compute.ComputeInitializerNormal:
-                return algebra.compute.ComputeInitializerNormal(greycat.libs_by_name[algebra.name_].mapped[59], avg, std)
+                return algebra.compute.ComputeInitializerNormal(greycat.libs_by_name[algebra.name_].mapped[59], [avg, std])
 
         @final
         class ComputeOperationNeg(GreyCat.Object):
@@ -1651,7 +1651,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationNeg:
-                return algebra.compute.ComputeOperationNeg(greycat.libs_by_name[algebra.name_].mapped[60], input, output)
+                return algebra.compute.ComputeOperationNeg(greycat.libs_by_name[algebra.name_].mapped[60], [input, output])
 
         @final
         class ComputeOperationTan(GreyCat.Object):
@@ -1674,7 +1674,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationTan:
-                return algebra.compute.ComputeOperationTan(greycat.libs_by_name[algebra.name_].mapped[61], input, output)
+                return algebra.compute.ComputeOperationTan(greycat.libs_by_name[algebra.name_].mapped[61], [input, output])
 
         @final
         class ComputeOperationRaiseToPower(GreyCat.Object):
@@ -1703,7 +1703,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str, power: float) -> algebra.compute.ComputeOperationRaiseToPower:
-                return algebra.compute.ComputeOperationRaiseToPower(greycat.libs_by_name[algebra.name_].mapped[62], input, output, power)
+                return algebra.compute.ComputeOperationRaiseToPower(greycat.libs_by_name[algebra.name_].mapped[62], [input, output, power])
 
         @final
         class ComputeOperationDiv(GreyCat.Object):
@@ -1732,7 +1732,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, input2: str, output: str) -> algebra.compute.ComputeOperationDiv:
-                return algebra.compute.ComputeOperationDiv(greycat.libs_by_name[algebra.name_].mapped[63], input, input2, output)
+                return algebra.compute.ComputeOperationDiv(greycat.libs_by_name[algebra.name_].mapped[63], [input, input2, output])
 
         @final
         class ComputeLayerLossClassification(GreyCat.Object):
@@ -1799,7 +1799,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str, reduction: algebra.compute.ComputeReduction, loss_type: algebra.compute.ComputeClassificationLoss, has_class_weights: bool, calculate_probabilities: bool, from_logits: bool) -> algebra.compute.ComputeLayerLossClassification:
-                return algebra.compute.ComputeLayerLossClassification(greycat.libs_by_name[algebra.name_].mapped[64], name, reduction, loss_type, has_class_weights, calculate_probabilities, from_logits)
+                return algebra.compute.ComputeLayerLossClassification(greycat.libs_by_name[algebra.name_].mapped[64], [name, reduction, loss_type, has_class_weights, calculate_probabilities, from_logits])
 
         @final
         class ComputeOperationAcos(GreyCat.Object):
@@ -1822,7 +1822,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationAcos:
-                return algebra.compute.ComputeOperationAcos(greycat.libs_by_name[algebra.name_].mapped[65], input, output)
+                return algebra.compute.ComputeOperationAcos(greycat.libs_by_name[algebra.name_].mapped[65], [input, output])
 
         @final
         class ComputeVariable(GreyCat.Object):
@@ -1839,7 +1839,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str) -> algebra.compute.ComputeVariable:
-                return algebra.compute.ComputeVariable(greycat.libs_by_name[algebra.name_].mapped[66], name)
+                return algebra.compute.ComputeVariable(greycat.libs_by_name[algebra.name_].mapped[66], [name])
 
         @final
         class ComputeLayerConfusion(GreyCat.Object):
@@ -1877,7 +1877,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str, nbClass: int) -> algebra.compute.ComputeLayerConfusion:
-                return algebra.compute.ComputeLayerConfusion(greycat.libs_by_name[algebra.name_].mapped[67], name, nbClass)
+                return algebra.compute.ComputeLayerConfusion(greycat.libs_by_name[algebra.name_].mapped[67], [name, nbClass])
 
         @final
         class ComputeOperation1In1Out(GreyCat.Object):
@@ -1900,7 +1900,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperation1In1Out:
-                return algebra.compute.ComputeOperation1In1Out(greycat.libs_by_name[algebra.name_].mapped[68], input, output)
+                return algebra.compute.ComputeOperation1In1Out(greycat.libs_by_name[algebra.name_].mapped[68], [input, output])
 
         @final
         class ComputeModel(GreyCat.Object):
@@ -1917,7 +1917,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, layers: std.core.Array) -> algebra.compute.ComputeModel:
-                return algebra.compute.ComputeModel(greycat.libs_by_name[algebra.name_].mapped[69], layers)
+                return algebra.compute.ComputeModel(greycat.libs_by_name[algebra.name_].mapped[69], [layers])
 
         @final
         class ComputeOperationAsinh(GreyCat.Object):
@@ -1940,7 +1940,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationAsinh:
-                return algebra.compute.ComputeOperationAsinh(greycat.libs_by_name[algebra.name_].mapped[70], input, output)
+                return algebra.compute.ComputeOperationAsinh(greycat.libs_by_name[algebra.name_].mapped[70], [input, output])
 
         @final
         class ComputeOperationHardSigmoid(GreyCat.Object):
@@ -1985,7 +1985,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str, slope: float, shift: float) -> algebra.compute.ComputeOperationHardSigmoid:
-                return algebra.compute.ComputeOperationHardSigmoid(greycat.libs_by_name[algebra.name_].mapped[71], input, output, slope, shift)
+                return algebra.compute.ComputeOperationHardSigmoid(greycat.libs_by_name[algebra.name_].mapped[71], [input, output, slope, shift])
 
         @final
         class ComputeActivationTanh(GreyCat.Object):
@@ -1996,7 +1996,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeActivationTanh:
-                return algebra.compute.ComputeActivationTanh(greycat.libs_by_name[algebra.name_].mapped[72])
+                return algebra.compute.ComputeActivationTanh(greycat.libs_by_name[algebra.name_].mapped[72], [])
 
         @final
         class ComputeRegularizer(GreyCat.Object):
@@ -2019,7 +2019,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, l1: float, l2: float) -> algebra.compute.ComputeRegularizer:
-                return algebra.compute.ComputeRegularizer(greycat.libs_by_name[algebra.name_].mapped[73], l1, l2)
+                return algebra.compute.ComputeRegularizer(greycat.libs_by_name[algebra.name_].mapped[73], [l1, l2])
 
         @final
         class ComputeOperationTanh(GreyCat.Object):
@@ -2042,7 +2042,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationTanh:
-                return algebra.compute.ComputeOperationTanh(greycat.libs_by_name[algebra.name_].mapped[74], input, output)
+                return algebra.compute.ComputeOperationTanh(greycat.libs_by_name[algebra.name_].mapped[74], [input, output])
 
         @final
         class ComputeLayer(GreyCat.Object):
@@ -2059,7 +2059,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str) -> algebra.compute.ComputeLayer:
-                return algebra.compute.ComputeLayer(greycat.libs_by_name[algebra.name_].mapped[75], name)
+                return algebra.compute.ComputeLayer(greycat.libs_by_name[algebra.name_].mapped[75], [name])
 
         @final
         class ComputeOptimizerAdaDelta(GreyCat.Object):
@@ -2103,7 +2103,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, learning_rate: float, decay_rate: float, smooth_epsilon: float) -> algebra.compute.ComputeOptimizerAdaDelta:
-                return algebra.compute.ComputeOptimizerAdaDelta(greycat.libs_by_name[algebra.name_].mapped[76], learning_rate, decay_rate, smooth_epsilon)
+                return algebra.compute.ComputeOptimizerAdaDelta(greycat.libs_by_name[algebra.name_].mapped[76], [learning_rate, decay_rate, smooth_epsilon])
 
         @final
         class ComputeOperationArgMax(GreyCat.Object):
@@ -2132,7 +2132,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str, output2: str) -> algebra.compute.ComputeOperationArgMax:
-                return algebra.compute.ComputeOperationArgMax(greycat.libs_by_name[algebra.name_].mapped[77], input, output, output2)
+                return algebra.compute.ComputeOperationArgMax(greycat.libs_by_name[algebra.name_].mapped[77], [input, output, output2])
 
         @final
         class ComputeOperationSoftmax(GreyCat.Object):
@@ -2155,7 +2155,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationSoftmax:
-                return algebra.compute.ComputeOperationSoftmax(greycat.libs_by_name[algebra.name_].mapped[78], input, output)
+                return algebra.compute.ComputeOperationSoftmax(greycat.libs_by_name[algebra.name_].mapped[78], [input, output])
 
         @final
         class ComputeLayerDense(GreyCat.Object):
@@ -2256,7 +2256,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str, type: std.core.TensorType, inputs: int, outputs: int, use_bias: bool, weight_initializer: algebra.compute.ComputeInitializer, weight_regularizer: algebra.compute.ComputeRegularizer, bias_initializer: algebra.compute.ComputeInitializer, bias_regularizer: algebra.compute.ComputeRegularizer, activation: algebra.compute.ComputeActivation) -> algebra.compute.ComputeLayerDense:
-                return algebra.compute.ComputeLayerDense(greycat.libs_by_name[algebra.name_].mapped[79], name, type, inputs, outputs, use_bias, weight_initializer, weight_regularizer, bias_initializer, bias_regularizer, activation)
+                return algebra.compute.ComputeLayerDense(greycat.libs_by_name[algebra.name_].mapped[79], [name, type, inputs, outputs, use_bias, weight_initializer, weight_regularizer, bias_initializer, bias_regularizer, activation])
 
         @final
         class ComputeLayerCustom(GreyCat.Object):
@@ -2285,7 +2285,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str, ops: std.core.Array, vars: std.core.Array) -> algebra.compute.ComputeLayerCustom:
-                return algebra.compute.ComputeLayerCustom(greycat.libs_by_name[algebra.name_].mapped[80], name, ops, vars)
+                return algebra.compute.ComputeLayerCustom(greycat.libs_by_name[algebra.name_].mapped[80], [name, ops, vars])
 
         @final
         class ComputeVarProxy(GreyCat.Object):
@@ -2302,7 +2302,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str) -> algebra.compute.ComputeVarProxy:
-                return algebra.compute.ComputeVarProxy(greycat.libs_by_name[algebra.name_].mapped[81], name)
+                return algebra.compute.ComputeVarProxy(greycat.libs_by_name[algebra.name_].mapped[81], [name])
 
         @final
         class ComputeOperationEuclidean(GreyCat.Object):
@@ -2331,7 +2331,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, input2: str, output: str) -> algebra.compute.ComputeOperationEuclidean:
-                return algebra.compute.ComputeOperationEuclidean(greycat.libs_by_name[algebra.name_].mapped[82], input, input2, output)
+                return algebra.compute.ComputeOperationEuclidean(greycat.libs_by_name[algebra.name_].mapped[82], [input, input2, output])
 
         @final
         class ComputeInitializerGlorotUniform(GreyCat.Object):
@@ -2342,7 +2342,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerGlorotUniform:
-                return algebra.compute.ComputeInitializerGlorotUniform(greycat.libs_by_name[algebra.name_].mapped[83])
+                return algebra.compute.ComputeInitializerGlorotUniform(greycat.libs_by_name[algebra.name_].mapped[83], [])
 
         @final
         class ComputeOperation(GreyCat.Object):
@@ -2353,7 +2353,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeOperation:
-                return algebra.compute.ComputeOperation(greycat.libs_by_name[algebra.name_].mapped[84])
+                return algebra.compute.ComputeOperation(greycat.libs_by_name[algebra.name_].mapped[84], [])
 
         @final
         class ComputeActivationCelu(GreyCat.Object):
@@ -2375,7 +2375,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, alpha: float) -> algebra.compute.ComputeActivationCelu:
-                return algebra.compute.ComputeActivationCelu(greycat.libs_by_name[algebra.name_].mapped[85], alpha)
+                return algebra.compute.ComputeActivationCelu(greycat.libs_by_name[algebra.name_].mapped[85], [alpha])
 
         @final
         class ComputeOperationCelu(GreyCat.Object):
@@ -2409,7 +2409,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str, alpha: float) -> algebra.compute.ComputeOperationCelu:
-                return algebra.compute.ComputeOperationCelu(greycat.libs_by_name[algebra.name_].mapped[86], input, output, alpha)
+                return algebra.compute.ComputeOperationCelu(greycat.libs_by_name[algebra.name_].mapped[86], [input, output, alpha])
 
         @final
         class ComputeOperationAddBias(GreyCat.Object):
@@ -2438,7 +2438,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, input2: str, output: str) -> algebra.compute.ComputeOperationAddBias:
-                return algebra.compute.ComputeOperationAddBias(greycat.libs_by_name[algebra.name_].mapped[87], input, input2, output)
+                return algebra.compute.ComputeOperationAddBias(greycat.libs_by_name[algebra.name_].mapped[87], [input, input2, output])
 
         @final
         class ComputeBinding(GreyCat.Object):
@@ -2467,7 +2467,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, src_layer_name: str, src_var_name: str, target_var_name: str) -> algebra.compute.ComputeBinding:
-                return algebra.compute.ComputeBinding(greycat.libs_by_name[algebra.name_].mapped[88], src_layer_name, src_var_name, target_var_name)
+                return algebra.compute.ComputeBinding(greycat.libs_by_name[algebra.name_].mapped[88], [src_layer_name, src_var_name, target_var_name])
 
         @final
         class ComputeActivationSoftmax(GreyCat.Object):
@@ -2484,7 +2484,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, classes: str) -> algebra.compute.ComputeActivationSoftmax:
-                return algebra.compute.ComputeActivationSoftmax(greycat.libs_by_name[algebra.name_].mapped[89], classes)
+                return algebra.compute.ComputeActivationSoftmax(greycat.libs_by_name[algebra.name_].mapped[89], [classes])
 
         @final
         class ComputeOperationRelu(GreyCat.Object):
@@ -2524,7 +2524,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str, max_value: float, threshold: float) -> algebra.compute.ComputeOperationRelu:
-                return algebra.compute.ComputeOperationRelu(greycat.libs_by_name[algebra.name_].mapped[90], input, output, max_value, threshold)
+                return algebra.compute.ComputeOperationRelu(greycat.libs_by_name[algebra.name_].mapped[90], [input, output, max_value, threshold])
 
         @final
         class ComputeOperationAdd(GreyCat.Object):
@@ -2553,7 +2553,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, input2: str, output: str) -> algebra.compute.ComputeOperationAdd:
-                return algebra.compute.ComputeOperationAdd(greycat.libs_by_name[algebra.name_].mapped[91], input, input2, output)
+                return algebra.compute.ComputeOperationAdd(greycat.libs_by_name[algebra.name_].mapped[91], [input, input2, output])
 
         @final
         class ComputeOperationLogSoftmax(GreyCat.Object):
@@ -2582,7 +2582,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str, axis: int) -> algebra.compute.ComputeOperationLogSoftmax:
-                return algebra.compute.ComputeOperationLogSoftmax(greycat.libs_by_name[algebra.name_].mapped[92], input, output, axis)
+                return algebra.compute.ComputeOperationLogSoftmax(greycat.libs_by_name[algebra.name_].mapped[92], [input, output, axis])
 
         @final
         class ComputeOptimizerRmsProp(GreyCat.Object):
@@ -2626,7 +2626,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, learning_rate: float, decay_rate: float, smooth_epsilon: float) -> algebra.compute.ComputeOptimizerRmsProp:
-                return algebra.compute.ComputeOptimizerRmsProp(greycat.libs_by_name[algebra.name_].mapped[93], learning_rate, decay_rate, smooth_epsilon)
+                return algebra.compute.ComputeOptimizerRmsProp(greycat.libs_by_name[algebra.name_].mapped[93], [learning_rate, decay_rate, smooth_epsilon])
 
         @final
         class ComputeOperationArgMin(GreyCat.Object):
@@ -2655,7 +2655,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str, output2: str) -> algebra.compute.ComputeOperationArgMin:
-                return algebra.compute.ComputeOperationArgMin(greycat.libs_by_name[algebra.name_].mapped[94], input, output, output2)
+                return algebra.compute.ComputeOperationArgMin(greycat.libs_by_name[algebra.name_].mapped[94], [input, output, output2])
 
         @final
         class ComputeActivationElu(GreyCat.Object):
@@ -2677,7 +2677,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, alpha: float) -> algebra.compute.ComputeActivationElu:
-                return algebra.compute.ComputeActivationElu(greycat.libs_by_name[algebra.name_].mapped[95], alpha)
+                return algebra.compute.ComputeActivationElu(greycat.libs_by_name[algebra.name_].mapped[95], [alpha])
 
         @final
         class ComputeOperationSub(GreyCat.Object):
@@ -2706,7 +2706,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, input2: str, output: str) -> algebra.compute.ComputeOperationSub:
-                return algebra.compute.ComputeOperationSub(greycat.libs_by_name[algebra.name_].mapped[96], input, input2, output)
+                return algebra.compute.ComputeOperationSub(greycat.libs_by_name[algebra.name_].mapped[96], [input, input2, output])
 
         @final
         class ComputeOperationFilter(GreyCat.Object):
@@ -2741,7 +2741,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str, mask: str, nbOutputs: int) -> algebra.compute.ComputeOperationFilter:
-                return algebra.compute.ComputeOperationFilter(greycat.libs_by_name[algebra.name_].mapped[97], input, output, mask, nbOutputs)
+                return algebra.compute.ComputeOperationFilter(greycat.libs_by_name[algebra.name_].mapped[97], [input, output, mask, nbOutputs])
 
         @final
         class ComputeOperationSelu(GreyCat.Object):
@@ -2764,7 +2764,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationSelu:
-                return algebra.compute.ComputeOperationSelu(greycat.libs_by_name[algebra.name_].mapped[98], input, output)
+                return algebra.compute.ComputeOperationSelu(greycat.libs_by_name[algebra.name_].mapped[98], [input, output])
 
         @final
         class ComputeOptimizerSgd(GreyCat.Object):
@@ -2786,7 +2786,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, learning_rate: float) -> algebra.compute.ComputeOptimizerSgd:
-                return algebra.compute.ComputeOptimizerSgd(greycat.libs_by_name[algebra.name_].mapped[99], learning_rate)
+                return algebra.compute.ComputeOptimizerSgd(greycat.libs_by_name[algebra.name_].mapped[99], [learning_rate])
 
         @final
         class ComputeInitializer(GreyCat.Object):
@@ -2797,7 +2797,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeInitializer:
-                return algebra.compute.ComputeInitializer(greycat.libs_by_name[algebra.name_].mapped[100])
+                return algebra.compute.ComputeInitializer(greycat.libs_by_name[algebra.name_].mapped[100], [])
 
         @final
         class ComputeLayerLSTM(GreyCat.Object):
@@ -2966,7 +2966,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str, bias_initializer: algebra.compute.ComputeInitializer, weight_regularizer: algebra.compute.ComputeRegularizer, bias_regularizer: algebra.compute.ComputeRegularizer, type: std.core.TensorType, use_bias: bool, return_sequences: bool, bidirectional: bool, auto_init_states: bool, inputs: int, outputs: int, layers: int, sequences: int) -> algebra.compute.ComputeLayerLSTM:
-                return algebra.compute.ComputeLayerLSTM(greycat.libs_by_name[algebra.name_].mapped[101], name, bias_initializer, weight_regularizer, bias_regularizer, type, use_bias, return_sequences, bidirectional, auto_init_states, inputs, outputs, layers, sequences)
+                return algebra.compute.ComputeLayerLSTM(greycat.libs_by_name[algebra.name_].mapped[101], [name, bias_initializer, weight_regularizer, bias_regularizer, type, use_bias, return_sequences, bidirectional, auto_init_states, inputs, outputs, layers, sequences])
 
         @final
         class ComputeOptimizerMomentum(GreyCat.Object):
@@ -2999,7 +2999,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, learning_rate: float, decay_rate: float) -> algebra.compute.ComputeOptimizerMomentum:
-                return algebra.compute.ComputeOptimizerMomentum(greycat.libs_by_name[algebra.name_].mapped[102], learning_rate, decay_rate)
+                return algebra.compute.ComputeOptimizerMomentum(greycat.libs_by_name[algebra.name_].mapped[102], [learning_rate, decay_rate])
 
         @final
         class ComputeLayerLossRegression(GreyCat.Object):
@@ -3028,7 +3028,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str, reduction: algebra.compute.ComputeReduction, loss_type: algebra.compute.ComputeRegressionLoss) -> algebra.compute.ComputeLayerLossRegression:
-                return algebra.compute.ComputeLayerLossRegression(greycat.libs_by_name[algebra.name_].mapped[103], name, reduction, loss_type)
+                return algebra.compute.ComputeLayerLossRegression(greycat.libs_by_name[algebra.name_].mapped[103], [name, reduction, loss_type])
 
         @final
         class ComputeOperationSqrt(GreyCat.Object):
@@ -3051,7 +3051,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationSqrt:
-                return algebra.compute.ComputeOperationSqrt(greycat.libs_by_name[algebra.name_].mapped[104], input, output)
+                return algebra.compute.ComputeOperationSqrt(greycat.libs_by_name[algebra.name_].mapped[104], [input, output])
 
         @final
         class ComputeOptimizerAdam(GreyCat.Object):
@@ -3106,7 +3106,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, learning_rate: float, beta1: float, beta2: float, smooth_epsilon: float) -> algebra.compute.ComputeOptimizerAdam:
-                return algebra.compute.ComputeOptimizerAdam(greycat.libs_by_name[algebra.name_].mapped[105], learning_rate, beta1, beta2, smooth_epsilon)
+                return algebra.compute.ComputeOptimizerAdam(greycat.libs_by_name[algebra.name_].mapped[105], [learning_rate, beta1, beta2, smooth_epsilon])
 
         @final
         class ComputeOperationSign(GreyCat.Object):
@@ -3129,7 +3129,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationSign:
-                return algebra.compute.ComputeOperationSign(greycat.libs_by_name[algebra.name_].mapped[106], input, output)
+                return algebra.compute.ComputeOperationSign(greycat.libs_by_name[algebra.name_].mapped[106], [input, output])
 
         @final
         class ComputeActivationSigmoid(GreyCat.Object):
@@ -3140,7 +3140,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeActivationSigmoid:
-                return algebra.compute.ComputeActivationSigmoid(greycat.libs_by_name[algebra.name_].mapped[107])
+                return algebra.compute.ComputeActivationSigmoid(greycat.libs_by_name[algebra.name_].mapped[107], [])
 
         @final
         class ComputeLayerLinear(GreyCat.Object):
@@ -3230,7 +3230,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str, type: std.core.TensorType, inputs: int, outputs: int, use_bias: bool, weight_initializer: algebra.compute.ComputeInitializer, weight_regularizer: algebra.compute.ComputeRegularizer, bias_initializer: algebra.compute.ComputeInitializer, bias_regularizer: algebra.compute.ComputeRegularizer) -> algebra.compute.ComputeLayerLinear:
-                return algebra.compute.ComputeLayerLinear(greycat.libs_by_name[algebra.name_].mapped[108], name, type, inputs, outputs, use_bias, weight_initializer, weight_regularizer, bias_initializer, bias_regularizer)
+                return algebra.compute.ComputeLayerLinear(greycat.libs_by_name[algebra.name_].mapped[108], [name, type, inputs, outputs, use_bias, weight_initializer, weight_regularizer, bias_initializer, bias_regularizer])
 
         @final
         class ComputeInitializerNone(GreyCat.Object):
@@ -3241,7 +3241,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerNone:
-                return algebra.compute.ComputeInitializerNone(greycat.libs_by_name[algebra.name_].mapped[109])
+                return algebra.compute.ComputeInitializerNone(greycat.libs_by_name[algebra.name_].mapped[109], [])
 
         @final
         class ComputeInitializerNormalAvg(GreyCat.Object):
@@ -3252,7 +3252,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerNormalAvg:
-                return algebra.compute.ComputeInitializerNormalAvg(greycat.libs_by_name[algebra.name_].mapped[110])
+                return algebra.compute.ComputeInitializerNormalAvg(greycat.libs_by_name[algebra.name_].mapped[110], [])
 
         @final
         class ComputeInitializerSigmoidUniform(GreyCat.Object):
@@ -3263,7 +3263,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerSigmoidUniform:
-                return algebra.compute.ComputeInitializerSigmoidUniform(greycat.libs_by_name[algebra.name_].mapped[111])
+                return algebra.compute.ComputeInitializerSigmoidUniform(greycat.libs_by_name[algebra.name_].mapped[111], [])
 
         @final
         class ComputeOperationLeakyRelu(GreyCat.Object):
@@ -3319,7 +3319,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str, alpha: float, max_value: float, threshold: float) -> algebra.compute.ComputeOperationLeakyRelu:
-                return algebra.compute.ComputeOperationLeakyRelu(greycat.libs_by_name[algebra.name_].mapped[112], input, output, alpha, max_value, threshold)
+                return algebra.compute.ComputeOperationLeakyRelu(greycat.libs_by_name[algebra.name_].mapped[112], [input, output, alpha, max_value, threshold])
 
         @final
         class ComputeActivationExp(GreyCat.Object):
@@ -3330,7 +3330,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeActivationExp:
-                return algebra.compute.ComputeActivationExp(greycat.libs_by_name[algebra.name_].mapped[113])
+                return algebra.compute.ComputeActivationExp(greycat.libs_by_name[algebra.name_].mapped[113], [])
 
         @final
         class ComputeOperationSum(GreyCat.Object):
@@ -3359,7 +3359,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str, axis: int) -> algebra.compute.ComputeOperationSum:
-                return algebra.compute.ComputeOperationSum(greycat.libs_by_name[algebra.name_].mapped[114], input, output, axis)
+                return algebra.compute.ComputeOperationSum(greycat.libs_by_name[algebra.name_].mapped[114], [input, output, axis])
 
         @final
         class ComputeOperationAtan(GreyCat.Object):
@@ -3382,7 +3382,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationAtan:
-                return algebra.compute.ComputeOperationAtan(greycat.libs_by_name[algebra.name_].mapped[115], input, output)
+                return algebra.compute.ComputeOperationAtan(greycat.libs_by_name[algebra.name_].mapped[115], [input, output])
 
         @final
         class ComputeInitializerUniformAvg(GreyCat.Object):
@@ -3393,7 +3393,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerUniformAvg:
-                return algebra.compute.ComputeInitializerUniformAvg(greycat.libs_by_name[algebra.name_].mapped[116])
+                return algebra.compute.ComputeInitializerUniformAvg(greycat.libs_by_name[algebra.name_].mapped[116], [])
 
         @final
         class ComputeInitializerReluUniform(GreyCat.Object):
@@ -3404,7 +3404,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerReluUniform:
-                return algebra.compute.ComputeInitializerReluUniform(greycat.libs_by_name[algebra.name_].mapped[117])
+                return algebra.compute.ComputeInitializerReluUniform(greycat.libs_by_name[algebra.name_].mapped[117], [])
 
         @final
         class ComputeLayerFilter(GreyCat.Object):
@@ -3460,7 +3460,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str, type: std.core.TensorType, inputs: int, outputs: int, maskValues: std.core.Array) -> algebra.compute.ComputeLayerFilter:
-                return algebra.compute.ComputeLayerFilter(greycat.libs_by_name[algebra.name_].mapped[118], name, type, inputs, outputs, maskValues)
+                return algebra.compute.ComputeLayerFilter(greycat.libs_by_name[algebra.name_].mapped[118], [name, type, inputs, outputs, maskValues])
 
         @final
         class ComputeRegressionLoss(GreyCat.Enum):
@@ -3481,7 +3481,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeRegressionLoss:
-                return algebra.compute.ComputeRegressionLoss(greycat.libs_by_name[algebra.name_].mapped[119])
+                return algebra.compute.ComputeRegressionLoss(greycat.libs_by_name[algebra.name_].mapped[119], [])
 
         @final
         class ComputeInitializerPytorch(GreyCat.Object):
@@ -3492,7 +3492,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerPytorch:
-                return algebra.compute.ComputeInitializerPytorch(greycat.libs_by_name[algebra.name_].mapped[120])
+                return algebra.compute.ComputeInitializerPytorch(greycat.libs_by_name[algebra.name_].mapped[120], [])
 
         @final
         class ComputeOptimizerFtrl(GreyCat.Object):
@@ -3547,7 +3547,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, learning_rate: float, lambda1: float, lambda2: float, beta: float) -> algebra.compute.ComputeOptimizerFtrl:
-                return algebra.compute.ComputeOptimizerFtrl(greycat.libs_by_name[algebra.name_].mapped[121], learning_rate, lambda1, lambda2, beta)
+                return algebra.compute.ComputeOptimizerFtrl(greycat.libs_by_name[algebra.name_].mapped[121], [learning_rate, lambda1, lambda2, beta])
 
         @final
         class ComputeOperationAcosh(GreyCat.Object):
@@ -3570,7 +3570,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationAcosh:
-                return algebra.compute.ComputeOperationAcosh(greycat.libs_by_name[algebra.name_].mapped[122], input, output)
+                return algebra.compute.ComputeOperationAcosh(greycat.libs_by_name[algebra.name_].mapped[122], [input, output])
 
         @final
         class ComputeOperationCosh(GreyCat.Object):
@@ -3593,7 +3593,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationCosh:
-                return algebra.compute.ComputeOperationCosh(greycat.libs_by_name[algebra.name_].mapped[123], input, output)
+                return algebra.compute.ComputeOperationCosh(greycat.libs_by_name[algebra.name_].mapped[123], [input, output])
 
         @final
         class ComputeOperationScale(GreyCat.Object):
@@ -3622,7 +3622,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, input: str, output: str, alpha: float) -> algebra.compute.ComputeOperationScale:
-                return algebra.compute.ComputeOperationScale(greycat.libs_by_name[algebra.name_].mapped[124], input, output, alpha)
+                return algebra.compute.ComputeOperationScale(greycat.libs_by_name[algebra.name_].mapped[124], [input, output, alpha])
 
         @final
         class ComputeInitializerUniform(GreyCat.Object):
@@ -3645,7 +3645,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, min: float, max: float) -> algebra.compute.ComputeInitializerUniform:
-                return algebra.compute.ComputeInitializerUniform(greycat.libs_by_name[algebra.name_].mapped[125], min, max)
+                return algebra.compute.ComputeInitializerUniform(greycat.libs_by_name[algebra.name_].mapped[125], [min, max])
 
         @final
         class ComputeActivationRelu(GreyCat.Object):
@@ -3673,7 +3673,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, max_value: float, threshold: float) -> algebra.compute.ComputeActivationRelu:
-                return algebra.compute.ComputeActivationRelu(greycat.libs_by_name[algebra.name_].mapped[126], max_value, threshold)
+                return algebra.compute.ComputeActivationRelu(greycat.libs_by_name[algebra.name_].mapped[126], [max_value, threshold])
 
         @final
         class ComputeLayerCall(GreyCat.Object):
@@ -3696,7 +3696,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, layer_name: str, bindings: std.core.Array) -> algebra.compute.ComputeLayerCall:
-                return algebra.compute.ComputeLayerCall(greycat.libs_by_name[algebra.name_].mapped[127], layer_name, bindings)
+                return algebra.compute.ComputeLayerCall(greycat.libs_by_name[algebra.name_].mapped[127], [layer_name, bindings])
 
         @final
         class ComputeEngine(algebra_n.compute._ComputeEngine):
@@ -3707,7 +3707,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra_n.compute._ComputeEngine:
-                return algebra.compute.ComputeEngine(greycat.libs_by_name[algebra.name_].mapped[128])
+                return algebra.compute.ComputeEngine(greycat.libs_by_name[algebra.name_].mapped[128], [ ])
 
     @final
     class nn_layers_names:
@@ -4721,7 +4721,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
-                return algebra.nn_layers_names.NNLayersNames(greycat.libs_by_name[algebra.name_].mapped[129])
+                return algebra.nn_layers_names.NNLayersNames(greycat.libs_by_name[algebra.name_].mapped[129], [])
 
     @final
     class nn:
@@ -4861,7 +4861,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, inputs: int, inputs_gradients: bool, outputs: int, fixed_batch_size: int, inputs_sequences: int, outputs_sequences: int, tensor_type: std.core.TensorType, seed: int, randomizeSeed: bool, layers: std.core.Array, preProcessType: algebra.nn.PreProcessType, preProcessObject: Any, postProcessType: algebra.nn.PostProcessType, postProcessObject: Any, optimizer: algebra.compute.ComputeOptimizer, lossLayer: algebra.compute.ComputeLayerLoss, _lastLayer: str, _lastOutput: str, encoder_layer_idx: int, encoder_layer_name: str, encoder_layer_var: str) -> algebra.nn.AutoEncoderNetwork:
-                return algebra.nn.AutoEncoderNetwork(greycat.libs_by_name[algebra.name_].mapped[130], inputs, inputs_gradients, outputs, fixed_batch_size, inputs_sequences, outputs_sequences, tensor_type, seed, randomizeSeed, layers, preProcessType, preProcessObject, postProcessType, postProcessObject, optimizer, lossLayer, _lastLayer, _lastOutput, encoder_layer_idx, encoder_layer_name, encoder_layer_var)
+                return algebra.nn.AutoEncoderNetwork(greycat.libs_by_name[algebra.name_].mapped[130], [inputs, inputs_gradients, outputs, fixed_batch_size, inputs_sequences, outputs_sequences, tensor_type, seed, randomizeSeed, layers, preProcessType, preProcessObject, postProcessType, postProcessObject, optimizer, lossLayer, _lastLayer, _lastOutput, encoder_layer_idx, encoder_layer_name, encoder_layer_var])
 
         @final
         class InitializerConfig(GreyCat.Object):
@@ -4896,7 +4896,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, weight_initializer: algebra.compute.ComputeInitializer, weight_regularizer: algebra.compute.ComputeRegularizer, bias_initializer: algebra.compute.ComputeInitializer, bias_regularizer: algebra.compute.ComputeRegularizer) -> algebra.nn.InitializerConfig:
-                return algebra.nn.InitializerConfig(greycat.libs_by_name[algebra.name_].mapped[131], weight_initializer, weight_regularizer, bias_initializer, bias_regularizer)
+                return algebra.nn.InitializerConfig(greycat.libs_by_name[algebra.name_].mapped[131], [weight_initializer, weight_regularizer, bias_initializer, bias_regularizer])
 
         @final
         class ComputeInitializers(GreyCat.Enum):
@@ -4997,7 +4997,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.nn.ComputeInitializers:
-                return algebra.nn.ComputeInitializers(greycat.libs_by_name[algebra.name_].mapped[132])
+                return algebra.nn.ComputeInitializers(greycat.libs_by_name[algebra.name_].mapped[132], [])
 
         @final
         class ComputeOptimizers(GreyCat.Enum):
@@ -5058,7 +5058,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.nn.ComputeOptimizers:
-                return algebra.nn.ComputeOptimizers(greycat.libs_by_name[algebra.name_].mapped[133])
+                return algebra.nn.ComputeOptimizers(greycat.libs_by_name[algebra.name_].mapped[133], [])
 
         @final
         class NeuralNetwork(GreyCat.Object):
@@ -5367,7 +5367,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, inputs: int, inputs_gradients: bool, outputs: int, fixed_batch_size: int, inputs_sequences: int, outputs_sequences: int, tensor_type: std.core.TensorType, seed: int, randomizeSeed: bool, layers: std.core.Array, preProcessType: algebra.nn.PreProcessType, preProcessObject: Any, postProcessType: algebra.nn.PostProcessType, postProcessObject: Any, optimizer: algebra.compute.ComputeOptimizer, lossLayer: algebra.compute.ComputeLayerLoss, _lastLayer: str, _lastOutput: str) -> algebra.nn.NeuralNetwork:
-                return algebra.nn.NeuralNetwork(greycat.libs_by_name[algebra.name_].mapped[134], inputs, inputs_gradients, outputs, fixed_batch_size, inputs_sequences, outputs_sequences, tensor_type, seed, randomizeSeed, layers, preProcessType, preProcessObject, postProcessType, postProcessObject, optimizer, lossLayer, _lastLayer, _lastOutput)
+                return algebra.nn.NeuralNetwork(greycat.libs_by_name[algebra.name_].mapped[134], [inputs, inputs_gradients, outputs, fixed_batch_size, inputs_sequences, outputs_sequences, tensor_type, seed, randomizeSeed, layers, preProcessType, preProcessObject, postProcessType, postProcessObject, optimizer, lossLayer, _lastLayer, _lastOutput])
 
         @final
         class ComputeLayerTypes(GreyCat.Enum):
@@ -5408,7 +5408,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.nn.ComputeLayerTypes:
-                return algebra.nn.ComputeLayerTypes(greycat.libs_by_name[algebra.name_].mapped[135])
+                return algebra.nn.ComputeLayerTypes(greycat.libs_by_name[algebra.name_].mapped[135], [])
 
         @final
         class ClassificationNetwork(GreyCat.Object):
@@ -5545,7 +5545,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, inputs: int, inputs_gradients: bool, outputs: int, fixed_batch_size: int, inputs_sequences: int, outputs_sequences: int, tensor_type: std.core.TensorType, seed: int, randomizeSeed: bool, layers: std.core.Array, preProcessType: algebra.nn.PreProcessType, preProcessObject: Any, postProcessType: algebra.nn.PostProcessType, postProcessObject: Any, optimizer: algebra.compute.ComputeOptimizer, lossLayer: algebra.compute.ComputeLayerLoss, _lastLayer: str, _lastOutput: str, calculate_probabilities: bool, has_class_weights: bool, from_logits: bool) -> algebra.nn.ClassificationNetwork:
-                return algebra.nn.ClassificationNetwork(greycat.libs_by_name[algebra.name_].mapped[136], inputs, inputs_gradients, outputs, fixed_batch_size, inputs_sequences, outputs_sequences, tensor_type, seed, randomizeSeed, layers, preProcessType, preProcessObject, postProcessType, postProcessObject, optimizer, lossLayer, _lastLayer, _lastOutput, calculate_probabilities, has_class_weights, from_logits)
+                return algebra.nn.ClassificationNetwork(greycat.libs_by_name[algebra.name_].mapped[136], [inputs, inputs_gradients, outputs, fixed_batch_size, inputs_sequences, outputs_sequences, tensor_type, seed, randomizeSeed, layers, preProcessType, preProcessObject, postProcessType, postProcessObject, optimizer, lossLayer, _lastLayer, _lastOutput, calculate_probabilities, has_class_weights, from_logits])
 
         @final
         class RegressionNetwork(GreyCat.Object):
@@ -5664,7 +5664,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, inputs: int, inputs_gradients: bool, outputs: int, fixed_batch_size: int, inputs_sequences: int, outputs_sequences: int, tensor_type: std.core.TensorType, seed: int, randomizeSeed: bool, layers: std.core.Array, preProcessType: algebra.nn.PreProcessType, preProcessObject: Any, postProcessType: algebra.nn.PostProcessType, postProcessObject: Any, optimizer: algebra.compute.ComputeOptimizer, lossLayer: algebra.compute.ComputeLayerLoss, _lastLayer: str, _lastOutput: str) -> algebra.nn.RegressionNetwork:
-                return algebra.nn.RegressionNetwork(greycat.libs_by_name[algebra.name_].mapped[137], inputs, inputs_gradients, outputs, fixed_batch_size, inputs_sequences, outputs_sequences, tensor_type, seed, randomizeSeed, layers, preProcessType, preProcessObject, postProcessType, postProcessObject, optimizer, lossLayer, _lastLayer, _lastOutput)
+                return algebra.nn.RegressionNetwork(greycat.libs_by_name[algebra.name_].mapped[137], [inputs, inputs_gradients, outputs, fixed_batch_size, inputs_sequences, outputs_sequences, tensor_type, seed, randomizeSeed, layers, preProcessType, preProcessObject, postProcessType, postProcessObject, optimizer, lossLayer, _lastLayer, _lastOutput])
 
         @final
         class ClassificationMetrics(GreyCat.Object):
@@ -5693,7 +5693,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, precision: std.core.Array, recall: std.core.Array, f1Score: std.core.Array) -> algebra.nn.ClassificationMetrics:
-                return algebra.nn.ClassificationMetrics(greycat.libs_by_name[algebra.name_].mapped[138], precision, recall, f1Score)
+                return algebra.nn.ClassificationMetrics(greycat.libs_by_name[algebra.name_].mapped[138], [precision, recall, f1Score])
 
         @final
         class ComputeActivations(GreyCat.Enum):
@@ -5764,7 +5764,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.nn.ComputeActivations:
-                return algebra.nn.ComputeActivations(greycat.libs_by_name[algebra.name_].mapped[139])
+                return algebra.nn.ComputeActivations(greycat.libs_by_name[algebra.name_].mapped[139], [])
 
         @final
         class PostProcessType(GreyCat.Enum):
@@ -5790,7 +5790,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.nn.PostProcessType:
-                return algebra.nn.PostProcessType(greycat.libs_by_name[algebra.name_].mapped[140])
+                return algebra.nn.PostProcessType(greycat.libs_by_name[algebra.name_].mapped[140], [])
 
         @final
         class BindingsResult(GreyCat.Object):
@@ -5831,7 +5831,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, previousLayerName: str, previousLayerOutput: str, expectedLayerName: str, expectedLayerOutput: str, postLayer: algebra.compute.ComputeLayer) -> algebra.nn.BindingsResult:
-                return algebra.nn.BindingsResult(greycat.libs_by_name[algebra.name_].mapped[141], previousLayerName, previousLayerOutput, expectedLayerName, expectedLayerOutput, postLayer)
+                return algebra.nn.BindingsResult(greycat.libs_by_name[algebra.name_].mapped[141], [previousLayerName, previousLayerOutput, expectedLayerName, expectedLayerOutput, postLayer])
 
         @final
         class PreProcessType(GreyCat.Enum):
@@ -5862,7 +5862,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.nn.PreProcessType:
-                return algebra.nn.PreProcessType(greycat.libs_by_name[algebra.name_].mapped[142])
+                return algebra.nn.PreProcessType(greycat.libs_by_name[algebra.name_].mapped[142], [])
 
     @final
     class kmeans:
@@ -5930,7 +5930,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, loss: float, roundsDistances: std.core.Array, centroids: std.core.Tensor, clusters_count: std.core.Tensor, clusters_sum_distance: std.core.Tensor, clusters_avg_distance: std.core.Tensor, assignement: std.core.Tensor, distances: std.core.Tensor, clusterInterDistances: std.core.Tensor) -> algebra.kmeans.KmeanResult:
-                return algebra.kmeans.KmeanResult(greycat.libs_by_name[algebra.name_].mapped[143], loss, roundsDistances, centroids, clusters_count, clusters_sum_distance, clusters_avg_distance, assignement, distances, clusterInterDistances)
+                return algebra.kmeans.KmeanResult(greycat.libs_by_name[algebra.name_].mapped[143], [loss, roundsDistances, centroids, clusters_count, clusters_sum_distance, clusters_avg_distance, assignement, distances, clusterInterDistances])
 
         @final
         class KmeanMetaResult(GreyCat.Object):
@@ -5953,7 +5953,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, runDistances: std.core.Array, bestResult: algebra.kmeans.KmeanResult) -> algebra.kmeans.KmeanMetaResult:
-                return algebra.kmeans.KmeanMetaResult(greycat.libs_by_name[algebra.name_].mapped[144], runDistances, bestResult)
+                return algebra.kmeans.KmeanMetaResult(greycat.libs_by_name[algebra.name_].mapped[144], [runDistances, bestResult])
 
         @final
         class Kmeans(GreyCat.Object):
@@ -6089,7 +6089,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.kmeans.Kmeans:
-                return algebra.kmeans.Kmeans(greycat.libs_by_name[algebra.name_].mapped[145])
+                return algebra.kmeans.Kmeans(greycat.libs_by_name[algebra.name_].mapped[145], [])
 
     @final
     class patterns:
@@ -6103,7 +6103,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.patterns.DTWPatternDetector:
-                return algebra.patterns.DTWPatternDetector(greycat.libs_by_name[algebra.name_].mapped[146])
+                return algebra.patterns.DTWPatternDetector(greycat.libs_by_name[algebra.name_].mapped[146], [])
 
         @final
         class ScoreDetailsSingleton(GreyCat.Object):
@@ -6132,7 +6132,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, best_pattern: int, timespan: std.core.duration, timestamp: std.core.time) -> algebra.patterns.ScoreDetailsSingleton:
-                return algebra.patterns.ScoreDetailsSingleton(greycat.libs_by_name[algebra.name_].mapped[147], best_pattern, timespan, timestamp)
+                return algebra.patterns.ScoreDetailsSingleton(greycat.libs_by_name[algebra.name_].mapped[147], [best_pattern, timespan, timestamp])
 
         @final
         class PatternDetector(GreyCat.Object):
@@ -6143,7 +6143,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.patterns.PatternDetector:
-                return algebra.patterns.PatternDetector(greycat.libs_by_name[algebra.name_].mapped[148])
+                return algebra.patterns.PatternDetector(greycat.libs_by_name[algebra.name_].mapped[148], [])
 
         @final
         class PatternDetectionEngine(GreyCat.Object):
@@ -6184,7 +6184,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, timeseries: std.core.nodeTime, state: algebra.patterns.PatternDetectionEngineState, nullStrategy: algebra.patterns.PatternNullStrategy, nullReplaceConstant: float, samplingPolicy: algebra.patterns.SamplingPolicy) -> algebra.patterns.PatternDetectionEngine:
-                return algebra.patterns.PatternDetectionEngine(greycat.libs_by_name[algebra.name_].mapped[149], timeseries, state, nullStrategy, nullReplaceConstant, samplingPolicy)
+                return algebra.patterns.PatternDetectionEngine(greycat.libs_by_name[algebra.name_].mapped[149], [timeseries, state, nullStrategy, nullReplaceConstant, samplingPolicy])
 
         @final
         class PatternDetectionSensitivity(GreyCat.Object):
@@ -6207,7 +6207,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, threshold: float, overlap: float) -> algebra.patterns.PatternDetectionSensitivity:
-                return algebra.patterns.PatternDetectionSensitivity(greycat.libs_by_name[algebra.name_].mapped[150], threshold, overlap)
+                return algebra.patterns.PatternDetectionSensitivity(greycat.libs_by_name[algebra.name_].mapped[150], [threshold, overlap])
 
         @final
         class SaxPatternDetectionEngine(GreyCat.Object):
@@ -6289,7 +6289,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, timeseries: std.core.nodeTime, state: algebra.patterns.PatternDetectionEngineState, nullStrategy: algebra.patterns.PatternNullStrategy, nullReplaceConstant: float, samplingPolicy: algebra.patterns.SamplingPolicy, alphabet_size: int, alphabet_boundaries: std.core.Array, lookup_table: std.core.nodeIndex, max_distance: float, pattern_fingerprints: std.core.Array, fingerprint_length: int) -> algebra.patterns.SaxPatternDetectionEngine:
-                return algebra.patterns.SaxPatternDetectionEngine(greycat.libs_by_name[algebra.name_].mapped[151], timeseries, state, nullStrategy, nullReplaceConstant, samplingPolicy, alphabet_size, alphabet_boundaries, lookup_table, max_distance, pattern_fingerprints, fingerprint_length)
+                return algebra.patterns.SaxPatternDetectionEngine(greycat.libs_by_name[algebra.name_].mapped[151], [timeseries, state, nullStrategy, nullReplaceConstant, samplingPolicy, alphabet_size, alphabet_boundaries, lookup_table, max_distance, pattern_fingerprints, fingerprint_length])
 
         @final
         class SamplingPolicy(GreyCat.Enum):
@@ -6315,7 +6315,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.patterns.SamplingPolicy:
-                return algebra.patterns.SamplingPolicy(greycat.libs_by_name[algebra.name_].mapped[152])
+                return algebra.patterns.SamplingPolicy(greycat.libs_by_name[algebra.name_].mapped[152], [])
 
         @final
         class DTWPatternDetectionEngine(GreyCat.Object):
@@ -6368,7 +6368,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, timeseries: std.core.nodeTime, state: algebra.patterns.PatternDetectionEngineState, nullStrategy: algebra.patterns.PatternNullStrategy, nullReplaceConstant: float, samplingPolicy: algebra.patterns.SamplingPolicy, std: float, matchingNormalisation: algebra.patterns.MatchingNormalisation) -> algebra.patterns.DTWPatternDetectionEngine:
-                return algebra.patterns.DTWPatternDetectionEngine(greycat.libs_by_name[algebra.name_].mapped[153], timeseries, state, nullStrategy, nullReplaceConstant, samplingPolicy, std, matchingNormalisation)
+                return algebra.patterns.DTWPatternDetectionEngine(greycat.libs_by_name[algebra.name_].mapped[153], [timeseries, state, nullStrategy, nullReplaceConstant, samplingPolicy, std, matchingNormalisation])
 
         @final
         class PatternDetectionEngineState(GreyCat.Object):
@@ -6409,7 +6409,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, hasScores: bool, hasDetections: bool, patterns: std.core.Array, scores: std.core.nodeList, detections: std.core.nodeTime) -> algebra.patterns.PatternDetectionEngineState:
-                return algebra.patterns.PatternDetectionEngineState(greycat.libs_by_name[algebra.name_].mapped[154], hasScores, hasDetections, patterns, scores, detections)
+                return algebra.patterns.PatternDetectionEngineState(greycat.libs_by_name[algebra.name_].mapped[154], [hasScores, hasDetections, patterns, scores, detections])
 
         @final
         class RandomPatternDetector(GreyCat.Object):
@@ -6420,7 +6420,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.patterns.RandomPatternDetector:
-                return algebra.patterns.RandomPatternDetector(greycat.libs_by_name[algebra.name_].mapped[155])
+                return algebra.patterns.RandomPatternDetector(greycat.libs_by_name[algebra.name_].mapped[155], [])
 
         @final
         class FFTPatternDetector(GreyCat.Object):
@@ -6431,7 +6431,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.patterns.FFTPatternDetector:
-                return algebra.patterns.FFTPatternDetector(greycat.libs_by_name[algebra.name_].mapped[156])
+                return algebra.patterns.FFTPatternDetector(greycat.libs_by_name[algebra.name_].mapped[156], [])
 
         @final
         class ScoreDetails(GreyCat.Object):
@@ -6454,7 +6454,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, best_pattern: int, timespan: std.core.duration) -> algebra.patterns.ScoreDetails:
-                return algebra.patterns.ScoreDetails(greycat.libs_by_name[algebra.name_].mapped[157], best_pattern, timespan)
+                return algebra.patterns.ScoreDetails(greycat.libs_by_name[algebra.name_].mapped[157], [best_pattern, timespan])
 
         @final
         class Detection(GreyCat.Object):
@@ -6483,7 +6483,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, score: float, best_pattern: int, timespan: std.core.duration) -> algebra.patterns.Detection:
-                return algebra.patterns.Detection(greycat.libs_by_name[algebra.name_].mapped[158], score, best_pattern, timespan)
+                return algebra.patterns.Detection(greycat.libs_by_name[algebra.name_].mapped[158], [score, best_pattern, timespan])
 
         @final
         class EuclideanPatternDetectionEngine(GreyCat.Object):
@@ -6548,7 +6548,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, timeseries: std.core.nodeTime, state: algebra.patterns.PatternDetectionEngineState, nullStrategy: algebra.patterns.PatternNullStrategy, nullReplaceConstant: float, samplingPolicy: algebra.patterns.SamplingPolicy, pattern_tensors: std.core.Array, window_tensors: std.core.Array, std: float, matchingNormalisation: algebra.patterns.MatchingNormalisation) -> algebra.patterns.EuclideanPatternDetectionEngine:
-                return algebra.patterns.EuclideanPatternDetectionEngine(greycat.libs_by_name[algebra.name_].mapped[159], timeseries, state, nullStrategy, nullReplaceConstant, samplingPolicy, pattern_tensors, window_tensors, std, matchingNormalisation)
+                return algebra.patterns.EuclideanPatternDetectionEngine(greycat.libs_by_name[algebra.name_].mapped[159], [timeseries, state, nullStrategy, nullReplaceConstant, samplingPolicy, pattern_tensors, window_tensors, std, matchingNormalisation])
 
         @final
         class RandomPatternDetectionEngine(GreyCat.Object):
@@ -6595,7 +6595,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, timeseries: std.core.nodeTime, state: algebra.patterns.PatternDetectionEngineState, nullStrategy: algebra.patterns.PatternNullStrategy, nullReplaceConstant: float, samplingPolicy: algebra.patterns.SamplingPolicy, rng: std.util.Random) -> algebra.patterns.RandomPatternDetectionEngine:
-                return algebra.patterns.RandomPatternDetectionEngine(greycat.libs_by_name[algebra.name_].mapped[160], timeseries, state, nullStrategy, nullReplaceConstant, samplingPolicy, rng)
+                return algebra.patterns.RandomPatternDetectionEngine(greycat.libs_by_name[algebra.name_].mapped[160], [timeseries, state, nullStrategy, nullReplaceConstant, samplingPolicy, rng])
 
         @final
         class PatternNullStrategy(GreyCat.Enum):
@@ -6631,7 +6631,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.patterns.PatternNullStrategy:
-                return algebra.patterns.PatternNullStrategy(greycat.libs_by_name[algebra.name_].mapped[161])
+                return algebra.patterns.PatternNullStrategy(greycat.libs_by_name[algebra.name_].mapped[161], [])
 
         @final
         class PatternDetectors(GreyCat.Enum):
@@ -6672,7 +6672,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.patterns.PatternDetectors:
-                return algebra.patterns.PatternDetectors(greycat.libs_by_name[algebra.name_].mapped[162])
+                return algebra.patterns.PatternDetectors(greycat.libs_by_name[algebra.name_].mapped[162], [])
 
         @final
         class MatchingNormalisation(GreyCat.Enum):
@@ -6703,7 +6703,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.patterns.MatchingNormalisation:
-                return algebra.patterns.MatchingNormalisation(greycat.libs_by_name[algebra.name_].mapped[163])
+                return algebra.patterns.MatchingNormalisation(greycat.libs_by_name[algebra.name_].mapped[163], [])
 
         @final
         class DistanceMetrics(GreyCat.Object):
@@ -6714,7 +6714,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.patterns.DistanceMetrics:
-                return algebra.patterns.DistanceMetrics(greycat.libs_by_name[algebra.name_].mapped[164])
+                return algebra.patterns.DistanceMetrics(greycat.libs_by_name[algebra.name_].mapped[164], [])
 
         @final
         class EuclideanPatternDetector(GreyCat.Object):
@@ -6725,7 +6725,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.patterns.EuclideanPatternDetector:
-                return algebra.patterns.EuclideanPatternDetector(greycat.libs_by_name[algebra.name_].mapped[165])
+                return algebra.patterns.EuclideanPatternDetector(greycat.libs_by_name[algebra.name_].mapped[165], [])
 
         @final
         class FFTResult(GreyCat.Object):
@@ -6754,7 +6754,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, distance: float, best_pattern: int, best_timespan: std.core.duration) -> algebra.patterns.FFTResult:
-                return algebra.patterns.FFTResult(greycat.libs_by_name[algebra.name_].mapped[166], distance, best_pattern, best_timespan)
+                return algebra.patterns.FFTResult(greycat.libs_by_name[algebra.name_].mapped[166], [distance, best_pattern, best_timespan])
 
         @final
         class OverlappingDetection(GreyCat.Object):
@@ -6789,7 +6789,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, score: float, best_pattern: int, timespan: std.core.duration, overlap: std.core.duration) -> algebra.patterns.OverlappingDetection:
-                return algebra.patterns.OverlappingDetection(greycat.libs_by_name[algebra.name_].mapped[167], score, best_pattern, timespan, overlap)
+                return algebra.patterns.OverlappingDetection(greycat.libs_by_name[algebra.name_].mapped[167], [score, best_pattern, timespan, overlap])
 
         @final
         class SaxPatternDetector(GreyCat.Object):
@@ -6812,7 +6812,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, alphabet_size: int, fingerprint_length: int) -> algebra.patterns.SaxPatternDetector:
-                return algebra.patterns.SaxPatternDetector(greycat.libs_by_name[algebra.name_].mapped[168], alphabet_size, fingerprint_length)
+                return algebra.patterns.SaxPatternDetector(greycat.libs_by_name[algebra.name_].mapped[168], [alphabet_size, fingerprint_length])
 
     @final
     class ml:
@@ -6826,7 +6826,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.ml.TimeSeriesDecomposition:
-                return algebra.ml.TimeSeriesDecomposition(greycat.libs_by_name[algebra.name_].mapped[169])
+                return algebra.ml.TimeSeriesDecomposition(greycat.libs_by_name[algebra.name_].mapped[169], [])
 
         @final
         class PCA(algebra_n.ml._PCA):
@@ -6837,7 +6837,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra_n.ml._PCA:
-                return algebra.ml.PCA(greycat.libs_by_name[algebra.name_].mapped[170])
+                return algebra.ml.PCA(greycat.libs_by_name[algebra.name_].mapped[170], [ ])
 
         @final
         class GaussianND(algebra_n.ml._GaussianND):
@@ -6848,7 +6848,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra_n.ml._GaussianND:
-                return algebra.ml.GaussianND(greycat.libs_by_name[algebra.name_].mapped[171])
+                return algebra.ml.GaussianND(greycat.libs_by_name[algebra.name_].mapped[171], [ ])
 
         @final
         class HeatMapProfile(GreyCat.Object):
@@ -6889,7 +6889,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, counts: std.core.Table, x_labels: std.core.Array, y_labels: std.core.Array, counts_max: int, counts_sum: int) -> algebra.ml.HeatMapProfile:
-                return algebra.ml.HeatMapProfile(greycat.libs_by_name[algebra.name_].mapped[172], counts, x_labels, y_labels, counts_max, counts_sum)
+                return algebra.ml.HeatMapProfile(greycat.libs_by_name[algebra.name_].mapped[172], [counts, x_labels, y_labels, counts_max, counts_sum])
 
         @final
         class Polynomial(algebra_n.ml._Polynomial):
@@ -6900,7 +6900,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra_n.ml._Polynomial:
-                return algebra.ml.Polynomial(greycat.libs_by_name[algebra.name_].mapped[173])
+                return algebra.ml.Polynomial(greycat.libs_by_name[algebra.name_].mapped[173], [ ])
 
         @final
         class Solver(GreyCat.Object):
@@ -6911,7 +6911,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> algebra.ml.Solver:
-                return algebra.ml.Solver(greycat.libs_by_name[algebra.name_].mapped[174])
+                return algebra.ml.Solver(greycat.libs_by_name[algebra.name_].mapped[174], [])
 
     @final
     class transforms:
@@ -6967,7 +6967,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, nt: std.core.nodeTime, sampling_step: std.core.duration, time_complex: std.core.Tensor, frequency_complex: std.core.Tensor, frequency_table: std.core.Table, start_time: std.core.time, best_size: int) -> algebra.transforms.FFTModel:
-                return algebra.transforms.FFTModel(greycat.libs_by_name[algebra.name_].mapped[175], nt, sampling_step, time_complex, frequency_complex, frequency_table, start_time, best_size)
+                return algebra.transforms.FFTModel(greycat.libs_by_name[algebra.name_].mapped[175], [nt, sampling_step, time_complex, frequency_complex, frequency_table, start_time, best_size])
 
     @final
     class powerflow:
@@ -7017,7 +7017,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, abs: float, angle_radians: float, voltage: float, voltage_img: float, current: float, current_img: float) -> algebra.powerflow.PowerBusResult:
-                return algebra.powerflow.PowerBusResult(greycat.libs_by_name[algebra.name_].mapped[176], abs, angle_radians, voltage, voltage_img, current, current_img)
+                return algebra.powerflow.PowerBusResult(greycat.libs_by_name[algebra.name_].mapped[176], [abs, angle_radians, voltage, voltage_img, current, current_img])
 
         @final
         class PowerLineResult(GreyCat.Object):
@@ -7112,7 +7112,7 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, p_from_mw: float, q_from_mvar: float, p_to_mw: float, q_to_mvar: float, pl_mw: float, ql_mvar: float, i_from_ka: float, i_to_ka: float, i_ka: float, vm_from_pu: float, vm_to_pu: float, va_from_radians: float, va_to_radians: float, loading_percent: float) -> algebra.powerflow.PowerLineResult:
-                return algebra.powerflow.PowerLineResult(greycat.libs_by_name[algebra.name_].mapped[177], p_from_mw, q_from_mvar, p_to_mw, q_to_mvar, pl_mw, ql_mvar, i_from_ka, i_to_ka, i_ka, vm_from_pu, vm_to_pu, va_from_radians, va_to_radians, loading_percent)
+                return algebra.powerflow.PowerLineResult(greycat.libs_by_name[algebra.name_].mapped[177], [p_from_mw, q_from_mvar, p_to_mw, q_to_mvar, pl_mw, ql_mvar, i_from_ka, i_to_ka, i_ka, vm_from_pu, vm_to_pu, va_from_radians, va_to_radians, loading_percent])
 
     def configure(self, loaders: dict[str, GreyCat.Loader], factories: dict[str, GreyCat.Factory]) -> None:
         factories[algebra.compute.ComputeClassificationLoss.name_] = lambda type, attributes: algebra.compute.ComputeClassificationLoss(type, attributes)
