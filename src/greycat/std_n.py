@@ -1381,9 +1381,15 @@ class std_n:
                     self.meta_index: Final[bool] = index
                     self.header: Final[str] = header
 
+                def __str__(self) -> str:
+                    ...
+
+                def __repr__(self) -> str:
+                    return f"{{header: {self.header}, col_type: {self.col_type}, type: {self.type}, index: {self.meta_index}}}"
+
             if "numpy" in sys.modules:
 
-                def to_numpy(self) -> numpy.ndarray:
+                def to_numpy(self) -> tuple[numpy.ndarray]:
                     nda: numpy.ndarray = numpy.reshape(
                         [
                             elem.value if type(elem) in [c_double, c_int64]
@@ -1401,17 +1407,11 @@ class std_n:
                     if len(null_indices) > 0:
                         nda = nda.astype(numpy.dtype(object))
                         nda = numpy.insert(nda, null_indices, None, axis=1)
-                    metadata: Final[dict] = {}
-                    nda_dtype: Final[numpy.dtype] = nda.dtype
-                    if nda_dtype.metadata is MappingProxyType:
-                        metadata.update(nda_dtype.metadata)
-                    metadata["core::Table.meta"] = self.meta
-                    nda.dtype = numpy.dtype(nda.dtype, metadata=metadata)
                     return nda
 
                 @staticmethod
                 def from_numpy(
-                    greycat: GreyCat, nda: numpy.ndarray
+                    greycat: GreyCat, nda: numpy.ndarray, meta: Optional[list[std_n.core._Table.TableColumnMeta]] = None
                 ) -> std_n.core._Table:
                     type_: GreyCat.Type = greycat.types_by_name["core::Table"]
                     table: std_n.core._Table = type_.factory(type_, None)
@@ -1439,12 +1439,8 @@ class std_n:
                         raise ValueError(f"Unknown dtype: {nda.dtype}")
                     table.rows = nda.shape[0]
                     table.cols = nda.shape[1]
-                    nda_dtype: Final[numpy.dtype] = nda.dtype
-                    if (
-                        isinstance(nda_dtype.metadata, MappingProxyType)
-                        and "core::Table.meta" in nda_dtype.metadata
-                    ):
-                        table.meta = nda_dtype.metadata["core::Table.meta"]
+                    if meta is not None:
+                        table.meta = meta
                     if not hasattr(table, "meta"):
                         table.meta = [
                             std_n.core._Table.TableColumnMeta(
@@ -1457,36 +1453,27 @@ class std_n:
                 if "pandas" in sys.modules:
                     def to_pandas(self) -> pandas.DataFrame:
                         nda = self.to_numpy()
-                        df: pandas.DataFrame
-                        nda_dtype: numpy.dtype = nda.dtype
-                        columns: list[str]
-                        dtypes: dict[str, numpy.dtype]
-                        meta: std_n.core._Table.TableColumnMeta
+                        columns: list[str|int] = list(map(lambda meta: meta.header, self.meta))
+                        dtypes: map[str|int, numpy.dtype] = {}
                         dtype: numpy.dtype
-                        if nda_dtype.metadata is not None and "core::Table.meta" in nda_dtype.metadata:
-                            columns = []
-                            dtypes = {}
-                            for meta in nda_dtype.metadata["core::Table.meta"]:
-                                columns.append(meta.header)
-                                if PrimitiveType.FLOAT.value == meta.col_type.value:
-                                    dtype = numpy.dtype(float)
-                                elif PrimitiveType.INT.value == meta.col_type.value:
-                                    dtype = numpy.dtype(int)
-                                elif PrimitiveType.BOOL.value == meta.col_type.value:
-                                    dtype = numpy.dtype(bool)
-                                elif PrimitiveType.TIME.value == meta.col_type.value:
-                                    dtype = numpy.dtype('datetime64[us]')
-                                elif meta.col_type.value in [PrimitiveType.OBJECT.value, PrimitiveType.UNDEFINED.value]:
-                                    dtype = numpy.dtype(object)
-                                else:
-                                    raise ValueError(
-                                        f"Unknown col type: {meta.col_type.value}")
-                                dtypes[meta.header] = dtype
-                            df = pandas.DataFrame(
-                                nda, columns=columns).astype(dtypes)
-                        else:
-                            df = pandas.DataFrame(nda)
-                        return df
+                        if len(set(columns)) < len(columns):
+                            columns = list(range(len(columns)))
+                        for offset, meta in enumerate(self.meta):
+                            if PrimitiveType.FLOAT.value == meta.col_type.value:
+                                dtype = numpy.dtype(float)
+                            elif PrimitiveType.INT.value == meta.col_type.value:
+                                dtype = numpy.dtype(int)
+                            elif PrimitiveType.BOOL.value == meta.col_type.value:
+                                dtype = numpy.dtype(bool)
+                            elif PrimitiveType.TIME.value == meta.col_type.value:
+                                dtype = numpy.dtype('datetime64[us]')
+                            elif meta.col_type.value in [PrimitiveType.OBJECT.value, PrimitiveType.UNDEFINED.value]:
+                                dtype = numpy.dtype(object)
+                            else:
+                                raise ValueError(
+                                    f"Unknown col type: {meta.col_type.value}")
+                            dtypes[columns[offset]] = dtype
+                        return pandas.DataFrame(nda, columns=columns).astype(dtypes)
 
                     @staticmethod
                     def from_pandas(
@@ -1514,9 +1501,7 @@ class std_n:
                             header = typed_header[0]
                             meta.append(std_n.core._Table.TableColumnMeta(
                                 col_type, _type, index, header))
-                        nda.dtype = numpy.dtype(nda.dtype.type, metadata={
-                                                "core::Table.meta": meta})
-                        return std_n.core._Table.from_numpy(greycat, nda)
+                        return std_n.core._Table.from_numpy(greycat, nda, meta=meta)
 
                 if "tensorflow" in sys.modules:
                     def to_tf_tensor(self) -> tensorflow.Tensor:

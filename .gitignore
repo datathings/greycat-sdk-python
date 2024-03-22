@@ -7,3 +7,7 @@
 
 /*.gcb
 /project.gcp
+
+/data
+/sandbox.gcl
+/tests/sandbox.py
