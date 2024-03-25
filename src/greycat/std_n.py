@@ -309,7 +309,7 @@ class std_n:
 
                 @staticmethod
                 def from_numpy(greycat: GreyCat, dt: numpy.datetime64) -> std_n.core._time:
-                    time = std_n.core._time(greycat.type_offset_core_time)
+                    time = std_n.core._time(greycat.types[greycat.type_offset_core_time])
                     time.value = c_int64(dt.astype(int)) if numpy.datetime_data(dt)[0] in [
                         "us", "μs"] else c_int64(dt.astype("datetime64[us]").astype(int))
                     return time
@@ -1446,6 +1446,7 @@ class std_n:
                             c_double(elem) if isinstance(elem, numpy.floating) or elem_type is float
                             else c_int64(elem) if isinstance(elem, numpy.integer) or elem_type is int
                             else greycat.std.core.Tuple.create(gc, float(numpy.real(elem)), float(numpy.imag(elem))) if isinstance(elem, numpy.complex128) or elem_type is complex
+                            else greycat.std.core.Tuple.create(gc, std_n.core._time.from_numpy(gc, elem.start_time.to_numpy()), f"{elem.freq}") if isinstance(elem, pandas.Period)
                             else std_n.core._time.from_numpy(gc, elem) if isinstance(elem, numpy.datetime64)
                             else std_n.core._time.from_numpy(gc, elem.to_numpy()) if "pandas" in sys.modules and isinstance(elem, pandas.Timestamp)
                             else std_n.core._duration.from_numpy(gc, elem) if isinstance(elem, numpy.timedelta64)
@@ -1521,7 +1522,7 @@ class std_n:
                                 col_type = PrimitiveType.FLOAT
                             elif dtype is numpy.dtype(int):
                                 col_type = PrimitiveType.INT
-                            elif dtype == pandas.StringDtype():
+                            elif type(dtype) is pandas.StringDtype:
                                 col_type = PrimitiveType.OBJECT
                                 _type = c_uint32(greycat.type_offset_core_string)
                             elif dtype is numpy.dtype(object):
