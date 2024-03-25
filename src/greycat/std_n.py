@@ -309,7 +309,8 @@ class std_n:
 
                 @staticmethod
                 def from_numpy(greycat: GreyCat, dt: numpy.datetime64) -> std_n.core._time:
-                    time = std_n.core._time(greycat.types[greycat.type_offset_core_time])
+                    time = std_n.core._time(
+                        greycat.types[greycat.type_offset_core_time])
                     time.value = c_int64(dt.astype(int)) if numpy.datetime_data(dt)[0] in [
                         "us", "μs"] else c_int64(dt.astype("datetime64[us]").astype(int))
                     return time
@@ -1217,6 +1218,7 @@ class std_n:
             def __hashable(key: Any) -> Any:
                 if type(key) in [c_char, c_int64, c_double, c_ubyte]:
                     return key.value
+                return key
 
             def __str__(self) -> str:
                 res: str = f"{{"
@@ -1294,7 +1296,8 @@ class std_n:
                     elif col_type == PrimitiveType.OBJECT.value:
                         if self.meta[col].type.value == self.type_.greycat.type_offset_core_string:
                             for row in range(self.rows):
-                                stream.write_string(self.data[col * self.rows + row], skip_type=True)
+                                stream.write_string(
+                                    self.data[col * self.rows + row], skip_type=True)
                         else:
                             for row in range(self.rows):
                                 o = self.data[col * self.rows + row]
@@ -1411,6 +1414,7 @@ class std_n:
                         [
                             elem.value if type(elem) in [c_double, c_int64]
                             else elem.to_numpy() if isinstance(elem, std_n.core._time) or isinstance(elem, std_n.core._duration)
+                            else elem.map if isinstance(elem, std_n.core._Map)
                             else elem
                             for elem in self.data
                         ],
@@ -1425,6 +1429,30 @@ class std_n:
                         nda = nda.astype(numpy.dtype(object))
                         nda = numpy.insert(nda, null_indices, None, axis=1)
                     return nda
+
+                @staticmethod
+                def __parse_numpy_elem(gc: GreyCat, elem) -> Any:
+                    elem_type = type(elem)
+                    if isinstance(elem, numpy.floating) or elem_type is float:
+                        return c_double(elem)
+                    if isinstance(elem, numpy.integer) or elem_type is int:
+                        return c_int64(elem)
+                    if isinstance(elem, numpy.complex128) or elem_type is complex:
+                        return greycat.std.core.Tuple.create(gc, float(numpy.real(elem)), float(numpy.imag(elem)))
+                    if isinstance(elem, numpy.datetime64):
+                        return std_n.core._time.from_numpy(gc, elem)
+                    if isinstance(elem, numpy.timedelta64):
+                        return std_n.core._duration.from_numpy(gc, elem)
+                    if "pandas" in sys.modules:
+                        if isinstance(elem, pandas.Timestamp):
+                            return std_n.core._time.from_numpy(gc, elem.to_numpy())
+                        if isinstance(elem, pandas.Timedelta):
+                            return std_n.core._duration.from_numpy(gc, elem.to_numpy())
+                        if isinstance(elem, pandas.Period):
+                            return greycat.std.core.Tuple.create(gc, std_n.core._time.from_numpy(gc, elem.start_time.to_numpy()), f"{elem.freq}")
+                        if isinstance(elem, pandas.Interval):
+                            return std_n.core._Table.__interval_to_map(gc, elem)
+                    return elem
 
                 @staticmethod
                 def from_numpy(
@@ -1443,18 +1471,8 @@ class std_n:
                             raise ValueError(
                                 "Numpy array contains ints larger than max int64")
                         table.data = [
-                            c_double(elem) if isinstance(elem, numpy.floating) or elem_type is float
-                            else c_int64(elem) if isinstance(elem, numpy.integer) or elem_type is int
-                            else greycat.std.core.Tuple.create(gc, float(numpy.real(elem)), float(numpy.imag(elem))) if isinstance(elem, numpy.complex128) or elem_type is complex
-                            else greycat.std.core.Tuple.create(gc, std_n.core._time.from_numpy(gc, elem.start_time.to_numpy()), f"{elem.freq}") if isinstance(elem, pandas.Period)
-                            else std_n.core._time.from_numpy(gc, elem) if isinstance(elem, numpy.datetime64)
-                            else std_n.core._time.from_numpy(gc, elem.to_numpy()) if "pandas" in sys.modules and isinstance(elem, pandas.Timestamp)
-                            else std_n.core._duration.from_numpy(gc, elem) if isinstance(elem, numpy.timedelta64)
-                            else std_n.core._duration.from_numpy(gc, elem.to_numpy()) if "pandas" in sys.modules and isinstance(elem, pandas.Timedelta)
-                            else elem
-                            for [elem, elem_type] in [
-                                [elem, type(elem)] for elem in nda.flatten("F")
-                            ]
+                            std_n.core._Table.__parse_numpy_elem(gc, elem)
+                            for elem in nda.flatten("F")
                         ]
                     else:
                         raise ValueError(f"Unknown dtype: {nda.dtype}")
@@ -1472,6 +1490,17 @@ class std_n:
                     return table
 
                 if "pandas" in sys.modules:
+                    @staticmethod
+                    def __interval_to_map(gc: GreyCat, interval: pandas.Interval) -> std_n.core._Map[std_n.core._String, Any]:
+                        map = std_n.core._Map(gc.types_by_name["core::Map"])
+                        map["left"] = std_n.core._Table.__parse_numpy_elem(
+                            gc, interval.left)
+                        map["right"] = std_n.core._Table.__parse_numpy_elem(
+                            gc, interval.right)
+                        map["closed_left"] = interval.closed_left
+                        map["closed_right"] = interval.closed_right
+                        return map
+
                     def to_pandas(self) -> pandas.DataFrame:
                         nda = self.to_numpy()
                         columns: list[str | int] = list(
@@ -1524,7 +1553,8 @@ class std_n:
                                 col_type = PrimitiveType.INT
                             elif type(dtype) is pandas.StringDtype:
                                 col_type = PrimitiveType.OBJECT
-                                _type = c_uint32(greycat.type_offset_core_string)
+                                _type = c_uint32(
+                                    greycat.type_offset_core_string)
                             elif dtype is numpy.dtype(object):
                                 col_type = PrimitiveType.UNDEFINED
                             elif dtype.type is numpy.datetime64:
