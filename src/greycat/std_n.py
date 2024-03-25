@@ -1555,14 +1555,16 @@ class std_n:
                                 col_type = PrimitiveType.OBJECT
                                 _type = c_uint32(
                                     greycat.type_offset_core_string)
-                            elif dtype is numpy.dtype(object):
-                                col_type = PrimitiveType.UNDEFINED
                             elif dtype.type is numpy.datetime64:
                                 col_type = PrimitiveType.TIME
                             elif dtype.type is numpy.timedelta64:
                                 col_type = PrimitiveType.DURATION
                             elif dtype is numpy.dtype(bool):
                                 col_type = PrimitiveType.BOOL
+                            # elif dtype is numpy.dtype(object):
+                            #     col_type = PrimitiveType.UNDEFINED
+                            else:
+                                col_type = PrimitiveType.UNDEFINED
                             header = typed_header[0]
                             meta.append(std_n.core._Table.TableColumnMeta(
                                 col_type, _type, index, header))
