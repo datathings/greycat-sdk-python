@@ -8,7 +8,6 @@
 // @library("useragent"); // Tricky useragent.useragent is tricky
 
 use io;
-use math;
 use runtime;
 use util;
 
