@@ -28,9 +28,9 @@ fn main() {
     external: false,
     role: "user",
   };
-  /*SecurityEntity::set(user);*/
-  info(Crypto::sha256hex("admin"));
-  /*User::setPassword(user.name, Crypto::sha256hex("changeme"));*/
+  SecurityEntity::set(user);
+  info(Crypto::sha256hex("changeme"));
+  User::setPassword(user.name, Crypto::sha256hex("changeme"));
 
   var out = GcbWriter::new("out.gcb");
   write_std(out);
