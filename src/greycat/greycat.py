@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import base64
 from ctypes import *
 import hashlib
@@ -1050,6 +1051,54 @@ class GreyCat:
     class Files:  # TODO?
         pass
 
+    __DEFAULT: Optional[GreyCat] = None
+    __DEFAULT_LIBS: dict[str, GreyCat.Library] = {}
+
+    @staticmethod
+    def import_library(name: str, loader) -> None:
+        if name not in GreyCat.__DEFAULT_LIBS.keys():
+            GreyCat.__DEFAULT_LIBS[name] = loader()
+
+    @staticmethod
+    def serve(port: int, abi_path: str) -> None:
+        if port < 1 or port > 65535:
+            raise ArgumentError("Invalid -p|--port [1..65535] parameter")
+        server_socket: socket.socket = socket.socket(
+            socket.AF_INET, socket.SOCK_STREAM)
+        server_socket.bind(("0.0.0.0", port))
+        server_socket.listen(5)  # TODO: check
+        print(f"Serving at 0.0.0.0:{port}…")
+        client_socket: socket.socket
+        while True:
+            client_socket, _ = server_socket.accept()
+            if GreyCat.__DEFAULT is None:
+                GreyCat.__DEFAULT = GreyCat(
+                    abi_path, libraries=list(GreyCat.__DEFAULT_LIBS.values()))
+            GreyCat.__DEFAULT.__handle(client_socket)
+
+    __HANDLERS: dict[str, Any] = {}
+
+    @staticmethod
+    def add_handler(function_name: str, handler: Any) -> None:
+        GreyCat.__HANDLERS[function_name] = handler
+
+    def __handle(self: GreyCat, client_socket: socket.socket) -> None:
+        stream: GreyCat._Stream = GreyCat._Stream(
+            GreyCat.__DEFAULT, socket.SocketIO(client_socket, "rwb"))
+        function_name: str = greycat.std.core.String.load(
+            self.types[self.type_offset_core_string], stream)
+        handler = GreyCat.__HANDLERS[function_name]
+        this: Optional[GreyCat.Object] = stream.read_object()
+        parameters: list[Any] = list(greycat.std.core.Array.load(
+            self.types_by_name[greycat.std.core.Array.name_], stream))
+        result: Any = handler(self, this, parameters)
+        buf: BufferedIOBase = BytesIO()
+        GreyCat._Stream(self, buf).write(result)
+        bs: bytes = buf.getvalue()
+        length: int = len(bs)
+        stream.write_i32(c_int(length))
+        stream.write_i8_array(bs, 0, length)
+
     def __init__(self: GreyCat, url: str, libraries: List[GreyCat.Library] = [], username: str | None = None, password: str | None = None, use_cookie: bool = False) -> None:
         self.__runtime_url: Final[str] = url
         self.__token: str | None = None
@@ -1458,7 +1507,7 @@ class GreyCat:
             runtime_url = runtime_url.replace("file://", "", 1)
         return GreyCat._Stream(
             self, open(os.path.join(
-                runtime_url, "gcdata", "store", "abi"), "rb")
+                runtime_url, "gcdata", "abi"), "rb")
         )
 
     def __get_abi(self, runtime_url: str) -> GreyCat._Stream:
@@ -1466,3 +1515,19 @@ class GreyCat:
             return self.__get_remote_abi(runtime_url)
         else:
             return self.__get_local_abi(runtime_url)
+
+
+def core__external_test(gc: GreyCat, this: Optional[GreyCat.Object], parameters: list[Any]) -> Any:
+    i: int = parameters[0].value
+    d: float = parameters[1].value
+    return d * i
+
+
+GreyCat.add_handler("core::external_test", core__external_test)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-p', '--port', type=int)
+    parser.add_argument('-a', '--abi', default=".")
+    args = parser.parse_args()
+    GreyCat.serve(args.port, args.abi)

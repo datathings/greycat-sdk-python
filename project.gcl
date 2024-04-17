@@ -1,6 +1,6 @@
 // @library("std", "6.1.82-dev");
 
-@library("algebra");
+// @library("algebra");
 // @library("decisiontrees"); // Non-existent
 // @library("network");
 // @library("patterns");
@@ -13,6 +13,10 @@ use util;
 
 fn fail() {
   var out = GcbWriter::new("fail.gcb");
+}
+
+fn test_external() {
+    info(external_test(12, 13.37));
 }
 
 fn main() {
