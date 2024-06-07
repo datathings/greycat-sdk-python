@@ -2,6 +2,7 @@
 from __future__ import annotations
 from ctypes import *
 from typing import *
+import struct
 from greycat.greycat import GreyCat
 from greycat.std_n import std_n
 
@@ -41,7 +42,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, sw: std.core.geo, ne: std.core.geo) -> std.core.GeoBox:
-                return std.core.GeoBox(greycat.libs_by_name[std.name_].mapped[0], sw, ne)
+                return std.core.GeoBox(greycat.libs_by_name[std.name_].mapped[0], [sw, ne])
 
         @final
         class Error(std_n.core._Error):
@@ -52,7 +53,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._Error:
-                return std.core.Error(greycat.libs_by_name[std.name_].mapped[1])
+                return std.core.Error(greycat.libs_by_name[std.name_].mapped[1], [])
 
         @final
         class tf2d(std_n.core._tf2d):
@@ -63,7 +64,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._tf2d:
-                return std.core.tf2d(greycat.libs_by_name[std.name_].mapped[2])
+                return std.core.tf2d(greycat.libs_by_name[std.name_].mapped[2], [])
 
         @final
         class Array(Generic[__T], std_n.core._Array[__T]):
@@ -74,7 +75,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._Array:
-                return std.core.Array(greycat.libs_by_name[std.name_].mapped[3])
+                return std.core.Array(greycat.libs_by_name[std.name_].mapped[3], [])
 
         @final
         class String(std_n.core._String):
@@ -85,7 +86,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._String:
-                return std.core.String(greycat.libs_by_name[std.name_].mapped[4])
+                return std.core.String(greycat.libs_by_name[std.name_].mapped[4], [])
 
         @final
         class Date(std_n.core._Date):
@@ -96,7 +97,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._Date:
-                return std.core.Date(greycat.libs_by_name[std.name_].mapped[5])
+                return std.core.Date(greycat.libs_by_name[std.name_].mapped[5], [])
 
         @final
         class GeoPoly(GreyCat.Object):
@@ -113,7 +114,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, points: std.core.Array) -> std.core.GeoPoly:
-                return std.core.GeoPoly(greycat.libs_by_name[std.name_].mapped[6], points)
+                return std.core.GeoPoly(greycat.libs_by_name[std.name_].mapped[6], [points])
 
         @final
         class ti5d(std_n.core._ti5d):
@@ -124,7 +125,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._ti5d:
-                return std.core.ti5d(greycat.libs_by_name[std.name_].mapped[7])
+                return std.core.ti5d(greycat.libs_by_name[std.name_].mapped[7], [])
 
         @final
         class nodeTime(Generic[__T], std_n.core._nodeTime[__T]):
@@ -135,7 +136,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._nodeTime:
-                return std.core.nodeTime(greycat.libs_by_name[std.name_].mapped[8])
+                return std.core.nodeTime(greycat.libs_by_name[std.name_].mapped[8], [])
 
         @final
         class TimeZone(GreyCat.Enum):
@@ -2956,7 +2957,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std.core.TimeZone:
-                return std.core.TimeZone(greycat.libs_by_name[std.name_].mapped[9])
+                return std.core.TimeZone(greycat.libs_by_name[std.name_].mapped[9], [])
 
         @final
         class Table(Generic[__T], std_n.core._Table[__T]):
@@ -2967,7 +2968,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._Table:
-                return std.core.Table(greycat.libs_by_name[std.name_].mapped[10])
+                return std.core.Table(greycat.libs_by_name[std.name_].mapped[10], [])
 
         @final
         class ti10d(std_n.core._ti10d):
@@ -2978,7 +2979,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._ti10d:
-                return std.core.ti10d(greycat.libs_by_name[std.name_].mapped[11])
+                return std.core.ti10d(greycat.libs_by_name[std.name_].mapped[11], [])
 
         @final
         class duration(std_n.core._duration):
@@ -2989,7 +2990,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._duration:
-                return std.core.duration(greycat.libs_by_name[std.name_].mapped[12])
+                return std.core.duration(greycat.libs_by_name[std.name_].mapped[12], [])
 
         @final
         class DurationUnit(GreyCat.Enum):
@@ -3045,7 +3046,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std.core.DurationUnit:
-                return std.core.DurationUnit(greycat.libs_by_name[std.name_].mapped[13])
+                return std.core.DurationUnit(greycat.libs_by_name[std.name_].mapped[13], [])
 
         @final
         class Tensor(std_n.core._Tensor):
@@ -3056,7 +3057,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._Tensor:
-                return std.core.Tensor(greycat.libs_by_name[std.name_].mapped[14])
+                return std.core.Tensor(greycat.libs_by_name[std.name_].mapped[14], [])
 
         @final
         class nodeIndex(Generic[__K, __V], std_n.core._nodeIndex[__K, __V]):
@@ -3067,7 +3068,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._nodeIndex:
-                return std.core.nodeIndex(greycat.libs_by_name[std.name_].mapped[15])
+                return std.core.nodeIndex(greycat.libs_by_name[std.name_].mapped[15], [])
 
         @final
         class TableColumnMapping(GreyCat.Object):
@@ -3090,7 +3091,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, column: int, extractors: std.core.Array) -> std.core.TableColumnMapping:
-                return std.core.TableColumnMapping(greycat.libs_by_name[std.name_].mapped[16], column, extractors)
+                return std.core.TableColumnMapping(greycat.libs_by_name[std.name_].mapped[16], [column, extractors])
 
         @final
         class nodeList(Generic[__T], std_n.core._nodeList[__T]):
@@ -3101,7 +3102,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._nodeList:
-                return std.core.nodeList(greycat.libs_by_name[std.name_].mapped[17])
+                return std.core.nodeList(greycat.libs_by_name[std.name_].mapped[17], [])
 
         @final
         class TensorType(GreyCat.Enum):
@@ -3142,7 +3143,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std.core.TensorType:
-                return std.core.TensorType(greycat.libs_by_name[std.name_].mapped[18])
+                return std.core.TensorType(greycat.libs_by_name[std.name_].mapped[18], [])
 
         @final
         class Tuple(Generic[__T, __U], GreyCat.Object):
@@ -3165,7 +3166,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, x: std.core.__T, y: std.core.__U) -> std.core.Tuple[TypeVar("T"), TypeVar("U")]:
-                return std.core.Tuple(greycat.libs_by_name[std.name_].mapped[19], x, y)
+                return std.core.Tuple(greycat.libs_by_name[std.name_].mapped[19], [x, y])
 
         @final
         class ti2d(std_n.core._ti2d):
@@ -3176,7 +3177,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._ti2d:
-                return std.core.ti2d(greycat.libs_by_name[std.name_].mapped[20])
+                return std.core.ti2d(greycat.libs_by_name[std.name_].mapped[20], [])
 
         @final
         class tf4d(std_n.core._tf4d):
@@ -3187,7 +3188,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._tf4d:
-                return std.core.tf4d(greycat.libs_by_name[std.name_].mapped[21])
+                return std.core.tf4d(greycat.libs_by_name[std.name_].mapped[21], [])
 
         @final
         class DatePart(GreyCat.Enum):
@@ -3233,7 +3234,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std.core.DatePart:
-                return std.core.DatePart(greycat.libs_by_name[std.name_].mapped[22])
+                return std.core.DatePart(greycat.libs_by_name[std.name_].mapped[22], [])
 
         @final
         class function(std_n.core._function):
@@ -3244,7 +3245,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._function:
-                return std.core.function(greycat.libs_by_name[std.name_].mapped[23])
+                return std.core.function(greycat.libs_by_name[std.name_].mapped[23], [])
 
         @final
         class ti3d(std_n.core._ti3d):
@@ -3255,7 +3256,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._ti3d:
-                return std.core.ti3d(greycat.libs_by_name[std.name_].mapped[24])
+                return std.core.ti3d(greycat.libs_by_name[std.name_].mapped[24], [])
 
         @final
         class TableColumnMeta(GreyCat.Object):
@@ -3314,7 +3315,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, type: str, size: int, index: bool, header: str, min: Any, max: Any, avg: Any, std: Any) -> std.core.TableColumnMeta:
-                return std.core.TableColumnMeta(greycat.libs_by_name[std.name_].mapped[25], type, size, index, header, min, max, avg, std)
+                return std.core.TableColumnMeta(greycat.libs_by_name[std.name_].mapped[25], [type, size, index, header, min, max, avg, std])
 
         @final
         class nodeGeo(Generic[__T], std_n.core._nodeGeo[__T]):
@@ -3325,7 +3326,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._nodeGeo:
-                return std.core.nodeGeo(greycat.libs_by_name[std.name_].mapped[26])
+                return std.core.nodeGeo(greycat.libs_by_name[std.name_].mapped[26], [])
 
         @final
         class node(Generic[__T], std_n.core._node[__T]):
@@ -3336,7 +3337,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._node:
-                return std.core.node(greycat.libs_by_name[std.name_].mapped[27])
+                return std.core.node(greycat.libs_by_name[std.name_].mapped[27], [])
 
         @final
         class tf3d(std_n.core._tf3d):
@@ -3347,7 +3348,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._tf3d:
-                return std.core.tf3d(greycat.libs_by_name[std.name_].mapped[28])
+                return std.core.tf3d(greycat.libs_by_name[std.name_].mapped[28], [])
 
         @final
         class nodeIndexBucket(std_n.core._nodeIndexBucket):
@@ -3358,7 +3359,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._nodeIndexBucket:
-                return std.core.nodeIndexBucket(greycat.libs_by_name[std.name_].mapped[29])
+                return std.core.nodeIndexBucket(greycat.libs_by_name[std.name_].mapped[29], [])
 
         @final
         class time(std_n.core._time):
@@ -3369,7 +3370,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._time:
-                return std.core.time(greycat.libs_by_name[std.name_].mapped[30])
+                return std.core.time(greycat.libs_by_name[std.name_].mapped[30], [])
 
         @final
         class SamplingMode(GreyCat.Enum):
@@ -3400,7 +3401,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std.core.SamplingMode:
-                return std.core.SamplingMode(greycat.libs_by_name[std.name_].mapped[31])
+                return std.core.SamplingMode(greycat.libs_by_name[std.name_].mapped[31], [])
 
         @final
         class ti6d(std_n.core._ti6d):
@@ -3411,7 +3412,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._ti6d:
-                return std.core.ti6d(greycat.libs_by_name[std.name_].mapped[32])
+                return std.core.ti6d(greycat.libs_by_name[std.name_].mapped[32], [])
 
         @final
         class GeoCircle(GreyCat.Object):
@@ -3434,7 +3435,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, center: std.core.geo, radius: float) -> std.core.GeoCircle:
-                return std.core.GeoCircle(greycat.libs_by_name[std.name_].mapped[33], center, radius)
+                return std.core.GeoCircle(greycat.libs_by_name[std.name_].mapped[33], [center, radius])
 
         @final
         class Map(Generic[__K, __V], std_n.core._Map[__K, __V]):
@@ -3445,7 +3446,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._Map:
-                return std.core.Map(greycat.libs_by_name[std.name_].mapped[34])
+                return std.core.Map(greycat.libs_by_name[std.name_].mapped[34], [])
 
         @final
         class ErrorCode(GreyCat.Enum):
@@ -3561,7 +3562,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std.core.ErrorCode:
-                return std.core.ErrorCode(greycat.libs_by_name[std.name_].mapped[35])
+                return std.core.ErrorCode(greycat.libs_by_name[std.name_].mapped[35], [])
 
         @final
         class ti4d(std_n.core._ti4d):
@@ -3572,7 +3573,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._ti4d:
-                return std.core.ti4d(greycat.libs_by_name[std.name_].mapped[36])
+                return std.core.ti4d(greycat.libs_by_name[std.name_].mapped[36], [])
 
         @final
         class geo(std_n.core._geo):
@@ -3583,7 +3584,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._geo:
-                return std.core.geo(greycat.libs_by_name[std.name_].mapped[37])
+                return std.core.geo(greycat.libs_by_name[std.name_].mapped[37], [])
 
         @final
         class nodeTimeSingleton(GreyCat.Object):
@@ -3606,7 +3607,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, t: std.core.time, v: Any) -> std.core.nodeTimeSingleton:
-                return std.core.nodeTimeSingleton(greycat.libs_by_name[std.name_].mapped[38], t, v)
+                return std.core.nodeTimeSingleton(greycat.libs_by_name[std.name_].mapped[38], [t, v])
 
         @final
         class NodeInfo(Generic[__T], GreyCat.Object):
@@ -3635,7 +3636,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, size: int, from_: std.core.__T, to: std.core.__T) -> std.core.NodeInfo[TypeVar("T")]:
-                return std.core.NodeInfo(greycat.libs_by_name[std.name_].mapped[39], size, from_, to)
+                return std.core.NodeInfo(greycat.libs_by_name[std.name_].mapped[39], [size, from_, to])
 
     @final
     class runtime:
@@ -3721,7 +3722,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, version: str, program_version: str, arch: str, timezone: std.core.TimeZone, license: std.runtime.License, io_threads: int, bg_threads: int, fg_threads: int, mem_total: int, mem_worker: int, nb_ctx: int, store_stats: std.runtime.StoreStat) -> std.runtime.RuntimeInfo:
-                return std.runtime.RuntimeInfo(greycat.libs_by_name[std.name_].mapped[40], version, program_version, arch, timezone, license, io_threads, bg_threads, fg_threads, mem_total, mem_worker, nb_ctx, store_stats)
+                return std.runtime.RuntimeInfo(greycat.libs_by_name[std.name_].mapped[40], [version, program_version, arch, timezone, license, io_threads, bg_threads, fg_threads, mem_total, mem_worker, nb_ctx, store_stats])
 
         @final
         class PeriodicTask(GreyCat.Object):
@@ -3761,16 +3762,16 @@ class std(GreyCat.Library):
                 self._set(self.type_.generated_offsets[4], v)
 
             @staticmethod
-            def all(greycat: GreyCat) -> std.core.Array:
+            def all(greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Array:
                 return GreyCat.call(greycat, "runtime::PeriodicTask::all")
 
             @staticmethod
-            def set(greycat: GreyCat, tasks: std.core.Array) -> None:
+            def set(tasks: std.core.Array, greycat: GreyCat = GreyCat.DEFAULT) -> None:
                 return GreyCat.call(greycat, "runtime::PeriodicTask::set", [tasks, ])
 
             @staticmethod
             def create(greycat: GreyCat, function: std.core.function, user_id: int, arguments: std.core.Array, start: std.core.time, every: std.core.duration) -> std.runtime.PeriodicTask:
-                return std.runtime.PeriodicTask(greycat.libs_by_name[std.name_].mapped[41], function, user_id, arguments, start, every)
+                return std.runtime.PeriodicTask(greycat.libs_by_name[std.name_].mapped[41], [function, user_id, arguments, start, every])
 
         @final
         class SecurityFields(GreyCat.Object):
@@ -3816,16 +3817,105 @@ class std(GreyCat.Library):
                 self._set(self.type_.generated_offsets[5], v)
 
             @staticmethod
-            def set(greycat: GreyCat, f: std.runtime.SecurityFields) -> None:
+            def set(f: std.runtime.SecurityFields, greycat: GreyCat = GreyCat.DEFAULT) -> None:
                 return GreyCat.call(greycat, "runtime::SecurityFields::set", [f, ])
 
             @staticmethod
-            def get(greycat: GreyCat) -> std.runtime.SecurityFields:
+            def get(greycat: GreyCat = GreyCat.DEFAULT) -> std.runtime.SecurityFields:
                 return GreyCat.call(greycat, "runtime::SecurityFields::get")
 
             @staticmethod
             def create(greycat: GreyCat, email: str, name: str, first_name: str, last_name: str, roles: std.core.Map, groups: std.core.Map) -> std.runtime.SecurityFields:
-                return std.runtime.SecurityFields(greycat.libs_by_name[std.name_].mapped[42], email, name, first_name, last_name, roles, groups)
+                return std.runtime.SecurityFields(greycat.libs_by_name[std.name_].mapped[42], [email, name, first_name, last_name, roles, groups])
+
+        @final
+        class LicenseType(GreyCat.Enum):
+            name_: Final[str] = "runtime::LicenseType"
+
+            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
+                super().__init__(type, attributes)
+
+            @staticmethod
+            def community(greycat: GreyCat) -> std.runtime.LicenseType:
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[43]
+                return t.enum_values[t.generated_offsets[0]]
+
+            @staticmethod
+            def enterprise(greycat: GreyCat) -> std.runtime.LicenseType:
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[43]
+                return t.enum_values[t.generated_offsets[1]]
+
+            @staticmethod
+            def testing(greycat: GreyCat) -> std.runtime.LicenseType:
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[43]
+                return t.enum_values[t.generated_offsets[2]]
+
+            @staticmethod
+            def create(greycat: GreyCat) -> std.runtime.LicenseType:
+                return std.runtime.LicenseType(greycat.libs_by_name[std.name_].mapped[43], [])
+
+        @final
+        class UserGroup(GreyCat.Object):
+            name_: Final[str] = "runtime::UserGroup"
+
+            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
+                super().__init__(type, attributes)
+
+            def id(self) -> int:
+                return self._get(self.type_.generated_offsets[0])
+
+            def set_id(self, v: int) -> None:
+                self._set(self.type_.generated_offsets[0], v)
+
+            def name(self) -> str:
+                return self._get(self.type_.generated_offsets[1])
+
+            def set_name(self, v: str) -> None:
+                self._set(self.type_.generated_offsets[1], v)
+
+            def activated(self) -> bool:
+                return self._get(self.type_.generated_offsets[2])
+
+            def set_activated(self, v: bool) -> None:
+                self._set(self.type_.generated_offsets[2], v)
+
+            @staticmethod
+            def all(greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Array:
+                return GreyCat.call(greycat, "runtime::SecurityEntity::all")
+
+            @staticmethod
+            def set(entity: std.runtime.SecurityEntity, greycat: GreyCat = GreyCat.DEFAULT) -> int:
+                return GreyCat.call(greycat, "runtime::SecurityEntity::set", [entity, ])
+
+            @staticmethod
+            def create(greycat: GreyCat, id: int, name: str, activated: bool) -> std.runtime.UserGroup:
+                return std.runtime.UserGroup(greycat.libs_by_name[std.name_].mapped[44], [id, name, activated])
+
+        @final
+        class UserGroupPolicyType(GreyCat.Enum):
+            name_: Final[str] = "runtime::UserGroupPolicyType"
+
+            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
+                super().__init__(type, attributes)
+
+            @staticmethod
+            def read(greycat: GreyCat) -> std.runtime.UserGroupPolicyType:
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[45]
+                return t.enum_values[t.generated_offsets[0]]
+
+            @staticmethod
+            def write(greycat: GreyCat) -> std.runtime.UserGroupPolicyType:
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[45]
+                return t.enum_values[t.generated_offsets[1]]
+
+            @staticmethod
+            def execute(greycat: GreyCat) -> std.runtime.UserGroupPolicyType:
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[45]
+                return t.enum_values[t.generated_offsets[2]]
+
+            @staticmethod
+            def create(greycat: GreyCat) -> std.runtime.UserGroupPolicyType:
+                return std.runtime.UserGroupPolicyType(greycat.libs_by_name[std.name_].mapped[45], [])
 
         @final
         class UserGroupPolicy(GreyCat.Object):
@@ -3848,7 +3938,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, group_id: int, type: std.runtime.UserGroupPolicyType) -> std.runtime.UserGroupPolicy:
-                return std.runtime.UserGroupPolicy(greycat.libs_by_name[std.name_].mapped[43], group_id, type)
+                return std.runtime.UserGroupPolicy(greycat.libs_by_name[std.name_].mapped[46], [group_id, type])
 
         @final
         class User(GreyCat.Object):
@@ -3918,79 +4008,52 @@ class std(GreyCat.Library):
                 self._set(self.type_.generated_offsets[9], v)
 
             @staticmethod
-            def all(greycat: GreyCat) -> std.core.Array:
+            def all(greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Array:
                 return GreyCat.call(greycat, "runtime::SecurityEntity::all")
 
             @staticmethod
-            def set(greycat: GreyCat, entity: std.runtime.SecurityEntity) -> int:
+            def set(entity: std.runtime.SecurityEntity, greycat: GreyCat = GreyCat.DEFAULT) -> int:
                 return GreyCat.call(greycat, "runtime::SecurityEntity::set", [entity, ])
 
             @staticmethod
-            def login(greycat: GreyCat, credentials: str, use_cookie: bool) -> str:
+            def login(credentials: str, use_cookie: bool, greycat: GreyCat = GreyCat.DEFAULT) -> str:
                 return GreyCat.call(greycat, "runtime::User::login", [credentials, use_cookie, ])
 
             @staticmethod
-            def tokenLogin(greycat: GreyCat, token: str, use_cookie: bool) -> str:
+            def tokenLogin(token: str, use_cookie: bool, greycat: GreyCat = GreyCat.DEFAULT) -> str:
                 return GreyCat.call(greycat, "runtime::User::tokenLogin", [token, use_cookie, ])
 
             @staticmethod
-            def logout(greycat: GreyCat) -> None:
+            def logout(greycat: GreyCat = GreyCat.DEFAULT) -> None:
                 return GreyCat.call(greycat, "runtime::User::logout")
 
             @staticmethod
-            def renew(greycat: GreyCat, use_cookie: bool) -> str:
+            def renew(use_cookie: bool, greycat: GreyCat = GreyCat.DEFAULT) -> str:
                 return GreyCat.call(greycat, "runtime::User::renew", [use_cookie, ])
 
             @staticmethod
-            def current(greycat: GreyCat) -> int:
+            def current(greycat: GreyCat = GreyCat.DEFAULT) -> int:
                 return GreyCat.call(greycat, "runtime::User::current")
 
             @staticmethod
-            def me(greycat: GreyCat) -> std.runtime.User:
+            def me(greycat: GreyCat = GreyCat.DEFAULT) -> std.runtime.User:
                 return GreyCat.call(greycat, "runtime::User::me")
 
             @staticmethod
-            def permissions(greycat: GreyCat) -> std.core.Array:
+            def permissions(greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Array:
                 return GreyCat.call(greycat, "runtime::User::permissions")
 
             @staticmethod
-            def setPassword(greycat: GreyCat, name: str, pass_: str) -> bool:
+            def setPassword(name: str, pass_: str, greycat: GreyCat = GreyCat.DEFAULT) -> bool:
                 return GreyCat.call(greycat, "runtime::User::setPassword", [name, pass_, ])
 
             @staticmethod
-            def getToken(greycat: GreyCat, id: int) -> str:
+            def getToken(id: int, greycat: GreyCat = GreyCat.DEFAULT) -> str:
                 return GreyCat.call(greycat, "runtime::User::getToken", [id, ])
 
             @staticmethod
             def create(greycat: GreyCat, id: int, name: str, activated: bool, full_name: str, email: str, role: str, permissions_flags: int, groups: std.core.Array, groups_flags: int, external: bool) -> std.runtime.User:
-                return std.runtime.User(greycat.libs_by_name[std.name_].mapped[44], id, name, activated, full_name, email, role, permissions_flags, groups, groups_flags, external)
-
-        @final
-        class OpenIDConnect(GreyCat.Object):
-            name_: Final[str] = "runtime::OpenIDConnect"
-
-            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
-                super().__init__(type, attributes)
-
-            def url(self) -> str:
-                return self._get(self.type_.generated_offsets[0])
-
-            def set_url(self, v: str) -> None:
-                self._set(self.type_.generated_offsets[0], v)
-
-            def clientId(self) -> str:
-                return self._get(self.type_.generated_offsets[1])
-
-            def set_clientId(self, v: str) -> None:
-                self._set(self.type_.generated_offsets[1], v)
-
-            @staticmethod
-            def config(greycat: GreyCat) -> std.runtime.OpenIDConnect:
-                return GreyCat.call(greycat, "runtime::OpenIDConnect::config")
-
-            @staticmethod
-            def create(greycat: GreyCat, url: str, clientId: str) -> std.runtime.OpenIDConnect:
-                return std.runtime.OpenIDConnect(greycat.libs_by_name[std.name_].mapped[45], url, clientId)
+                return std.runtime.User(greycat.libs_by_name[std.name_].mapped[47], [id, name, activated, full_name, email, role, permissions_flags, groups, groups_flags, external])
 
         @final
         class UserCredential(GreyCat.Object):
@@ -4013,7 +4076,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, offset: int, pass_: str) -> std.runtime.UserCredential:
-                return std.runtime.UserCredential(greycat.libs_by_name[std.name_].mapped[46], offset, pass_)
+                return std.runtime.UserCredential(greycat.libs_by_name[std.name_].mapped[48], [offset, pass_])
 
         @final
         class StoreStat(GreyCat.Object):
@@ -4078,70 +4141,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, capacity_bytes: int, allocated_bytes: int, allocated_ratio: float, remained_bytes: int, remained_ratio: float, used_bytes: int, used_ratio: float, available_bytes: int, available_ratio: float) -> std.runtime.StoreStat:
-                return std.runtime.StoreStat(greycat.libs_by_name[std.name_].mapped[47], capacity_bytes, allocated_bytes, allocated_ratio, remained_bytes, remained_ratio, used_bytes, used_ratio, available_bytes, available_ratio)
-
-        @final
-        class UserGroupPolicyType(GreyCat.Enum):
-            name_: Final[str] = "runtime::UserGroupPolicyType"
-
-            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
-                super().__init__(type, attributes)
-
-            @staticmethod
-            def read(greycat: GreyCat) -> std.runtime.UserGroupPolicyType:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[48]
-                return t.enum_values[t.generated_offsets[0]]
-
-            @staticmethod
-            def write(greycat: GreyCat) -> std.runtime.UserGroupPolicyType:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[48]
-                return t.enum_values[t.generated_offsets[1]]
-
-            @staticmethod
-            def execute(greycat: GreyCat) -> std.runtime.UserGroupPolicyType:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[48]
-                return t.enum_values[t.generated_offsets[2]]
-
-            @staticmethod
-            def create(greycat: GreyCat) -> std.runtime.UserGroupPolicyType:
-                return std.runtime.UserGroupPolicyType(greycat.libs_by_name[std.name_].mapped[48])
-
-        @final
-        class UserGroup(GreyCat.Object):
-            name_: Final[str] = "runtime::UserGroup"
-
-            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
-                super().__init__(type, attributes)
-
-            def id(self) -> int:
-                return self._get(self.type_.generated_offsets[0])
-
-            def set_id(self, v: int) -> None:
-                self._set(self.type_.generated_offsets[0], v)
-
-            def name(self) -> str:
-                return self._get(self.type_.generated_offsets[1])
-
-            def set_name(self, v: str) -> None:
-                self._set(self.type_.generated_offsets[1], v)
-
-            def activated(self) -> bool:
-                return self._get(self.type_.generated_offsets[2])
-
-            def set_activated(self, v: bool) -> None:
-                self._set(self.type_.generated_offsets[2], v)
-
-            @staticmethod
-            def all(greycat: GreyCat) -> std.core.Array:
-                return GreyCat.call(greycat, "runtime::SecurityEntity::all")
-
-            @staticmethod
-            def set(greycat: GreyCat, entity: std.runtime.SecurityEntity) -> int:
-                return GreyCat.call(greycat, "runtime::SecurityEntity::set", [entity, ])
-
-            @staticmethod
-            def create(greycat: GreyCat, id: int, name: str, activated: bool) -> std.runtime.UserGroup:
-                return std.runtime.UserGroup(greycat.libs_by_name[std.name_].mapped[49], id, name, activated)
+                return std.runtime.StoreStat(greycat.libs_by_name[std.name_].mapped[49], [capacity_bytes, allocated_bytes, allocated_ratio, remained_bytes, remained_ratio, used_bytes, used_ratio, available_bytes, available_ratio])
 
         @final
         class UserRole(GreyCat.Object):
@@ -4163,20 +4163,47 @@ class std(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def all(greycat: GreyCat) -> std.core.Array:
+            def all(greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Array:
                 return GreyCat.call(greycat, "runtime::UserRole::all")
 
             @staticmethod
-            def remove(greycat: GreyCat, name: str) -> None:
+            def remove(name: str, greycat: GreyCat = GreyCat.DEFAULT) -> None:
                 return GreyCat.call(greycat, "runtime::UserRole::remove", [name, ])
 
             @staticmethod
-            def set(greycat: GreyCat, value: std.runtime.UserRole) -> None:
+            def set(value: std.runtime.UserRole, greycat: GreyCat = GreyCat.DEFAULT) -> None:
                 return GreyCat.call(greycat, "runtime::UserRole::set", [value, ])
 
             @staticmethod
             def create(greycat: GreyCat, name: str, permissions: std.core.Array) -> std.runtime.UserRole:
-                return std.runtime.UserRole(greycat.libs_by_name[std.name_].mapped[50], name, permissions)
+                return std.runtime.UserRole(greycat.libs_by_name[std.name_].mapped[50], [name, permissions])
+
+        @final
+        class OpenIDConnect(GreyCat.Object):
+            name_: Final[str] = "runtime::OpenIDConnect"
+
+            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
+                super().__init__(type, attributes)
+
+            def url(self) -> str:
+                return self._get(self.type_.generated_offsets[0])
+
+            def set_url(self, v: str) -> None:
+                self._set(self.type_.generated_offsets[0], v)
+
+            def clientId(self) -> str:
+                return self._get(self.type_.generated_offsets[1])
+
+            def set_clientId(self, v: str) -> None:
+                self._set(self.type_.generated_offsets[1], v)
+
+            @staticmethod
+            def config(greycat: GreyCat = GreyCat.DEFAULT) -> std.runtime.OpenIDConnect:
+                return GreyCat.call(greycat, "runtime::OpenIDConnect::config")
+
+            @staticmethod
+            def create(greycat: GreyCat, url: str, clientId: str) -> std.runtime.OpenIDConnect:
+                return std.runtime.OpenIDConnect(greycat.libs_by_name[std.name_].mapped[51], [url, clientId])
 
         @final
         class Task(GreyCat.Object):
@@ -4228,24 +4255,24 @@ class std(GreyCat.Library):
                 self._set(self.type_.generated_offsets[6], v)
 
             @staticmethod
-            def running(greycat: GreyCat) -> std.core.Array:
+            def running(greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Array:
                 return GreyCat.call(greycat, "runtime::Task::running")
 
             @staticmethod
-            def history(greycat: GreyCat, offset: int, max: int) -> std.core.Array:
+            def history(offset: int, max: int, greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Array:
                 return GreyCat.call(greycat, "runtime::Task::history", [offset, max, ])
 
             @staticmethod
-            def cancel(greycat: GreyCat, task_id: int) -> bool:
+            def cancel(task_id: int, greycat: GreyCat = GreyCat.DEFAULT) -> bool:
                 return GreyCat.call(greycat, "runtime::Task::cancel", [task_id, ])
 
             @staticmethod
-            def info(greycat: GreyCat, user_id: int, task_id: int) -> std.runtime.TaskInfo:
+            def info(user_id: int, task_id: int, greycat: GreyCat = GreyCat.DEFAULT) -> std.runtime.TaskInfo:
                 return GreyCat.call(greycat, "runtime::Task::info", [user_id, task_id, ])
 
             @staticmethod
             def create(greycat: GreyCat, user_id: int, task_id: int, mod: str, type: str, fun: str, creation: std.core.time, status: std.runtime.TaskStatus) -> std.runtime.Task:
-                return std.runtime.Task(greycat.libs_by_name[std.name_].mapped[51], user_id, task_id, mod, type, fun, creation, status)
+                return std.runtime.Task(greycat.libs_by_name[std.name_].mapped[52], [user_id, task_id, mod, type, fun, creation, status])
 
         @final
         class SecurityPolicy(GreyCat.Object):
@@ -4278,13 +4305,25 @@ class std(GreyCat.Library):
             def set_fields(self, v: std.runtime.SecurityFields) -> None:
                 self._set(self.type_.generated_offsets[3], v)
 
+            def keys(self) -> std.core.Map:
+                return self._get(self.type_.generated_offsets[4])
+
+            def set_keys(self, v: std.core.Map) -> None:
+                self._set(self.type_.generated_offsets[4], v)
+
+            def keys_last_refresh(self) -> std.core.time:
+                return self._get(self.type_.generated_offsets[5])
+
+            def set_keys_last_refresh(self, v: std.core.time) -> None:
+                self._set(self.type_.generated_offsets[5], v)
+
             @staticmethod
-            def permissions(greycat: GreyCat) -> std.core.Array:
+            def permissions(greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Array:
                 return GreyCat.call(greycat, "runtime::SecurityPolicy::permissions")
 
             @staticmethod
-            def create(greycat: GreyCat, entities: std.core.Array, credentials: std.core.Map, roles: std.core.Map, fields: std.runtime.SecurityFields) -> std.runtime.SecurityPolicy:
-                return std.runtime.SecurityPolicy(greycat.libs_by_name[std.name_].mapped[52], entities, credentials, roles, fields)
+            def create(greycat: GreyCat, entities: std.core.Array, credentials: std.core.Map, roles: std.core.Map, fields: std.runtime.SecurityFields, keys: std.core.Map, keys_last_refresh: std.core.time) -> std.runtime.SecurityPolicy:
+                return std.runtime.SecurityPolicy(greycat.libs_by_name[std.name_].mapped[53], [entities, credentials, roles, fields, keys, keys_last_refresh])
 
         @final
         class License(GreyCat.Object):
@@ -4335,9 +4374,15 @@ class std(GreyCat.Library):
             def set_extra_2(self, v: int) -> None:
                 self._set(self.type_.generated_offsets[6], v)
 
+            def type(self) -> std.runtime.LicenseType:
+                return self._get(self.type_.generated_offsets[7])
+
+            def set_type(self, v: std.runtime.LicenseType) -> None:
+                self._set(self.type_.generated_offsets[7], v)
+
             @staticmethod
-            def create(greycat: GreyCat, name: str, start: std.core.time, end: std.core.time, company: str, max_memory: int, extra_1: int, extra_2: int) -> std.runtime.License:
-                return std.runtime.License(greycat.libs_by_name[std.name_].mapped[53], name, start, end, company, max_memory, extra_1, extra_2)
+            def create(greycat: GreyCat, name: str, start: std.core.time, end: std.core.time, company: str, max_memory: int, extra_1: int, extra_2: int, type: std.runtime.LicenseType) -> std.runtime.License:
+                return std.runtime.License(greycat.libs_by_name[std.name_].mapped[54], [name, start, end, company, max_memory, extra_1, extra_2, type])
 
         @final
         class Runtime(GreyCat.Object):
@@ -4347,20 +4392,20 @@ class std(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def info(greycat: GreyCat) -> std.runtime.RuntimeInfo:
+            def info(greycat: GreyCat = GreyCat.DEFAULT) -> std.runtime.RuntimeInfo:
                 return GreyCat.call(greycat, "runtime::Runtime::info")
 
             @staticmethod
-            def abi(greycat: GreyCat) -> None:
+            def abi(greycat: GreyCat = GreyCat.DEFAULT) -> None:
                 return GreyCat.call(greycat, "runtime::Runtime::abi")
 
             @staticmethod
-            def readModVar(greycat: GreyCat, mod_var: str) -> Any:
+            def readModVar(mod_var: str, greycat: GreyCat = GreyCat.DEFAULT) -> Any:
                 return GreyCat.call(greycat, "runtime::Runtime::readModVar", [mod_var, ])
 
             @staticmethod
             def create(greycat: GreyCat) -> std.runtime.Runtime:
-                return std.runtime.Runtime(greycat.libs_by_name[std.name_].mapped[54])
+                return std.runtime.Runtime(greycat.libs_by_name[std.name_].mapped[55], [])
 
         @final
         class TaskStatus(GreyCat.Enum):
@@ -4371,37 +4416,37 @@ class std(GreyCat.Library):
 
             @staticmethod
             def empty(greycat: GreyCat) -> std.runtime.TaskStatus:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[55]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[56]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
             def waiting(greycat: GreyCat) -> std.runtime.TaskStatus:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[55]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[56]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
             def running(greycat: GreyCat) -> std.runtime.TaskStatus:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[55]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[56]
                 return t.enum_values[t.generated_offsets[2]]
 
             @staticmethod
             def cancelled(greycat: GreyCat) -> std.runtime.TaskStatus:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[55]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[56]
                 return t.enum_values[t.generated_offsets[3]]
 
             @staticmethod
             def error(greycat: GreyCat) -> std.runtime.TaskStatus:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[55]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[56]
                 return t.enum_values[t.generated_offsets[4]]
 
             @staticmethod
             def ended(greycat: GreyCat) -> std.runtime.TaskStatus:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[55]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[56]
                 return t.enum_values[t.generated_offsets[5]]
 
             @staticmethod
             def create(greycat: GreyCat) -> std.runtime.TaskStatus:
-                return std.runtime.TaskStatus(greycat.libs_by_name[std.name_].mapped[55])
+                return std.runtime.TaskStatus(greycat.libs_by_name[std.name_].mapped[56], [])
 
         @final
         class TaskInfo(GreyCat.Object):
@@ -4490,7 +4535,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, user_id: int, task_id: int, mod: str, type: str, fun: str, creation: std.core.time, status: std.runtime.TaskStatus, start: std.core.time, progress: float, remaining: std.core.duration, duration: std.core.duration, sub_waiting: int, sub_tasks_all: int) -> std.runtime.TaskInfo:
-                return std.runtime.TaskInfo(greycat.libs_by_name[std.name_].mapped[56], user_id, task_id, mod, type, fun, creation, status, start, progress, remaining, duration, sub_waiting, sub_tasks_all)
+                return std.runtime.TaskInfo(greycat.libs_by_name[std.name_].mapped[57], [user_id, task_id, mod, type, fun, creation, status, start, progress, remaining, duration, sub_waiting, sub_tasks_all])
 
         @final
         class System(GreyCat.Object):
@@ -4501,7 +4546,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std.runtime.System:
-                return std.runtime.System(greycat.libs_by_name[std.name_].mapped[57])
+                return std.runtime.System(greycat.libs_by_name[std.name_].mapped[58], [])
 
         @final
         class SecurityEntity(GreyCat.Object):
@@ -4529,49 +4574,23 @@ class std(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def all(greycat: GreyCat) -> std.core.Array:
+            def all(greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Array:
                 return GreyCat.call(greycat, "runtime::SecurityEntity::all")
 
             @staticmethod
-            def set(greycat: GreyCat, entity: std.runtime.SecurityEntity) -> int:
+            def set(entity: std.runtime.SecurityEntity, greycat: GreyCat = GreyCat.DEFAULT) -> int:
                 return GreyCat.call(greycat, "runtime::SecurityEntity::set", [entity, ])
 
             @staticmethod
             def create(greycat: GreyCat, id: int, name: str, activated: bool) -> std.runtime.SecurityEntity:
-                return std.runtime.SecurityEntity(greycat.libs_by_name[std.name_].mapped[58], id, name, activated)
+                return std.runtime.SecurityEntity(greycat.libs_by_name[std.name_].mapped[59], [id, name, activated])
 
     @final
     class io:
 
         @final
-        class SmtpAuth(GreyCat.Enum):
-            name_: Final[str] = "io::SmtpAuth"
-
-            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
-                super().__init__(type, attributes)
-
-            @staticmethod
-            def none(greycat: GreyCat) -> std.io.SmtpAuth:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[59]
-                return t.enum_values[t.generated_offsets[0]]
-
-            @staticmethod
-            def plain(greycat: GreyCat) -> std.io.SmtpAuth:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[59]
-                return t.enum_values[t.generated_offsets[1]]
-
-            @staticmethod
-            def login(greycat: GreyCat) -> std.io.SmtpAuth:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[59]
-                return t.enum_values[t.generated_offsets[2]]
-
-            @staticmethod
-            def create(greycat: GreyCat) -> std.io.SmtpAuth:
-                return std.io.SmtpAuth(greycat.libs_by_name[std.name_].mapped[59])
-
-        @final
-        class HttpHeader(GreyCat.Object):
-            name_: Final[str] = "io::HttpHeader"
+        class CsvColumnDate(GreyCat.Object):
+            name_: Final[str] = "io::CsvColumnDate"
 
             def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
                 super().__init__(type, attributes)
@@ -4582,15 +4601,156 @@ class std(GreyCat.Library):
             def set_name(self, v: str) -> None:
                 self._set(self.type_.generated_offsets[0], v)
 
-            def value(self) -> str:
+            def mandatory(self) -> bool:
                 return self._get(self.type_.generated_offsets[1])
 
-            def set_value(self, v: str) -> None:
+            def set_mandatory(self, v: bool) -> None:
                 self._set(self.type_.generated_offsets[1], v)
 
+            def offset(self) -> int:
+                return self._get(self.type_.generated_offsets[2])
+
+            def set_offset(self, v: int) -> None:
+                self._set(self.type_.generated_offsets[2], v)
+
+            def format(self) -> str:
+                return self._get(self.type_.generated_offsets[3])
+
+            def set_format(self, v: str) -> None:
+                self._set(self.type_.generated_offsets[3], v)
+
+            def tz(self) -> std.core.TimeZone:
+                return self._get(self.type_.generated_offsets[4])
+
+            def set_tz(self, v: std.core.TimeZone) -> None:
+                self._set(self.type_.generated_offsets[4], v)
+
+            def as_time(self) -> bool:
+                return self._get(self.type_.generated_offsets[5])
+
+            def set_as_time(self, v: bool) -> None:
+                self._set(self.type_.generated_offsets[5], v)
+
             @staticmethod
-            def create(greycat: GreyCat, name: str, value: str) -> std.io.HttpHeader:
-                return std.io.HttpHeader(greycat.libs_by_name[std.name_].mapped[60], name, value)
+            def create(greycat: GreyCat, name: str, mandatory: bool, offset: int, format: str, tz: std.core.TimeZone, as_time: bool) -> std.io.CsvColumnDate:
+                return std.io.CsvColumnDate(greycat.libs_by_name[std.name_].mapped[60], [name, mandatory, offset, format, tz, as_time])
+
+        @final
+        class CsvColumnInteger(GreyCat.Object):
+            name_: Final[str] = "io::CsvColumnInteger"
+
+            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
+                super().__init__(type, attributes)
+
+            def name(self) -> str:
+                return self._get(self.type_.generated_offsets[0])
+
+            def set_name(self, v: str) -> None:
+                self._set(self.type_.generated_offsets[0], v)
+
+            def mandatory(self) -> bool:
+                return self._get(self.type_.generated_offsets[1])
+
+            def set_mandatory(self, v: bool) -> None:
+                self._set(self.type_.generated_offsets[1], v)
+
+            def offset(self) -> int:
+                return self._get(self.type_.generated_offsets[2])
+
+            def set_offset(self, v: int) -> None:
+                self._set(self.type_.generated_offsets[2], v)
+
+            @staticmethod
+            def create(greycat: GreyCat, name: str, mandatory: bool, offset: int) -> std.io.CsvColumnInteger:
+                return std.io.CsvColumnInteger(greycat.libs_by_name[std.name_].mapped[61], [name, mandatory, offset])
+
+        @final
+        class File(GreyCat.Object):
+            name_: Final[str] = "io::File"
+
+            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
+                super().__init__(type, attributes)
+
+            def path(self) -> str:
+                return self._get(self.type_.generated_offsets[0])
+
+            def set_path(self, v: str) -> None:
+                self._set(self.type_.generated_offsets[0], v)
+
+            def size(self) -> int:
+                return self._get(self.type_.generated_offsets[1])
+
+            def set_size(self, v: int) -> None:
+                self._set(self.type_.generated_offsets[1], v)
+
+            def last_modification(self) -> std.core.time:
+                return self._get(self.type_.generated_offsets[2])
+
+            def set_last_modification(self, v: std.core.time) -> None:
+                self._set(self.type_.generated_offsets[2], v)
+
+            @staticmethod
+            def create(greycat: GreyCat, path: str, size: int, last_modification: std.core.time) -> std.io.File:
+                return std.io.File(greycat.libs_by_name[std.name_].mapped[62], [path, size, last_modification])
+
+        @final
+        class CsvColumnString(GreyCat.Object):
+            name_: Final[str] = "io::CsvColumnString"
+
+            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
+                super().__init__(type, attributes)
+
+            def name(self) -> str:
+                return self._get(self.type_.generated_offsets[0])
+
+            def set_name(self, v: str) -> None:
+                self._set(self.type_.generated_offsets[0], v)
+
+            def mandatory(self) -> bool:
+                return self._get(self.type_.generated_offsets[1])
+
+            def set_mandatory(self, v: bool) -> None:
+                self._set(self.type_.generated_offsets[1], v)
+
+            def offset(self) -> int:
+                return self._get(self.type_.generated_offsets[2])
+
+            def set_offset(self, v: int) -> None:
+                self._set(self.type_.generated_offsets[2], v)
+
+            def trim(self) -> bool:
+                return self._get(self.type_.generated_offsets[3])
+
+            def set_trim(self, v: bool) -> None:
+                self._set(self.type_.generated_offsets[3], v)
+
+            def try_number(self) -> bool:
+                return self._get(self.type_.generated_offsets[4])
+
+            def set_try_number(self, v: bool) -> None:
+                self._set(self.type_.generated_offsets[4], v)
+
+            def try_json(self) -> bool:
+                return self._get(self.type_.generated_offsets[5])
+
+            def set_try_json(self, v: bool) -> None:
+                self._set(self.type_.generated_offsets[5], v)
+
+            def values(self) -> std.core.Array:
+                return self._get(self.type_.generated_offsets[6])
+
+            def set_values(self, v: std.core.Array) -> None:
+                self._set(self.type_.generated_offsets[6], v)
+
+            def encoder(self) -> std.io.TextEncoder:
+                return self._get(self.type_.generated_offsets[7])
+
+            def set_encoder(self, v: std.io.TextEncoder) -> None:
+                self._set(self.type_.generated_offsets[7], v)
+
+            @staticmethod
+            def create(greycat: GreyCat, name: str, mandatory: bool, offset: int, trim: bool, try_number: bool, try_json: bool, values: std.core.Array, encoder: std.io.TextEncoder) -> std.io.CsvColumnString:
+                return std.io.CsvColumnString(greycat.libs_by_name[std.name_].mapped[63], [name, mandatory, offset, trim, try_number, try_json, values, encoder])
 
         @final
         class CsvStatistics(GreyCat.Object):
@@ -4655,69 +4815,11 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, header_lines: int, separator: c_char, string_delimiter: c_char, decimal_separator: c_char, thousands_separator: c_char, columns: std.core.Array, line_count: int, fail_count: int, file_count: int) -> std.io.CsvStatistics:
-                return std.io.CsvStatistics(greycat.libs_by_name[std.name_].mapped[61], header_lines, separator, string_delimiter, decimal_separator, thousands_separator, columns, line_count, fail_count, file_count)
+                return std.io.CsvStatistics(greycat.libs_by_name[std.name_].mapped[64], [header_lines, separator, string_delimiter, decimal_separator, thousands_separator, columns, line_count, fail_count, file_count])
 
         @final
-        class CsvAnalysis(GreyCat.Object):
-            name_: Final[str] = "io::CsvAnalysis"
-
-            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
-                super().__init__(type, attributes)
-
-            def config(self) -> std.io.CsvAnalysisConfig:
-                return self._get(self.type_.generated_offsets[0])
-
-            def set_config(self, v: std.io.CsvAnalysisConfig) -> None:
-                self._set(self.type_.generated_offsets[0], v)
-
-            def statistics(self) -> std.io.CsvStatistics:
-                return self._get(self.type_.generated_offsets[1])
-
-            def set_statistics(self, v: std.io.CsvStatistics) -> None:
-                self._set(self.type_.generated_offsets[1], v)
-
-            @staticmethod
-            def analyze(greycat: GreyCat, file_path: str, config: std.io.CsvAnalysisConfig) -> std.runtime.Task:
-                return GreyCat.call(greycat, "io::CsvAnalysis::analyze", [file_path, config, ])
-
-            @staticmethod
-            def create(greycat: GreyCat, config: std.io.CsvAnalysisConfig, statistics: std.io.CsvStatistics) -> std.io.CsvAnalysis:
-                return std.io.CsvAnalysis(greycat.libs_by_name[std.name_].mapped[62], config, statistics)
-
-        @final
-        class TextEncoder(GreyCat.Enum):
-            name_: Final[str] = "io::TextEncoder"
-
-            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
-                super().__init__(type, attributes)
-
-            @staticmethod
-            def plain(greycat: GreyCat) -> std.io.TextEncoder:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[63]
-                return t.enum_values[t.generated_offsets[0]]
-
-            @staticmethod
-            def base64(greycat: GreyCat) -> std.io.TextEncoder:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[63]
-                return t.enum_values[t.generated_offsets[1]]
-
-            @staticmethod
-            def base64url(greycat: GreyCat) -> std.io.TextEncoder:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[63]
-                return t.enum_values[t.generated_offsets[2]]
-
-            @staticmethod
-            def hexadecimal(greycat: GreyCat) -> std.io.TextEncoder:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[63]
-                return t.enum_values[t.generated_offsets[3]]
-
-            @staticmethod
-            def create(greycat: GreyCat) -> std.io.TextEncoder:
-                return std.io.TextEncoder(greycat.libs_by_name[std.name_].mapped[63])
-
-        @final
-        class CsvColumnBoolean(GreyCat.Object):
-            name_: Final[str] = "io::CsvColumnBoolean"
+        class CsvColumnFloat(GreyCat.Object):
+            name_: Final[str] = "io::CsvColumnFloat"
 
             def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
                 super().__init__(type, attributes)
@@ -4741,19 +4843,274 @@ class std(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, mandatory: bool, offset: int) -> std.io.CsvColumnBoolean:
-                return std.io.CsvColumnBoolean(greycat.libs_by_name[std.name_].mapped[64], name, mandatory, offset)
+            def create(greycat: GreyCat, name: str, mandatory: bool, offset: int) -> std.io.CsvColumnFloat:
+                return std.io.CsvColumnFloat(greycat.libs_by_name[std.name_].mapped[65], [name, mandatory, offset])
 
         @final
-        class Mqtt(GreyCat.Object):
-            name_: Final[str] = "io::Mqtt"
+        class HttpHeader(GreyCat.Object):
+            name_: Final[str] = "io::HttpHeader"
+
+            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
+                super().__init__(type, attributes)
+
+            def name(self) -> str:
+                return self._get(self.type_.generated_offsets[0])
+
+            def set_name(self, v: str) -> None:
+                self._set(self.type_.generated_offsets[0], v)
+
+            def value(self) -> str:
+                return self._get(self.type_.generated_offsets[1])
+
+            def set_value(self, v: str) -> None:
+                self._set(self.type_.generated_offsets[1], v)
+
+            @staticmethod
+            def create(greycat: GreyCat, name: str, value: str) -> std.io.HttpHeader:
+                return std.io.HttpHeader(greycat.libs_by_name[std.name_].mapped[66], [name, value])
+
+        @final
+        class CsvFormat(GreyCat.Object):
+            name_: Final[str] = "io::CsvFormat"
+
+            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
+                super().__init__(type, attributes)
+
+            def header_lines(self) -> int:
+                return self._get(self.type_.generated_offsets[0])
+
+            def set_header_lines(self, v: int) -> None:
+                self._set(self.type_.generated_offsets[0], v)
+
+            def separator(self) -> c_char:
+                return self._get(self.type_.generated_offsets[1])
+
+            def set_separator(self, v: c_char) -> None:
+                self._set(self.type_.generated_offsets[1], v)
+
+            def string_delimiter(self) -> c_char:
+                return self._get(self.type_.generated_offsets[2])
+
+            def set_string_delimiter(self, v: c_char) -> None:
+                self._set(self.type_.generated_offsets[2], v)
+
+            def decimal_separator(self) -> c_char:
+                return self._get(self.type_.generated_offsets[3])
+
+            def set_decimal_separator(self, v: c_char) -> None:
+                self._set(self.type_.generated_offsets[3], v)
+
+            def thousands_separator(self) -> c_char:
+                return self._get(self.type_.generated_offsets[4])
+
+            def set_thousands_separator(self, v: c_char) -> None:
+                self._set(self.type_.generated_offsets[4], v)
+
+            def columns_size(self) -> int:
+                return self._get(self.type_.generated_offsets[5])
+
+            def set_columns_size(self, v: int) -> None:
+                self._set(self.type_.generated_offsets[5], v)
+
+            def columns(self) -> std.core.Array:
+                return self._get(self.type_.generated_offsets[6])
+
+            def set_columns(self, v: std.core.Array) -> None:
+                self._set(self.type_.generated_offsets[6], v)
+
+            @staticmethod
+            def generate(format: std.io.CsvFormat, ident_col: int, time_col: int, greycat: GreyCat = GreyCat.DEFAULT) -> str:
+                return GreyCat.call(greycat, "io::CsvFormat::generate", [format, ident_col, time_col, ])
+
+            @staticmethod
+            def validate(path: str, format: std.io.CsvFormat, max_rows: int, max_invalid: int, invalid_path: str, greycat: GreyCat = GreyCat.DEFAULT) -> std.runtime.Task:
+                return GreyCat.call(greycat, "io::CsvFormat::validate", [path, format, max_rows, max_invalid, invalid_path, ])
+
+            @staticmethod
+            def sample(path: str, format: std.io.CsvFormat, offset: int, max: int, greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Table:
+                return GreyCat.call(greycat, "io::CsvFormat::sample", [path, format, offset, max, ])
+
+            @staticmethod
+            def infer(analysis: std.io.CsvStatistics, greycat: GreyCat = GreyCat.DEFAULT) -> std.io.CsvFormat:
+                return GreyCat.call(greycat, "io::CsvFormat::infer", [analysis, ])
+
+            @staticmethod
+            def create(greycat: GreyCat, header_lines: int, separator: c_char, string_delimiter: c_char, decimal_separator: c_char, thousands_separator: c_char, columns_size: int, columns: std.core.Array) -> std.io.CsvFormat:
+                return std.io.CsvFormat(greycat.libs_by_name[std.name_].mapped[67], [header_lines, separator, string_delimiter, decimal_separator, thousands_separator, columns_size, columns])
+
+        @final
+        class CsvColumnDuration(GreyCat.Object):
+            name_: Final[str] = "io::CsvColumnDuration"
+
+            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
+                super().__init__(type, attributes)
+
+            def name(self) -> str:
+                return self._get(self.type_.generated_offsets[0])
+
+            def set_name(self, v: str) -> None:
+                self._set(self.type_.generated_offsets[0], v)
+
+            def mandatory(self) -> bool:
+                return self._get(self.type_.generated_offsets[1])
+
+            def set_mandatory(self, v: bool) -> None:
+                self._set(self.type_.generated_offsets[1], v)
+
+            def offset(self) -> int:
+                return self._get(self.type_.generated_offsets[2])
+
+            def set_offset(self, v: int) -> None:
+                self._set(self.type_.generated_offsets[2], v)
+
+            def unit(self) -> std.core.DurationUnit:
+                return self._get(self.type_.generated_offsets[3])
+
+            def set_unit(self, v: std.core.DurationUnit) -> None:
+                self._set(self.type_.generated_offsets[3], v)
+
+            @staticmethod
+            def create(greycat: GreyCat, name: str, mandatory: bool, offset: int, unit: std.core.DurationUnit) -> std.io.CsvColumnDuration:
+                return std.io.CsvColumnDuration(greycat.libs_by_name[std.name_].mapped[68], [name, mandatory, offset, unit])
+
+        @final
+        class CsvAnalysis(GreyCat.Object):
+            name_: Final[str] = "io::CsvAnalysis"
+
+            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
+                super().__init__(type, attributes)
+
+            def config(self) -> std.io.CsvAnalysisConfig:
+                return self._get(self.type_.generated_offsets[0])
+
+            def set_config(self, v: std.io.CsvAnalysisConfig) -> None:
+                self._set(self.type_.generated_offsets[0], v)
+
+            def statistics(self) -> std.io.CsvStatistics:
+                return self._get(self.type_.generated_offsets[1])
+
+            def set_statistics(self, v: std.io.CsvStatistics) -> None:
+                self._set(self.type_.generated_offsets[1], v)
+
+            @staticmethod
+            def analyze(file_path: str, config: std.io.CsvAnalysisConfig, greycat: GreyCat = GreyCat.DEFAULT) -> std.runtime.Task:
+                return GreyCat.call(greycat, "io::CsvAnalysis::analyze", [file_path, config, ])
+
+            @staticmethod
+            def create(greycat: GreyCat, config: std.io.CsvAnalysisConfig, statistics: std.io.CsvStatistics) -> std.io.CsvAnalysis:
+                return std.io.CsvAnalysis(greycat.libs_by_name[std.name_].mapped[69], [config, statistics])
+
+        @final
+        class CsvAnalysisConfig(GreyCat.Object):
+            name_: Final[str] = "io::CsvAnalysisConfig"
+
+            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
+                super().__init__(type, attributes)
+
+            def header_lines(self) -> int:
+                return self._get(self.type_.generated_offsets[0])
+
+            def set_header_lines(self, v: int) -> None:
+                self._set(self.type_.generated_offsets[0], v)
+
+            def separator(self) -> c_char:
+                return self._get(self.type_.generated_offsets[1])
+
+            def set_separator(self, v: c_char) -> None:
+                self._set(self.type_.generated_offsets[1], v)
+
+            def string_delimiter(self) -> c_char:
+                return self._get(self.type_.generated_offsets[2])
+
+            def set_string_delimiter(self, v: c_char) -> None:
+                self._set(self.type_.generated_offsets[2], v)
+
+            def decimal_separator(self) -> c_char:
+                return self._get(self.type_.generated_offsets[3])
+
+            def set_decimal_separator(self, v: c_char) -> None:
+                self._set(self.type_.generated_offsets[3], v)
+
+            def thousands_separator(self) -> c_char:
+                return self._get(self.type_.generated_offsets[4])
+
+            def set_thousands_separator(self, v: c_char) -> None:
+                self._set(self.type_.generated_offsets[4], v)
+
+            def row_limit(self) -> int:
+                return self._get(self.type_.generated_offsets[5])
+
+            def set_row_limit(self, v: int) -> None:
+                self._set(self.type_.generated_offsets[5], v)
+
+            def enumerable_limit(self) -> int:
+                return self._get(self.type_.generated_offsets[6])
+
+            def set_enumerable_limit(self, v: int) -> None:
+                self._set(self.type_.generated_offsets[6], v)
+
+            def date_check_limit(self) -> int:
+                return self._get(self.type_.generated_offsets[7])
+
+            def set_date_check_limit(self, v: int) -> None:
+                self._set(self.type_.generated_offsets[7], v)
+
+            def date_formats(self) -> std.core.Array:
+                return self._get(self.type_.generated_offsets[8])
+
+            def set_date_formats(self, v: std.core.Array) -> None:
+                self._set(self.type_.generated_offsets[8], v)
+
+            @staticmethod
+            def enumerable_limit_default(greycat: GreyCat) -> int:
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[70]
+                return t.static_values[0]
+
+            @staticmethod
+            def date_check_limit_default(greycat: GreyCat) -> int:
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[70]
+                return t.static_values[1]
+
+            @staticmethod
+            def create(greycat: GreyCat, header_lines: int, separator: c_char, string_delimiter: c_char, decimal_separator: c_char, thousands_separator: c_char, row_limit: int, enumerable_limit: int, date_check_limit: int, date_formats: std.core.Array) -> std.io.CsvAnalysisConfig:
+                return std.io.CsvAnalysisConfig(greycat.libs_by_name[std.name_].mapped[70], [header_lines, separator, string_delimiter, decimal_separator, thousands_separator, row_limit, enumerable_limit, date_check_limit, date_formats])
+
+        @final
+        class SmtpAuth(GreyCat.Enum):
+            name_: Final[str] = "io::SmtpAuth"
 
             def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> std.io.Mqtt:
-                return std.io.Mqtt(greycat.libs_by_name[std.name_].mapped[65])
+            def none(greycat: GreyCat) -> std.io.SmtpAuth:
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[71]
+                return t.enum_values[t.generated_offsets[0]]
+
+            @staticmethod
+            def plain(greycat: GreyCat) -> std.io.SmtpAuth:
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[71]
+                return t.enum_values[t.generated_offsets[1]]
+
+            @staticmethod
+            def login(greycat: GreyCat) -> std.io.SmtpAuth:
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[71]
+                return t.enum_values[t.generated_offsets[2]]
+
+            @staticmethod
+            def create(greycat: GreyCat) -> std.io.SmtpAuth:
+                return std.io.SmtpAuth(greycat.libs_by_name[std.name_].mapped[71], [])
+
+        @final
+        class Http(GreyCat.Object):
+            name_: Final[str] = "io::Http"
+
+            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
+                super().__init__(type, attributes)
+
+            @staticmethod
+            def create(greycat: GreyCat) -> std.io.Http:
+                return std.io.Http(greycat.libs_by_name[std.name_].mapped[72], [])
 
         @final
         class Smtp(GreyCat.Object):
@@ -4800,71 +5157,49 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, host: str, port: int, mode: std.io.SmtpMode, authenticate: std.io.SmtpAuth, user: str, pass_: str) -> std.io.Smtp:
-                return std.io.Smtp(greycat.libs_by_name[std.name_].mapped[66], host, port, mode, authenticate, user, pass_)
+                return std.io.Smtp(greycat.libs_by_name[std.name_].mapped[73], [host, port, mode, authenticate, user, pass_])
 
         @final
-        class CsvColumnDuration(GreyCat.Object):
-            name_: Final[str] = "io::CsvColumnDuration"
+        class Mqtt(GreyCat.Object):
+            name_: Final[str] = "io::Mqtt"
 
             def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
                 super().__init__(type, attributes)
 
-            def name(self) -> str:
-                return self._get(self.type_.generated_offsets[0])
-
-            def set_name(self, v: str) -> None:
-                self._set(self.type_.generated_offsets[0], v)
-
-            def mandatory(self) -> bool:
-                return self._get(self.type_.generated_offsets[1])
-
-            def set_mandatory(self, v: bool) -> None:
-                self._set(self.type_.generated_offsets[1], v)
-
-            def offset(self) -> int:
-                return self._get(self.type_.generated_offsets[2])
-
-            def set_offset(self, v: int) -> None:
-                self._set(self.type_.generated_offsets[2], v)
-
-            def unit(self) -> std.core.DurationUnit:
-                return self._get(self.type_.generated_offsets[3])
-
-            def set_unit(self, v: std.core.DurationUnit) -> None:
-                self._set(self.type_.generated_offsets[3], v)
-
             @staticmethod
-            def create(greycat: GreyCat, name: str, mandatory: bool, offset: int, unit: std.core.DurationUnit) -> std.io.CsvColumnDuration:
-                return std.io.CsvColumnDuration(greycat.libs_by_name[std.name_].mapped[67], name, mandatory, offset, unit)
+            def create(greycat: GreyCat) -> std.io.Mqtt:
+                return std.io.Mqtt(greycat.libs_by_name[std.name_].mapped[74], [])
 
         @final
-        class CsvColumnIgnored(GreyCat.Object):
-            name_: Final[str] = "io::CsvColumnIgnored"
+        class TextEncoder(GreyCat.Enum):
+            name_: Final[str] = "io::TextEncoder"
 
             def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
                 super().__init__(type, attributes)
 
-            def name(self) -> str:
-                return self._get(self.type_.generated_offsets[0])
-
-            def set_name(self, v: str) -> None:
-                self._set(self.type_.generated_offsets[0], v)
-
-            def mandatory(self) -> bool:
-                return self._get(self.type_.generated_offsets[1])
-
-            def set_mandatory(self, v: bool) -> None:
-                self._set(self.type_.generated_offsets[1], v)
-
-            def offset(self) -> int:
-                return self._get(self.type_.generated_offsets[2])
-
-            def set_offset(self, v: int) -> None:
-                self._set(self.type_.generated_offsets[2], v)
+            @staticmethod
+            def plain(greycat: GreyCat) -> std.io.TextEncoder:
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[75]
+                return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, mandatory: bool, offset: int) -> std.io.CsvColumnIgnored:
-                return std.io.CsvColumnIgnored(greycat.libs_by_name[std.name_].mapped[68], name, mandatory, offset)
+            def base64(greycat: GreyCat) -> std.io.TextEncoder:
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[75]
+                return t.enum_values[t.generated_offsets[1]]
+
+            @staticmethod
+            def base64url(greycat: GreyCat) -> std.io.TextEncoder:
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[75]
+                return t.enum_values[t.generated_offsets[2]]
+
+            @staticmethod
+            def hexadecimal(greycat: GreyCat) -> std.io.TextEncoder:
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[75]
+                return t.enum_values[t.generated_offsets[3]]
+
+            @staticmethod
+            def create(greycat: GreyCat) -> std.io.TextEncoder:
+                return std.io.TextEncoder(greycat.libs_by_name[std.name_].mapped[75], [])
 
         @final
         class CsvColumnStatistics(GreyCat.Object):
@@ -4941,7 +5276,71 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str, example: Any, null_count: int, bool_count: int, int_count: int, float_count: int, string_count: int, date_count: int, date_format_count: std.core.Map, enumerable_count: std.core.Map, profile: std.util.Gaussian) -> std.io.CsvColumnStatistics:
-                return std.io.CsvColumnStatistics(greycat.libs_by_name[std.name_].mapped[69], name, example, null_count, bool_count, int_count, float_count, string_count, date_count, date_format_count, enumerable_count, profile)
+                return std.io.CsvColumnStatistics(greycat.libs_by_name[std.name_].mapped[76], [name, example, null_count, bool_count, int_count, float_count, string_count, date_count, date_format_count, enumerable_count, profile])
+
+        @final
+        class CsvColumnIgnored(GreyCat.Object):
+            name_: Final[str] = "io::CsvColumnIgnored"
+
+            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
+                super().__init__(type, attributes)
+
+            def name(self) -> str:
+                return self._get(self.type_.generated_offsets[0])
+
+            def set_name(self, v: str) -> None:
+                self._set(self.type_.generated_offsets[0], v)
+
+            def mandatory(self) -> bool:
+                return self._get(self.type_.generated_offsets[1])
+
+            def set_mandatory(self, v: bool) -> None:
+                self._set(self.type_.generated_offsets[1], v)
+
+            def offset(self) -> int:
+                return self._get(self.type_.generated_offsets[2])
+
+            def set_offset(self, v: int) -> None:
+                self._set(self.type_.generated_offsets[2], v)
+
+            @staticmethod
+            def create(greycat: GreyCat, name: str, mandatory: bool, offset: int) -> std.io.CsvColumnIgnored:
+                return std.io.CsvColumnIgnored(greycat.libs_by_name[std.name_].mapped[77], [name, mandatory, offset])
+
+        @final
+        class CsvColumnTime(GreyCat.Object):
+            name_: Final[str] = "io::CsvColumnTime"
+
+            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
+                super().__init__(type, attributes)
+
+            def name(self) -> str:
+                return self._get(self.type_.generated_offsets[0])
+
+            def set_name(self, v: str) -> None:
+                self._set(self.type_.generated_offsets[0], v)
+
+            def mandatory(self) -> bool:
+                return self._get(self.type_.generated_offsets[1])
+
+            def set_mandatory(self, v: bool) -> None:
+                self._set(self.type_.generated_offsets[1], v)
+
+            def offset(self) -> int:
+                return self._get(self.type_.generated_offsets[2])
+
+            def set_offset(self, v: int) -> None:
+                self._set(self.type_.generated_offsets[2], v)
+
+            def unit(self) -> std.core.DurationUnit:
+                return self._get(self.type_.generated_offsets[3])
+
+            def set_unit(self, v: std.core.DurationUnit) -> None:
+                self._set(self.type_.generated_offsets[3], v)
+
+            @staticmethod
+            def create(greycat: GreyCat, name: str, mandatory: bool, offset: int, unit: std.core.DurationUnit) -> std.io.CsvColumnTime:
+                return std.io.CsvColumnTime(greycat.libs_by_name[std.name_].mapped[78], [name, mandatory, offset, unit])
 
         @final
         class Url(GreyCat.Object):
@@ -4988,7 +5387,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, protocol: str, host: str, port: int, path: str, params: std.core.Map, hash: str) -> std.io.Url:
-                return std.io.Url(greycat.libs_by_name[std.name_].mapped[70], protocol, host, port, path, params, hash)
+                return std.io.Url(greycat.libs_by_name[std.name_].mapped[79], [protocol, host, port, path, params, hash])
 
         @final
         class Email(GreyCat.Object):
@@ -5041,7 +5440,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, from_: str, subject: str, body: str, body_is_html: bool, to: std.core.Array, cc: std.core.Array, bcc: std.core.Array) -> std.io.Email:
-                return std.io.Email(greycat.libs_by_name[std.name_].mapped[71], from_, subject, body, body_is_html, to, cc, bcc)
+                return std.io.Email(greycat.libs_by_name[std.name_].mapped[80], [from_, subject, body, body_is_html, to, cc, bcc])
 
         @final
         class CsvValidateResult(GreyCat.Object):
@@ -5070,11 +5469,11 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, line_count: int, fail_count: int, invalid_count: std.core.Array) -> std.io.CsvValidateResult:
-                return std.io.CsvValidateResult(greycat.libs_by_name[std.name_].mapped[72], line_count, fail_count, invalid_count)
+                return std.io.CsvValidateResult(greycat.libs_by_name[std.name_].mapped[81], [line_count, fail_count, invalid_count])
 
         @final
-        class CsvColumnFloat(GreyCat.Object):
-            name_: Final[str] = "io::CsvColumnFloat"
+        class CsvColumnBoolean(GreyCat.Object):
+            name_: Final[str] = "io::CsvColumnBoolean"
 
             def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
                 super().__init__(type, attributes)
@@ -5098,324 +5497,8 @@ class std(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, mandatory: bool, offset: int) -> std.io.CsvColumnFloat:
-                return std.io.CsvColumnFloat(greycat.libs_by_name[std.name_].mapped[73], name, mandatory, offset)
-
-        @final
-        class CsvAnalysisConfig(GreyCat.Object):
-            name_: Final[str] = "io::CsvAnalysisConfig"
-
-            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
-                super().__init__(type, attributes)
-
-            def header_lines(self) -> int:
-                return self._get(self.type_.generated_offsets[0])
-
-            def set_header_lines(self, v: int) -> None:
-                self._set(self.type_.generated_offsets[0], v)
-
-            def separator(self) -> c_char:
-                return self._get(self.type_.generated_offsets[1])
-
-            def set_separator(self, v: c_char) -> None:
-                self._set(self.type_.generated_offsets[1], v)
-
-            def string_delimiter(self) -> c_char:
-                return self._get(self.type_.generated_offsets[2])
-
-            def set_string_delimiter(self, v: c_char) -> None:
-                self._set(self.type_.generated_offsets[2], v)
-
-            def decimal_separator(self) -> c_char:
-                return self._get(self.type_.generated_offsets[3])
-
-            def set_decimal_separator(self, v: c_char) -> None:
-                self._set(self.type_.generated_offsets[3], v)
-
-            def thousands_separator(self) -> c_char:
-                return self._get(self.type_.generated_offsets[4])
-
-            def set_thousands_separator(self, v: c_char) -> None:
-                self._set(self.type_.generated_offsets[4], v)
-
-            def row_limit(self) -> int:
-                return self._get(self.type_.generated_offsets[5])
-
-            def set_row_limit(self, v: int) -> None:
-                self._set(self.type_.generated_offsets[5], v)
-
-            def enumerable_limit(self) -> int:
-                return self._get(self.type_.generated_offsets[6])
-
-            def set_enumerable_limit(self, v: int) -> None:
-                self._set(self.type_.generated_offsets[6], v)
-
-            def date_check_limit(self) -> int:
-                return self._get(self.type_.generated_offsets[7])
-
-            def set_date_check_limit(self, v: int) -> None:
-                self._set(self.type_.generated_offsets[7], v)
-
-            def date_formats(self) -> std.core.Array:
-                return self._get(self.type_.generated_offsets[8])
-
-            def set_date_formats(self, v: std.core.Array) -> None:
-                self._set(self.type_.generated_offsets[8], v)
-
-            @staticmethod
-            def enumerable_limit_default(greycat: GreyCat) -> int:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[74]
-                return t.static_values[0]
-
-            @staticmethod
-            def date_check_limit_default(greycat: GreyCat) -> int:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[74]
-                return t.static_values[1]
-
-            @staticmethod
-            def create(greycat: GreyCat, header_lines: int, separator: c_char, string_delimiter: c_char, decimal_separator: c_char, thousands_separator: c_char, row_limit: int, enumerable_limit: int, date_check_limit: int, date_formats: std.core.Array) -> std.io.CsvAnalysisConfig:
-                return std.io.CsvAnalysisConfig(greycat.libs_by_name[std.name_].mapped[74], header_lines, separator, string_delimiter, decimal_separator, thousands_separator, row_limit, enumerable_limit, date_check_limit, date_formats)
-
-        @final
-        class CsvColumnString(GreyCat.Object):
-            name_: Final[str] = "io::CsvColumnString"
-
-            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
-                super().__init__(type, attributes)
-
-            def name(self) -> str:
-                return self._get(self.type_.generated_offsets[0])
-
-            def set_name(self, v: str) -> None:
-                self._set(self.type_.generated_offsets[0], v)
-
-            def mandatory(self) -> bool:
-                return self._get(self.type_.generated_offsets[1])
-
-            def set_mandatory(self, v: bool) -> None:
-                self._set(self.type_.generated_offsets[1], v)
-
-            def offset(self) -> int:
-                return self._get(self.type_.generated_offsets[2])
-
-            def set_offset(self, v: int) -> None:
-                self._set(self.type_.generated_offsets[2], v)
-
-            def trim(self) -> bool:
-                return self._get(self.type_.generated_offsets[3])
-
-            def set_trim(self, v: bool) -> None:
-                self._set(self.type_.generated_offsets[3], v)
-
-            def try_number(self) -> bool:
-                return self._get(self.type_.generated_offsets[4])
-
-            def set_try_number(self, v: bool) -> None:
-                self._set(self.type_.generated_offsets[4], v)
-
-            def try_json(self) -> bool:
-                return self._get(self.type_.generated_offsets[5])
-
-            def set_try_json(self, v: bool) -> None:
-                self._set(self.type_.generated_offsets[5], v)
-
-            def values(self) -> std.core.Array:
-                return self._get(self.type_.generated_offsets[6])
-
-            def set_values(self, v: std.core.Array) -> None:
-                self._set(self.type_.generated_offsets[6], v)
-
-            def encoder(self) -> std.io.TextEncoder:
-                return self._get(self.type_.generated_offsets[7])
-
-            def set_encoder(self, v: std.io.TextEncoder) -> None:
-                self._set(self.type_.generated_offsets[7], v)
-
-            @staticmethod
-            def create(greycat: GreyCat, name: str, mandatory: bool, offset: int, trim: bool, try_number: bool, try_json: bool, values: std.core.Array, encoder: std.io.TextEncoder) -> std.io.CsvColumnString:
-                return std.io.CsvColumnString(greycat.libs_by_name[std.name_].mapped[75], name, mandatory, offset, trim, try_number, try_json, values, encoder)
-
-        @final
-        class CsvColumnDate(GreyCat.Object):
-            name_: Final[str] = "io::CsvColumnDate"
-
-            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
-                super().__init__(type, attributes)
-
-            def name(self) -> str:
-                return self._get(self.type_.generated_offsets[0])
-
-            def set_name(self, v: str) -> None:
-                self._set(self.type_.generated_offsets[0], v)
-
-            def mandatory(self) -> bool:
-                return self._get(self.type_.generated_offsets[1])
-
-            def set_mandatory(self, v: bool) -> None:
-                self._set(self.type_.generated_offsets[1], v)
-
-            def offset(self) -> int:
-                return self._get(self.type_.generated_offsets[2])
-
-            def set_offset(self, v: int) -> None:
-                self._set(self.type_.generated_offsets[2], v)
-
-            def format(self) -> str:
-                return self._get(self.type_.generated_offsets[3])
-
-            def set_format(self, v: str) -> None:
-                self._set(self.type_.generated_offsets[3], v)
-
-            def tz(self) -> std.core.TimeZone:
-                return self._get(self.type_.generated_offsets[4])
-
-            def set_tz(self, v: std.core.TimeZone) -> None:
-                self._set(self.type_.generated_offsets[4], v)
-
-            def as_time(self) -> bool:
-                return self._get(self.type_.generated_offsets[5])
-
-            def set_as_time(self, v: bool) -> None:
-                self._set(self.type_.generated_offsets[5], v)
-
-            @staticmethod
-            def create(greycat: GreyCat, name: str, mandatory: bool, offset: int, format: str, tz: std.core.TimeZone, as_time: bool) -> std.io.CsvColumnDate:
-                return std.io.CsvColumnDate(greycat.libs_by_name[std.name_].mapped[76], name, mandatory, offset, format, tz, as_time)
-
-        @final
-        class File(GreyCat.Object):
-            name_: Final[str] = "io::File"
-
-            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
-                super().__init__(type, attributes)
-
-            def path(self) -> str:
-                return self._get(self.type_.generated_offsets[0])
-
-            def set_path(self, v: str) -> None:
-                self._set(self.type_.generated_offsets[0], v)
-
-            def size(self) -> int:
-                return self._get(self.type_.generated_offsets[1])
-
-            def set_size(self, v: int) -> None:
-                self._set(self.type_.generated_offsets[1], v)
-
-            def last_modification(self) -> std.core.time:
-                return self._get(self.type_.generated_offsets[2])
-
-            def set_last_modification(self, v: std.core.time) -> None:
-                self._set(self.type_.generated_offsets[2], v)
-
-            @staticmethod
-            def create(greycat: GreyCat, path: str, size: int, last_modification: std.core.time) -> std.io.File:
-                return std.io.File(greycat.libs_by_name[std.name_].mapped[77], path, size, last_modification)
-
-        @final
-        class CsvFormat(GreyCat.Object):
-            name_: Final[str] = "io::CsvFormat"
-
-            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
-                super().__init__(type, attributes)
-
-            def header_lines(self) -> int:
-                return self._get(self.type_.generated_offsets[0])
-
-            def set_header_lines(self, v: int) -> None:
-                self._set(self.type_.generated_offsets[0], v)
-
-            def separator(self) -> c_char:
-                return self._get(self.type_.generated_offsets[1])
-
-            def set_separator(self, v: c_char) -> None:
-                self._set(self.type_.generated_offsets[1], v)
-
-            def string_delimiter(self) -> c_char:
-                return self._get(self.type_.generated_offsets[2])
-
-            def set_string_delimiter(self, v: c_char) -> None:
-                self._set(self.type_.generated_offsets[2], v)
-
-            def decimal_separator(self) -> c_char:
-                return self._get(self.type_.generated_offsets[3])
-
-            def set_decimal_separator(self, v: c_char) -> None:
-                self._set(self.type_.generated_offsets[3], v)
-
-            def thousands_separator(self) -> c_char:
-                return self._get(self.type_.generated_offsets[4])
-
-            def set_thousands_separator(self, v: c_char) -> None:
-                self._set(self.type_.generated_offsets[4], v)
-
-            def columns_size(self) -> int:
-                return self._get(self.type_.generated_offsets[5])
-
-            def set_columns_size(self, v: int) -> None:
-                self._set(self.type_.generated_offsets[5], v)
-
-            def columns(self) -> std.core.Array:
-                return self._get(self.type_.generated_offsets[6])
-
-            def set_columns(self, v: std.core.Array) -> None:
-                self._set(self.type_.generated_offsets[6], v)
-
-            @staticmethod
-            def generate(greycat: GreyCat, format: std.io.CsvFormat, ident_col: int, time_col: int) -> str:
-                return GreyCat.call(greycat, "io::CsvFormat::generate", [format, ident_col, time_col, ])
-
-            @staticmethod
-            def validate(greycat: GreyCat, path: str, format: std.io.CsvFormat, max_rows: int, max_invalid: int, invalid_path: str) -> std.runtime.Task:
-                return GreyCat.call(greycat, "io::CsvFormat::validate", [path, format, max_rows, max_invalid, invalid_path, ])
-
-            @staticmethod
-            def sample(greycat: GreyCat, path: str, format: std.io.CsvFormat, offset: int, max: int) -> std.core.Table:
-                return GreyCat.call(greycat, "io::CsvFormat::sample", [path, format, offset, max, ])
-
-            @staticmethod
-            def infer(greycat: GreyCat, analysis: std.io.CsvStatistics) -> std.io.CsvFormat:
-                return GreyCat.call(greycat, "io::CsvFormat::infer", [analysis, ])
-
-            @staticmethod
-            def create(greycat: GreyCat, header_lines: int, separator: c_char, string_delimiter: c_char, decimal_separator: c_char, thousands_separator: c_char, columns_size: int, columns: std.core.Array) -> std.io.CsvFormat:
-                return std.io.CsvFormat(greycat.libs_by_name[std.name_].mapped[78], header_lines, separator, string_delimiter, decimal_separator, thousands_separator, columns_size, columns)
-
-        @final
-        class Http(GreyCat.Object):
-            name_: Final[str] = "io::Http"
-
-            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
-                super().__init__(type, attributes)
-
-            @staticmethod
-            def create(greycat: GreyCat) -> std.io.Http:
-                return std.io.Http(greycat.libs_by_name[std.name_].mapped[79])
-
-        @final
-        class SmtpMode(GreyCat.Enum):
-            name_: Final[str] = "io::SmtpMode"
-
-            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
-                super().__init__(type, attributes)
-
-            @staticmethod
-            def plain(greycat: GreyCat) -> std.io.SmtpMode:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[80]
-                return t.enum_values[t.generated_offsets[0]]
-
-            @staticmethod
-            def ssl_tls(greycat: GreyCat) -> std.io.SmtpMode:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[80]
-                return t.enum_values[t.generated_offsets[1]]
-
-            @staticmethod
-            def starttls(greycat: GreyCat) -> std.io.SmtpMode:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[80]
-                return t.enum_values[t.generated_offsets[2]]
-
-            @staticmethod
-            def create(greycat: GreyCat) -> std.io.SmtpMode:
-                return std.io.SmtpMode(greycat.libs_by_name[std.name_].mapped[80])
+            def create(greycat: GreyCat, name: str, mandatory: bool, offset: int) -> std.io.CsvColumnBoolean:
+                return std.io.CsvColumnBoolean(greycat.libs_by_name[std.name_].mapped[82], [name, mandatory, offset])
 
         @final
         class CsvColumn(GreyCat.Object):
@@ -5444,71 +5527,33 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, name: str, mandatory: bool, offset: int) -> std.io.CsvColumn:
-                return std.io.CsvColumn(greycat.libs_by_name[std.name_].mapped[81], name, mandatory, offset)
+                return std.io.CsvColumn(greycat.libs_by_name[std.name_].mapped[83], [name, mandatory, offset])
 
         @final
-        class CsvColumnInteger(GreyCat.Object):
-            name_: Final[str] = "io::CsvColumnInteger"
+        class SmtpMode(GreyCat.Enum):
+            name_: Final[str] = "io::SmtpMode"
 
             def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
                 super().__init__(type, attributes)
 
-            def name(self) -> str:
-                return self._get(self.type_.generated_offsets[0])
-
-            def set_name(self, v: str) -> None:
-                self._set(self.type_.generated_offsets[0], v)
-
-            def mandatory(self) -> bool:
-                return self._get(self.type_.generated_offsets[1])
-
-            def set_mandatory(self, v: bool) -> None:
-                self._set(self.type_.generated_offsets[1], v)
-
-            def offset(self) -> int:
-                return self._get(self.type_.generated_offsets[2])
-
-            def set_offset(self, v: int) -> None:
-                self._set(self.type_.generated_offsets[2], v)
+            @staticmethod
+            def plain(greycat: GreyCat) -> std.io.SmtpMode:
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[84]
+                return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, mandatory: bool, offset: int) -> std.io.CsvColumnInteger:
-                return std.io.CsvColumnInteger(greycat.libs_by_name[std.name_].mapped[82], name, mandatory, offset)
-
-        @final
-        class CsvColumnTime(GreyCat.Object):
-            name_: Final[str] = "io::CsvColumnTime"
-
-            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
-                super().__init__(type, attributes)
-
-            def name(self) -> str:
-                return self._get(self.type_.generated_offsets[0])
-
-            def set_name(self, v: str) -> None:
-                self._set(self.type_.generated_offsets[0], v)
-
-            def mandatory(self) -> bool:
-                return self._get(self.type_.generated_offsets[1])
-
-            def set_mandatory(self, v: bool) -> None:
-                self._set(self.type_.generated_offsets[1], v)
-
-            def offset(self) -> int:
-                return self._get(self.type_.generated_offsets[2])
-
-            def set_offset(self, v: int) -> None:
-                self._set(self.type_.generated_offsets[2], v)
-
-            def unit(self) -> std.core.DurationUnit:
-                return self._get(self.type_.generated_offsets[3])
-
-            def set_unit(self, v: std.core.DurationUnit) -> None:
-                self._set(self.type_.generated_offsets[3], v)
+            def ssl_tls(greycat: GreyCat) -> std.io.SmtpMode:
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[84]
+                return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, mandatory: bool, offset: int, unit: std.core.DurationUnit) -> std.io.CsvColumnTime:
-                return std.io.CsvColumnTime(greycat.libs_by_name[std.name_].mapped[83], name, mandatory, offset, unit)
+            def starttls(greycat: GreyCat) -> std.io.SmtpMode:
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[84]
+                return t.enum_values[t.generated_offsets[2]]
+
+            @staticmethod
+            def create(greycat: GreyCat) -> std.io.SmtpMode:
+                return std.io.SmtpMode(greycat.libs_by_name[std.name_].mapped[84], [])
 
     @final
     class math:
@@ -5522,223 +5567,162 @@ class std(GreyCat.Library):
 
             @staticmethod
             def e(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[84]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[85]
                 return t.static_values[0]
 
             @staticmethod
             def log_2e(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[84]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[85]
                 return t.static_values[1]
 
             @staticmethod
             def log_10e(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[84]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[85]
                 return t.static_values[2]
 
             @staticmethod
             def ln2(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[84]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[85]
                 return t.static_values[3]
 
             @staticmethod
             def ln10(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[84]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[85]
                 return t.static_values[4]
 
             @staticmethod
             def pi(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[84]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[85]
                 return t.static_values[5]
 
             @staticmethod
             def pi_2(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[84]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[85]
                 return t.static_values[6]
 
             @staticmethod
             def pi_4(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[84]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[85]
                 return t.static_values[7]
 
             @staticmethod
             def m1_pi(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[84]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[85]
                 return t.static_values[8]
 
             @staticmethod
             def m2_pi(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[84]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[85]
                 return t.static_values[9]
 
             @staticmethod
             def m2_sqrt_pi(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[84]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[85]
                 return t.static_values[10]
 
             @staticmethod
             def sqrt2(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[84]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[85]
                 return t.static_values[11]
 
             @staticmethod
             def sqrt1_2(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[84]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[85]
                 return t.static_values[12]
 
             @staticmethod
             def create(greycat: GreyCat) -> std.math.MathConstants:
-                return std.math.MathConstants(greycat.libs_by_name[std.name_].mapped[84])
+                return std.math.MathConstants(greycat.libs_by_name[std.name_].mapped[85], [])
 
     @final
     class util:
         __T = TypeVar("__T")
 
         @final
-        class HistogramInt(std_n.util._HistogramInt):
-            name_: Final[str] = "util::HistogramInt"
-
-            def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
-                super().__init__(type)
-
-            @staticmethod
-            def create(greycat: GreyCat) -> std_n.util._HistogramInt:
-                return std.util.HistogramInt(greycat.libs_by_name[std.name_].mapped[85])
-
-        @final
-        class BoxPlotFloat(GreyCat.Object):
-            name_: Final[str] = "util::BoxPlotFloat"
+        class Random(GreyCat.Object):
+            name_: Final[str] = "util::Random"
 
             def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
                 super().__init__(type, attributes)
 
-            def min(self) -> float:
+            def seed(self) -> int:
                 return self._get(self.type_.generated_offsets[0])
 
-            def set_min(self, v: float) -> None:
+            def set_seed(self, v: int) -> None:
                 self._set(self.type_.generated_offsets[0], v)
 
-            def max(self) -> float:
+            def v(self) -> float:
                 return self._get(self.type_.generated_offsets[1])
 
-            def set_max(self, v: float) -> None:
+            def set_v(self, v: float) -> None:
                 self._set(self.type_.generated_offsets[1], v)
 
-            def whiskerLow(self) -> float:
-                return self._get(self.type_.generated_offsets[2])
-
-            def set_whiskerLow(self, v: float) -> None:
-                self._set(self.type_.generated_offsets[2], v)
-
-            def whiskerHigh(self) -> float:
-                return self._get(self.type_.generated_offsets[3])
-
-            def set_whiskerHigh(self, v: float) -> None:
-                self._set(self.type_.generated_offsets[3], v)
-
-            def percentile1(self) -> float:
-                return self._get(self.type_.generated_offsets[4])
-
-            def set_percentile1(self, v: float) -> None:
-                self._set(self.type_.generated_offsets[4], v)
-
-            def percentile5(self) -> float:
-                return self._get(self.type_.generated_offsets[5])
-
-            def set_percentile5(self, v: float) -> None:
-                self._set(self.type_.generated_offsets[5], v)
-
-            def percentile25(self) -> float:
-                return self._get(self.type_.generated_offsets[6])
-
-            def set_percentile25(self, v: float) -> None:
-                self._set(self.type_.generated_offsets[6], v)
-
-            def percentile50(self) -> float:
-                return self._get(self.type_.generated_offsets[7])
-
-            def set_percentile50(self, v: float) -> None:
-                self._set(self.type_.generated_offsets[7], v)
-
-            def percentile75(self) -> float:
-                return self._get(self.type_.generated_offsets[8])
-
-            def set_percentile75(self, v: float) -> None:
-                self._set(self.type_.generated_offsets[8], v)
-
-            def percentile95(self) -> float:
-                return self._get(self.type_.generated_offsets[9])
-
-            def set_percentile95(self, v: float) -> None:
-                self._set(self.type_.generated_offsets[9], v)
-
-            def percentile99(self) -> float:
-                return self._get(self.type_.generated_offsets[10])
-
-            def set_percentile99(self, v: float) -> None:
-                self._set(self.type_.generated_offsets[10], v)
-
-            def countOutliersLow(self) -> int:
-                return self._get(self.type_.generated_offsets[11])
-
-            def set_countOutliersLow(self, v: int) -> None:
-                self._set(self.type_.generated_offsets[11], v)
-
-            def countOutliersHigh(self) -> int:
-                return self._get(self.type_.generated_offsets[12])
-
-            def set_countOutliersHigh(self, v: int) -> None:
-                self._set(self.type_.generated_offsets[12], v)
-
-            def percentageOutliersLow(self) -> float:
-                return self._get(self.type_.generated_offsets[13])
-
-            def set_percentageOutliersLow(self, v: float) -> None:
-                self._set(self.type_.generated_offsets[13], v)
-
-            def percentageOutliersHigh(self) -> float:
-                return self._get(self.type_.generated_offsets[14])
-
-            def set_percentageOutliersHigh(self, v: float) -> None:
-                self._set(self.type_.generated_offsets[14], v)
-
-            def sum(self) -> float:
-                return self._get(self.type_.generated_offsets[15])
-
-            def set_sum(self, v: float) -> None:
-                self._set(self.type_.generated_offsets[15], v)
-
-            def avg(self) -> float:
-                return self._get(self.type_.generated_offsets[16])
-
-            def set_avg(self, v: float) -> None:
-                self._set(self.type_.generated_offsets[16], v)
-
-            def std(self) -> float:
-                return self._get(self.type_.generated_offsets[17])
-
-            def set_std(self, v: float) -> None:
-                self._set(self.type_.generated_offsets[17], v)
-
-            def size(self) -> int:
-                return self._get(self.type_.generated_offsets[18])
-
-            def set_size(self, v: int) -> None:
-                self._set(self.type_.generated_offsets[18], v)
-
             @staticmethod
-            def create(greycat: GreyCat, min: float, max: float, whiskerLow: float, whiskerHigh: float, percentile1: float, percentile5: float, percentile25: float, percentile50: float, percentile75: float, percentile95: float, percentile99: float, countOutliersLow: int, countOutliersHigh: int, percentageOutliersLow: float, percentageOutliersHigh: float, sum: float, avg: float, std: float, size: int) -> std.util.BoxPlotFloat:
-                return std.util.BoxPlotFloat(greycat.libs_by_name[std.name_].mapped[86], min, max, whiskerLow, whiskerHigh, percentile1, percentile5, percentile25, percentile50, percentile75, percentile95, percentile99, countOutliersLow, countOutliersHigh, percentageOutliersLow, percentageOutliersHigh, sum, avg, std, size)
+            def create(greycat: GreyCat, seed: int, v: float) -> std.util.Random:
+                return std.util.Random(greycat.libs_by_name[std.name_].mapped[86], [seed, v])
 
         @final
-        class GaussianProfile(std_n.util._GaussianProfile):
-            name_: Final[str] = "util::GaussianProfile"
+        class Iban(std_n.util._Iban):
+            name_: Final[str] = "util::Iban"
 
             def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
                 super().__init__(type)
 
             @staticmethod
-            def create(greycat: GreyCat) -> std_n.util._GaussianProfile:
-                return std.util.GaussianProfile(greycat.libs_by_name[std.name_].mapped[87])
+            def create(greycat: GreyCat) -> std_n.util._Iban:
+                return std.util.Iban(greycat.libs_by_name[std.name_].mapped[87], [])
+
+        @final
+        class Gaussian(GreyCat.Object):
+            name_: Final[str] = "util::Gaussian"
+
+            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
+                super().__init__(type, attributes)
+
+            def sum(self) -> float:
+                return self._get(self.type_.generated_offsets[0])
+
+            def set_sum(self, v: float) -> None:
+                self._set(self.type_.generated_offsets[0], v)
+
+            def sum_sq(self) -> float:
+                return self._get(self.type_.generated_offsets[1])
+
+            def set_sum_sq(self, v: float) -> None:
+                self._set(self.type_.generated_offsets[1], v)
+
+            def count(self) -> int:
+                return self._get(self.type_.generated_offsets[2])
+
+            def set_count(self, v: int) -> None:
+                self._set(self.type_.generated_offsets[2], v)
+
+            def min(self) -> float:
+                return self._get(self.type_.generated_offsets[3])
+
+            def set_min(self, v: float) -> None:
+                self._set(self.type_.generated_offsets[3], v)
+
+            def max(self) -> float:
+                return self._get(self.type_.generated_offsets[4])
+
+            def set_max(self, v: float) -> None:
+                self._set(self.type_.generated_offsets[4], v)
+
+            @staticmethod
+            def create(greycat: GreyCat, sum: float, sum_sq: float, count: int, min: float, max: float) -> std.util.Gaussian:
+                return std.util.Gaussian(greycat.libs_by_name[std.name_].mapped[88], [sum, sum_sq, count, min, max])
+
+        @final
+        class HistogramFloat(std_n.util._HistogramFloat):
+            name_: Final[str] = "util::HistogramFloat"
+
+            def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
+                super().__init__(type)
+
+            @staticmethod
+            def create(greycat: GreyCat) -> std_n.util._HistogramFloat:
+                return std.util.HistogramFloat(greycat.libs_by_name[std.name_].mapped[89], [])
 
         @final
         class BoxPlotInt(GreyCat.Object):
@@ -5863,158 +5847,143 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, min: int, max: int, whiskerLow: int, whiskerHigh: int, percentile1: int, percentile5: int, percentile25: int, percentile50: int, percentile75: int, percentile95: int, percentile99: int, countOutliersLow: int, countOutliersHigh: int, percentageOutliersLow: float, percentageOutliersHigh: float, sum: float, avg: float, std: float, size: int) -> std.util.BoxPlotInt:
-                return std.util.BoxPlotInt(greycat.libs_by_name[std.name_].mapped[88], min, max, whiskerLow, whiskerHigh, percentile1, percentile5, percentile25, percentile50, percentile75, percentile95, percentile99, countOutliersLow, countOutliersHigh, percentageOutliersLow, percentageOutliersHigh, sum, avg, std, size)
+                return std.util.BoxPlotInt(greycat.libs_by_name[std.name_].mapped[90], [min, max, whiskerLow, whiskerHigh, percentile1, percentile5, percentile25, percentile50, percentile75, percentile95, percentile99, countOutliersLow, countOutliersHigh, percentageOutliersLow, percentageOutliersHigh, sum, avg, std, size])
 
         @final
-        class HistogramFloat(std_n.util._HistogramFloat):
-            name_: Final[str] = "util::HistogramFloat"
-
-            def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
-                super().__init__(type)
-
-            @staticmethod
-            def create(greycat: GreyCat) -> std_n.util._HistogramFloat:
-                return std.util.HistogramFloat(greycat.libs_by_name[std.name_].mapped[89])
-
-        @final
-        class Iban(std_n.util._Iban):
-            name_: Final[str] = "util::Iban"
-
-            def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
-                super().__init__(type)
-
-            @staticmethod
-            def create(greycat: GreyCat) -> std_n.util._Iban:
-                return std.util.Iban(greycat.libs_by_name[std.name_].mapped[90])
-
-        @final
-        class Queue(Generic[__T], std_n.util._Queue[__T]):
-            name_: Final[str] = "util::Queue"
-
-            def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
-                super().__init__(type)
-
-            @staticmethod
-            def create(greycat: GreyCat) -> std_n.util._Queue:
-                return std.util.Queue(greycat.libs_by_name[std.name_].mapped[91])
-
-        @final
-        class TimeWindow(std_n.util._TimeWindow):
-            name_: Final[str] = "util::TimeWindow"
-
-            def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
-                super().__init__(type)
-
-            @staticmethod
-            def create(greycat: GreyCat) -> std_n.util._TimeWindow:
-                return std.util.TimeWindow(greycat.libs_by_name[std.name_].mapped[92])
-
-        @final
-        class Assert(GreyCat.Object):
-            name_: Final[str] = "util::Assert"
+        class BoxPlotFloat(GreyCat.Object):
+            name_: Final[str] = "util::BoxPlotFloat"
 
             def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
                 super().__init__(type, attributes)
 
-            @staticmethod
-            def create(greycat: GreyCat) -> std.util.Assert:
-                return std.util.Assert(greycat.libs_by_name[std.name_].mapped[93])
-
-        @final
-        class Crypto(GreyCat.Object):
-            name_: Final[str] = "util::Crypto"
-
-            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
-                super().__init__(type, attributes)
-
-            @staticmethod
-            def create(greycat: GreyCat) -> std.util.Crypto:
-                return std.util.Crypto(greycat.libs_by_name[std.name_].mapped[94])
-
-        @final
-        class DenseDim(GreyCat.Object):
-            name_: Final[str] = "util::DenseDim"
-
-            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
-                super().__init__(type, attributes)
-
-            def min(self) -> int:
+            def min(self) -> float:
                 return self._get(self.type_.generated_offsets[0])
 
-            def set_min(self, v: int) -> None:
+            def set_min(self, v: float) -> None:
                 self._set(self.type_.generated_offsets[0], v)
 
-            def max(self) -> int:
+            def max(self) -> float:
                 return self._get(self.type_.generated_offsets[1])
 
-            def set_max(self, v: int) -> None:
+            def set_max(self, v: float) -> None:
                 self._set(self.type_.generated_offsets[1], v)
 
-            def step(self) -> int:
+            def whiskerLow(self) -> float:
                 return self._get(self.type_.generated_offsets[2])
 
-            def set_step(self, v: int) -> None:
+            def set_whiskerLow(self, v: float) -> None:
                 self._set(self.type_.generated_offsets[2], v)
 
+            def whiskerHigh(self) -> float:
+                return self._get(self.type_.generated_offsets[3])
+
+            def set_whiskerHigh(self, v: float) -> None:
+                self._set(self.type_.generated_offsets[3], v)
+
+            def percentile1(self) -> float:
+                return self._get(self.type_.generated_offsets[4])
+
+            def set_percentile1(self, v: float) -> None:
+                self._set(self.type_.generated_offsets[4], v)
+
+            def percentile5(self) -> float:
+                return self._get(self.type_.generated_offsets[5])
+
+            def set_percentile5(self, v: float) -> None:
+                self._set(self.type_.generated_offsets[5], v)
+
+            def percentile25(self) -> float:
+                return self._get(self.type_.generated_offsets[6])
+
+            def set_percentile25(self, v: float) -> None:
+                self._set(self.type_.generated_offsets[6], v)
+
+            def percentile50(self) -> float:
+                return self._get(self.type_.generated_offsets[7])
+
+            def set_percentile50(self, v: float) -> None:
+                self._set(self.type_.generated_offsets[7], v)
+
+            def percentile75(self) -> float:
+                return self._get(self.type_.generated_offsets[8])
+
+            def set_percentile75(self, v: float) -> None:
+                self._set(self.type_.generated_offsets[8], v)
+
+            def percentile95(self) -> float:
+                return self._get(self.type_.generated_offsets[9])
+
+            def set_percentile95(self, v: float) -> None:
+                self._set(self.type_.generated_offsets[9], v)
+
+            def percentile99(self) -> float:
+                return self._get(self.type_.generated_offsets[10])
+
+            def set_percentile99(self, v: float) -> None:
+                self._set(self.type_.generated_offsets[10], v)
+
+            def countOutliersLow(self) -> int:
+                return self._get(self.type_.generated_offsets[11])
+
+            def set_countOutliersLow(self, v: int) -> None:
+                self._set(self.type_.generated_offsets[11], v)
+
+            def countOutliersHigh(self) -> int:
+                return self._get(self.type_.generated_offsets[12])
+
+            def set_countOutliersHigh(self, v: int) -> None:
+                self._set(self.type_.generated_offsets[12], v)
+
+            def percentageOutliersLow(self) -> float:
+                return self._get(self.type_.generated_offsets[13])
+
+            def set_percentageOutliersLow(self, v: float) -> None:
+                self._set(self.type_.generated_offsets[13], v)
+
+            def percentageOutliersHigh(self) -> float:
+                return self._get(self.type_.generated_offsets[14])
+
+            def set_percentageOutliersHigh(self, v: float) -> None:
+                self._set(self.type_.generated_offsets[14], v)
+
+            def sum(self) -> float:
+                return self._get(self.type_.generated_offsets[15])
+
+            def set_sum(self, v: float) -> None:
+                self._set(self.type_.generated_offsets[15], v)
+
+            def avg(self) -> float:
+                return self._get(self.type_.generated_offsets[16])
+
+            def set_avg(self, v: float) -> None:
+                self._set(self.type_.generated_offsets[16], v)
+
+            def std(self) -> float:
+                return self._get(self.type_.generated_offsets[17])
+
+            def set_std(self, v: float) -> None:
+                self._set(self.type_.generated_offsets[17], v)
+
+            def size(self) -> int:
+                return self._get(self.type_.generated_offsets[18])
+
+            def set_size(self, v: int) -> None:
+                self._set(self.type_.generated_offsets[18], v)
+
             @staticmethod
-            def create(greycat: GreyCat, min: int, max: int, step: int) -> std.util.DenseDim:
-                return std.util.DenseDim(greycat.libs_by_name[std.name_].mapped[95], min, max, step)
+            def create(greycat: GreyCat, min: float, max: float, whiskerLow: float, whiskerHigh: float, percentile1: float, percentile5: float, percentile25: float, percentile50: float, percentile75: float, percentile95: float, percentile99: float, countOutliersLow: int, countOutliersHigh: int, percentageOutliersLow: float, percentageOutliersHigh: float, sum: float, avg: float, std: float, size: int) -> std.util.BoxPlotFloat:
+                return std.util.BoxPlotFloat(greycat.libs_by_name[std.name_].mapped[91], [min, max, whiskerLow, whiskerHigh, percentile1, percentile5, percentile25, percentile50, percentile75, percentile95, percentile99, countOutliersLow, countOutliersHigh, percentageOutliersLow, percentageOutliersHigh, sum, avg, std, size])
 
         @final
-        class SlidingWindow(std_n.util._SlidingWindow):
-            name_: Final[str] = "util::SlidingWindow"
+        class GaussianProfile(std_n.util._GaussianProfile):
+            name_: Final[str] = "util::GaussianProfile"
 
             def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
                 super().__init__(type)
 
             @staticmethod
-            def create(greycat: GreyCat) -> std_n.util._SlidingWindow:
-                return std.util.SlidingWindow(greycat.libs_by_name[std.name_].mapped[96])
-
-        @final
-        class Random(GreyCat.Object):
-            name_: Final[str] = "util::Random"
-
-            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
-                super().__init__(type, attributes)
-
-            def seed(self) -> int:
-                return self._get(self.type_.generated_offsets[0])
-
-            def set_seed(self, v: int) -> None:
-                self._set(self.type_.generated_offsets[0], v)
-
-            def v(self) -> float:
-                return self._get(self.type_.generated_offsets[1])
-
-            def set_v(self, v: float) -> None:
-                self._set(self.type_.generated_offsets[1], v)
-
-            @staticmethod
-            def create(greycat: GreyCat, seed: int, v: float) -> std.util.Random:
-                return std.util.Random(greycat.libs_by_name[std.name_].mapped[97], seed, v)
-
-        @final
-        class Plot(GreyCat.Object):
-            name_: Final[str] = "util::Plot"
-
-            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
-                super().__init__(type, attributes)
-
-            @staticmethod
-            def create(greycat: GreyCat) -> std.util.Plot:
-                return std.util.Plot(greycat.libs_by_name[std.name_].mapped[98])
-
-        @final
-        class Buffer(std_n.util._Buffer):
-            name_: Final[str] = "util::Buffer"
-
-            def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
-                super().__init__(type)
-
-            @staticmethod
-            def create(greycat: GreyCat) -> std_n.util._Buffer:
-                return std.util.Buffer(greycat.libs_by_name[std.name_].mapped[99])
+            def create(greycat: GreyCat) -> std_n.util._GaussianProfile:
+                return std.util.GaussianProfile(greycat.libs_by_name[std.name_].mapped[92], [])
 
         @final
         class ProgressTracker(GreyCat.Object):
@@ -6067,48 +6036,124 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, start: std.core.time, total: int, counter: int, duration: std.core.duration, progress: float, speed: float, remaining: std.core.duration) -> std.util.ProgressTracker:
-                return std.util.ProgressTracker(greycat.libs_by_name[std.name_].mapped[100], start, total, counter, duration, progress, speed, remaining)
+                return std.util.ProgressTracker(greycat.libs_by_name[std.name_].mapped[93], [start, total, counter, duration, progress, speed, remaining])
 
         @final
-        class Gaussian(GreyCat.Object):
-            name_: Final[str] = "util::Gaussian"
+        class Buffer(std_n.util._Buffer):
+            name_: Final[str] = "util::Buffer"
+
+            def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
+                super().__init__(type)
+
+            @staticmethod
+            def create(greycat: GreyCat) -> std_n.util._Buffer:
+                return std.util.Buffer(greycat.libs_by_name[std.name_].mapped[94], [])
+
+        @final
+        class DenseDim(GreyCat.Object):
+            name_: Final[str] = "util::DenseDim"
 
             def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
                 super().__init__(type, attributes)
 
-            def sum(self) -> float:
+            def min(self) -> int:
                 return self._get(self.type_.generated_offsets[0])
 
-            def set_sum(self, v: float) -> None:
+            def set_min(self, v: int) -> None:
                 self._set(self.type_.generated_offsets[0], v)
 
-            def sum_sq(self) -> float:
+            def max(self) -> int:
                 return self._get(self.type_.generated_offsets[1])
 
-            def set_sum_sq(self, v: float) -> None:
+            def set_max(self, v: int) -> None:
                 self._set(self.type_.generated_offsets[1], v)
 
-            def count(self) -> int:
+            def step(self) -> int:
                 return self._get(self.type_.generated_offsets[2])
 
-            def set_count(self, v: int) -> None:
+            def set_step(self, v: int) -> None:
                 self._set(self.type_.generated_offsets[2], v)
 
-            def min(self) -> float:
-                return self._get(self.type_.generated_offsets[3])
+            @staticmethod
+            def create(greycat: GreyCat, min: int, max: int, step: int) -> std.util.DenseDim:
+                return std.util.DenseDim(greycat.libs_by_name[std.name_].mapped[95], [min, max, step])
 
-            def set_min(self, v: float) -> None:
-                self._set(self.type_.generated_offsets[3], v)
+        @final
+        class HistogramInt(std_n.util._HistogramInt):
+            name_: Final[str] = "util::HistogramInt"
 
-            def max(self) -> float:
-                return self._get(self.type_.generated_offsets[4])
-
-            def set_max(self, v: float) -> None:
-                self._set(self.type_.generated_offsets[4], v)
+            def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
+                super().__init__(type)
 
             @staticmethod
-            def create(greycat: GreyCat, sum: float, sum_sq: float, count: int, min: float, max: float) -> std.util.Gaussian:
-                return std.util.Gaussian(greycat.libs_by_name[std.name_].mapped[101], sum, sum_sq, count, min, max)
+            def create(greycat: GreyCat) -> std_n.util._HistogramInt:
+                return std.util.HistogramInt(greycat.libs_by_name[std.name_].mapped[96], [])
+
+        @final
+        class SlidingWindow(std_n.util._SlidingWindow):
+            name_: Final[str] = "util::SlidingWindow"
+
+            def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
+                super().__init__(type)
+
+            @staticmethod
+            def create(greycat: GreyCat) -> std_n.util._SlidingWindow:
+                return std.util.SlidingWindow(greycat.libs_by_name[std.name_].mapped[97], [])
+
+        @final
+        class Queue(Generic[__T], std_n.util._Queue[__T]):
+            name_: Final[str] = "util::Queue"
+
+            def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
+                super().__init__(type)
+
+            @staticmethod
+            def create(greycat: GreyCat) -> std_n.util._Queue:
+                return std.util.Queue(greycat.libs_by_name[std.name_].mapped[98], [])
+
+        @final
+        class Plot(GreyCat.Object):
+            name_: Final[str] = "util::Plot"
+
+            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
+                super().__init__(type, attributes)
+
+            @staticmethod
+            def create(greycat: GreyCat) -> std.util.Plot:
+                return std.util.Plot(greycat.libs_by_name[std.name_].mapped[99], [])
+
+        @final
+        class TimeWindow(std_n.util._TimeWindow):
+            name_: Final[str] = "util::TimeWindow"
+
+            def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
+                super().__init__(type)
+
+            @staticmethod
+            def create(greycat: GreyCat) -> std_n.util._TimeWindow:
+                return std.util.TimeWindow(greycat.libs_by_name[std.name_].mapped[100], [])
+
+        @final
+        class Assert(GreyCat.Object):
+            name_: Final[str] = "util::Assert"
+
+            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
+                super().__init__(type, attributes)
+
+            @staticmethod
+            def create(greycat: GreyCat) -> std.util.Assert:
+                return std.util.Assert(greycat.libs_by_name[std.name_].mapped[101], [])
+
+        @final
+        class Crypto(GreyCat.Object):
+            name_: Final[str] = "util::Crypto"
+
+            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
+                super().__init__(type, attributes)
+
+            @staticmethod
+            def create(greycat: GreyCat) -> std.util.Crypto:
+                return std.util.Crypto(greycat.libs_by_name[std.name_].mapped[102], [])
 
     def configure(self, loaders: dict[str, GreyCat.Loader], factories: dict[str, GreyCat.Factory]) -> None:
         factories[std.core.GeoBox.name_] = lambda type, attributes: std.core.GeoBox(type, attributes)
@@ -6180,14 +6225,15 @@ class std(GreyCat.Library):
         factories[std.runtime.RuntimeInfo.name_] = lambda type, attributes: std.runtime.RuntimeInfo(type, attributes)
         factories[std.runtime.PeriodicTask.name_] = lambda type, attributes: std.runtime.PeriodicTask(type, attributes)
         factories[std.runtime.SecurityFields.name_] = lambda type, attributes: std.runtime.SecurityFields(type, attributes)
+        factories[std.runtime.LicenseType.name_] = lambda type, attributes: std.runtime.LicenseType(type, attributes)
+        factories[std.runtime.UserGroup.name_] = lambda type, attributes: std.runtime.UserGroup(type, attributes)
+        factories[std.runtime.UserGroupPolicyType.name_] = lambda type, attributes: std.runtime.UserGroupPolicyType(type, attributes)
         factories[std.runtime.UserGroupPolicy.name_] = lambda type, attributes: std.runtime.UserGroupPolicy(type, attributes)
         factories[std.runtime.User.name_] = lambda type, attributes: std.runtime.User(type, attributes)
-        factories[std.runtime.OpenIDConnect.name_] = lambda type, attributes: std.runtime.OpenIDConnect(type, attributes)
         factories[std.runtime.UserCredential.name_] = lambda type, attributes: std.runtime.UserCredential(type, attributes)
         factories[std.runtime.StoreStat.name_] = lambda type, attributes: std.runtime.StoreStat(type, attributes)
-        factories[std.runtime.UserGroupPolicyType.name_] = lambda type, attributes: std.runtime.UserGroupPolicyType(type, attributes)
-        factories[std.runtime.UserGroup.name_] = lambda type, attributes: std.runtime.UserGroup(type, attributes)
         factories[std.runtime.UserRole.name_] = lambda type, attributes: std.runtime.UserRole(type, attributes)
+        factories[std.runtime.OpenIDConnect.name_] = lambda type, attributes: std.runtime.OpenIDConnect(type, attributes)
         factories[std.runtime.Task.name_] = lambda type, attributes: std.runtime.Task(type, attributes)
         factories[std.runtime.SecurityPolicy.name_] = lambda type, attributes: std.runtime.SecurityPolicy(type, attributes)
         factories[std.runtime.License.name_] = lambda type, attributes: std.runtime.License(type, attributes)
@@ -6196,57 +6242,57 @@ class std(GreyCat.Library):
         factories[std.runtime.TaskInfo.name_] = lambda type, attributes: std.runtime.TaskInfo(type, attributes)
         factories[std.runtime.System.name_] = lambda type, attributes: std.runtime.System(type, attributes)
         factories[std.runtime.SecurityEntity.name_] = lambda type, attributes: std.runtime.SecurityEntity(type, attributes)
-        factories[std.io.SmtpAuth.name_] = lambda type, attributes: std.io.SmtpAuth(type, attributes)
-        factories[std.io.HttpHeader.name_] = lambda type, attributes: std.io.HttpHeader(type, attributes)
+        factories[std.io.CsvColumnDate.name_] = lambda type, attributes: std.io.CsvColumnDate(type, attributes)
+        factories[std.io.CsvColumnInteger.name_] = lambda type, attributes: std.io.CsvColumnInteger(type, attributes)
+        factories[std.io.File.name_] = lambda type, attributes: std.io.File(type, attributes)
+        factories[std.io.CsvColumnString.name_] = lambda type, attributes: std.io.CsvColumnString(type, attributes)
         factories[std.io.CsvStatistics.name_] = lambda type, attributes: std.io.CsvStatistics(type, attributes)
-        factories[std.io.CsvAnalysis.name_] = lambda type, attributes: std.io.CsvAnalysis(type, attributes)
-        factories[std.io.TextEncoder.name_] = lambda type, attributes: std.io.TextEncoder(type, attributes)
-        factories[std.io.CsvColumnBoolean.name_] = lambda type, attributes: std.io.CsvColumnBoolean(type, attributes)
-        factories[std.io.Mqtt.name_] = lambda type, attributes: std.io.Mqtt(type, attributes)
-        factories[std.io.Smtp.name_] = lambda type, attributes: std.io.Smtp(type, attributes)
+        factories[std.io.CsvColumnFloat.name_] = lambda type, attributes: std.io.CsvColumnFloat(type, attributes)
+        factories[std.io.HttpHeader.name_] = lambda type, attributes: std.io.HttpHeader(type, attributes)
+        factories[std.io.CsvFormat.name_] = lambda type, attributes: std.io.CsvFormat(type, attributes)
         factories[std.io.CsvColumnDuration.name_] = lambda type, attributes: std.io.CsvColumnDuration(type, attributes)
-        factories[std.io.CsvColumnIgnored.name_] = lambda type, attributes: std.io.CsvColumnIgnored(type, attributes)
+        factories[std.io.CsvAnalysis.name_] = lambda type, attributes: std.io.CsvAnalysis(type, attributes)
+        factories[std.io.CsvAnalysisConfig.name_] = lambda type, attributes: std.io.CsvAnalysisConfig(type, attributes)
+        factories[std.io.SmtpAuth.name_] = lambda type, attributes: std.io.SmtpAuth(type, attributes)
+        factories[std.io.Http.name_] = lambda type, attributes: std.io.Http(type, attributes)
+        factories[std.io.Smtp.name_] = lambda type, attributes: std.io.Smtp(type, attributes)
+        factories[std.io.Mqtt.name_] = lambda type, attributes: std.io.Mqtt(type, attributes)
+        factories[std.io.TextEncoder.name_] = lambda type, attributes: std.io.TextEncoder(type, attributes)
         factories[std.io.CsvColumnStatistics.name_] = lambda type, attributes: std.io.CsvColumnStatistics(type, attributes)
+        factories[std.io.CsvColumnIgnored.name_] = lambda type, attributes: std.io.CsvColumnIgnored(type, attributes)
+        factories[std.io.CsvColumnTime.name_] = lambda type, attributes: std.io.CsvColumnTime(type, attributes)
         factories[std.io.Url.name_] = lambda type, attributes: std.io.Url(type, attributes)
         factories[std.io.Email.name_] = lambda type, attributes: std.io.Email(type, attributes)
         factories[std.io.CsvValidateResult.name_] = lambda type, attributes: std.io.CsvValidateResult(type, attributes)
-        factories[std.io.CsvColumnFloat.name_] = lambda type, attributes: std.io.CsvColumnFloat(type, attributes)
-        factories[std.io.CsvAnalysisConfig.name_] = lambda type, attributes: std.io.CsvAnalysisConfig(type, attributes)
-        factories[std.io.CsvColumnString.name_] = lambda type, attributes: std.io.CsvColumnString(type, attributes)
-        factories[std.io.CsvColumnDate.name_] = lambda type, attributes: std.io.CsvColumnDate(type, attributes)
-        factories[std.io.File.name_] = lambda type, attributes: std.io.File(type, attributes)
-        factories[std.io.CsvFormat.name_] = lambda type, attributes: std.io.CsvFormat(type, attributes)
-        factories[std.io.Http.name_] = lambda type, attributes: std.io.Http(type, attributes)
-        factories[std.io.SmtpMode.name_] = lambda type, attributes: std.io.SmtpMode(type, attributes)
+        factories[std.io.CsvColumnBoolean.name_] = lambda type, attributes: std.io.CsvColumnBoolean(type, attributes)
         factories[std.io.CsvColumn.name_] = lambda type, attributes: std.io.CsvColumn(type, attributes)
-        factories[std.io.CsvColumnInteger.name_] = lambda type, attributes: std.io.CsvColumnInteger(type, attributes)
-        factories[std.io.CsvColumnTime.name_] = lambda type, attributes: std.io.CsvColumnTime(type, attributes)
+        factories[std.io.SmtpMode.name_] = lambda type, attributes: std.io.SmtpMode(type, attributes)
         factories[std.math.MathConstants.name_] = lambda type, attributes: std.math.MathConstants(type, attributes)
-        factories[std.util.HistogramInt.name_] = lambda type, attributes: std.util.HistogramInt(type, attributes)
-        loaders[std.util.HistogramInt.name_] = lambda type, stream: std_n.util._HistogramInt.load(type, stream)
+        factories[std.util.Random.name_] = lambda type, attributes: std.util.Random(type, attributes)
+        factories[std.util.Iban.name_] = lambda type, attributes: std.util.Iban(type, attributes)
+        loaders[std.util.Iban.name_] = lambda type, stream: std_n.util._Iban.load(type, stream)
+        factories[std.util.Gaussian.name_] = lambda type, attributes: std.util.Gaussian(type, attributes)
+        factories[std.util.HistogramFloat.name_] = lambda type, attributes: std.util.HistogramFloat(type, attributes)
+        loaders[std.util.HistogramFloat.name_] = lambda type, stream: std_n.util._HistogramFloat.load(type, stream)
+        factories[std.util.BoxPlotInt.name_] = lambda type, attributes: std.util.BoxPlotInt(type, attributes)
         factories[std.util.BoxPlotFloat.name_] = lambda type, attributes: std.util.BoxPlotFloat(type, attributes)
         factories[std.util.GaussianProfile.name_] = lambda type, attributes: std.util.GaussianProfile(type, attributes)
         loaders[std.util.GaussianProfile.name_] = lambda type, stream: std_n.util._GaussianProfile.load(type, stream)
-        factories[std.util.BoxPlotInt.name_] = lambda type, attributes: std.util.BoxPlotInt(type, attributes)
-        factories[std.util.HistogramFloat.name_] = lambda type, attributes: std.util.HistogramFloat(type, attributes)
-        loaders[std.util.HistogramFloat.name_] = lambda type, stream: std_n.util._HistogramFloat.load(type, stream)
-        factories[std.util.Iban.name_] = lambda type, attributes: std.util.Iban(type, attributes)
-        loaders[std.util.Iban.name_] = lambda type, stream: std_n.util._Iban.load(type, stream)
+        factories[std.util.ProgressTracker.name_] = lambda type, attributes: std.util.ProgressTracker(type, attributes)
+        factories[std.util.Buffer.name_] = lambda type, attributes: std.util.Buffer(type, attributes)
+        loaders[std.util.Buffer.name_] = lambda type, stream: std_n.util._Buffer.load(type, stream)
+        factories[std.util.DenseDim.name_] = lambda type, attributes: std.util.DenseDim(type, attributes)
+        factories[std.util.HistogramInt.name_] = lambda type, attributes: std.util.HistogramInt(type, attributes)
+        loaders[std.util.HistogramInt.name_] = lambda type, stream: std_n.util._HistogramInt.load(type, stream)
+        factories[std.util.SlidingWindow.name_] = lambda type, attributes: std.util.SlidingWindow(type, attributes)
+        loaders[std.util.SlidingWindow.name_] = lambda type, stream: std_n.util._SlidingWindow.load(type, stream)
         factories[std.util.Queue.name_] = lambda type, attributes: std.util.Queue(type, attributes)
         loaders[std.util.Queue.name_] = lambda type, stream: std_n.util._Queue.load(type, stream)
+        factories[std.util.Plot.name_] = lambda type, attributes: std.util.Plot(type, attributes)
         factories[std.util.TimeWindow.name_] = lambda type, attributes: std.util.TimeWindow(type, attributes)
         loaders[std.util.TimeWindow.name_] = lambda type, stream: std_n.util._TimeWindow.load(type, stream)
         factories[std.util.Assert.name_] = lambda type, attributes: std.util.Assert(type, attributes)
         factories[std.util.Crypto.name_] = lambda type, attributes: std.util.Crypto(type, attributes)
-        factories[std.util.DenseDim.name_] = lambda type, attributes: std.util.DenseDim(type, attributes)
-        factories[std.util.SlidingWindow.name_] = lambda type, attributes: std.util.SlidingWindow(type, attributes)
-        loaders[std.util.SlidingWindow.name_] = lambda type, stream: std_n.util._SlidingWindow.load(type, stream)
-        factories[std.util.Random.name_] = lambda type, attributes: std.util.Random(type, attributes)
-        factories[std.util.Plot.name_] = lambda type, attributes: std.util.Plot(type, attributes)
-        factories[std.util.Buffer.name_] = lambda type, attributes: std.util.Buffer(type, attributes)
-        loaders[std.util.Buffer.name_] = lambda type, stream: std_n.util._Buffer.load(type, stream)
-        factories[std.util.ProgressTracker.name_] = lambda type, attributes: std.util.ProgressTracker(type, attributes)
-        factories[std.util.Gaussian.name_] = lambda type, attributes: std.util.Gaussian(type, attributes)
 
     def init(self, greycat: GreyCat) -> None:
         self.mapped: list[GreyCat.Type] = [
@@ -6293,14 +6339,15 @@ class std(GreyCat.Library):
             greycat.types_by_name[std.runtime.RuntimeInfo.name_],
             greycat.types_by_name[std.runtime.PeriodicTask.name_],
             greycat.types_by_name[std.runtime.SecurityFields.name_],
+            greycat.types_by_name[std.runtime.LicenseType.name_],
+            greycat.types_by_name[std.runtime.UserGroup.name_],
+            greycat.types_by_name[std.runtime.UserGroupPolicyType.name_],
             greycat.types_by_name[std.runtime.UserGroupPolicy.name_],
             greycat.types_by_name[std.runtime.User.name_],
-            greycat.types_by_name[std.runtime.OpenIDConnect.name_],
             greycat.types_by_name[std.runtime.UserCredential.name_],
             greycat.types_by_name[std.runtime.StoreStat.name_],
-            greycat.types_by_name[std.runtime.UserGroupPolicyType.name_],
-            greycat.types_by_name[std.runtime.UserGroup.name_],
             greycat.types_by_name[std.runtime.UserRole.name_],
+            greycat.types_by_name[std.runtime.OpenIDConnect.name_],
             greycat.types_by_name[std.runtime.Task.name_],
             greycat.types_by_name[std.runtime.SecurityPolicy.name_],
             greycat.types_by_name[std.runtime.License.name_],
@@ -6309,49 +6356,49 @@ class std(GreyCat.Library):
             greycat.types_by_name[std.runtime.TaskInfo.name_],
             greycat.types_by_name[std.runtime.System.name_],
             greycat.types_by_name[std.runtime.SecurityEntity.name_],
-            greycat.types_by_name[std.io.SmtpAuth.name_],
-            greycat.types_by_name[std.io.HttpHeader.name_],
+            greycat.types_by_name[std.io.CsvColumnDate.name_],
+            greycat.types_by_name[std.io.CsvColumnInteger.name_],
+            greycat.types_by_name[std.io.File.name_],
+            greycat.types_by_name[std.io.CsvColumnString.name_],
             greycat.types_by_name[std.io.CsvStatistics.name_],
-            greycat.types_by_name[std.io.CsvAnalysis.name_],
-            greycat.types_by_name[std.io.TextEncoder.name_],
-            greycat.types_by_name[std.io.CsvColumnBoolean.name_],
-            greycat.types_by_name[std.io.Mqtt.name_],
-            greycat.types_by_name[std.io.Smtp.name_],
+            greycat.types_by_name[std.io.CsvColumnFloat.name_],
+            greycat.types_by_name[std.io.HttpHeader.name_],
+            greycat.types_by_name[std.io.CsvFormat.name_],
             greycat.types_by_name[std.io.CsvColumnDuration.name_],
-            greycat.types_by_name[std.io.CsvColumnIgnored.name_],
+            greycat.types_by_name[std.io.CsvAnalysis.name_],
+            greycat.types_by_name[std.io.CsvAnalysisConfig.name_],
+            greycat.types_by_name[std.io.SmtpAuth.name_],
+            greycat.types_by_name[std.io.Http.name_],
+            greycat.types_by_name[std.io.Smtp.name_],
+            greycat.types_by_name[std.io.Mqtt.name_],
+            greycat.types_by_name[std.io.TextEncoder.name_],
             greycat.types_by_name[std.io.CsvColumnStatistics.name_],
+            greycat.types_by_name[std.io.CsvColumnIgnored.name_],
+            greycat.types_by_name[std.io.CsvColumnTime.name_],
             greycat.types_by_name[std.io.Url.name_],
             greycat.types_by_name[std.io.Email.name_],
             greycat.types_by_name[std.io.CsvValidateResult.name_],
-            greycat.types_by_name[std.io.CsvColumnFloat.name_],
-            greycat.types_by_name[std.io.CsvAnalysisConfig.name_],
-            greycat.types_by_name[std.io.CsvColumnString.name_],
-            greycat.types_by_name[std.io.CsvColumnDate.name_],
-            greycat.types_by_name[std.io.File.name_],
-            greycat.types_by_name[std.io.CsvFormat.name_],
-            greycat.types_by_name[std.io.Http.name_],
-            greycat.types_by_name[std.io.SmtpMode.name_],
+            greycat.types_by_name[std.io.CsvColumnBoolean.name_],
             greycat.types_by_name[std.io.CsvColumn.name_],
-            greycat.types_by_name[std.io.CsvColumnInteger.name_],
-            greycat.types_by_name[std.io.CsvColumnTime.name_],
+            greycat.types_by_name[std.io.SmtpMode.name_],
             greycat.types_by_name[std.math.MathConstants.name_],
-            greycat.types_by_name[std.util.HistogramInt.name_],
+            greycat.types_by_name[std.util.Random.name_],
+            greycat.types_by_name[std.util.Iban.name_],
+            greycat.types_by_name[std.util.Gaussian.name_],
+            greycat.types_by_name[std.util.HistogramFloat.name_],
+            greycat.types_by_name[std.util.BoxPlotInt.name_],
             greycat.types_by_name[std.util.BoxPlotFloat.name_],
             greycat.types_by_name[std.util.GaussianProfile.name_],
-            greycat.types_by_name[std.util.BoxPlotInt.name_],
-            greycat.types_by_name[std.util.HistogramFloat.name_],
-            greycat.types_by_name[std.util.Iban.name_],
+            greycat.types_by_name[std.util.ProgressTracker.name_],
+            greycat.types_by_name[std.util.Buffer.name_],
+            greycat.types_by_name[std.util.DenseDim.name_],
+            greycat.types_by_name[std.util.HistogramInt.name_],
+            greycat.types_by_name[std.util.SlidingWindow.name_],
             greycat.types_by_name[std.util.Queue.name_],
+            greycat.types_by_name[std.util.Plot.name_],
             greycat.types_by_name[std.util.TimeWindow.name_],
             greycat.types_by_name[std.util.Assert.name_],
             greycat.types_by_name[std.util.Crypto.name_],
-            greycat.types_by_name[std.util.DenseDim.name_],
-            greycat.types_by_name[std.util.SlidingWindow.name_],
-            greycat.types_by_name[std.util.Random.name_],
-            greycat.types_by_name[std.util.Plot.name_],
-            greycat.types_by_name[std.util.Buffer.name_],
-            greycat.types_by_name[std.util.ProgressTracker.name_],
-            greycat.types_by_name[std.util.Gaussian.name_],
         ]
         self.mapped[0].resolve_generated_offsets("sw", "ne")
         self.mapped[6].resolve_generated_offsets("points")
@@ -6366,57 +6413,58 @@ class std(GreyCat.Library):
         self.mapped[31].resolve_generated_offset_with_values("fixed", 0, "fixed_reg", 1, "adaptative", 2, "dense", 3)
         self.mapped[33].resolve_generated_offsets("center", "radius")
         self.mapped[35].resolve_generated_offset_with_values("none", 0, "too_deep_workspace", 1, "too_deep_iterator", 2, "wrong_operand", 3, "wrong_params", 4, "wrong_param_type", 5, "wrong_numeric", 6, "wrong_state", 7, "wrong_null", 8, "unresolved_ref", 9, "assign_error", 10, "interrupted", 11, "throw", 12, "wrong_type", 13, "wrong_dimension", 14, "unsupported_operation", 15, "unsupported_type", 16, "dimensions_mismatch", 17, "timeout", 18, "forbidden", 19, "runtime_error", 20)
-        self.mapped[37].static_values = [greycat.create_geo(-85.0511287602, -179.9999999581), greycat.create_geo(85.0511287602, 179.9999999581)]
+        self.mapped[37].static_values = [greycat.create_geo(struct.unpack("d", struct.pack("l", -4587686678796158022))[0], struct.unpack("d", struct.pack("l", -4582834833316020224))[0]), greycat.create_geo(struct.unpack("d", struct.pack("l", 4635685358058617786))[0], struct.unpack("d", struct.pack("l", 4640537203538755584))[0])]
         self.mapped[38].resolve_generated_offsets("t", "v")
         self.mapped[39].resolve_generated_offsets("size", "from", "to")
         self.mapped[40].resolve_generated_offsets("version", "program_version", "arch", "timezone", "license", "io_threads", "bg_threads", "fg_threads", "mem_total", "mem_worker", "nb_ctx", "store_stats")
         self.mapped[41].resolve_generated_offsets("function", "user_id", "arguments", "start", "every")
         self.mapped[42].resolve_generated_offsets("email", "name", "first_name", "last_name", "roles", "groups")
-        self.mapped[43].resolve_generated_offsets("group_id", "type")
-        self.mapped[44].resolve_generated_offsets("id", "name", "activated", "full_name", "email", "role", "permissions_flags", "groups", "groups_flags", "external")
-        self.mapped[45].resolve_generated_offsets("url", "clientId")
-        self.mapped[46].resolve_generated_offsets("offset", "pass")
-        self.mapped[47].resolve_generated_offsets("capacity_bytes", "allocated_bytes", "allocated_ratio", "remained_bytes", "remained_ratio", "used_bytes", "used_ratio", "available_bytes", "available_ratio")
-        self.mapped[48].resolve_generated_offset_with_values("read", 0, "write", 1, "execute", 2)
-        self.mapped[49].resolve_generated_offsets("id", "name", "activated")
+        self.mapped[43].resolve_generated_offset_with_values("community", 0, "enterprise", 1, "testing", 2)
+        self.mapped[44].resolve_generated_offsets("id", "name", "activated")
+        self.mapped[45].resolve_generated_offset_with_values("read", 0, "write", 1, "execute", 2)
+        self.mapped[46].resolve_generated_offsets("group_id", "type")
+        self.mapped[47].resolve_generated_offsets("id", "name", "activated", "full_name", "email", "role", "permissions_flags", "groups", "groups_flags", "external")
+        self.mapped[48].resolve_generated_offsets("offset", "pass")
+        self.mapped[49].resolve_generated_offsets("capacity_bytes", "allocated_bytes", "allocated_ratio", "remained_bytes", "remained_ratio", "used_bytes", "used_ratio", "available_bytes", "available_ratio")
         self.mapped[50].resolve_generated_offsets("name", "permissions")
-        self.mapped[51].resolve_generated_offsets("user_id", "task_id", "mod", "type", "fun", "creation", "status")
-        self.mapped[52].resolve_generated_offsets("entities", "credentials", "roles", "fields")
-        self.mapped[53].resolve_generated_offsets("name", "start", "end", "company", "max_memory", "extra_1", "extra_2")
-        self.mapped[55].resolve_generated_offset_with_values("empty", 0, "waiting", 1, "running", 2, "cancelled", 3, "error", 4, "ended", 5)
-        self.mapped[56].resolve_generated_offsets("user_id", "task_id", "mod", "type", "fun", "creation", "status", "start", "progress", "remaining", "duration", "sub_waiting", "sub_tasks_all")
-        self.mapped[58].resolve_generated_offsets("id", "name", "activated")
-        self.mapped[59].resolve_generated_offset_with_values("none", 0, "plain", 1, "login", 2)
-        self.mapped[60].resolve_generated_offsets("name", "value")
-        self.mapped[61].resolve_generated_offsets("header_lines", "separator", "string_delimiter", "decimal_separator", "thousands_separator", "columns", "line_count", "fail_count", "file_count")
-        self.mapped[62].resolve_generated_offsets("config", "statistics")
-        self.mapped[63].resolve_generated_offset_with_values("plain", None, "base64", None, "base64url", None, "hexadecimal", None)
-        self.mapped[64].resolve_generated_offsets("name", "mandatory", "offset")
-        self.mapped[66].resolve_generated_offsets("host", "port", "mode", "authenticate", "user", "pass")
-        self.mapped[67].resolve_generated_offsets("name", "mandatory", "offset", "unit")
-        self.mapped[68].resolve_generated_offsets("name", "mandatory", "offset")
-        self.mapped[69].resolve_generated_offsets("name", "example", "null_count", "bool_count", "int_count", "float_count", "string_count", "date_count", "date_format_count", "enumerable_count", "profile")
-        self.mapped[70].resolve_generated_offsets("protocol", "host", "port", "path", "params", "hash")
-        self.mapped[71].resolve_generated_offsets("from", "subject", "body", "body_is_html", "to", "cc", "bcc")
-        self.mapped[72].resolve_generated_offsets("line_count", "fail_count", "invalid_count")
-        self.mapped[73].resolve_generated_offsets("name", "mandatory", "offset")
-        self.mapped[74].resolve_generated_offsets("header_lines", "separator", "string_delimiter", "decimal_separator", "thousands_separator", "row_limit", "enumerable_limit", "date_check_limit", "date_formats")
-        self.mapped[74].static_values = [100, 100]
-        self.mapped[75].resolve_generated_offsets("name", "mandatory", "offset", "trim", "try_number", "try_json", "values", "encoder")
-        self.mapped[76].resolve_generated_offsets("name", "mandatory", "offset", "format", "tz", "as_time")
-        self.mapped[77].resolve_generated_offsets("path", "size", "last_modification")
-        self.mapped[78].resolve_generated_offsets("header_lines", "separator", "string_delimiter", "decimal_separator", "thousands_separator", "columns_size", "columns")
-        self.mapped[80].resolve_generated_offset_with_values("plain", 0, "ssl_tls", 1, "starttls", 2)
-        self.mapped[81].resolve_generated_offsets("name", "mandatory", "offset")
+        self.mapped[51].resolve_generated_offsets("url", "clientId")
+        self.mapped[52].resolve_generated_offsets("user_id", "task_id", "mod", "type", "fun", "creation", "status")
+        self.mapped[53].resolve_generated_offsets("entities", "credentials", "roles", "fields", "keys", "keys_last_refresh")
+        self.mapped[54].resolve_generated_offsets("name", "start", "end", "company", "max_memory", "extra_1", "extra_2", "type")
+        self.mapped[56].resolve_generated_offset_with_values("empty", 0, "waiting", 1, "running", 2, "cancelled", 3, "error", 4, "ended", 5)
+        self.mapped[57].resolve_generated_offsets("user_id", "task_id", "mod", "type", "fun", "creation", "status", "start", "progress", "remaining", "duration", "sub_waiting", "sub_tasks_all")
+        self.mapped[59].resolve_generated_offsets("id", "name", "activated")
+        self.mapped[60].resolve_generated_offsets("name", "mandatory", "offset", "format", "tz", "as_time")
+        self.mapped[61].resolve_generated_offsets("name", "mandatory", "offset")
+        self.mapped[62].resolve_generated_offsets("path", "size", "last_modification")
+        self.mapped[63].resolve_generated_offsets("name", "mandatory", "offset", "trim", "try_number", "try_json", "values", "encoder")
+        self.mapped[64].resolve_generated_offsets("header_lines", "separator", "string_delimiter", "decimal_separator", "thousands_separator", "columns", "line_count", "fail_count", "file_count")
+        self.mapped[65].resolve_generated_offsets("name", "mandatory", "offset")
+        self.mapped[66].resolve_generated_offsets("name", "value")
+        self.mapped[67].resolve_generated_offsets("header_lines", "separator", "string_delimiter", "decimal_separator", "thousands_separator", "columns_size", "columns")
+        self.mapped[68].resolve_generated_offsets("name", "mandatory", "offset", "unit")
+        self.mapped[69].resolve_generated_offsets("config", "statistics")
+        self.mapped[70].resolve_generated_offsets("header_lines", "separator", "string_delimiter", "decimal_separator", "thousands_separator", "row_limit", "enumerable_limit", "date_check_limit", "date_formats")
+        self.mapped[70].static_values = [100, 100]
+        self.mapped[71].resolve_generated_offset_with_values("none", 0, "plain", 1, "login", 2)
+        self.mapped[73].resolve_generated_offsets("host", "port", "mode", "authenticate", "user", "pass")
+        self.mapped[75].resolve_generated_offset_with_values("plain", None, "base64", None, "base64url", None, "hexadecimal", None)
+        self.mapped[76].resolve_generated_offsets("name", "example", "null_count", "bool_count", "int_count", "float_count", "string_count", "date_count", "date_format_count", "enumerable_count", "profile")
+        self.mapped[77].resolve_generated_offsets("name", "mandatory", "offset")
+        self.mapped[78].resolve_generated_offsets("name", "mandatory", "offset", "unit")
+        self.mapped[79].resolve_generated_offsets("protocol", "host", "port", "path", "params", "hash")
+        self.mapped[80].resolve_generated_offsets("from", "subject", "body", "body_is_html", "to", "cc", "bcc")
+        self.mapped[81].resolve_generated_offsets("line_count", "fail_count", "invalid_count")
         self.mapped[82].resolve_generated_offsets("name", "mandatory", "offset")
-        self.mapped[83].resolve_generated_offsets("name", "mandatory", "offset", "unit")
-        self.mapped[84].static_values = [2.7182818285, 1.4426950409, 0.4342944819, 0.6931471806, 2.302585093, 3.1415926536, 1.5707963268, 0.7853981634, 0.3183098862, 0.6366197724, 1.1283791671, 1.4142135624, 0.7071067812]
-        self.mapped[85].static_values = [0, 1, 2, 3]
-        self.mapped[86].resolve_generated_offsets("min", "max", "whiskerLow", "whiskerHigh", "percentile1", "percentile5", "percentile25", "percentile50", "percentile75", "percentile95", "percentile99", "countOutliersLow", "countOutliersHigh", "percentageOutliersLow", "percentageOutliersHigh", "sum", "avg", "std", "size")
-        self.mapped[87].static_values = [0, 1, 2, 3, 4, 5, 6]
-        self.mapped[88].resolve_generated_offsets("min", "max", "whiskerLow", "whiskerHigh", "percentile1", "percentile5", "percentile25", "percentile50", "percentile75", "percentile95", "percentile99", "countOutliersLow", "countOutliersHigh", "percentageOutliersLow", "percentageOutliersHigh", "sum", "avg", "std", "size")
+        self.mapped[83].resolve_generated_offsets("name", "mandatory", "offset")
+        self.mapped[84].resolve_generated_offset_with_values("plain", 0, "ssl_tls", 1, "starttls", 2)
+        self.mapped[85].static_values = [struct.unpack("d", struct.pack("l", 4613303445314885481))[0], struct.unpack("d", struct.pack("l", 4609176140021203710))[0], struct.unpack("d", struct.pack("l", 4601495173785380110))[0], struct.unpack("d", struct.pack("l", 4604418534313441775))[0], struct.unpack("d", struct.pack("l", 4612367379483415830))[0], struct.unpack("d", struct.pack("l", 4614256656552045848))[0], struct.unpack("d", struct.pack("l", 4609753056924675352))[0], struct.unpack("d", struct.pack("l", 4605249457297304856))[0], struct.unpack("d", struct.pack("l", 4599405781057128579))[0], struct.unpack("d", struct.pack("l", 4603909380684499075))[0], struct.unpack("d", struct.pack("l", 4607760587169110893))[0], struct.unpack("d", struct.pack("l", 4609047870845172685))[0], struct.unpack("d", struct.pack("l", 4604544271217802189))[0]]
+        self.mapped[86].resolve_generated_offsets("seed", "v")
+        self.mapped[88].resolve_generated_offsets("sum", "sum_sq", "count", "min", "max")
         self.mapped[89].static_values = [0, 1, 2, 3]
+        self.mapped[90].resolve_generated_offsets("min", "max", "whiskerLow", "whiskerHigh", "percentile1", "percentile5", "percentile25", "percentile50", "percentile75", "percentile95", "percentile99", "countOutliersLow", "countOutliersHigh", "percentageOutliersLow", "percentageOutliersHigh", "sum", "avg", "std", "size")
+        self.mapped[91].resolve_generated_offsets("min", "max", "whiskerLow", "whiskerHigh", "percentile1", "percentile5", "percentile25", "percentile50", "percentile75", "percentile95", "percentile99", "countOutliersLow", "countOutliersHigh", "percentageOutliersLow", "percentageOutliersHigh", "sum", "avg", "std", "size")
+        self.mapped[92].static_values = [0, 1, 2, 3, 4, 5, 6]
+        self.mapped[93].resolve_generated_offsets("start", "total", "counter", "duration", "progress", "speed", "remaining")
         self.mapped[95].resolve_generated_offsets("min", "max", "step")
-        self.mapped[97].resolve_generated_offsets("seed", "v")
-        self.mapped[100].resolve_generated_offsets("start", "total", "counter", "duration", "progress", "speed", "remaining")
-        self.mapped[101].resolve_generated_offsets("sum", "sum_sq", "count", "min", "max")
+        self.mapped[96].static_values = [0, 1, 2, 3]

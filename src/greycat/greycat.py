@@ -60,6 +60,8 @@ class ByteArrayIO(BufferedIOBase):
 class GreyCat:
     ABI_PROTO: Final[int] = 1
 
+    DEFAULT: Optional[GreyCat] = None
+
     @final
     class SocketServer:
         __ip: str = '127.0.0.1'
@@ -1025,7 +1027,7 @@ class GreyCat:
     class Files:  # TODO?
         pass
 
-    def __init__(self: GreyCat, url: str, libraries: List[GreyCat.Library] = [], username: str | None = None, password: str | None = None, use_cookie: bool = False) -> None:
+    def __init__(self: GreyCat, url: str, libraries: List[GreyCat.Library] = [], username: str | None = None, password: str | None = None, use_cookie: bool = False, set_as_default: bool = True) -> None:
         self.__runtime_url: Final[str] = url
         self.__token: str | None = None
         if username is not None and password is not None:
@@ -1250,6 +1252,9 @@ class GreyCat:
         abi_stream.close()
         for lib in self.libs_by_name.values():
             lib.init(self)
+
+        if set_as_default:
+            GreyCat.DEFAULT = self
 
     def call(self, fqn: str, parameters: List[object] = []) -> object:
         if not (self.__is_remote):

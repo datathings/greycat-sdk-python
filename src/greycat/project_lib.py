@@ -2,6 +2,7 @@
 from __future__ import annotations
 from ctypes import *
 from typing import *
+import struct
 from greycat import *
 
 
@@ -29,14 +30,14 @@ class project_lib(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> project_lib.project.TestType:
-                return project_lib.project.TestType(greycat.libs_by_name[project_lib.name_].mapped[0])
+                return project_lib.project.TestType(greycat.libs_by_name[project_lib.name_].mapped[0], [])
 
         @staticmethod
-        def get_gcb(greycat: GreyCat) -> std.core.Array:
+        def get_gcb(greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Array:
             return GreyCat.call(greycat, "project::get_gcb")
 
         @staticmethod
-        def display(greycat: GreyCat, v: Any) -> Any:
+        def display(v: Any, greycat: GreyCat = GreyCat.DEFAULT) -> Any:
             return GreyCat.call(greycat, "project::display", [v, ])
 
     def configure(self, loaders: dict[str, GreyCat.Loader], factories: dict[str, GreyCat.Factory]) -> None:
