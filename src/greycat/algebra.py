@@ -2416,6 +2416,7 @@ class algebra(GreyCat.Library):
 
     @final
     class climate:
+        pass
     @final
     class transforms:
 
