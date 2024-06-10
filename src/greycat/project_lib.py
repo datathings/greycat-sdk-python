@@ -33,12 +33,16 @@ class project_lib(GreyCat.Library):
                 return project_lib.project.TestType(greycat.libs_by_name[project_lib.name_].mapped[0], [])
 
         @staticmethod
-        def get_gcb(greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Array:
-            return GreyCat.call(greycat, "project::get_gcb")
+        def get_gcb(__greycat: Optional[GreyCat] = None) -> std.core.Array:
+            if __greycat is None:
+                __greycat  = GreyCat.DEFAULT
+            return __greycat.call("project::get_gcb")
 
         @staticmethod
-        def display(v: Any, greycat: GreyCat = GreyCat.DEFAULT) -> Any:
-            return GreyCat.call(greycat, "project::display", [v, ])
+        def display(v: Any, __greycat: Optional[GreyCat] = None) -> Any:
+            if __greycat is None:
+                __greycat  = GreyCat.DEFAULT
+            return __greycat.call("project::display", [v, ])
 
     def configure(self, loaders: dict[str, GreyCat.Loader], factories: dict[str, GreyCat.Factory]) -> None:
         factories[project_lib.project.TestType.name_] = lambda type, attributes: project_lib.project.TestType(type, attributes)

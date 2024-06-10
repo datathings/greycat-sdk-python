@@ -3762,12 +3762,16 @@ class std(GreyCat.Library):
                 self._set(self.type_.generated_offsets[4], v)
 
             @staticmethod
-            def all(greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Array:
-                return GreyCat.call(greycat, "runtime::PeriodicTask::all")
+            def all(__greycat: Optional[GreyCat] = None) -> std.core.Array:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::PeriodicTask::all")
 
             @staticmethod
-            def set(tasks: std.core.Array, greycat: GreyCat = GreyCat.DEFAULT) -> None:
-                return GreyCat.call(greycat, "runtime::PeriodicTask::set", [tasks, ])
+            def set(tasks: std.core.Array, __greycat: Optional[GreyCat] = None) -> None:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::PeriodicTask::set", [tasks, ])
 
             @staticmethod
             def create(greycat: GreyCat, function: std.core.function, user_id: int, arguments: std.core.Array, start: std.core.time, every: std.core.duration) -> std.runtime.PeriodicTask:
@@ -3817,12 +3821,16 @@ class std(GreyCat.Library):
                 self._set(self.type_.generated_offsets[5], v)
 
             @staticmethod
-            def set(f: std.runtime.SecurityFields, greycat: GreyCat = GreyCat.DEFAULT) -> None:
-                return GreyCat.call(greycat, "runtime::SecurityFields::set", [f, ])
+            def set(f: std.runtime.SecurityFields, __greycat: Optional[GreyCat] = None) -> None:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::SecurityFields::set", [f, ])
 
             @staticmethod
-            def get(greycat: GreyCat = GreyCat.DEFAULT) -> std.runtime.SecurityFields:
-                return GreyCat.call(greycat, "runtime::SecurityFields::get")
+            def get(__greycat: Optional[GreyCat] = None) -> std.runtime.SecurityFields:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::SecurityFields::get")
 
             @staticmethod
             def create(greycat: GreyCat, email: str, name: str, first_name: str, last_name: str, roles: std.core.Map, groups: std.core.Map) -> std.runtime.SecurityFields:
@@ -3880,12 +3888,16 @@ class std(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def all(greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Array:
-                return GreyCat.call(greycat, "runtime::SecurityEntity::all")
+            def all(__greycat: Optional[GreyCat] = None) -> std.core.Array:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::SecurityEntity::all")
 
             @staticmethod
-            def set(entity: std.runtime.SecurityEntity, greycat: GreyCat = GreyCat.DEFAULT) -> int:
-                return GreyCat.call(greycat, "runtime::SecurityEntity::set", [entity, ])
+            def set(entity: std.runtime.SecurityEntity, __greycat: Optional[GreyCat] = None) -> int:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::SecurityEntity::set", [entity, ])
 
             @staticmethod
             def create(greycat: GreyCat, id: int, name: str, activated: bool) -> std.runtime.UserGroup:
@@ -4008,48 +4020,70 @@ class std(GreyCat.Library):
                 self._set(self.type_.generated_offsets[9], v)
 
             @staticmethod
-            def all(greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Array:
-                return GreyCat.call(greycat, "runtime::SecurityEntity::all")
+            def all(__greycat: Optional[GreyCat] = None) -> std.core.Array:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::SecurityEntity::all")
 
             @staticmethod
-            def set(entity: std.runtime.SecurityEntity, greycat: GreyCat = GreyCat.DEFAULT) -> int:
-                return GreyCat.call(greycat, "runtime::SecurityEntity::set", [entity, ])
+            def set(entity: std.runtime.SecurityEntity, __greycat: Optional[GreyCat] = None) -> int:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::SecurityEntity::set", [entity, ])
 
             @staticmethod
-            def login(credentials: str, use_cookie: bool, greycat: GreyCat = GreyCat.DEFAULT) -> str:
-                return GreyCat.call(greycat, "runtime::User::login", [credentials, use_cookie, ])
+            def login(credentials: str, use_cookie: bool, __greycat: Optional[GreyCat] = None) -> str:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::User::login", [credentials, use_cookie, ])
 
             @staticmethod
-            def tokenLogin(token: str, use_cookie: bool, greycat: GreyCat = GreyCat.DEFAULT) -> str:
-                return GreyCat.call(greycat, "runtime::User::tokenLogin", [token, use_cookie, ])
+            def tokenLogin(token: str, use_cookie: bool, __greycat: Optional[GreyCat] = None) -> str:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::User::tokenLogin", [token, use_cookie, ])
 
             @staticmethod
-            def logout(greycat: GreyCat = GreyCat.DEFAULT) -> None:
-                return GreyCat.call(greycat, "runtime::User::logout")
+            def logout(__greycat: Optional[GreyCat] = None) -> None:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::User::logout")
 
             @staticmethod
-            def renew(use_cookie: bool, greycat: GreyCat = GreyCat.DEFAULT) -> str:
-                return GreyCat.call(greycat, "runtime::User::renew", [use_cookie, ])
+            def renew(use_cookie: bool, __greycat: Optional[GreyCat] = None) -> str:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::User::renew", [use_cookie, ])
 
             @staticmethod
-            def current(greycat: GreyCat = GreyCat.DEFAULT) -> int:
-                return GreyCat.call(greycat, "runtime::User::current")
+            def current(__greycat: Optional[GreyCat] = None) -> int:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::User::current")
 
             @staticmethod
-            def me(greycat: GreyCat = GreyCat.DEFAULT) -> std.runtime.User:
-                return GreyCat.call(greycat, "runtime::User::me")
+            def me(__greycat: Optional[GreyCat] = None) -> std.runtime.User:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::User::me")
 
             @staticmethod
-            def permissions(greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Array:
-                return GreyCat.call(greycat, "runtime::User::permissions")
+            def permissions(__greycat: Optional[GreyCat] = None) -> std.core.Array:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::User::permissions")
 
             @staticmethod
-            def setPassword(name: str, pass_: str, greycat: GreyCat = GreyCat.DEFAULT) -> bool:
-                return GreyCat.call(greycat, "runtime::User::setPassword", [name, pass_, ])
+            def setPassword(name: str, pass_: str, __greycat: Optional[GreyCat] = None) -> bool:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::User::setPassword", [name, pass_, ])
 
             @staticmethod
-            def getToken(id: int, greycat: GreyCat = GreyCat.DEFAULT) -> str:
-                return GreyCat.call(greycat, "runtime::User::getToken", [id, ])
+            def getToken(id: int, __greycat: Optional[GreyCat] = None) -> str:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::User::getToken", [id, ])
 
             @staticmethod
             def create(greycat: GreyCat, id: int, name: str, activated: bool, full_name: str, email: str, role: str, permissions_flags: int, groups: std.core.Array, groups_flags: int, external: bool) -> std.runtime.User:
@@ -4163,16 +4197,22 @@ class std(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def all(greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Array:
-                return GreyCat.call(greycat, "runtime::UserRole::all")
+            def all(__greycat: Optional[GreyCat] = None) -> std.core.Array:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::UserRole::all")
 
             @staticmethod
-            def remove(name: str, greycat: GreyCat = GreyCat.DEFAULT) -> None:
-                return GreyCat.call(greycat, "runtime::UserRole::remove", [name, ])
+            def remove(name: str, __greycat: Optional[GreyCat] = None) -> None:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::UserRole::remove", [name, ])
 
             @staticmethod
-            def set(value: std.runtime.UserRole, greycat: GreyCat = GreyCat.DEFAULT) -> None:
-                return GreyCat.call(greycat, "runtime::UserRole::set", [value, ])
+            def set(value: std.runtime.UserRole, __greycat: Optional[GreyCat] = None) -> None:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::UserRole::set", [value, ])
 
             @staticmethod
             def create(greycat: GreyCat, name: str, permissions: std.core.Array) -> std.runtime.UserRole:
@@ -4198,8 +4238,10 @@ class std(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def config(greycat: GreyCat = GreyCat.DEFAULT) -> std.runtime.OpenIDConnect:
-                return GreyCat.call(greycat, "runtime::OpenIDConnect::config")
+            def config(__greycat: Optional[GreyCat] = None) -> std.runtime.OpenIDConnect:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::OpenIDConnect::config")
 
             @staticmethod
             def create(greycat: GreyCat, url: str, clientId: str) -> std.runtime.OpenIDConnect:
@@ -4255,20 +4297,28 @@ class std(GreyCat.Library):
                 self._set(self.type_.generated_offsets[6], v)
 
             @staticmethod
-            def running(greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Array:
-                return GreyCat.call(greycat, "runtime::Task::running")
+            def running(__greycat: Optional[GreyCat] = None) -> std.core.Array:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::Task::running")
 
             @staticmethod
-            def history(offset: int, max: int, greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Array:
-                return GreyCat.call(greycat, "runtime::Task::history", [offset, max, ])
+            def history(offset: int, max: int, __greycat: Optional[GreyCat] = None) -> std.core.Array:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::Task::history", [offset, max, ])
 
             @staticmethod
-            def cancel(task_id: int, greycat: GreyCat = GreyCat.DEFAULT) -> bool:
-                return GreyCat.call(greycat, "runtime::Task::cancel", [task_id, ])
+            def cancel(task_id: int, __greycat: Optional[GreyCat] = None) -> bool:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::Task::cancel", [task_id, ])
 
             @staticmethod
-            def info(user_id: int, task_id: int, greycat: GreyCat = GreyCat.DEFAULT) -> std.runtime.TaskInfo:
-                return GreyCat.call(greycat, "runtime::Task::info", [user_id, task_id, ])
+            def info(user_id: int, task_id: int, __greycat: Optional[GreyCat] = None) -> std.runtime.TaskInfo:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::Task::info", [user_id, task_id, ])
 
             @staticmethod
             def create(greycat: GreyCat, user_id: int, task_id: int, mod: str, type: str, fun: str, creation: std.core.time, status: std.runtime.TaskStatus) -> std.runtime.Task:
@@ -4318,8 +4368,10 @@ class std(GreyCat.Library):
                 self._set(self.type_.generated_offsets[5], v)
 
             @staticmethod
-            def permissions(greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Array:
-                return GreyCat.call(greycat, "runtime::SecurityPolicy::permissions")
+            def permissions(__greycat: Optional[GreyCat] = None) -> std.core.Array:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::SecurityPolicy::permissions")
 
             @staticmethod
             def create(greycat: GreyCat, entities: std.core.Array, credentials: std.core.Map, roles: std.core.Map, fields: std.runtime.SecurityFields, keys: std.core.Map, keys_last_refresh: std.core.time) -> std.runtime.SecurityPolicy:
@@ -4392,16 +4444,22 @@ class std(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def info(greycat: GreyCat = GreyCat.DEFAULT) -> std.runtime.RuntimeInfo:
-                return GreyCat.call(greycat, "runtime::Runtime::info")
+            def info(__greycat: Optional[GreyCat] = None) -> std.runtime.RuntimeInfo:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::Runtime::info")
 
             @staticmethod
-            def abi(greycat: GreyCat = GreyCat.DEFAULT) -> None:
-                return GreyCat.call(greycat, "runtime::Runtime::abi")
+            def abi(__greycat: Optional[GreyCat] = None) -> None:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::Runtime::abi")
 
             @staticmethod
-            def readModVar(mod_var: str, greycat: GreyCat = GreyCat.DEFAULT) -> Any:
-                return GreyCat.call(greycat, "runtime::Runtime::readModVar", [mod_var, ])
+            def readModVar(mod_var: str, __greycat: Optional[GreyCat] = None) -> Any:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::Runtime::readModVar", [mod_var, ])
 
             @staticmethod
             def create(greycat: GreyCat) -> std.runtime.Runtime:
@@ -4574,12 +4632,16 @@ class std(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def all(greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Array:
-                return GreyCat.call(greycat, "runtime::SecurityEntity::all")
+            def all(__greycat: Optional[GreyCat] = None) -> std.core.Array:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::SecurityEntity::all")
 
             @staticmethod
-            def set(entity: std.runtime.SecurityEntity, greycat: GreyCat = GreyCat.DEFAULT) -> int:
-                return GreyCat.call(greycat, "runtime::SecurityEntity::set", [entity, ])
+            def set(entity: std.runtime.SecurityEntity, __greycat: Optional[GreyCat] = None) -> int:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("runtime::SecurityEntity::set", [entity, ])
 
             @staticmethod
             def create(greycat: GreyCat, id: int, name: str, activated: bool) -> std.runtime.SecurityEntity:
@@ -4919,20 +4981,28 @@ class std(GreyCat.Library):
                 self._set(self.type_.generated_offsets[6], v)
 
             @staticmethod
-            def generate(format: std.io.CsvFormat, ident_col: int, time_col: int, greycat: GreyCat = GreyCat.DEFAULT) -> str:
-                return GreyCat.call(greycat, "io::CsvFormat::generate", [format, ident_col, time_col, ])
+            def generate(format: std.io.CsvFormat, ident_col: int, time_col: int, __greycat: Optional[GreyCat] = None) -> str:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("io::CsvFormat::generate", [format, ident_col, time_col, ])
 
             @staticmethod
-            def validate(path: str, format: std.io.CsvFormat, max_rows: int, max_invalid: int, invalid_path: str, greycat: GreyCat = GreyCat.DEFAULT) -> std.runtime.Task:
-                return GreyCat.call(greycat, "io::CsvFormat::validate", [path, format, max_rows, max_invalid, invalid_path, ])
+            def validate(path: str, format: std.io.CsvFormat, max_rows: int, max_invalid: int, invalid_path: str, __greycat: Optional[GreyCat] = None) -> std.runtime.Task:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("io::CsvFormat::validate", [path, format, max_rows, max_invalid, invalid_path, ])
 
             @staticmethod
-            def sample(path: str, format: std.io.CsvFormat, offset: int, max: int, greycat: GreyCat = GreyCat.DEFAULT) -> std.core.Table:
-                return GreyCat.call(greycat, "io::CsvFormat::sample", [path, format, offset, max, ])
+            def sample(path: str, format: std.io.CsvFormat, offset: int, max: int, __greycat: Optional[GreyCat] = None) -> std.core.Table:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("io::CsvFormat::sample", [path, format, offset, max, ])
 
             @staticmethod
-            def infer(analysis: std.io.CsvStatistics, greycat: GreyCat = GreyCat.DEFAULT) -> std.io.CsvFormat:
-                return GreyCat.call(greycat, "io::CsvFormat::infer", [analysis, ])
+            def infer(analysis: std.io.CsvStatistics, __greycat: Optional[GreyCat] = None) -> std.io.CsvFormat:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("io::CsvFormat::infer", [analysis, ])
 
             @staticmethod
             def create(greycat: GreyCat, header_lines: int, separator: c_char, string_delimiter: c_char, decimal_separator: c_char, thousands_separator: c_char, columns_size: int, columns: std.core.Array) -> std.io.CsvFormat:
@@ -4993,8 +5063,10 @@ class std(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def analyze(file_path: str, config: std.io.CsvAnalysisConfig, greycat: GreyCat = GreyCat.DEFAULT) -> std.runtime.Task:
-                return GreyCat.call(greycat, "io::CsvAnalysis::analyze", [file_path, config, ])
+            def analyze(file_path: str, config: std.io.CsvAnalysisConfig, __greycat: Optional[GreyCat] = None) -> std.runtime.Task:
+                if __greycat is None:
+                    __greycat  = GreyCat.DEFAULT
+                return __greycat.call("io::CsvAnalysis::analyze", [file_path, config, ])
 
             @staticmethod
             def create(greycat: GreyCat, config: std.io.CsvAnalysisConfig, statistics: std.io.CsvStatistics) -> std.io.CsvAnalysis:
