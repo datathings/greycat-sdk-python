@@ -7501,7 +7501,7 @@ class algebra(GreyCat.Library):
         self.mapped[13].resolve_generated_offset_with_values("none", "None", "min_max_scaling", "Min/Max Scaling", "standard_scaling", "Standard Scaling")
         self.mapped[14].resolve_generated_offset_with_values("none", "None", "constant", "Constant", "sigmoid_uniform", "SigmoidUniform", "lecun_uniform", "LeCunUniform", "xavier", "Xavier", "xavier_uniform", "XavierUniform", "relu", "Relu", "relu_uniform", "ReluUniform", "normal", "Normal", "normal_in", "NormalIn", "normal_out", "NormalOut", "normal_avg", "NormalAvg", "uniform", "Uniform", "uniform_in", "UniformIn", "uniform_out", "UniformOut", "uniform_avg", "UniformAvg", "identity", "Identity", "pytorch", "Pytorch")
         self.mapped[15].resolve_generated_offset_with_values("layer_0", "layer_0", "layer_1", "layer_1", "layer_2", "layer_2", "layer_3", "layer_3", "layer_4", "layer_4", "layer_5", "layer_5", "layer_6", "layer_6", "layer_7", "layer_7", "layer_8", "layer_8", "layer_9", "layer_9", "layer_10", "layer_10", "layer_11", "layer_11", "layer_12", "layer_12", "layer_13", "layer_13", "layer_14", "layer_14", "layer_15", "layer_15", "layer_16", "layer_16", "layer_17", "layer_17", "layer_18", "layer_18", "layer_19", "layer_19", "layer_20", "layer_20", "layer_21", "layer_21", "layer_22", "layer_22", "layer_23", "layer_23", "layer_24", "layer_24", "layer_25", "layer_25", "layer_26", "layer_26", "layer_27", "layer_27", "layer_28", "layer_28", "layer_29", "layer_29", "layer_30", "layer_30", "layer_31", "layer_31", "layer_32", "layer_32", "layer_33", "layer_33", "layer_34", "layer_34", "layer_35", "layer_35", "layer_36", "layer_36", "layer_37", "layer_37", "layer_38", "layer_38", "layer_39", "layer_39", "layer_40", "layer_40", "layer_41", "layer_41", "layer_42", "layer_42", "layer_43", "layer_43", "layer_44", "layer_44", "layer_45", "layer_45", "layer_46", "layer_46", "layer_47", "layer_47", "layer_48", "layer_48", "layer_49", "layer_49", "layer_50", "layer_50", "layer_51", "layer_51", "layer_52", "layer_52", "layer_53", "layer_53", "layer_54", "layer_54", "layer_55", "layer_55", "layer_56", "layer_56", "layer_57", "layer_57", "layer_58", "layer_58", "layer_59", "layer_59", "layer_60", "layer_60", "layer_61", "layer_61", "layer_62", "layer_62", "layer_63", "layer_63", "layer_64", "layer_64", "layer_65", "layer_65", "layer_66", "layer_66", "layer_67", "layer_67", "layer_68", "layer_68", "layer_69", "layer_69", "layer_70", "layer_70", "layer_71", "layer_71", "layer_72", "layer_72", "layer_73", "layer_73", "layer_74", "layer_74", "layer_75", "layer_75", "layer_76", "layer_76", "layer_77", "layer_77", "layer_78", "layer_78", "layer_79", "layer_79", "layer_80", "layer_80", "layer_81", "layer_81", "layer_82", "layer_82", "layer_83", "layer_83", "layer_84", "layer_84", "layer_85", "layer_85", "layer_86", "layer_86", "layer_87", "layer_87", "layer_88", "layer_88", "layer_89", "layer_89", "layer_90", "layer_90", "layer_91", "layer_91", "layer_92", "layer_92", "layer_93", "layer_93", "layer_94", "layer_94", "layer_95", "layer_95", "layer_96", "layer_96", "layer_97", "layer_97", "layer_98", "layer_98", "layer_99", "layer_99", "layer_100", "layer_100", "layer_101", "layer_101", "layer_102", "layer_102", "layer_103", "layer_103", "layer_104", "layer_104", "layer_105", "layer_105", "layer_106", "layer_106", "layer_107", "layer_107", "layer_108", "layer_108", "layer_109", "layer_109", "layer_110", "layer_110", "layer_111", "layer_111", "layer_112", "layer_112", "layer_113", "layer_113", "layer_114", "layer_114", "layer_115", "layer_115", "layer_116", "layer_116", "layer_117", "layer_117", "layer_118", "layer_118", "layer_119", "layer_119", "layer_120", "layer_120", "layer_121", "layer_121", "layer_122", "layer_122", "layer_123", "layer_123", "layer_124", "layer_124", "layer_125", "layer_125", "layer_126", "layer_126", "layer_127", "layer_127", "layer_128", "layer_128", "layer_129", "layer_129", "layer_130", "layer_130", "layer_131", "layer_131", "layer_132", "layer_132", "layer_133", "layer_133", "layer_134", "layer_134", "layer_135", "layer_135", "layer_136", "layer_136", "layer_137", "layer_137", "layer_138", "layer_138", "layer_139", "layer_139", "layer_140", "layer_140", "layer_141", "layer_141", "layer_142", "layer_142", "layer_143", "layer_143", "layer_144", "layer_144", "layer_145", "layer_145", "layer_146", "layer_146", "layer_147", "layer_147", "layer_148", "layer_148", "layer_149", "layer_149", "layer_150", "layer_150", "layer_151", "layer_151", "layer_152", "layer_152", "layer_153", "layer_153", "layer_154", "layer_154", "layer_155", "layer_155", "layer_156", "layer_156", "layer_157", "layer_157", "layer_158", "layer_158", "layer_159", "layer_159", "layer_160", "layer_160", "layer_161", "layer_161", "layer_162", "layer_162", "layer_163", "layer_163", "layer_164", "layer_164", "layer_165", "layer_165", "layer_166", "layer_166", "layer_167", "layer_167", "layer_168", "layer_168", "layer_169", "layer_169", "layer_170", "layer_170", "layer_171", "layer_171", "layer_172", "layer_172", "layer_173", "layer_173", "layer_174", "layer_174", "layer_175", "layer_175", "layer_176", "layer_176", "layer_177", "layer_177", "layer_178", "layer_178", "layer_179", "layer_179", "layer_180", "layer_180", "layer_181", "layer_181", "layer_182", "layer_182", "layer_183", "layer_183", "layer_184", "layer_184", "layer_185", "layer_185", "layer_186", "layer_186", "layer_187", "layer_187", "layer_188", "layer_188", "layer_189", "layer_189", "layer_190", "layer_190", "layer_191", "layer_191", "layer_192", "layer_192", "layer_193", "layer_193", "layer_194", "layer_194", "layer_195", "layer_195", "layer_196", "layer_196", "layer_197", "layer_197", "layer_198", "layer_198", "layer_199", "layer_199")
-        self.mapped[20].static_values = [struct.unpack("d", struct.pack("l", 4606732058837280358))[0]]
+        self.mapped[20].static_values = [struct.unpack("=d", struct.pack("=q", 4606732058837280358))[0]]
         self.mapped[21].resolve_generated_offsets("counts", "x_labels", "y_labels", "counts_max", "counts_sum")
         self.mapped[22].resolve_generated_offsets("nt", "sampling_step", "time_complex", "frequency_complex", "frequency_table", "start_time", "best_size")
         self.mapped[23].resolve_generated_offsets("loss", "roundsDistances", "centroids", "clusters_count", "clusters_sum_distance", "clusters_avg_distance", "assignement", "distances", "clusterInterDistances")
@@ -7515,9 +7515,9 @@ class algebra(GreyCat.Library):
         self.mapped[30].resolve_generated_offsets("name", "type", "inverse_transform")
         self.mapped[30].static_values = ["input", "output", "avg", "std"]
         self.mapped[34].resolve_generated_offsets("learning_rate", "decay_rate")
-        self.mapped[34].static_values = [struct.unpack("d", struct.pack("l", 4562254508917369340))[0], struct.unpack("d", struct.pack("l", 4606281698874543309))[0]]
+        self.mapped[34].static_values = [struct.unpack("=d", struct.pack("=q", 4562254508917369340))[0], struct.unpack("=d", struct.pack("=q", 4606281698874543309))[0]]
         self.mapped[35].resolve_generated_offsets("max_value", "threshold")
-        self.mapped[35].static_values = [struct.unpack("d", struct.pack("l", 0))[0]]
+        self.mapped[35].static_values = [struct.unpack("=d", struct.pack("=q", 0))[0]]
         self.mapped[38].resolve_generated_offsets("name", "type", "inputs", "outputs", "maskValues")
         self.mapped[38].static_values = ["input", "output", "mask"]
         self.mapped[39].resolve_generated_offsets("name", "reduction", "loss_type")
@@ -7525,15 +7525,15 @@ class algebra(GreyCat.Library):
         self.mapped[42].resolve_generated_offsets("name", "reduction")
         self.mapped[42].static_values = ["computed", "expected", "loss"]
         self.mapped[43].resolve_generated_offsets("learning_rate", "decay_rate", "smooth_epsilon")
-        self.mapped[43].static_values = [struct.unpack("d", struct.pack("l", 4562254508917369340))[0], struct.unpack("d", struct.pack("l", 4606732058837280358))[0], struct.unpack("d", struct.pack("l", 4502148214488346440))[0]]
+        self.mapped[43].static_values = [struct.unpack("=d", struct.pack("=q", 4562254508917369340))[0], struct.unpack("=d", struct.pack("=q", 4606732058837280358))[0], struct.unpack("=d", struct.pack("=q", 4502148214488346440))[0]]
         self.mapped[44].resolve_generated_offsets("input", "output")
         self.mapped[45].resolve_generated_offsets("input", "output")
         self.mapped[46].resolve_generated_offsets("name")
         self.mapped[47].resolve_generated_offsets("learning_rate")
-        self.mapped[47].static_values = [struct.unpack("d", struct.pack("l", 4576918229304087675))[0]]
+        self.mapped[47].static_values = [struct.unpack("=d", struct.pack("=q", 4576918229304087675))[0]]
         self.mapped[51].resolve_generated_offsets("min", "max")
         self.mapped[52].resolve_generated_offsets("learning_rate", "beta1", "beta2", "smooth_epsilon")
-        self.mapped[52].static_values = [struct.unpack("d", struct.pack("l", 4562254508917369340))[0], struct.unpack("d", struct.pack("l", 4606281698874543309))[0], struct.unpack("d", struct.pack("l", 4607173411600762667))[0], struct.unpack("d", struct.pack("l", 4502148214488346440))[0]]
+        self.mapped[52].static_values = [struct.unpack("=d", struct.pack("=q", 4562254508917369340))[0], struct.unpack("=d", struct.pack("=q", 4606281698874543309))[0], struct.unpack("=d", struct.pack("=q", 4607173411600762667))[0], struct.unpack("=d", struct.pack("=q", 4502148214488346440))[0]]
         self.mapped[53].resolve_generated_offsets("name", "calls", "optimizer")
         self.mapped[54].resolve_generated_offsets("input", "ifCondition", "output", "counts", "classes")
         self.mapped[55].resolve_generated_offsets("input", "output")
@@ -7544,9 +7544,9 @@ class algebra(GreyCat.Library):
         self.mapped[64].resolve_generated_offsets("input", "output")
         self.mapped[65].resolve_generated_offsets("layers")
         self.mapped[66].resolve_generated_offsets("input", "output", "alpha")
-        self.mapped[66].static_values = [struct.unpack("d", struct.pack("l", 4607182418800017408))[0]]
+        self.mapped[66].static_values = [struct.unpack("=d", struct.pack("=q", 4607182418800017408))[0]]
         self.mapped[67].resolve_generated_offsets("learning_rate", "initial_accumulator", "smooth_epsilon")
-        self.mapped[67].static_values = [struct.unpack("d", struct.pack("l", 4562254508917369340))[0], struct.unpack("d", struct.pack("l", 4591870180066957722))[0], struct.unpack("d", struct.pack("l", 4502148214488346440))[0]]
+        self.mapped[67].static_values = [struct.unpack("=d", struct.pack("=q", 4562254508917369340))[0], struct.unpack("=d", struct.pack("=q", 4591870180066957722))[0], struct.unpack("=d", struct.pack("=q", 4502148214488346440))[0]]
         self.mapped[68].resolve_generated_offsets("input", "output", "power")
         self.mapped[69].resolve_generated_offsets("input", "input2", "output")
         self.mapped[72].resolve_generated_offsets("input", "output")
@@ -7555,7 +7555,7 @@ class algebra(GreyCat.Library):
         self.mapped[77].resolve_generated_offsets("input", "output")
         self.mapped[78].resolve_generated_offsets("input", "output")
         self.mapped[79].resolve_generated_offsets("slope", "shift")
-        self.mapped[79].static_values = [struct.unpack("d", struct.pack("l", 4596373779694328218))[0], struct.unpack("d", struct.pack("l", 4602678819172646912))[0]]
+        self.mapped[79].static_values = [struct.unpack("=d", struct.pack("=q", 4596373779694328218))[0], struct.unpack("=d", struct.pack("=q", 4602678819172646912))[0]]
         self.mapped[81].resolve_generated_offsets("name")
         self.mapped[82].resolve_generated_offset_with_values("square", "Square", "abs", "Abs")
         self.mapped[83].resolve_generated_offsets("name", "type", "inverse_transform")
@@ -7569,19 +7569,19 @@ class algebra(GreyCat.Library):
         self.mapped[88].static_values = ["input", "output"]
         self.mapped[89].resolve_generated_offsets("layer_name", "bindings")
         self.mapped[90].resolve_generated_offsets("alpha", "max_value", "threshold")
-        self.mapped[90].static_values = [struct.unpack("d", struct.pack("l", 4599075939470750515))[0], struct.unpack("d", struct.pack("l", 0))[0]]
+        self.mapped[90].static_values = [struct.unpack("=d", struct.pack("=q", 4599075939470750515))[0], struct.unpack("=d", struct.pack("=q", 0))[0]]
         self.mapped[91].resolve_generated_offsets("name")
         self.mapped[92].resolve_generated_offsets("l1", "l2")
         self.mapped[93].resolve_generated_offsets("input", "output", "output2")
         self.mapped[94].resolve_generated_offsets("input", "output")
         self.mapped[95].resolve_generated_offsets("learning_rate", "lambda1", "lambda2", "beta")
-        self.mapped[95].static_values = [struct.unpack("d", struct.pack("l", 4562254508917369340))[0], struct.unpack("d", struct.pack("l", 0))[0], struct.unpack("d", struct.pack("l", 0))[0], struct.unpack("d", struct.pack("l", 0))[0]]
+        self.mapped[95].static_values = [struct.unpack("=d", struct.pack("=q", 4562254508917369340))[0], struct.unpack("=d", struct.pack("=q", 0))[0], struct.unpack("=d", struct.pack("=q", 0))[0], struct.unpack("=d", struct.pack("=q", 0))[0]]
         self.mapped[97].resolve_generated_offsets("input", "output")
         self.mapped[98].resolve_generated_offsets("input", "output")
         self.mapped[99].resolve_generated_offsets("src_layer_name", "src_var_name", "target_var_name")
         self.mapped[100].resolve_generated_offsets("input", "output")
         self.mapped[101].resolve_generated_offsets("alpha")
-        self.mapped[101].static_values = [struct.unpack("d", struct.pack("l", 4607182418800017408))[0]]
+        self.mapped[101].static_values = [struct.unpack("=d", struct.pack("=q", 4607182418800017408))[0]]
         self.mapped[102].resolve_generated_offsets("name", "type", "shape", "with_grad")
         self.mapped[103].resolve_generated_offsets("name", "type", "inverse_transform")
         self.mapped[103].static_values = ["input", "output", "avg", "std", "space"]
@@ -7589,12 +7589,12 @@ class algebra(GreyCat.Library):
         self.mapped[106].resolve_generated_offsets("name", "reduction", "loss_type", "has_class_weights", "calculate_probabilities", "from_logits")
         self.mapped[106].static_values = ["class_weights", "predicted_classes", "probabilities", "sum_reduce"]
         self.mapped[107].resolve_generated_offsets("input", "output", "alpha", "max_value", "threshold")
-        self.mapped[107].static_values = [struct.unpack("d", struct.pack("l", 4599075939470750515))[0], struct.unpack("d", struct.pack("l", 9218868437227405311))[0], struct.unpack("d", struct.pack("l", 0))[0]]
+        self.mapped[107].static_values = [struct.unpack("=d", struct.pack("=q", 4599075939470750515))[0], struct.unpack("=d", struct.pack("=q", 9218868437227405311))[0], struct.unpack("=d", struct.pack("=q", 0))[0]]
         self.mapped[108].resolve_generated_offsets("alpha")
-        self.mapped[108].static_values = [struct.unpack("d", struct.pack("l", 4607182418800017408))[0]]
+        self.mapped[108].static_values = [struct.unpack("=d", struct.pack("=q", 4607182418800017408))[0]]
         self.mapped[109].resolve_generated_offsets("input", "output")
         self.mapped[110].resolve_generated_offsets("input", "output", "alpha")
-        self.mapped[110].static_values = [struct.unpack("d", struct.pack("l", 4607182418800017408))[0]]
+        self.mapped[110].static_values = [struct.unpack("=d", struct.pack("=q", 4607182418800017408))[0]]
         self.mapped[111].resolve_generated_offsets("input", "output")
         self.mapped[114].resolve_generated_offsets("input", "output")
         self.mapped[115].resolve_generated_offsets("input", "output")
@@ -7604,37 +7604,37 @@ class algebra(GreyCat.Library):
         self.mapped[118].resolve_generated_offsets("input", "output")
         self.mapped[119].resolve_generated_offsets("input", "output")
         self.mapped[120].resolve_generated_offsets("learning_rate", "decay_rate")
-        self.mapped[120].static_values = [struct.unpack("d", struct.pack("l", 4562254508917369340))[0], struct.unpack("d", struct.pack("l", 4606281698874543309))[0]]
+        self.mapped[120].static_values = [struct.unpack("=d", struct.pack("=q", 4562254508917369340))[0], struct.unpack("=d", struct.pack("=q", 4606281698874543309))[0]]
         self.mapped[121].resolve_generated_offsets("input", "value")
         self.mapped[122].resolve_generated_offsets("learning_rate", "beta1", "beta2", "smooth_epsilon")
-        self.mapped[122].static_values = [struct.unpack("d", struct.pack("l", 4562254508917369340))[0], struct.unpack("d", struct.pack("l", 4606281698874543309))[0], struct.unpack("d", struct.pack("l", 4607173411600762667))[0], struct.unpack("d", struct.pack("l", 4502148214488346440))[0]]
+        self.mapped[122].static_values = [struct.unpack("=d", struct.pack("=q", 4562254508917369340))[0], struct.unpack("=d", struct.pack("=q", 4606281698874543309))[0], struct.unpack("=d", struct.pack("=q", 4607173411600762667))[0], struct.unpack("=d", struct.pack("=q", 4502148214488346440))[0]]
         self.mapped[123].resolve_generated_offsets("learning_rate")
         self.mapped[127].resolve_generated_offsets("input", "input2", "output")
         self.mapped[128].resolve_generated_offsets("input", "output")
         self.mapped[129].resolve_generated_offsets("input", "output", "output2")
         self.mapped[130].resolve_generated_offsets("learning_rate", "beta1", "beta2", "smooth_epsilon")
-        self.mapped[130].static_values = [struct.unpack("d", struct.pack("l", 4562254508917369340))[0], struct.unpack("d", struct.pack("l", 4606281698874543309))[0], struct.unpack("d", struct.pack("l", 4607173411600762667))[0], struct.unpack("d", struct.pack("l", 4502148214488346440))[0]]
+        self.mapped[130].static_values = [struct.unpack("=d", struct.pack("=q", 4562254508917369340))[0], struct.unpack("=d", struct.pack("=q", 4606281698874543309))[0], struct.unpack("=d", struct.pack("=q", 4607173411600762667))[0], struct.unpack("=d", struct.pack("=q", 4502148214488346440))[0]]
         self.mapped[131].resolve_generated_offsets("input", "output", "axis")
         self.mapped[132].resolve_generated_offsets("input", "input2", "output")
         self.mapped[133].resolve_generated_offsets("input", "input2", "output")
         self.mapped[134].resolve_generated_offsets("input", "output")
         self.mapped[135].resolve_generated_offsets("input", "input2", "output", "transposeA", "transposeB", "alpha", "beta")
-        self.mapped[135].static_values = [false, struct.unpack("d", struct.pack("l", 4607182418800017408))[0], struct.unpack("d", struct.pack("l", 0))[0]]
+        self.mapped[135].static_values = [false, struct.unpack("=d", struct.pack("=q", 4607182418800017408))[0], struct.unpack("=d", struct.pack("=q", 0))[0]]
         self.mapped[136].resolve_generated_offsets("input", "input2", "output")
         self.mapped[137].resolve_generated_offset_with_values("auto", "auto", "none", "none", "sum", "sum", "mean", "mean", "disabled", "disabled")
         self.mapped[138].resolve_generated_offsets("input", "input2", "output")
         self.mapped[139].resolve_generated_offsets("learning_rate", "decay_rate", "smooth_epsilon")
-        self.mapped[139].static_values = [struct.unpack("d", struct.pack("l", 4562254508917369340))[0], struct.unpack("d", struct.pack("l", 4606281698874543309))[0], struct.unpack("d", struct.pack("l", 4502148214488346440))[0]]
+        self.mapped[139].static_values = [struct.unpack("=d", struct.pack("=q", 4562254508917369340))[0], struct.unpack("=d", struct.pack("=q", 4606281698874543309))[0], struct.unpack("=d", struct.pack("=q", 4502148214488346440))[0]]
         self.mapped[141].resolve_generated_offsets("name", "type", "inputs", "outputs", "use_bias", "weight_initializer", "weight_regularizer", "bias_initializer", "bias_regularizer")
         self.mapped[141].static_values = ["input", "output", "weight", "bias", "mult"]
         self.mapped[142].resolve_generated_offsets("avg", "std")
         self.mapped[143].resolve_generated_offsets("name", "type", "shape")
         self.mapped[144].resolve_generated_offsets("input", "output", "slope", "shift")
-        self.mapped[144].static_values = [struct.unpack("d", struct.pack("l", 4596373779694328218))[0], struct.unpack("d", struct.pack("l", 4602678819172646912))[0]]
+        self.mapped[144].static_values = [struct.unpack("=d", struct.pack("=q", 4596373779694328218))[0], struct.unpack("=d", struct.pack("=q", 4602678819172646912))[0]]
         self.mapped[145].resolve_generated_offsets("name")
         self.mapped[146].resolve_generated_offsets("input", "output", "output2")
         self.mapped[147].resolve_generated_offsets("input", "output", "max_value", "threshold")
-        self.mapped[147].static_values = [struct.unpack("d", struct.pack("l", 0))[0]]
+        self.mapped[147].static_values = [struct.unpack("=d", struct.pack("=q", 0))[0]]
         self.mapped[149].resolve_generated_offsets("input", "output")
         self.mapped[150].resolve_generated_offsets("input", "output")
         self.mapped[151].resolve_generated_offsets("input", "input2", "output")
