@@ -76,7 +76,8 @@ class GreyCat:
                     break
                 sock.close()
             self.__port: Final[int] = port
-            self.__sock: Final[socket.socket] = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.__sock: Final[socket.socket] = socket.socket(
+                socket.AF_INET, socket.SOCK_STREAM)
             self.__sock.bind((GreyCat.SocketServer.__ip, port))
             self.__greycat = greycat
             self.__endpoints: dict[str, Callable[[list[Any]], Any]] = {}
@@ -93,11 +94,13 @@ class GreyCat:
             res: Any
             self.__sock.listen()  # TODO: set backlog?
             with open(self.__port_path, "w") as out:
-                out.write(f"{os.getpid()},{int.from_bytes(socket.inet_aton(socket.gethostbyname(GreyCat.SocketServer.__ip)))},{self.__port}")
+                out.write(
+                    f"{os.getpid()},{int.from_bytes(socket.inet_aton(socket.gethostbyname(GreyCat.SocketServer.__ip)))},{self.__port}")
             print(f"Serving at {GreyCat.SocketServer.__ip}:{self.__port}…")
             while True:
                 conn, _ = self.__sock.accept()
-                stream = GreyCat._Stream(self.__greycat, socket.SocketIO(conn, "rwb"))
+                stream = GreyCat._Stream(
+                    self.__greycat, socket.SocketIO(conn, "rwb"))
                 endpoint = stream.read()
                 parameters = stream.read()
                 res = self.__endpoints[endpoint](*parameters)
@@ -158,7 +161,8 @@ class GreyCat:
                 )
             abi_version: c_int32 = self.read_i32()
             if abi_version.value > self.greycat._abi_version.value:
-                raise RuntimeError("larger ABI version, please reload this handler")
+                raise RuntimeError(
+                    "larger ABI version, please reload this handler")
 
         def read(self) -> Any:
             primitive_offset: c_ubyte = self.read_i8()
@@ -342,12 +346,14 @@ class GreyCat:
                     self.write_vu32(c_uint32(symbolOffset << 1 | 1))
                 else:
                     self.write_i8(PrimitiveType.OBJECT)
-                    self.write_vu32(c_uint32(self.greycat.type_offset_core_string))
+                    self.write_vu32(
+                        c_uint32(self.greycat.type_offset_core_string))
                     data = value.encode("utf-8")
                     self.write_vu32(c_uint32(len(data) << 1))
                     self.write_i8_array(data, 0, len(data))
             elif (
-                issubclass(type(value), GreyCat.Object) or type(value) is GreyCat.Object
+                issubclass(type(value), GreyCat.Object) or type(
+                    value) is GreyCat.Object
             ):
                 value._save_type(self)
                 value._save(self)
@@ -655,7 +661,8 @@ class GreyCat:
         _PRIMITIVE_LOADERS[PrimitiveType.TUF3D.value] = __tf3d_loader
         _PRIMITIVE_LOADERS[PrimitiveType.TUF4D.value] = __tf4d_loader
         _PRIMITIVE_LOADERS[PrimitiveType.BLOCK_REF.value] = __error_loader
-        _PRIMITIVE_LOADERS[PrimitiveType.FUNCTION.value] = __error_loader  # TODO?
+        # TODO?
+        _PRIMITIVE_LOADERS[PrimitiveType.FUNCTION.value] = __error_loader
         _PRIMITIVE_LOADERS[PrimitiveType.UNDEFINED.value] = __error_loader
         _PRIMITIVE_LOADERS[PrimitiveType.STRING_LIT.value] = __string_lit_loader
 
@@ -702,8 +709,10 @@ class GreyCat:
         @final
         def __object_loader(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
             program_type: Final[GreyCat.Type] = type.greycat.types[type.mapped_type_off]
-            attributes: Final[List[Any]] = [None] * len(program_type.attributes)
-            nullable_bitset: bytes = stream.read_i8_array(type.nullable_nb_bytes)
+            attributes: Final[List[Any]] = [
+                None] * len(program_type.attributes)
+            nullable_bitset: bytes = stream.read_i8_array(
+                type.nullable_nb_bytes)
             nullable_offset: int = -1
             att: GreyCat.Type.Attribute
             loaded_field: Any
@@ -724,16 +733,19 @@ class GreyCat:
                 if load_type == PrimitiveType.ENUM.value:
                     field_type: GreyCat.Type = type.greycat.types[att.abi_type]
                     if att.sbi_type.value == PrimitiveType.UNDEFINED.value:
-                        loaded_field = GreyCat.Type.__enum_loader(type.greycat.types[stream.read_vu32().value], stream)
+                        loaded_field = GreyCat.Type.__enum_loader(
+                            type.greycat.types[stream.read_vu32().value], stream)
                     else:
-                        loaded_field = GreyCat.Type.__enum_loader(field_type, stream)
+                        loaded_field = GreyCat.Type.__enum_loader(
+                            field_type, stream)
                 elif load_type == PrimitiveType.OBJECT.value:
                     field_type: GreyCat.Type = type.greycat.types[att.abi_type]
                     if (not field_type.is_native) and (
                         field_type.is_abstract
                         or att.sbi_type.value == PrimitiveType.UNDEFINED.value
                     ):
-                        field_type = type.greycat.types[stream.read_vu32().value]
+                        field_type = type.greycat.types[stream.read_vu32(
+                        ).value]
                     loaded_field = field_type.loader(field_type, stream)
                 else:
                     loaded_field = GreyCat._Stream._PRIMITIVE_LOADERS[
@@ -771,7 +783,8 @@ class GreyCat:
             self.is_abstract: Final[bool] = is_abstract
             self.is_enum: Final[bool] = is_enum
             self.is_native: Final[bool] = is_native
-            self.attributes: Final[List[GreyCat.Type.Attribute]] = type_attributes
+            self.attributes: Final[List[GreyCat.Type.Attribute]
+                                   ] = type_attributes
             self.attribute_off_by_name: Final[dict[str, int]] = {}
             att_offset: int
             for att_offset in range(len(type_attributes)):
@@ -792,9 +805,11 @@ class GreyCat:
                             None,
                         ]
                         if self.factory is None:
-                            self.enum_values.append(GreyCat.Enum(self, attributes))
+                            self.enum_values.append(
+                                GreyCat.Enum(self, attributes))
                         else:
-                            self.enum_values.append(self.factory(self, attributes))
+                            self.enum_values.append(
+                                self.factory(self, attributes))
                 else:
                     self.enum_values = None
             else:
@@ -825,7 +840,8 @@ class GreyCat:
             self.generated_offsets: List[int] = []
             name_offset: int
             for name_offset in range(0, len(args), 2):
-                resolved: int | None = self.attribute_off_by_name.get(args[name_offset])
+                resolved: int | None = self.attribute_off_by_name.get(
+                    args[name_offset])
                 if resolved is None:
                     raise ValueError(
                         "unmapped generated field, please re-generate this code!"
@@ -855,7 +871,8 @@ class GreyCat:
             stream.write_vu32(c_uint32(self.type_.offset))
 
         def _save(self, stream: GreyCat._Stream) -> None:
-            nullable_bitset: bytearray = bytearray(self.type_.nullable_nb_bytes)
+            nullable_bitset: bytearray = bytearray(
+                self.type_.nullable_nb_bytes)
             nullable_offset: int = 0
             field: GreyCat.Type.Attribute
             offset: int
@@ -881,7 +898,8 @@ class GreyCat:
                 elif field.sbi_type.value == PrimitiveType.CHAR.value:
                     c: c_ubyte = c_ubyte(value)
                     if c > GreyCat._Stream.__ASCII_MAX:
-                        raise ValueError(f"Only ASCII characters are allowed: {c}")
+                        raise ValueError(
+                            f"Only ASCII characters are allowed: {c}")
                     stream.write_i8(c)
                 elif field.sbi_type.value == PrimitiveType.INT.value:
                     if type(value) is c_int64:
@@ -953,7 +971,8 @@ class GreyCat:
                             self.type_.greycat._symbols_off_by_value[string]
                         )
                         if not (symbol_offset is None):
-                            stream.write_vu32(c_uint32((symbol_offset << 1) | 1))
+                            stream.write_vu32(
+                                c_uint32((symbol_offset << 1) | 1))
                         else:
                             data: bytes = string.encode("utf-8")
                             stream.write_vu32(c_uint32(len(data)))
@@ -1001,7 +1020,8 @@ class GreyCat:
                 return f"{self.type_.name}.{self.key}"
             return f"{self.type_.name}.{self.key}{{value={self.value}}}"
 
-    Loader: Final[type[Callable[[Type, _Stream], Any]]] = Callable[[Type, _Stream], Any]
+    Loader: Final[type[Callable[[Type, _Stream], Any]]
+                  ] = Callable[[Type, _Stream], Any]
 
     Factory: Final[type[Callable[[Type, List[Any]], Any]]] = Callable[
         [Type, List[object]], Any
@@ -1269,7 +1289,8 @@ class GreyCat:
         if url.startswith("http://"):
             connection = http.client.HTTPConnection(url.replace("http://", ""))
         elif self.__runtime_url.startswith("https://"):
-            connection = http.client.HTTPSConnection(url.replace("https://", ""))
+            connection = http.client.HTTPSConnection(
+                url.replace("https://", ""))
         else:
             raise ValueError("wrong state")
         body: bytes | None = None
@@ -1331,14 +1352,48 @@ class GreyCat:
         )
         response: http.client.HTTPResponse = connection.getresponse()
         status: int = response.status
-        stream = GreyCat._Stream(self, response)
         if 200 > status or 300 <= status:
             raise RuntimeError(f'HTTP {status}: {response.reason}"')
+        stream = GreyCat._Stream(self, response)
         stream.read_abi_header()
         res = stream.read()
         # if len(response.read(1)) > 0:
         #     raise IOError('Remaining unread bytes')
         stream.close()
+        return res
+
+    def get_file(self, path: str) -> object:
+        if path.endswith(".gcb"):
+            return self.fetch(path)
+        connection: http.client.HTTPConnection | http.client.HTTPSConnection
+        if self.__runtime_url.startswith("http://"):
+            connection: http.client.HTTPConnection = http.client.HTTPConnection(
+                self.__runtime_url.replace("http://", "")
+            )
+        elif self.__runtime_url.startswith("https://"):
+            connection: http.client.HTTPSConnection = http.client.HTTPSConnection(
+                self.__runtime_url.replace("https://", "")
+            )
+        else:
+            raise ValueError
+        headers: dict[str, str] = {
+            "Accept": "application/octet-stream",
+        }
+        if self.__token is not None:
+            headers["Authorization"] = self.__token
+        connection.request(
+            "GET",
+            f"files/{path}",
+            None,
+            headers
+        )
+        response: http.client.HTTPResponse = connection.getresponse()
+        status: int = response.status
+        if 200 > status or 300 <= status:
+            raise RuntimeError(f'HTTP {status}: {response.reason}"')
+        res = response.read()
+        if path.endswith(".json"):
+            return json.loads(res)
         return res
 
     def login(self, username: str, password: str, use_cookie: bool = False) -> None:
@@ -1353,7 +1408,8 @@ class GreyCat:
             )
         else:
             raise ValueError
-        credentials = base64.b64encode(f"{username}:{hashlib.sha256(password.encode('utf-8')).hexdigest()}".encode("utf-8")).decode("utf-8")
+        credentials = base64.b64encode(
+            f"{username}:{hashlib.sha256(password.encode('utf-8')).hexdigest()}".encode("utf-8")).decode("utf-8")
         body = json.dumps([credentials, use_cookie])
         connection.request(
             "POST",
@@ -1435,7 +1491,8 @@ class GreyCat:
         if runtime_url.startswith("file://"):
             runtime_url = runtime_url.replace("file://", "", 1)
         return GreyCat._Stream(
-            self, open(os.path.join(runtime_url, "gcdata", "store", "abi"), "rb")
+            self, open(os.path.join(
+                runtime_url, "gcdata", "store", "abi"), "rb")
         )
 
     def __get_abi(self, runtime_url: str) -> GreyCat._Stream:
