@@ -53,7 +53,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._Error:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.Error(greycat.libs_by_name[std.name_].mapped[1], [])
 
         @final
@@ -65,7 +66,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._tf2d:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.tf2d(greycat.libs_by_name[std.name_].mapped[2], [])
 
         @final
@@ -77,7 +79,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._Array:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.Array(greycat.libs_by_name[std.name_].mapped[3], [])
 
         @final
@@ -89,7 +92,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._String:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.String(greycat.libs_by_name[std.name_].mapped[4], [])
 
         @final
@@ -101,7 +105,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._Date:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.Date(greycat.libs_by_name[std.name_].mapped[5], [])
 
         @final
@@ -130,7 +135,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._ti5d:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.ti5d(greycat.libs_by_name[std.name_].mapped[7], [])
 
         @final
@@ -142,7 +148,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._nodeTime:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.nodeTime(greycat.libs_by_name[std.name_].mapped[8], [])
 
         @final
@@ -2975,7 +2982,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._Table:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.Table(greycat.libs_by_name[std.name_].mapped[10], [])
 
         @final
@@ -2987,7 +2995,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._ti10d:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.ti10d(greycat.libs_by_name[std.name_].mapped[11], [])
 
         @final
@@ -2999,7 +3008,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._duration:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.duration(greycat.libs_by_name[std.name_].mapped[12], [])
 
         @final
@@ -3067,7 +3077,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._Tensor:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.Tensor(greycat.libs_by_name[std.name_].mapped[14], [])
 
         @final
@@ -3079,7 +3090,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._nodeIndex:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.nodeIndex(greycat.libs_by_name[std.name_].mapped[15], [])
 
         @final
@@ -3114,7 +3126,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._nodeList:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.nodeList(greycat.libs_by_name[std.name_].mapped[17], [])
 
         @final
@@ -3190,7 +3203,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._ti2d:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.ti2d(greycat.libs_by_name[std.name_].mapped[20], [])
 
         @final
@@ -3202,7 +3216,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._tf4d:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.tf4d(greycat.libs_by_name[std.name_].mapped[21], [])
 
         @final
@@ -3260,7 +3275,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._function:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.function(greycat.libs_by_name[std.name_].mapped[23], [])
 
         @final
@@ -3272,7 +3288,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._ti3d:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.ti3d(greycat.libs_by_name[std.name_].mapped[24], [])
 
         @final
@@ -3343,7 +3360,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._nodeGeo:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.nodeGeo(greycat.libs_by_name[std.name_].mapped[26], [])
 
         @final
@@ -3355,7 +3373,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._node:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.node(greycat.libs_by_name[std.name_].mapped[27], [])
 
         @final
@@ -3367,7 +3386,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._tf3d:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.tf3d(greycat.libs_by_name[std.name_].mapped[28], [])
 
         @final
@@ -3379,7 +3399,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._nodeIndexBucket:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.nodeIndexBucket(greycat.libs_by_name[std.name_].mapped[29], [])
 
         @final
@@ -3391,7 +3412,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._time:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.time(greycat.libs_by_name[std.name_].mapped[30], [])
 
         @final
@@ -3434,7 +3456,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._ti6d:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.ti6d(greycat.libs_by_name[std.name_].mapped[32], [])
 
         @final
@@ -3469,7 +3492,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._Map:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.Map(greycat.libs_by_name[std.name_].mapped[34], [])
 
         @final
@@ -3597,7 +3621,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._ti4d:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.ti4d(greycat.libs_by_name[std.name_].mapped[36], [])
 
         @final
@@ -3609,7 +3634,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._geo:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.core.geo(greycat.libs_by_name[std.name_].mapped[37], [])
 
         @final
@@ -3790,13 +3816,13 @@ class std(GreyCat.Library):
             @staticmethod
             def all(__greycat: Optional[GreyCat] = None) -> std.core.Array:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::PeriodicTask::all")
 
             @staticmethod
             def set(tasks: std.core.Array, __greycat: Optional[GreyCat] = None) -> None:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::PeriodicTask::set", [tasks, ])
 
             @staticmethod
@@ -3849,13 +3875,13 @@ class std(GreyCat.Library):
             @staticmethod
             def set(f: std.runtime.SecurityFields, __greycat: Optional[GreyCat] = None) -> None:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::SecurityFields::set", [f, ])
 
             @staticmethod
             def get(__greycat: Optional[GreyCat] = None) -> std.runtime.SecurityFields:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::SecurityFields::get")
 
             @staticmethod
@@ -3916,13 +3942,13 @@ class std(GreyCat.Library):
             @staticmethod
             def all(__greycat: Optional[GreyCat] = None) -> std.core.Array:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::SecurityEntity::all")
 
             @staticmethod
             def set(entity: std.runtime.SecurityEntity, __greycat: Optional[GreyCat] = None) -> int:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::SecurityEntity::set", [entity, ])
 
             @staticmethod
@@ -4048,67 +4074,67 @@ class std(GreyCat.Library):
             @staticmethod
             def all(__greycat: Optional[GreyCat] = None) -> std.core.Array:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::SecurityEntity::all")
 
             @staticmethod
             def set(entity: std.runtime.SecurityEntity, __greycat: Optional[GreyCat] = None) -> int:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::SecurityEntity::set", [entity, ])
 
             @staticmethod
             def login(credentials: str, use_cookie: bool, __greycat: Optional[GreyCat] = None) -> str:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::User::login", [credentials, use_cookie, ])
 
             @staticmethod
             def tokenLogin(token: str, use_cookie: bool, __greycat: Optional[GreyCat] = None) -> str:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::User::tokenLogin", [token, use_cookie, ])
 
             @staticmethod
             def logout(__greycat: Optional[GreyCat] = None) -> None:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::User::logout")
 
             @staticmethod
             def renew(use_cookie: bool, __greycat: Optional[GreyCat] = None) -> str:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::User::renew", [use_cookie, ])
 
             @staticmethod
             def current(__greycat: Optional[GreyCat] = None) -> int:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::User::current")
 
             @staticmethod
             def me(__greycat: Optional[GreyCat] = None) -> std.runtime.User:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::User::me")
 
             @staticmethod
             def permissions(__greycat: Optional[GreyCat] = None) -> std.core.Array:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::User::permissions")
 
             @staticmethod
             def setPassword(name: str, pass_: str, __greycat: Optional[GreyCat] = None) -> bool:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::User::setPassword", [name, pass_, ])
 
             @staticmethod
             def getToken(id: int, __greycat: Optional[GreyCat] = None) -> str:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::User::getToken", [id, ])
 
             @staticmethod
@@ -4225,19 +4251,19 @@ class std(GreyCat.Library):
             @staticmethod
             def all(__greycat: Optional[GreyCat] = None) -> std.core.Array:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::UserRole::all")
 
             @staticmethod
             def remove(name: str, __greycat: Optional[GreyCat] = None) -> None:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::UserRole::remove", [name, ])
 
             @staticmethod
             def set(value: std.runtime.UserRole, __greycat: Optional[GreyCat] = None) -> None:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::UserRole::set", [value, ])
 
             @staticmethod
@@ -4266,7 +4292,7 @@ class std(GreyCat.Library):
             @staticmethod
             def config(__greycat: Optional[GreyCat] = None) -> std.runtime.OpenIDConnect:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::OpenIDConnect::config")
 
             @staticmethod
@@ -4325,25 +4351,25 @@ class std(GreyCat.Library):
             @staticmethod
             def running(__greycat: Optional[GreyCat] = None) -> std.core.Array:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::Task::running")
 
             @staticmethod
             def history(offset: int, max: int, __greycat: Optional[GreyCat] = None) -> std.core.Array:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::Task::history", [offset, max, ])
 
             @staticmethod
             def cancel(task_id: int, __greycat: Optional[GreyCat] = None) -> bool:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::Task::cancel", [task_id, ])
 
             @staticmethod
             def info(user_id: int, task_id: int, __greycat: Optional[GreyCat] = None) -> std.runtime.TaskInfo:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::Task::info", [user_id, task_id, ])
 
             @staticmethod
@@ -4396,7 +4422,7 @@ class std(GreyCat.Library):
             @staticmethod
             def permissions(__greycat: Optional[GreyCat] = None) -> std.core.Array:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::SecurityPolicy::permissions")
 
             @staticmethod
@@ -4472,19 +4498,19 @@ class std(GreyCat.Library):
             @staticmethod
             def info(__greycat: Optional[GreyCat] = None) -> std.runtime.RuntimeInfo:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::Runtime::info")
 
             @staticmethod
             def abi(__greycat: Optional[GreyCat] = None) -> None:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::Runtime::abi")
 
             @staticmethod
             def readModVar(mod_var: str, __greycat: Optional[GreyCat] = None) -> Any:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::Runtime::readModVar", [mod_var, ])
 
             @staticmethod
@@ -4660,13 +4686,13 @@ class std(GreyCat.Library):
             @staticmethod
             def all(__greycat: Optional[GreyCat] = None) -> std.core.Array:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::SecurityEntity::all")
 
             @staticmethod
             def set(entity: std.runtime.SecurityEntity, __greycat: Optional[GreyCat] = None) -> int:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("runtime::SecurityEntity::set", [entity, ])
 
             @staticmethod
@@ -5009,25 +5035,25 @@ class std(GreyCat.Library):
             @staticmethod
             def generate(format: std.io.CsvFormat, ident_col: int, time_col: int, __greycat: Optional[GreyCat] = None) -> str:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("io::CsvFormat::generate", [format, ident_col, time_col, ])
 
             @staticmethod
             def validate(path: str, format: std.io.CsvFormat, max_rows: int, max_invalid: int, invalid_path: str, __greycat: Optional[GreyCat] = None) -> std.runtime.Task:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("io::CsvFormat::validate", [path, format, max_rows, max_invalid, invalid_path, ])
 
             @staticmethod
             def sample(path: str, format: std.io.CsvFormat, offset: int, max: int, __greycat: Optional[GreyCat] = None) -> std.core.Table:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("io::CsvFormat::sample", [path, format, offset, max, ])
 
             @staticmethod
             def infer(analysis: std.io.CsvStatistics, __greycat: Optional[GreyCat] = None) -> std.io.CsvFormat:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("io::CsvFormat::infer", [analysis, ])
 
             @staticmethod
@@ -5091,7 +5117,7 @@ class std(GreyCat.Library):
             @staticmethod
             def analyze(file_path: str, config: std.io.CsvAnalysisConfig, __greycat: Optional[GreyCat] = None) -> std.runtime.Task:
                 if __greycat is None:
-                    __greycat  = GreyCat.DEFAULT
+                    __greycat = GreyCat.DEFAULT
                 return __greycat.call("io::CsvAnalysis::analyze", [file_path, config, ])
 
             @staticmethod
@@ -5768,7 +5794,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.util._Iban:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.util.Iban(greycat.libs_by_name[std.name_].mapped[87], [])
 
         @final
@@ -5821,7 +5848,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.util._HistogramFloat:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.util.HistogramFloat(greycat.libs_by_name[std.name_].mapped[89], [])
 
         @final
@@ -6083,7 +6111,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.util._GaussianProfile:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.util.GaussianProfile(greycat.libs_by_name[std.name_].mapped[92], [])
 
         @final
@@ -6148,7 +6177,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.util._Buffer:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.util.Buffer(greycat.libs_by_name[std.name_].mapped[94], [])
 
         @final
@@ -6189,7 +6219,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.util._HistogramInt:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.util.HistogramInt(greycat.libs_by_name[std.name_].mapped[96], [])
 
         @final
@@ -6201,7 +6232,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.util._SlidingWindow:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.util.SlidingWindow(greycat.libs_by_name[std.name_].mapped[97], [])
 
         @final
@@ -6213,7 +6245,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.util._Queue:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.util.Queue(greycat.libs_by_name[std.name_].mapped[98], [])
 
         @final
@@ -6236,7 +6269,8 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.util._TimeWindow:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return std.util.TimeWindow(greycat.libs_by_name[std.name_].mapped[100], [])
 
         @final

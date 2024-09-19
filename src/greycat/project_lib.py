@@ -35,13 +35,13 @@ class project_lib(GreyCat.Library):
         @staticmethod
         def get_gcb(__greycat: Optional[GreyCat] = None) -> std.core.Array:
             if __greycat is None:
-                __greycat  = GreyCat.DEFAULT
+                __greycat = GreyCat.DEFAULT
             return __greycat.call("project::get_gcb")
 
         @staticmethod
         def display(v: Any, __greycat: Optional[GreyCat] = None) -> Any:
             if __greycat is None:
-                __greycat  = GreyCat.DEFAULT
+                __greycat = GreyCat.DEFAULT
             return __greycat.call("project::display", [v, ])
 
     def configure(self, loaders: dict[str, GreyCat.Loader], factories: dict[str, GreyCat.Factory]) -> None:

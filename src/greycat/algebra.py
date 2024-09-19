@@ -2327,7 +2327,8 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> algebra_n.ml._Polynomial:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.ml.Polynomial(greycat.libs_by_name[algebra.name_].mapped[16], [])
 
         @final
@@ -2339,7 +2340,8 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> algebra_n.ml._GaussianND:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.ml.GaussianND(greycat.libs_by_name[algebra.name_].mapped[17], [])
 
         @final
@@ -2373,7 +2375,8 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> algebra_n.ml._PCA:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.ml.PCA(greycat.libs_by_name[algebra.name_].mapped[20], [])
 
         @final
@@ -3870,7 +3873,8 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> algebra_n.compute._ComputeEngine:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeEngine(greycat.libs_by_name[algebra.name_].mapped[71], [])
 
         @final
@@ -6113,7 +6117,8 @@ class algebra(GreyCat.Library):
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> algebra_n.compute._ComputeState:
-                if greycat is None: greycat = GreyCat.DEFAULT
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeState(greycat.libs_by_name[algebra.name_].mapped[148], [])
 
         @final
