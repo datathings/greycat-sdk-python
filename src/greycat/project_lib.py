@@ -24,12 +24,16 @@ class project_lib(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def i(greycat: GreyCat) -> int:
+            def i(greycat: Optional[GreyCat] = None) -> int:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[project_lib.name_].mapped[0]
                 return t.static_values[0]
 
             @staticmethod
-            def create(greycat: GreyCat) -> project_lib.project.TestType:
+            def create(greycat: Optional[GreyCat] = None) -> project_lib.project.TestType:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return project_lib.project.TestType(greycat.libs_by_name[project_lib.name_].mapped[0], [])
 
         @staticmethod

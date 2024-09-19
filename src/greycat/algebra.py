@@ -62,7 +62,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[5], v)
 
             @staticmethod
-            def create(greycat: GreyCat, abs: float, angle_radians: float, voltage: float, voltage_img: float, current: float, current_img: float) -> algebra.powerflow.PowerBusResult:
+            def create(abs: float, angle_radians: float, voltage: float, voltage_img: float, current: float, current_img: float, greycat: Optional[GreyCat] = None) -> algebra.powerflow.PowerBusResult:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.powerflow.PowerBusResult(greycat.libs_by_name[algebra.name_].mapped[0], [abs, angle_radians, voltage, voltage_img, current, current_img])
 
         @final
@@ -157,7 +159,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[13], v)
 
             @staticmethod
-            def create(greycat: GreyCat, p_from_mw: float, q_from_mvar: float, p_to_mw: float, q_to_mvar: float, pl_mw: float, ql_mvar: float, i_from_ka: float, i_to_ka: float, i_ka: float, vm_from_pu: float, vm_to_pu: float, va_from_radians: float, va_to_radians: float, loading_percent: float) -> algebra.powerflow.PowerLineResult:
+            def create(p_from_mw: float, q_from_mvar: float, p_to_mw: float, q_to_mvar: float, pl_mw: float, ql_mvar: float, i_from_ka: float, i_to_ka: float, i_ka: float, vm_from_pu: float, vm_to_pu: float, va_from_radians: float, va_to_radians: float, loading_percent: float, greycat: Optional[GreyCat] = None) -> algebra.powerflow.PowerLineResult:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.powerflow.PowerLineResult(greycat.libs_by_name[algebra.name_].mapped[1], [p_from_mw, q_from_mvar, p_to_mw, q_to_mvar, pl_mw, ql_mvar, i_from_ka, i_to_ka, i_ka, vm_from_pu, vm_to_pu, va_from_radians, va_to_radians, loading_percent])
 
     @final
@@ -279,197 +283,275 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[17], v)
 
             @staticmethod
-            def err_negative_in_out(greycat: GreyCat) -> str:
+            def err_negative_in_out(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[0]
 
             @staticmethod
-            def err_last_layer_wrong(greycat: GreyCat) -> str:
+            def err_last_layer_wrong(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[1]
 
             @staticmethod
-            def err_incompatible_loss(greycat: GreyCat) -> str:
+            def err_incompatible_loss(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[2]
 
             @staticmethod
-            def err_layer_not_supported(greycat: GreyCat) -> str:
+            def err_layer_not_supported(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[3]
 
             @staticmethod
-            def err_tensor_type_not_supported(greycat: GreyCat) -> str:
+            def err_tensor_type_not_supported(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[4]
 
             @staticmethod
-            def err_minimum_layers(greycat: GreyCat) -> str:
+            def err_minimum_layers(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[5]
 
             @staticmethod
-            def layer_placeholders_name(greycat: GreyCat) -> str:
+            def layer_placeholders_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[6]
 
             @staticmethod
-            def layer_classification_name(greycat: GreyCat) -> str:
+            def layer_classification_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[7]
 
             @staticmethod
-            def layer_preprocess_name(greycat: GreyCat) -> str:
+            def layer_preprocess_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[8]
 
             @staticmethod
-            def layer_postprocess_learn_name(greycat: GreyCat) -> str:
+            def layer_postprocess_learn_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[9]
 
             @staticmethod
-            def layer_main_layers_name(greycat: GreyCat) -> str:
+            def layer_main_layers_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[10]
 
             @staticmethod
-            def layer_loss_learn_name(greycat: GreyCat) -> str:
+            def layer_loss_learn_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[11]
 
             @staticmethod
-            def layer_loss_display_name(greycat: GreyCat) -> str:
+            def layer_loss_display_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[12]
 
             @staticmethod
-            def layer_postprocess_display_name(greycat: GreyCat) -> str:
+            def layer_postprocess_display_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[13]
 
             @staticmethod
-            def layer_confusion_name(greycat: GreyCat) -> str:
+            def layer_confusion_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[14]
 
             @staticmethod
-            def seq_predict(greycat: GreyCat) -> str:
+            def seq_predict(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[15]
 
             @staticmethod
-            def seq_post_process(greycat: GreyCat) -> str:
+            def seq_post_process(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[16]
 
             @staticmethod
-            def seq_learn(greycat: GreyCat) -> str:
+            def seq_learn(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[17]
 
             @staticmethod
-            def seq_loss_display(greycat: GreyCat) -> str:
+            def seq_loss_display(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[18]
 
             @staticmethod
-            def seq_encode(greycat: GreyCat) -> str:
+            def seq_encode(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[19]
 
             @staticmethod
-            def seq_decode(greycat: GreyCat) -> str:
+            def seq_decode(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[20]
 
             @staticmethod
-            def seq_confusion(greycat: GreyCat) -> str:
+            def seq_confusion(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[21]
 
             @staticmethod
-            def var_inputs_name(greycat: GreyCat) -> str:
+            def var_inputs_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[22]
 
             @staticmethod
-            def var_enc_inputs_name(greycat: GreyCat) -> str:
+            def var_enc_inputs_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[23]
 
             @staticmethod
-            def var_targets_name(greycat: GreyCat) -> str:
+            def var_targets_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[24]
 
             @staticmethod
-            def var_classifier_classes(greycat: GreyCat) -> str:
+            def var_classifier_classes(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[25]
 
             @staticmethod
-            def var_classifier_probabilities(greycat: GreyCat) -> str:
+            def var_classifier_probabilities(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[26]
 
             @staticmethod
-            def var_classifier_class_weights(greycat: GreyCat) -> str:
+            def var_classifier_class_weights(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[27]
 
             @staticmethod
-            def var_classifier_confusion(greycat: GreyCat) -> str:
+            def var_classifier_confusion(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[28]
 
             @staticmethod
-            def var_input_avg(greycat: GreyCat) -> str:
+            def var_input_avg(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[29]
 
             @staticmethod
-            def var_input_min(greycat: GreyCat) -> str:
+            def var_input_min(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[30]
 
             @staticmethod
-            def var_input_max(greycat: GreyCat) -> str:
+            def var_input_max(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[31]
 
             @staticmethod
-            def var_input_std(greycat: GreyCat) -> str:
+            def var_input_std(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[32]
 
             @staticmethod
-            def var_input_space(greycat: GreyCat) -> str:
+            def var_input_space(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[33]
 
             @staticmethod
-            def var_output_avg(greycat: GreyCat) -> str:
+            def var_output_avg(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[34]
 
             @staticmethod
-            def var_output_min(greycat: GreyCat) -> str:
+            def var_output_min(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[35]
 
             @staticmethod
-            def var_output_max(greycat: GreyCat) -> str:
+            def var_output_max(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[36]
 
             @staticmethod
-            def var_output_std(greycat: GreyCat) -> str:
+            def var_output_std(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[2]
                 return t.static_values[37]
 
             @staticmethod
-            def create(greycat: GreyCat, inputs: int, inputs_gradients: bool, outputs: int, fixed_batch_size: int, inputs_sequences: int, outputs_sequences: int, tensor_type: std.core.TensorType, seed: int, randomizeSeed: bool, layers: std.core.Array, preProcessType: algebra.nn.PreProcessType, preProcessObject: Any, postProcessType: algebra.nn.PostProcessType, postProcessObject: Any, optimizer: algebra.compute.ComputeOptimizer, lossLayer: algebra.compute.ComputeLayerLoss, _lastLayer: str, _lastOutput: str) -> algebra.nn.NeuralNetwork:
+            def create(inputs: int, inputs_gradients: bool, outputs: int, fixed_batch_size: int, inputs_sequences: int, outputs_sequences: int, tensor_type: std.core.TensorType, seed: int, randomizeSeed: bool, layers: std.core.Array, preProcessType: algebra.nn.PreProcessType, preProcessObject: Any, postProcessType: algebra.nn.PostProcessType, postProcessObject: Any, optimizer: algebra.compute.ComputeOptimizer, lossLayer: algebra.compute.ComputeLayerLoss, _lastLayer: str, _lastOutput: str, greycat: Optional[GreyCat] = None) -> algebra.nn.NeuralNetwork:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.nn.NeuralNetwork(greycat.libs_by_name[algebra.name_].mapped[2], [inputs, inputs_gradients, outputs, fixed_batch_size, inputs_sequences, outputs_sequences, tensor_type, seed, randomizeSeed, layers, preProcessType, preProcessObject, postProcessType, postProcessObject, optimizer, lossLayer, _lastLayer, _lastOutput])
 
         @final
@@ -510,7 +592,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[4], v)
 
             @staticmethod
-            def create(greycat: GreyCat, previousLayerName: str, previousLayerOutput: str, expectedLayerName: str, expectedLayerOutput: str, postLayer: algebra.compute.ComputeLayer) -> algebra.nn.BindingsResult:
+            def create(previousLayerName: str, previousLayerOutput: str, expectedLayerName: str, expectedLayerOutput: str, postLayer: algebra.compute.ComputeLayer, greycat: Optional[GreyCat] = None) -> algebra.nn.BindingsResult:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.nn.BindingsResult(greycat.libs_by_name[algebra.name_].mapped[3], [previousLayerName, previousLayerOutput, expectedLayerName, expectedLayerOutput, postLayer])
 
         @final
@@ -545,7 +629,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[3], v)
 
             @staticmethod
-            def create(greycat: GreyCat, weight_initializer: algebra.compute.ComputeInitializer, weight_regularizer: algebra.compute.ComputeRegularizer, bias_initializer: algebra.compute.ComputeInitializer, bias_regularizer: algebra.compute.ComputeRegularizer) -> algebra.nn.InitializerConfig:
+            def create(weight_initializer: algebra.compute.ComputeInitializer, weight_regularizer: algebra.compute.ComputeRegularizer, bias_initializer: algebra.compute.ComputeInitializer, bias_regularizer: algebra.compute.ComputeRegularizer, greycat: Optional[GreyCat] = None) -> algebra.nn.InitializerConfig:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.nn.InitializerConfig(greycat.libs_by_name[algebra.name_].mapped[4], [weight_initializer, weight_regularizer, bias_initializer, bias_regularizer])
 
         @final
@@ -574,7 +660,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, precision: std.core.Array, recall: std.core.Array, f1Score: std.core.Array) -> algebra.nn.ClassificationMetrics:
+            def create(precision: std.core.Array, recall: std.core.Array, f1Score: std.core.Array, greycat: Optional[GreyCat] = None) -> algebra.nn.ClassificationMetrics:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.nn.ClassificationMetrics(greycat.libs_by_name[algebra.name_].mapped[5], [precision, recall, f1Score])
 
         @final
@@ -585,67 +673,93 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def relu(greycat: GreyCat) -> algebra.nn.ComputeActivations:
+            def relu(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeActivations:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[6]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
-            def leaky_relu(greycat: GreyCat) -> algebra.nn.ComputeActivations:
+            def leaky_relu(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeActivations:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[6]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
-            def sigmoid(greycat: GreyCat) -> algebra.nn.ComputeActivations:
+            def sigmoid(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeActivations:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[6]
                 return t.enum_values[t.generated_offsets[2]]
 
             @staticmethod
-            def hard_sigmoid(greycat: GreyCat) -> algebra.nn.ComputeActivations:
+            def hard_sigmoid(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeActivations:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[6]
                 return t.enum_values[t.generated_offsets[3]]
 
             @staticmethod
-            def exp(greycat: GreyCat) -> algebra.nn.ComputeActivations:
+            def exp(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeActivations:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[6]
                 return t.enum_values[t.generated_offsets[4]]
 
             @staticmethod
-            def soft_max(greycat: GreyCat) -> algebra.nn.ComputeActivations:
+            def soft_max(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeActivations:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[6]
                 return t.enum_values[t.generated_offsets[5]]
 
             @staticmethod
-            def soft_plus(greycat: GreyCat) -> algebra.nn.ComputeActivations:
+            def soft_plus(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeActivations:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[6]
                 return t.enum_values[t.generated_offsets[6]]
 
             @staticmethod
-            def soft_sign(greycat: GreyCat) -> algebra.nn.ComputeActivations:
+            def soft_sign(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeActivations:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[6]
                 return t.enum_values[t.generated_offsets[7]]
 
             @staticmethod
-            def tanh(greycat: GreyCat) -> algebra.nn.ComputeActivations:
+            def tanh(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeActivations:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[6]
                 return t.enum_values[t.generated_offsets[8]]
 
             @staticmethod
-            def selu(greycat: GreyCat) -> algebra.nn.ComputeActivations:
+            def selu(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeActivations:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[6]
                 return t.enum_values[t.generated_offsets[9]]
 
             @staticmethod
-            def elu(greycat: GreyCat) -> algebra.nn.ComputeActivations:
+            def elu(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeActivations:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[6]
                 return t.enum_values[t.generated_offsets[10]]
 
             @staticmethod
-            def celu(greycat: GreyCat) -> algebra.nn.ComputeActivations:
+            def celu(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeActivations:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[6]
                 return t.enum_values[t.generated_offsets[11]]
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.nn.ComputeActivations:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeActivations:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.nn.ComputeActivations(greycat.libs_by_name[algebra.name_].mapped[6], [])
 
         @final
@@ -764,7 +878,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[17], v)
 
             @staticmethod
-            def create(greycat: GreyCat, inputs: int, inputs_gradients: bool, outputs: int, fixed_batch_size: int, inputs_sequences: int, outputs_sequences: int, tensor_type: std.core.TensorType, seed: int, randomizeSeed: bool, layers: std.core.Array, preProcessType: algebra.nn.PreProcessType, preProcessObject: Any, postProcessType: algebra.nn.PostProcessType, postProcessObject: Any, optimizer: algebra.compute.ComputeOptimizer, lossLayer: algebra.compute.ComputeLayerLoss, _lastLayer: str, _lastOutput: str) -> algebra.nn.RegressionNetwork:
+            def create(inputs: int, inputs_gradients: bool, outputs: int, fixed_batch_size: int, inputs_sequences: int, outputs_sequences: int, tensor_type: std.core.TensorType, seed: int, randomizeSeed: bool, layers: std.core.Array, preProcessType: algebra.nn.PreProcessType, preProcessObject: Any, postProcessType: algebra.nn.PostProcessType, postProcessObject: Any, optimizer: algebra.compute.ComputeOptimizer, lossLayer: algebra.compute.ComputeLayerLoss, _lastLayer: str, _lastOutput: str, greycat: Optional[GreyCat] = None) -> algebra.nn.RegressionNetwork:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.nn.RegressionNetwork(greycat.libs_by_name[algebra.name_].mapped[7], [inputs, inputs_gradients, outputs, fixed_batch_size, inputs_sequences, outputs_sequences, tensor_type, seed, randomizeSeed, layers, preProcessType, preProcessObject, postProcessType, postProcessObject, optimizer, lossLayer, _lastLayer, _lastOutput])
 
         @final
@@ -775,57 +891,79 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def ada_delta(greycat: GreyCat) -> algebra.nn.ComputeOptimizers:
+            def ada_delta(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeOptimizers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[8]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
-            def ada_grad(greycat: GreyCat) -> algebra.nn.ComputeOptimizers:
+            def ada_grad(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeOptimizers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[8]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
-            def adam(greycat: GreyCat) -> algebra.nn.ComputeOptimizers:
+            def adam(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeOptimizers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[8]
                 return t.enum_values[t.generated_offsets[2]]
 
             @staticmethod
-            def ada_max(greycat: GreyCat) -> algebra.nn.ComputeOptimizers:
+            def ada_max(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeOptimizers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[8]
                 return t.enum_values[t.generated_offsets[3]]
 
             @staticmethod
-            def nadam(greycat: GreyCat) -> algebra.nn.ComputeOptimizers:
+            def nadam(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeOptimizers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[8]
                 return t.enum_values[t.generated_offsets[4]]
 
             @staticmethod
-            def ftrl(greycat: GreyCat) -> algebra.nn.ComputeOptimizers:
+            def ftrl(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeOptimizers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[8]
                 return t.enum_values[t.generated_offsets[5]]
 
             @staticmethod
-            def sgd(greycat: GreyCat) -> algebra.nn.ComputeOptimizers:
+            def sgd(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeOptimizers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[8]
                 return t.enum_values[t.generated_offsets[6]]
 
             @staticmethod
-            def rms_prop(greycat: GreyCat) -> algebra.nn.ComputeOptimizers:
+            def rms_prop(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeOptimizers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[8]
                 return t.enum_values[t.generated_offsets[7]]
 
             @staticmethod
-            def momentum(greycat: GreyCat) -> algebra.nn.ComputeOptimizers:
+            def momentum(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeOptimizers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[8]
                 return t.enum_values[t.generated_offsets[8]]
 
             @staticmethod
-            def nesterov(greycat: GreyCat) -> algebra.nn.ComputeOptimizers:
+            def nesterov(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeOptimizers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[8]
                 return t.enum_values[t.generated_offsets[9]]
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.nn.ComputeOptimizers:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeOptimizers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.nn.ComputeOptimizers(greycat.libs_by_name[algebra.name_].mapped[8], [])
 
         @final
@@ -836,37 +974,51 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def linear(greycat: GreyCat) -> algebra.nn.ComputeLayerTypes:
+            def linear(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeLayerTypes:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[9]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
-            def dense(greycat: GreyCat) -> algebra.nn.ComputeLayerTypes:
+            def dense(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeLayerTypes:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[9]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
-            def activation(greycat: GreyCat) -> algebra.nn.ComputeLayerTypes:
+            def activation(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeLayerTypes:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[9]
                 return t.enum_values[t.generated_offsets[2]]
 
             @staticmethod
-            def lstm(greycat: GreyCat) -> algebra.nn.ComputeLayerTypes:
+            def lstm(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeLayerTypes:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[9]
                 return t.enum_values[t.generated_offsets[3]]
 
             @staticmethod
-            def loss(greycat: GreyCat) -> algebra.nn.ComputeLayerTypes:
+            def loss(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeLayerTypes:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[9]
                 return t.enum_values[t.generated_offsets[4]]
 
             @staticmethod
-            def filter(greycat: GreyCat) -> algebra.nn.ComputeLayerTypes:
+            def filter(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeLayerTypes:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[9]
                 return t.enum_values[t.generated_offsets[5]]
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.nn.ComputeLayerTypes:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeLayerTypes:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.nn.ComputeLayerTypes(greycat.libs_by_name[algebra.name_].mapped[9], [])
 
         @final
@@ -877,27 +1029,37 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def none(greycat: GreyCat) -> algebra.nn.PreProcessType:
+            def none(greycat: Optional[GreyCat] = None) -> algebra.nn.PreProcessType:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[10]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
-            def min_max_scaling(greycat: GreyCat) -> algebra.nn.PreProcessType:
+            def min_max_scaling(greycat: Optional[GreyCat] = None) -> algebra.nn.PreProcessType:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[10]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
-            def standard_scaling(greycat: GreyCat) -> algebra.nn.PreProcessType:
+            def standard_scaling(greycat: Optional[GreyCat] = None) -> algebra.nn.PreProcessType:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[10]
                 return t.enum_values[t.generated_offsets[2]]
 
             @staticmethod
-            def pca_scaling(greycat: GreyCat) -> algebra.nn.PreProcessType:
+            def pca_scaling(greycat: Optional[GreyCat] = None) -> algebra.nn.PreProcessType:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[10]
                 return t.enum_values[t.generated_offsets[3]]
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.nn.PreProcessType:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.nn.PreProcessType:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.nn.PreProcessType(greycat.libs_by_name[algebra.name_].mapped[10], [])
 
         @final
@@ -1034,7 +1196,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[20], v)
 
             @staticmethod
-            def create(greycat: GreyCat, inputs: int, inputs_gradients: bool, outputs: int, fixed_batch_size: int, inputs_sequences: int, outputs_sequences: int, tensor_type: std.core.TensorType, seed: int, randomizeSeed: bool, layers: std.core.Array, preProcessType: algebra.nn.PreProcessType, preProcessObject: Any, postProcessType: algebra.nn.PostProcessType, postProcessObject: Any, optimizer: algebra.compute.ComputeOptimizer, lossLayer: algebra.compute.ComputeLayerLoss, _lastLayer: str, _lastOutput: str, calculate_probabilities: bool, has_class_weights: bool, from_logits: bool) -> algebra.nn.ClassificationNetwork:
+            def create(inputs: int, inputs_gradients: bool, outputs: int, fixed_batch_size: int, inputs_sequences: int, outputs_sequences: int, tensor_type: std.core.TensorType, seed: int, randomizeSeed: bool, layers: std.core.Array, preProcessType: algebra.nn.PreProcessType, preProcessObject: Any, postProcessType: algebra.nn.PostProcessType, postProcessObject: Any, optimizer: algebra.compute.ComputeOptimizer, lossLayer: algebra.compute.ComputeLayerLoss, _lastLayer: str, _lastOutput: str, calculate_probabilities: bool, has_class_weights: bool, from_logits: bool, greycat: Optional[GreyCat] = None) -> algebra.nn.ClassificationNetwork:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.nn.ClassificationNetwork(greycat.libs_by_name[algebra.name_].mapped[11], [inputs, inputs_gradients, outputs, fixed_batch_size, inputs_sequences, outputs_sequences, tensor_type, seed, randomizeSeed, layers, preProcessType, preProcessObject, postProcessType, postProcessObject, optimizer, lossLayer, _lastLayer, _lastOutput, calculate_probabilities, has_class_weights, from_logits])
 
         @final
@@ -1171,7 +1335,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[20], v)
 
             @staticmethod
-            def create(greycat: GreyCat, inputs: int, inputs_gradients: bool, outputs: int, fixed_batch_size: int, inputs_sequences: int, outputs_sequences: int, tensor_type: std.core.TensorType, seed: int, randomizeSeed: bool, layers: std.core.Array, preProcessType: algebra.nn.PreProcessType, preProcessObject: Any, postProcessType: algebra.nn.PostProcessType, postProcessObject: Any, optimizer: algebra.compute.ComputeOptimizer, lossLayer: algebra.compute.ComputeLayerLoss, _lastLayer: str, _lastOutput: str, encoder_layer_idx: int, encoder_layer_name: str, encoder_layer_var: str) -> algebra.nn.AutoEncoderNetwork:
+            def create(inputs: int, inputs_gradients: bool, outputs: int, fixed_batch_size: int, inputs_sequences: int, outputs_sequences: int, tensor_type: std.core.TensorType, seed: int, randomizeSeed: bool, layers: std.core.Array, preProcessType: algebra.nn.PreProcessType, preProcessObject: Any, postProcessType: algebra.nn.PostProcessType, postProcessObject: Any, optimizer: algebra.compute.ComputeOptimizer, lossLayer: algebra.compute.ComputeLayerLoss, _lastLayer: str, _lastOutput: str, encoder_layer_idx: int, encoder_layer_name: str, encoder_layer_var: str, greycat: Optional[GreyCat] = None) -> algebra.nn.AutoEncoderNetwork:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.nn.AutoEncoderNetwork(greycat.libs_by_name[algebra.name_].mapped[12], [inputs, inputs_gradients, outputs, fixed_batch_size, inputs_sequences, outputs_sequences, tensor_type, seed, randomizeSeed, layers, preProcessType, preProcessObject, postProcessType, postProcessObject, optimizer, lossLayer, _lastLayer, _lastOutput, encoder_layer_idx, encoder_layer_name, encoder_layer_var])
 
         @final
@@ -1182,22 +1348,30 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def none(greycat: GreyCat) -> algebra.nn.PostProcessType:
+            def none(greycat: Optional[GreyCat] = None) -> algebra.nn.PostProcessType:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[13]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
-            def min_max_scaling(greycat: GreyCat) -> algebra.nn.PostProcessType:
+            def min_max_scaling(greycat: Optional[GreyCat] = None) -> algebra.nn.PostProcessType:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[13]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
-            def standard_scaling(greycat: GreyCat) -> algebra.nn.PostProcessType:
+            def standard_scaling(greycat: Optional[GreyCat] = None) -> algebra.nn.PostProcessType:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[13]
                 return t.enum_values[t.generated_offsets[2]]
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.nn.PostProcessType:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.nn.PostProcessType:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.nn.PostProcessType(greycat.libs_by_name[algebra.name_].mapped[13], [])
 
         @final
@@ -1208,97 +1382,135 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def none(greycat: GreyCat) -> algebra.nn.ComputeInitializers:
+            def none(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeInitializers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
-            def constant(greycat: GreyCat) -> algebra.nn.ComputeInitializers:
+            def constant(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeInitializers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
-            def sigmoid_uniform(greycat: GreyCat) -> algebra.nn.ComputeInitializers:
+            def sigmoid_uniform(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeInitializers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[2]]
 
             @staticmethod
-            def lecun_uniform(greycat: GreyCat) -> algebra.nn.ComputeInitializers:
+            def lecun_uniform(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeInitializers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[3]]
 
             @staticmethod
-            def xavier(greycat: GreyCat) -> algebra.nn.ComputeInitializers:
+            def xavier(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeInitializers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[4]]
 
             @staticmethod
-            def xavier_uniform(greycat: GreyCat) -> algebra.nn.ComputeInitializers:
+            def xavier_uniform(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeInitializers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[5]]
 
             @staticmethod
-            def relu(greycat: GreyCat) -> algebra.nn.ComputeInitializers:
+            def relu(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeInitializers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[6]]
 
             @staticmethod
-            def relu_uniform(greycat: GreyCat) -> algebra.nn.ComputeInitializers:
+            def relu_uniform(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeInitializers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[7]]
 
             @staticmethod
-            def normal(greycat: GreyCat) -> algebra.nn.ComputeInitializers:
+            def normal(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeInitializers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[8]]
 
             @staticmethod
-            def normal_in(greycat: GreyCat) -> algebra.nn.ComputeInitializers:
+            def normal_in(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeInitializers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[9]]
 
             @staticmethod
-            def normal_out(greycat: GreyCat) -> algebra.nn.ComputeInitializers:
+            def normal_out(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeInitializers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[10]]
 
             @staticmethod
-            def normal_avg(greycat: GreyCat) -> algebra.nn.ComputeInitializers:
+            def normal_avg(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeInitializers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[11]]
 
             @staticmethod
-            def uniform(greycat: GreyCat) -> algebra.nn.ComputeInitializers:
+            def uniform(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeInitializers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[12]]
 
             @staticmethod
-            def uniform_in(greycat: GreyCat) -> algebra.nn.ComputeInitializers:
+            def uniform_in(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeInitializers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[13]]
 
             @staticmethod
-            def uniform_out(greycat: GreyCat) -> algebra.nn.ComputeInitializers:
+            def uniform_out(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeInitializers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[14]]
 
             @staticmethod
-            def uniform_avg(greycat: GreyCat) -> algebra.nn.ComputeInitializers:
+            def uniform_avg(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeInitializers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[15]]
 
             @staticmethod
-            def identity(greycat: GreyCat) -> algebra.nn.ComputeInitializers:
+            def identity(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeInitializers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[16]]
 
             @staticmethod
-            def pytorch(greycat: GreyCat) -> algebra.nn.ComputeInitializers:
+            def pytorch(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeInitializers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[17]]
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.nn.ComputeInitializers:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.nn.ComputeInitializers:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.nn.ComputeInitializers(greycat.libs_by_name[algebra.name_].mapped[14], [])
 
     @final
@@ -1312,1007 +1524,1409 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def layer_0(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_0(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
-            def layer_1(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_1(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
-            def layer_2(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_2(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[2]]
 
             @staticmethod
-            def layer_3(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_3(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[3]]
 
             @staticmethod
-            def layer_4(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_4(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[4]]
 
             @staticmethod
-            def layer_5(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_5(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[5]]
 
             @staticmethod
-            def layer_6(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_6(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[6]]
 
             @staticmethod
-            def layer_7(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_7(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[7]]
 
             @staticmethod
-            def layer_8(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_8(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[8]]
 
             @staticmethod
-            def layer_9(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_9(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[9]]
 
             @staticmethod
-            def layer_10(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_10(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[10]]
 
             @staticmethod
-            def layer_11(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_11(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[11]]
 
             @staticmethod
-            def layer_12(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_12(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[12]]
 
             @staticmethod
-            def layer_13(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_13(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[13]]
 
             @staticmethod
-            def layer_14(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_14(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[14]]
 
             @staticmethod
-            def layer_15(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_15(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[15]]
 
             @staticmethod
-            def layer_16(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_16(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[16]]
 
             @staticmethod
-            def layer_17(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_17(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[17]]
 
             @staticmethod
-            def layer_18(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_18(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[18]]
 
             @staticmethod
-            def layer_19(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_19(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[19]]
 
             @staticmethod
-            def layer_20(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_20(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[20]]
 
             @staticmethod
-            def layer_21(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_21(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[21]]
 
             @staticmethod
-            def layer_22(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_22(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[22]]
 
             @staticmethod
-            def layer_23(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_23(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[23]]
 
             @staticmethod
-            def layer_24(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_24(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[24]]
 
             @staticmethod
-            def layer_25(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_25(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[25]]
 
             @staticmethod
-            def layer_26(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_26(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[26]]
 
             @staticmethod
-            def layer_27(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_27(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[27]]
 
             @staticmethod
-            def layer_28(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_28(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[28]]
 
             @staticmethod
-            def layer_29(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_29(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[29]]
 
             @staticmethod
-            def layer_30(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_30(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[30]]
 
             @staticmethod
-            def layer_31(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_31(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[31]]
 
             @staticmethod
-            def layer_32(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_32(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[32]]
 
             @staticmethod
-            def layer_33(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_33(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[33]]
 
             @staticmethod
-            def layer_34(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_34(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[34]]
 
             @staticmethod
-            def layer_35(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_35(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[35]]
 
             @staticmethod
-            def layer_36(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_36(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[36]]
 
             @staticmethod
-            def layer_37(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_37(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[37]]
 
             @staticmethod
-            def layer_38(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_38(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[38]]
 
             @staticmethod
-            def layer_39(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_39(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[39]]
 
             @staticmethod
-            def layer_40(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_40(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[40]]
 
             @staticmethod
-            def layer_41(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_41(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[41]]
 
             @staticmethod
-            def layer_42(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_42(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[42]]
 
             @staticmethod
-            def layer_43(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_43(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[43]]
 
             @staticmethod
-            def layer_44(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_44(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[44]]
 
             @staticmethod
-            def layer_45(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_45(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[45]]
 
             @staticmethod
-            def layer_46(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_46(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[46]]
 
             @staticmethod
-            def layer_47(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_47(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[47]]
 
             @staticmethod
-            def layer_48(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_48(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[48]]
 
             @staticmethod
-            def layer_49(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_49(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[49]]
 
             @staticmethod
-            def layer_50(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_50(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[50]]
 
             @staticmethod
-            def layer_51(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_51(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[51]]
 
             @staticmethod
-            def layer_52(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_52(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[52]]
 
             @staticmethod
-            def layer_53(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_53(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[53]]
 
             @staticmethod
-            def layer_54(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_54(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[54]]
 
             @staticmethod
-            def layer_55(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_55(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[55]]
 
             @staticmethod
-            def layer_56(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_56(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[56]]
 
             @staticmethod
-            def layer_57(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_57(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[57]]
 
             @staticmethod
-            def layer_58(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_58(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[58]]
 
             @staticmethod
-            def layer_59(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_59(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[59]]
 
             @staticmethod
-            def layer_60(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_60(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[60]]
 
             @staticmethod
-            def layer_61(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_61(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[61]]
 
             @staticmethod
-            def layer_62(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_62(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[62]]
 
             @staticmethod
-            def layer_63(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_63(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[63]]
 
             @staticmethod
-            def layer_64(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_64(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[64]]
 
             @staticmethod
-            def layer_65(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_65(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[65]]
 
             @staticmethod
-            def layer_66(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_66(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[66]]
 
             @staticmethod
-            def layer_67(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_67(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[67]]
 
             @staticmethod
-            def layer_68(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_68(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[68]]
 
             @staticmethod
-            def layer_69(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_69(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[69]]
 
             @staticmethod
-            def layer_70(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_70(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[70]]
 
             @staticmethod
-            def layer_71(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_71(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[71]]
 
             @staticmethod
-            def layer_72(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_72(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[72]]
 
             @staticmethod
-            def layer_73(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_73(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[73]]
 
             @staticmethod
-            def layer_74(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_74(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[74]]
 
             @staticmethod
-            def layer_75(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_75(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[75]]
 
             @staticmethod
-            def layer_76(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_76(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[76]]
 
             @staticmethod
-            def layer_77(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_77(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[77]]
 
             @staticmethod
-            def layer_78(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_78(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[78]]
 
             @staticmethod
-            def layer_79(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_79(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[79]]
 
             @staticmethod
-            def layer_80(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_80(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[80]]
 
             @staticmethod
-            def layer_81(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_81(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[81]]
 
             @staticmethod
-            def layer_82(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_82(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[82]]
 
             @staticmethod
-            def layer_83(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_83(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[83]]
 
             @staticmethod
-            def layer_84(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_84(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[84]]
 
             @staticmethod
-            def layer_85(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_85(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[85]]
 
             @staticmethod
-            def layer_86(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_86(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[86]]
 
             @staticmethod
-            def layer_87(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_87(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[87]]
 
             @staticmethod
-            def layer_88(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_88(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[88]]
 
             @staticmethod
-            def layer_89(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_89(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[89]]
 
             @staticmethod
-            def layer_90(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_90(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[90]]
 
             @staticmethod
-            def layer_91(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_91(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[91]]
 
             @staticmethod
-            def layer_92(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_92(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[92]]
 
             @staticmethod
-            def layer_93(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_93(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[93]]
 
             @staticmethod
-            def layer_94(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_94(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[94]]
 
             @staticmethod
-            def layer_95(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_95(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[95]]
 
             @staticmethod
-            def layer_96(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_96(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[96]]
 
             @staticmethod
-            def layer_97(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_97(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[97]]
 
             @staticmethod
-            def layer_98(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_98(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[98]]
 
             @staticmethod
-            def layer_99(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_99(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[99]]
 
             @staticmethod
-            def layer_100(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_100(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[100]]
 
             @staticmethod
-            def layer_101(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_101(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[101]]
 
             @staticmethod
-            def layer_102(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_102(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[102]]
 
             @staticmethod
-            def layer_103(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_103(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[103]]
 
             @staticmethod
-            def layer_104(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_104(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[104]]
 
             @staticmethod
-            def layer_105(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_105(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[105]]
 
             @staticmethod
-            def layer_106(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_106(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[106]]
 
             @staticmethod
-            def layer_107(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_107(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[107]]
 
             @staticmethod
-            def layer_108(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_108(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[108]]
 
             @staticmethod
-            def layer_109(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_109(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[109]]
 
             @staticmethod
-            def layer_110(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_110(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[110]]
 
             @staticmethod
-            def layer_111(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_111(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[111]]
 
             @staticmethod
-            def layer_112(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_112(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[112]]
 
             @staticmethod
-            def layer_113(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_113(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[113]]
 
             @staticmethod
-            def layer_114(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_114(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[114]]
 
             @staticmethod
-            def layer_115(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_115(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[115]]
 
             @staticmethod
-            def layer_116(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_116(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[116]]
 
             @staticmethod
-            def layer_117(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_117(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[117]]
 
             @staticmethod
-            def layer_118(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_118(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[118]]
 
             @staticmethod
-            def layer_119(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_119(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[119]]
 
             @staticmethod
-            def layer_120(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_120(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[120]]
 
             @staticmethod
-            def layer_121(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_121(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[121]]
 
             @staticmethod
-            def layer_122(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_122(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[122]]
 
             @staticmethod
-            def layer_123(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_123(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[123]]
 
             @staticmethod
-            def layer_124(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_124(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[124]]
 
             @staticmethod
-            def layer_125(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_125(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[125]]
 
             @staticmethod
-            def layer_126(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_126(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[126]]
 
             @staticmethod
-            def layer_127(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_127(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[127]]
 
             @staticmethod
-            def layer_128(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_128(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[128]]
 
             @staticmethod
-            def layer_129(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_129(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[129]]
 
             @staticmethod
-            def layer_130(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_130(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[130]]
 
             @staticmethod
-            def layer_131(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_131(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[131]]
 
             @staticmethod
-            def layer_132(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_132(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[132]]
 
             @staticmethod
-            def layer_133(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_133(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[133]]
 
             @staticmethod
-            def layer_134(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_134(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[134]]
 
             @staticmethod
-            def layer_135(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_135(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[135]]
 
             @staticmethod
-            def layer_136(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_136(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[136]]
 
             @staticmethod
-            def layer_137(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_137(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[137]]
 
             @staticmethod
-            def layer_138(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_138(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[138]]
 
             @staticmethod
-            def layer_139(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_139(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[139]]
 
             @staticmethod
-            def layer_140(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_140(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[140]]
 
             @staticmethod
-            def layer_141(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_141(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[141]]
 
             @staticmethod
-            def layer_142(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_142(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[142]]
 
             @staticmethod
-            def layer_143(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_143(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[143]]
 
             @staticmethod
-            def layer_144(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_144(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[144]]
 
             @staticmethod
-            def layer_145(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_145(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[145]]
 
             @staticmethod
-            def layer_146(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_146(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[146]]
 
             @staticmethod
-            def layer_147(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_147(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[147]]
 
             @staticmethod
-            def layer_148(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_148(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[148]]
 
             @staticmethod
-            def layer_149(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_149(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[149]]
 
             @staticmethod
-            def layer_150(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_150(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[150]]
 
             @staticmethod
-            def layer_151(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_151(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[151]]
 
             @staticmethod
-            def layer_152(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_152(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[152]]
 
             @staticmethod
-            def layer_153(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_153(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[153]]
 
             @staticmethod
-            def layer_154(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_154(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[154]]
 
             @staticmethod
-            def layer_155(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_155(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[155]]
 
             @staticmethod
-            def layer_156(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_156(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[156]]
 
             @staticmethod
-            def layer_157(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_157(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[157]]
 
             @staticmethod
-            def layer_158(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_158(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[158]]
 
             @staticmethod
-            def layer_159(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_159(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[159]]
 
             @staticmethod
-            def layer_160(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_160(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[160]]
 
             @staticmethod
-            def layer_161(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_161(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[161]]
 
             @staticmethod
-            def layer_162(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_162(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[162]]
 
             @staticmethod
-            def layer_163(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_163(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[163]]
 
             @staticmethod
-            def layer_164(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_164(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[164]]
 
             @staticmethod
-            def layer_165(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_165(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[165]]
 
             @staticmethod
-            def layer_166(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_166(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[166]]
 
             @staticmethod
-            def layer_167(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_167(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[167]]
 
             @staticmethod
-            def layer_168(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_168(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[168]]
 
             @staticmethod
-            def layer_169(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_169(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[169]]
 
             @staticmethod
-            def layer_170(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_170(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[170]]
 
             @staticmethod
-            def layer_171(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_171(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[171]]
 
             @staticmethod
-            def layer_172(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_172(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[172]]
 
             @staticmethod
-            def layer_173(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_173(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[173]]
 
             @staticmethod
-            def layer_174(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_174(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[174]]
 
             @staticmethod
-            def layer_175(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_175(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[175]]
 
             @staticmethod
-            def layer_176(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_176(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[176]]
 
             @staticmethod
-            def layer_177(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_177(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[177]]
 
             @staticmethod
-            def layer_178(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_178(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[178]]
 
             @staticmethod
-            def layer_179(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_179(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[179]]
 
             @staticmethod
-            def layer_180(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_180(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[180]]
 
             @staticmethod
-            def layer_181(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_181(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[181]]
 
             @staticmethod
-            def layer_182(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_182(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[182]]
 
             @staticmethod
-            def layer_183(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_183(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[183]]
 
             @staticmethod
-            def layer_184(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_184(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[184]]
 
             @staticmethod
-            def layer_185(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_185(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[185]]
 
             @staticmethod
-            def layer_186(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_186(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[186]]
 
             @staticmethod
-            def layer_187(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_187(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[187]]
 
             @staticmethod
-            def layer_188(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_188(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[188]]
 
             @staticmethod
-            def layer_189(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_189(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[189]]
 
             @staticmethod
-            def layer_190(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_190(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[190]]
 
             @staticmethod
-            def layer_191(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_191(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[191]]
 
             @staticmethod
-            def layer_192(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_192(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[192]]
 
             @staticmethod
-            def layer_193(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_193(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[193]]
 
             @staticmethod
-            def layer_194(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_194(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[194]]
 
             @staticmethod
-            def layer_195(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_195(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[195]]
 
             @staticmethod
-            def layer_196(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_196(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[196]]
 
             @staticmethod
-            def layer_197(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_197(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[197]]
 
             @staticmethod
-            def layer_198(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_198(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[198]]
 
             @staticmethod
-            def layer_199(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def layer_199(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[15]
                 return t.enum_values[t.generated_offsets[199]]
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.nn_layers_names.NNLayersNames:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.nn_layers_names.NNLayersNames:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.nn_layers_names.NNLayersNames(greycat.libs_by_name[algebra.name_].mapped[15], [])
 
     @final
@@ -2352,7 +2966,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.ml.Solver:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.ml.Solver:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.ml.Solver(greycat.libs_by_name[algebra.name_].mapped[18], [])
 
         @final
@@ -2363,7 +2979,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.ml.TimeSeriesDecomposition:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.ml.TimeSeriesDecomposition:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.ml.TimeSeriesDecomposition(greycat.libs_by_name[algebra.name_].mapped[19], [])
 
         @final
@@ -2417,7 +3035,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[4], v)
 
             @staticmethod
-            def create(greycat: GreyCat, counts: std.core.Table, x_labels: std.core.Array, y_labels: std.core.Array, counts_max: int, counts_sum: int) -> algebra.ml.HeatMapProfile:
+            def create(counts: std.core.Table, x_labels: std.core.Array, y_labels: std.core.Array, counts_max: int, counts_sum: int, greycat: Optional[GreyCat] = None) -> algebra.ml.HeatMapProfile:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.ml.HeatMapProfile(greycat.libs_by_name[algebra.name_].mapped[21], [counts, x_labels, y_labels, counts_max, counts_sum])
 
     @final
@@ -2476,7 +3096,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[6], v)
 
             @staticmethod
-            def create(greycat: GreyCat, nt: std.core.nodeTime, sampling_step: std.core.duration, time_complex: std.core.Tensor, frequency_complex: std.core.Tensor, frequency_table: std.core.Table, start_time: std.core.time, best_size: int) -> algebra.transforms.FFTModel:
+            def create(nt: std.core.nodeTime, sampling_step: std.core.duration, time_complex: std.core.Tensor, frequency_complex: std.core.Tensor, frequency_table: std.core.Table, start_time: std.core.time, best_size: int, greycat: Optional[GreyCat] = None) -> algebra.transforms.FFTModel:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.transforms.FFTModel(greycat.libs_by_name[algebra.name_].mapped[22], [nt, sampling_step, time_complex, frequency_complex, frequency_table, start_time, best_size])
 
     @final
@@ -2544,7 +3166,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[8], v)
 
             @staticmethod
-            def create(greycat: GreyCat, loss: float, roundsDistances: std.core.Array, centroids: std.core.Tensor, clusters_count: std.core.Tensor, clusters_sum_distance: std.core.Tensor, clusters_avg_distance: std.core.Tensor, assignement: std.core.Tensor, distances: std.core.Tensor, clusterInterDistances: std.core.Tensor) -> algebra.kmeans.KmeanResult:
+            def create(loss: float, roundsDistances: std.core.Array, centroids: std.core.Tensor, clusters_count: std.core.Tensor, clusters_sum_distance: std.core.Tensor, clusters_avg_distance: std.core.Tensor, assignement: std.core.Tensor, distances: std.core.Tensor, clusterInterDistances: std.core.Tensor, greycat: Optional[GreyCat] = None) -> algebra.kmeans.KmeanResult:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.kmeans.KmeanResult(greycat.libs_by_name[algebra.name_].mapped[23], [loss, roundsDistances, centroids, clusters_count, clusters_sum_distance, clusters_avg_distance, assignement, distances, clusterInterDistances])
 
         @final
@@ -2555,132 +3179,184 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def var_input(greycat: GreyCat) -> str:
+            def var_input(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[0]
 
             @staticmethod
-            def var_assignement(greycat: GreyCat) -> str:
+            def var_assignement(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[1]
 
             @staticmethod
-            def var_min_distance(greycat: GreyCat) -> str:
+            def var_min_distance(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[2]
 
             @staticmethod
-            def varo_centroids(greycat: GreyCat) -> str:
+            def varo_centroids(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[3]
 
             @staticmethod
-            def var_distance(greycat: GreyCat) -> str:
+            def var_distance(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[4]
 
             @staticmethod
-            def var_sum_centroids(greycat: GreyCat) -> str:
+            def var_sum_centroids(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[5]
 
             @staticmethod
-            def var_sum_min_distance(greycat: GreyCat) -> str:
+            def var_sum_min_distance(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[6]
 
             @staticmethod
-            def var_count_centroids(greycat: GreyCat) -> str:
+            def var_count_centroids(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[7]
 
             @staticmethod
-            def var_centroid_distances(greycat: GreyCat) -> str:
+            def var_centroid_distances(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[8]
 
             @staticmethod
-            def var_sum_cluster_distances(greycat: GreyCat) -> str:
+            def var_sum_cluster_distances(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[9]
 
             @staticmethod
-            def var_avg_cluster_distances(greycat: GreyCat) -> str:
+            def var_avg_cluster_distances(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[10]
 
             @staticmethod
-            def var_count_cluster_distances(greycat: GreyCat) -> str:
+            def var_count_cluster_distances(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[11]
 
             @staticmethod
-            def layer_placeholders(greycat: GreyCat) -> str:
+            def layer_placeholders(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[12]
 
             @staticmethod
-            def layer_forward(greycat: GreyCat) -> str:
+            def layer_forward(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[13]
 
             @staticmethod
-            def layer_backward(greycat: GreyCat) -> str:
+            def layer_backward(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[14]
 
             @staticmethod
-            def layer_init_round(greycat: GreyCat) -> str:
+            def layer_init_round(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[15]
 
             @staticmethod
-            def layer_end_round(greycat: GreyCat) -> str:
+            def layer_end_round(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[16]
 
             @staticmethod
-            def layer_stats(greycat: GreyCat) -> str:
+            def layer_stats(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[17]
 
             @staticmethod
-            def seq_init_round(greycat: GreyCat) -> str:
+            def seq_init_round(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[18]
 
             @staticmethod
-            def seq_forward(greycat: GreyCat) -> str:
+            def seq_forward(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[19]
 
             @staticmethod
-            def seq_backward(greycat: GreyCat) -> str:
+            def seq_backward(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[20]
 
             @staticmethod
-            def seq_end_round(greycat: GreyCat) -> str:
+            def seq_end_round(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[21]
 
             @staticmethod
-            def seq_stats(greycat: GreyCat) -> str:
+            def seq_stats(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[22]
 
             @staticmethod
-            def default_meta_rounds(greycat: GreyCat) -> int:
+            def default_meta_rounds(greycat: Optional[GreyCat] = None) -> int:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[23]
 
             @staticmethod
-            def default_rounds(greycat: GreyCat) -> int:
+            def default_rounds(greycat: Optional[GreyCat] = None) -> int:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[24]
                 return t.static_values[24]
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.kmeans.Kmeans:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.kmeans.Kmeans:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.kmeans.Kmeans(greycat.libs_by_name[algebra.name_].mapped[24], [])
 
         @final
@@ -2703,7 +3379,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, runDistances: std.core.Array, bestResult: algebra.kmeans.KmeanResult) -> algebra.kmeans.KmeanMetaResult:
+            def create(runDistances: std.core.Array, bestResult: algebra.kmeans.KmeanResult, greycat: Optional[GreyCat] = None) -> algebra.kmeans.KmeanMetaResult:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.kmeans.KmeanMetaResult(greycat.libs_by_name[algebra.name_].mapped[25], [runDistances, bestResult])
 
     @final
@@ -2735,22 +3413,30 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def var_input_name(greycat: GreyCat) -> str:
+            def var_input_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[26]
                 return t.static_values[0]
 
             @staticmethod
-            def var_predicted_classes_name(greycat: GreyCat) -> str:
+            def var_predicted_classes_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[26]
                 return t.static_values[1]
 
             @staticmethod
-            def var_probabilities_name(greycat: GreyCat) -> str:
+            def var_probabilities_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[26]
                 return t.static_values[2]
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, calculate_probabilities: bool, from_logits: bool) -> algebra.compute.ComputeLayerClassification:
+            def create(name: str, calculate_probabilities: bool, from_logits: bool, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeLayerClassification:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeLayerClassification(greycat.libs_by_name[algebra.name_].mapped[26], [name, calculate_probabilities, from_logits])
 
         @final
@@ -2785,7 +3471,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[3], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str, mask: str, nbOutputs: int) -> algebra.compute.ComputeOperationFilter:
+            def create(input: str, output: str, mask: str, nbOutputs: int, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationFilter:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationFilter(greycat.libs_by_name[algebra.name_].mapped[27], [input, output, mask, nbOutputs])
 
         @final
@@ -2820,7 +3508,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[3], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str, min: float, max: float) -> algebra.compute.ComputeOperationClip:
+            def create(input: str, output: str, min: float, max: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationClip:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationClip(greycat.libs_by_name[algebra.name_].mapped[28], [input, output, min, max])
 
         @final
@@ -2849,7 +3539,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, epoch: int, optimizationSteps: int, batchNotOptimized: int) -> algebra.compute.ComputeCounter:
+            def create(epoch: int, optimizationSteps: int, batchNotOptimized: int, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeCounter:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeCounter(greycat.libs_by_name[algebra.name_].mapped[29], [epoch, optimizationSteps, batchNotOptimized])
 
         @final
@@ -2878,27 +3570,37 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def var_input_name(greycat: GreyCat) -> str:
+            def var_input_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[30]
                 return t.static_values[0]
 
             @staticmethod
-            def var_output_name(greycat: GreyCat) -> str:
+            def var_output_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[30]
                 return t.static_values[1]
 
             @staticmethod
-            def var_avg_name(greycat: GreyCat) -> str:
+            def var_avg_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[30]
                 return t.static_values[2]
 
             @staticmethod
-            def var_std_name(greycat: GreyCat) -> str:
+            def var_std_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[30]
                 return t.static_values[3]
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, type: std.core.TensorType, inverse_transform: bool) -> algebra.compute.ComputeLayerStandardScaler:
+            def create(name: str, type: std.core.TensorType, inverse_transform: bool, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeLayerStandardScaler:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeLayerStandardScaler(greycat.libs_by_name[algebra.name_].mapped[30], [name, type, inverse_transform])
 
         @final
@@ -2909,7 +3611,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeActivationExp:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeActivationExp:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeActivationExp(greycat.libs_by_name[algebra.name_].mapped[31], [])
 
         @final
@@ -2920,7 +3624,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerRelu:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeInitializerRelu:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeInitializerRelu(greycat.libs_by_name[algebra.name_].mapped[32], [])
 
         @final
@@ -2931,7 +3637,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerLSTM:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeInitializerLSTM:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeInitializerLSTM(greycat.libs_by_name[algebra.name_].mapped[33], [])
 
         @final
@@ -2954,17 +3662,23 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def learning_rate_def(greycat: GreyCat) -> float:
+            def learning_rate_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[34]
                 return t.static_values[0]
 
             @staticmethod
-            def decay_rate_def(greycat: GreyCat) -> float:
+            def decay_rate_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[34]
                 return t.static_values[1]
 
             @staticmethod
-            def create(greycat: GreyCat, learning_rate: float, decay_rate: float) -> algebra.compute.ComputeOptimizerMomentum:
+            def create(learning_rate: float, decay_rate: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOptimizerMomentum:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOptimizerMomentum(greycat.libs_by_name[algebra.name_].mapped[34], [learning_rate, decay_rate])
 
         @final
@@ -2987,12 +3701,16 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def threshold_def(greycat: GreyCat) -> float:
+            def threshold_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[35]
                 return t.static_values[0]
 
             @staticmethod
-            def create(greycat: GreyCat, max_value: float, threshold: float) -> algebra.compute.ComputeActivationRelu:
+            def create(max_value: float, threshold: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeActivationRelu:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeActivationRelu(greycat.libs_by_name[algebra.name_].mapped[35], [max_value, threshold])
 
         @final
@@ -3003,7 +3721,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeInitializer:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeInitializer:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeInitializer(greycat.libs_by_name[algebra.name_].mapped[36], [])
 
         @final
@@ -3014,7 +3734,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerIdentity:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeInitializerIdentity:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeInitializerIdentity(greycat.libs_by_name[algebra.name_].mapped[37], [])
 
         @final
@@ -3055,22 +3777,30 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[4], v)
 
             @staticmethod
-            def var_input_name(greycat: GreyCat) -> str:
+            def var_input_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[38]
                 return t.static_values[0]
 
             @staticmethod
-            def var_output_name(greycat: GreyCat) -> str:
+            def var_output_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[38]
                 return t.static_values[1]
 
             @staticmethod
-            def var_mask_name(greycat: GreyCat) -> str:
+            def var_mask_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[38]
                 return t.static_values[2]
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, type: std.core.TensorType, inputs: int, outputs: int, maskValues: std.core.Array) -> algebra.compute.ComputeLayerFilter:
+            def create(name: str, type: std.core.TensorType, inputs: int, outputs: int, maskValues: std.core.Array, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeLayerFilter:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeLayerFilter(greycat.libs_by_name[algebra.name_].mapped[38], [name, type, inputs, outputs, maskValues])
 
         @final
@@ -3099,7 +3829,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, reduction: algebra.compute.ComputeReduction, loss_type: algebra.compute.ComputeRegressionLoss) -> algebra.compute.ComputeLayerLossRegression:
+            def create(name: str, reduction: algebra.compute.ComputeReduction, loss_type: algebra.compute.ComputeRegressionLoss, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeLayerLossRegression:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeLayerLossRegression(greycat.libs_by_name[algebra.name_].mapped[39], [name, reduction, loss_type])
 
         @final
@@ -3110,7 +3842,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeActivationSoftSign:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeActivationSoftSign:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeActivationSoftSign(greycat.libs_by_name[algebra.name_].mapped[40], [])
 
         @final
@@ -3139,7 +3873,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str, axis: int) -> algebra.compute.ComputeOperationSum:
+            def create(input: str, output: str, axis: int, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationSum:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationSum(greycat.libs_by_name[algebra.name_].mapped[41], [input, output, axis])
 
         @final
@@ -3162,22 +3898,30 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def var_computed_name(greycat: GreyCat) -> str:
+            def var_computed_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[42]
                 return t.static_values[0]
 
             @staticmethod
-            def var_expected_name(greycat: GreyCat) -> str:
+            def var_expected_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[42]
                 return t.static_values[1]
 
             @staticmethod
-            def var_loss_name(greycat: GreyCat) -> str:
+            def var_loss_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[42]
                 return t.static_values[2]
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, reduction: algebra.compute.ComputeReduction) -> algebra.compute.ComputeLayerLoss:
+            def create(name: str, reduction: algebra.compute.ComputeReduction, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeLayerLoss:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeLayerLoss(greycat.libs_by_name[algebra.name_].mapped[42], [name, reduction])
 
         @final
@@ -3206,22 +3950,30 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def learning_rate_def(greycat: GreyCat) -> float:
+            def learning_rate_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[43]
                 return t.static_values[0]
 
             @staticmethod
-            def decay_rate_def(greycat: GreyCat) -> float:
+            def decay_rate_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[43]
                 return t.static_values[1]
 
             @staticmethod
-            def smooth_epsilon_def(greycat: GreyCat) -> float:
+            def smooth_epsilon_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[43]
                 return t.static_values[2]
 
             @staticmethod
-            def create(greycat: GreyCat, learning_rate: float, decay_rate: float, smooth_epsilon: float) -> algebra.compute.ComputeOptimizerAdaDelta:
+            def create(learning_rate: float, decay_rate: float, smooth_epsilon: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOptimizerAdaDelta:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOptimizerAdaDelta(greycat.libs_by_name[algebra.name_].mapped[43], [learning_rate, decay_rate, smooth_epsilon])
 
         @final
@@ -3244,7 +3996,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationSoftSign:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationSoftSign:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationSoftSign(greycat.libs_by_name[algebra.name_].mapped[44], [input, output])
 
         @final
@@ -3267,7 +4021,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationSin:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationSin:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationSin(greycat.libs_by_name[algebra.name_].mapped[45], [input, output])
 
         @final
@@ -3284,7 +4040,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[0], v)
 
             @staticmethod
-            def create(greycat: GreyCat, name: str) -> algebra.compute.ComputeVarProxy:
+            def create(name: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeVarProxy:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeVarProxy(greycat.libs_by_name[algebra.name_].mapped[46], [name])
 
         @final
@@ -3301,12 +4059,16 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[0], v)
 
             @staticmethod
-            def learning_rate_def(greycat: GreyCat) -> float:
+            def learning_rate_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[47]
                 return t.static_values[0]
 
             @staticmethod
-            def create(greycat: GreyCat, learning_rate: float) -> algebra.compute.ComputeOptimizerSgd:
+            def create(learning_rate: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOptimizerSgd:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOptimizerSgd(greycat.libs_by_name[algebra.name_].mapped[47], [learning_rate])
 
         @final
@@ -3317,7 +4079,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerPytorch:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeInitializerPytorch:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeInitializerPytorch(greycat.libs_by_name[algebra.name_].mapped[48], [])
 
         @final
@@ -3328,7 +4092,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerXavier:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeInitializerXavier:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeInitializerXavier(greycat.libs_by_name[algebra.name_].mapped[49], [])
 
         @final
@@ -3339,7 +4105,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeActivationSelu:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeActivationSelu:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeActivationSelu(greycat.libs_by_name[algebra.name_].mapped[50], [])
 
         @final
@@ -3362,7 +4130,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, min: float, max: float) -> algebra.compute.ComputeInitializerUniform:
+            def create(min: float, max: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeInitializerUniform:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeInitializerUniform(greycat.libs_by_name[algebra.name_].mapped[51], [min, max])
 
         @final
@@ -3397,27 +4167,37 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[3], v)
 
             @staticmethod
-            def learning_rate_def(greycat: GreyCat) -> float:
+            def learning_rate_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[52]
                 return t.static_values[0]
 
             @staticmethod
-            def beta1_def(greycat: GreyCat) -> float:
+            def beta1_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[52]
                 return t.static_values[1]
 
             @staticmethod
-            def beta2_def(greycat: GreyCat) -> float:
+            def beta2_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[52]
                 return t.static_values[2]
 
             @staticmethod
-            def smooth_epsilon_def(greycat: GreyCat) -> float:
+            def smooth_epsilon_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[52]
                 return t.static_values[3]
 
             @staticmethod
-            def create(greycat: GreyCat, learning_rate: float, beta1: float, beta2: float, smooth_epsilon: float) -> algebra.compute.ComputeOptimizerNadam:
+            def create(learning_rate: float, beta1: float, beta2: float, smooth_epsilon: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOptimizerNadam:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOptimizerNadam(greycat.libs_by_name[algebra.name_].mapped[52], [learning_rate, beta1, beta2, smooth_epsilon])
 
         @final
@@ -3446,7 +4226,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, calls: std.core.Array, optimizer: algebra.compute.ComputeOptimizer) -> algebra.compute.ComputeLayerSeq:
+            def create(name: str, calls: std.core.Array, optimizer: algebra.compute.ComputeOptimizer, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeLayerSeq:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeLayerSeq(greycat.libs_by_name[algebra.name_].mapped[53], [name, calls, optimizer])
 
         @final
@@ -3487,7 +4269,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[4], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, ifCondition: str, output: str, counts: str, classes: int) -> algebra.compute.ComputeOperationSumIf:
+            def create(input: str, ifCondition: str, output: str, counts: str, classes: int, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationSumIf:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationSumIf(greycat.libs_by_name[algebra.name_].mapped[54], [input, ifCondition, output, counts, classes])
 
         @final
@@ -3510,7 +4294,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationAtanh:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationAtanh:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationAtanh(greycat.libs_by_name[algebra.name_].mapped[55], [input, output])
 
         @final
@@ -3521,7 +4307,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerGlorotUniform:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeInitializerGlorotUniform:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeInitializerGlorotUniform(greycat.libs_by_name[algebra.name_].mapped[56], [])
 
         @final
@@ -3544,7 +4332,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationLog:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationLog:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationLog(greycat.libs_by_name[algebra.name_].mapped[57], [input, output])
 
         @final
@@ -3555,7 +4345,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeOperation:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperation:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperation(greycat.libs_by_name[algebra.name_].mapped[58], [])
 
         @final
@@ -3602,7 +4394,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[5], v)
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, type: std.core.TensorType, shape: std.core.Array, l1: float, l2: float, init: algebra.compute.ComputeInitializer) -> algebra.compute.ComputeVarOptimize:
+            def create(name: str, type: std.core.TensorType, shape: std.core.Array, l1: float, l2: float, init: algebra.compute.ComputeInitializer, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeVarOptimize:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeVarOptimize(greycat.libs_by_name[algebra.name_].mapped[59], [name, type, shape, l1, l2, init])
 
         @final
@@ -3631,7 +4425,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, input2: str, output: str) -> algebra.compute.ComputeOperationEuclidean:
+            def create(input: str, input2: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationEuclidean:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationEuclidean(greycat.libs_by_name[algebra.name_].mapped[60], [input, input2, output])
 
         @final
@@ -3642,17 +4438,23 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def categorical_cross_entropy(greycat: GreyCat) -> algebra.compute.ComputeClassificationLoss:
+            def categorical_cross_entropy(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeClassificationLoss:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[61]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
-            def sparse_categorical_cross_entropy(greycat: GreyCat) -> algebra.compute.ComputeClassificationLoss:
+            def sparse_categorical_cross_entropy(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeClassificationLoss:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[61]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeClassificationLoss:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeClassificationLoss:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeClassificationLoss(greycat.libs_by_name[algebra.name_].mapped[61], [])
 
         @final
@@ -3663,7 +4465,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeActivationTanh:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeActivationTanh:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeActivationTanh(greycat.libs_by_name[algebra.name_].mapped[62], [])
 
         @final
@@ -3674,7 +4478,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerLeCunUniform:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeInitializerLeCunUniform:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeInitializerLeCunUniform(greycat.libs_by_name[algebra.name_].mapped[63], [])
 
         @final
@@ -3697,7 +4503,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationAcosh:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationAcosh:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationAcosh(greycat.libs_by_name[algebra.name_].mapped[64], [input, output])
 
         @final
@@ -3714,7 +4522,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[0], v)
 
             @staticmethod
-            def create(greycat: GreyCat, layers: std.core.Array) -> algebra.compute.ComputeModel:
+            def create(layers: std.core.Array, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeModel:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeModel(greycat.libs_by_name[algebra.name_].mapped[65], [layers])
 
         @final
@@ -3743,12 +4553,16 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def alpha_def(greycat: GreyCat) -> float:
+            def alpha_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[66]
                 return t.static_values[0]
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str, alpha: float) -> algebra.compute.ComputeOperationElu:
+            def create(input: str, output: str, alpha: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationElu:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationElu(greycat.libs_by_name[algebra.name_].mapped[66], [input, output, alpha])
 
         @final
@@ -3777,22 +4591,30 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def learning_rate_def(greycat: GreyCat) -> float:
+            def learning_rate_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[67]
                 return t.static_values[0]
 
             @staticmethod
-            def initial_accumulator_def(greycat: GreyCat) -> float:
+            def initial_accumulator_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[67]
                 return t.static_values[1]
 
             @staticmethod
-            def smooth_epsilon_def(greycat: GreyCat) -> float:
+            def smooth_epsilon_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[67]
                 return t.static_values[2]
 
             @staticmethod
-            def create(greycat: GreyCat, learning_rate: float, initial_accumulator: float, smooth_epsilon: float) -> algebra.compute.ComputeOptimizerAdaGrad:
+            def create(learning_rate: float, initial_accumulator: float, smooth_epsilon: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOptimizerAdaGrad:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOptimizerAdaGrad(greycat.libs_by_name[algebra.name_].mapped[67], [learning_rate, initial_accumulator, smooth_epsilon])
 
         @final
@@ -3821,7 +4643,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str, power: float) -> algebra.compute.ComputeOperationRaiseToPower:
+            def create(input: str, output: str, power: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationRaiseToPower:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationRaiseToPower(greycat.libs_by_name[algebra.name_].mapped[68], [input, output, power])
 
         @final
@@ -3850,7 +4674,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, input2: str, output: str) -> algebra.compute.ComputeOperationAvg:
+            def create(input: str, input2: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationAvg:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationAvg(greycat.libs_by_name[algebra.name_].mapped[69], [input, input2, output])
 
         @final
@@ -3861,7 +4687,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeActivationSoftplus:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeActivationSoftplus:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeActivationSoftplus(greycat.libs_by_name[algebra.name_].mapped[70], [])
 
         @final
@@ -3897,7 +4725,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationSign:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationSign:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationSign(greycat.libs_by_name[algebra.name_].mapped[72], [input, output])
 
         @final
@@ -3908,7 +4738,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerReluUniform:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeInitializerReluUniform:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeInitializerReluUniform(greycat.libs_by_name[algebra.name_].mapped[73], [])
 
         @final
@@ -3919,7 +4751,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerUniformOut:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeInitializerUniformOut:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeInitializerUniformOut(greycat.libs_by_name[algebra.name_].mapped[74], [])
 
         @final
@@ -3942,7 +4776,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationSoftplus:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationSoftplus:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationSoftplus(greycat.libs_by_name[algebra.name_].mapped[75], [input, output])
 
         @final
@@ -3971,7 +4807,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str, alpha: float) -> algebra.compute.ComputeOperationScale:
+            def create(input: str, output: str, alpha: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationScale:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationScale(greycat.libs_by_name[algebra.name_].mapped[76], [input, output, alpha])
 
         @final
@@ -3994,7 +4832,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationSoftmax:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationSoftmax:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationSoftmax(greycat.libs_by_name[algebra.name_].mapped[77], [input, output])
 
         @final
@@ -4017,7 +4857,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationExp:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationExp:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationExp(greycat.libs_by_name[algebra.name_].mapped[78], [input, output])
 
         @final
@@ -4040,17 +4882,23 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def slope_def(greycat: GreyCat) -> float:
+            def slope_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[79]
                 return t.static_values[0]
 
             @staticmethod
-            def shift_def(greycat: GreyCat) -> float:
+            def shift_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[79]
                 return t.static_values[1]
 
             @staticmethod
-            def create(greycat: GreyCat, slope: float, shift: float) -> algebra.compute.ComputeActivationHardSigmoid:
+            def create(slope: float, shift: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeActivationHardSigmoid:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeActivationHardSigmoid(greycat.libs_by_name[algebra.name_].mapped[79], [slope, shift])
 
         @final
@@ -4061,7 +4909,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerNormalAvg:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeInitializerNormalAvg:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeInitializerNormalAvg(greycat.libs_by_name[algebra.name_].mapped[80], [])
 
         @final
@@ -4078,7 +4928,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[0], v)
 
             @staticmethod
-            def create(greycat: GreyCat, name: str) -> algebra.compute.ComputeVariable:
+            def create(name: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeVariable:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeVariable(greycat.libs_by_name[algebra.name_].mapped[81], [name])
 
         @final
@@ -4089,17 +4941,23 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def square(greycat: GreyCat) -> algebra.compute.ComputeRegressionLoss:
+            def square(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeRegressionLoss:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[82]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
-            def abs(greycat: GreyCat) -> algebra.compute.ComputeRegressionLoss:
+            def abs(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeRegressionLoss:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[82]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeRegressionLoss:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeRegressionLoss:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeRegressionLoss(greycat.libs_by_name[algebra.name_].mapped[82], [])
 
         @final
@@ -4128,27 +4986,37 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def var_input_name(greycat: GreyCat) -> str:
+            def var_input_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[83]
                 return t.static_values[0]
 
             @staticmethod
-            def var_output_name(greycat: GreyCat) -> str:
+            def var_output_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[83]
                 return t.static_values[1]
 
             @staticmethod
-            def var_min_name(greycat: GreyCat) -> str:
+            def var_min_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[83]
                 return t.static_values[2]
 
             @staticmethod
-            def var_max_name(greycat: GreyCat) -> str:
+            def var_max_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[83]
                 return t.static_values[3]
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, type: std.core.TensorType, inverse_transform: bool) -> algebra.compute.ComputeLayerMinMaxScaler:
+            def create(name: str, type: std.core.TensorType, inverse_transform: bool, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeLayerMinMaxScaler:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeLayerMinMaxScaler(greycat.libs_by_name[algebra.name_].mapped[83], [name, type, inverse_transform])
 
         @final
@@ -4165,7 +5033,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[0], v)
 
             @staticmethod
-            def create(greycat: GreyCat, classes: str) -> algebra.compute.ComputeActivationSoftmax:
+            def create(classes: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeActivationSoftmax:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeActivationSoftmax(greycat.libs_by_name[algebra.name_].mapped[84], [classes])
 
         @final
@@ -4188,7 +5058,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationAsinh:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationAsinh:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationAsinh(greycat.libs_by_name[algebra.name_].mapped[85], [input, output])
 
         @final
@@ -4211,22 +5083,30 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def var_computed_name(greycat: GreyCat) -> str:
+            def var_computed_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[86]
                 return t.static_values[0]
 
             @staticmethod
-            def var_expected_name(greycat: GreyCat) -> str:
+            def var_expected_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[86]
                 return t.static_values[1]
 
             @staticmethod
-            def var_confusion_name(greycat: GreyCat) -> str:
+            def var_confusion_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[86]
                 return t.static_values[2]
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, nbClass: int) -> algebra.compute.ComputeLayerConfusion:
+            def create(name: str, nbClass: int, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeLayerConfusion:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeLayerConfusion(greycat.libs_by_name[algebra.name_].mapped[86], [name, nbClass])
 
         @final
@@ -4243,7 +5123,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[0], v)
 
             @staticmethod
-            def create(greycat: GreyCat, value: Any) -> algebra.compute.ComputeInitializerConstant:
+            def create(value: Any, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeInitializerConstant:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeInitializerConstant(greycat.libs_by_name[algebra.name_].mapped[87], [value])
 
         @final
@@ -4266,17 +5148,23 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def var_input_name(greycat: GreyCat) -> str:
+            def var_input_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[88]
                 return t.static_values[0]
 
             @staticmethod
-            def var_output_name(greycat: GreyCat) -> str:
+            def var_output_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[88]
                 return t.static_values[1]
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, activation: algebra.compute.ComputeActivation) -> algebra.compute.ComputeLayerActivation:
+            def create(name: str, activation: algebra.compute.ComputeActivation, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeLayerActivation:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeLayerActivation(greycat.libs_by_name[algebra.name_].mapped[88], [name, activation])
 
         @final
@@ -4299,7 +5187,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, layer_name: str, bindings: std.core.Array) -> algebra.compute.ComputeLayerCall:
+            def create(layer_name: str, bindings: std.core.Array, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeLayerCall:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeLayerCall(greycat.libs_by_name[algebra.name_].mapped[89], [layer_name, bindings])
 
         @final
@@ -4328,17 +5218,23 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def alpha_def(greycat: GreyCat) -> float:
+            def alpha_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[90]
                 return t.static_values[0]
 
             @staticmethod
-            def threshold_def(greycat: GreyCat) -> float:
+            def threshold_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[90]
                 return t.static_values[1]
 
             @staticmethod
-            def create(greycat: GreyCat, alpha: float, max_value: float, threshold: float) -> algebra.compute.ComputeActivationLeakyRelu:
+            def create(alpha: float, max_value: float, threshold: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeActivationLeakyRelu:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeActivationLeakyRelu(greycat.libs_by_name[algebra.name_].mapped[90], [alpha, max_value, threshold])
 
         @final
@@ -4355,7 +5251,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[0], v)
 
             @staticmethod
-            def create(greycat: GreyCat, name: str) -> algebra.compute.ComputeVar:
+            def create(name: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeVar:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeVar(greycat.libs_by_name[algebra.name_].mapped[91], [name])
 
         @final
@@ -4378,7 +5276,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, l1: float, l2: float) -> algebra.compute.ComputeRegularizer:
+            def create(l1: float, l2: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeRegularizer:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeRegularizer(greycat.libs_by_name[algebra.name_].mapped[92], [l1, l2])
 
         @final
@@ -4407,7 +5307,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str, output2: str) -> algebra.compute.ComputeOperationArgMin:
+            def create(input: str, output: str, output2: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationArgMin:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationArgMin(greycat.libs_by_name[algebra.name_].mapped[93], [input, output, output2])
 
         @final
@@ -4430,7 +5332,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationAsin:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationAsin:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationAsin(greycat.libs_by_name[algebra.name_].mapped[94], [input, output])
 
         @final
@@ -4465,27 +5369,37 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[3], v)
 
             @staticmethod
-            def learning_rate_def(greycat: GreyCat) -> float:
+            def learning_rate_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[95]
                 return t.static_values[0]
 
             @staticmethod
-            def beta_def(greycat: GreyCat) -> float:
+            def beta_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[95]
                 return t.static_values[1]
 
             @staticmethod
-            def lambda1_def(greycat: GreyCat) -> float:
+            def lambda1_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[95]
                 return t.static_values[2]
 
             @staticmethod
-            def lambda2_def(greycat: GreyCat) -> float:
+            def lambda2_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[95]
                 return t.static_values[3]
 
             @staticmethod
-            def create(greycat: GreyCat, learning_rate: float, lambda1: float, lambda2: float, beta: float) -> algebra.compute.ComputeOptimizerFtrl:
+            def create(learning_rate: float, lambda1: float, lambda2: float, beta: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOptimizerFtrl:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOptimizerFtrl(greycat.libs_by_name[algebra.name_].mapped[95], [learning_rate, lambda1, lambda2, beta])
 
         @final
@@ -4496,7 +5410,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeActivation:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeActivation:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeActivation(greycat.libs_by_name[algebra.name_].mapped[96], [])
 
         @final
@@ -4519,7 +5435,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationAcos:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationAcos:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationAcos(greycat.libs_by_name[algebra.name_].mapped[97], [input, output])
 
         @final
@@ -4542,7 +5460,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationTan:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationTan:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationTan(greycat.libs_by_name[algebra.name_].mapped[98], [input, output])
 
         @final
@@ -4571,7 +5491,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, src_layer_name: str, src_var_name: str, target_var_name: str) -> algebra.compute.ComputeBinding:
+            def create(src_layer_name: str, src_var_name: str, target_var_name: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeBinding:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeBinding(greycat.libs_by_name[algebra.name_].mapped[99], [src_layer_name, src_var_name, target_var_name])
 
         @final
@@ -4594,7 +5516,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationAtan:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationAtan:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationAtan(greycat.libs_by_name[algebra.name_].mapped[100], [input, output])
 
         @final
@@ -4611,12 +5535,16 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[0], v)
 
             @staticmethod
-            def alpha_def(greycat: GreyCat) -> float:
+            def alpha_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[101]
                 return t.static_values[0]
 
             @staticmethod
-            def create(greycat: GreyCat, alpha: float) -> algebra.compute.ComputeActivationElu:
+            def create(alpha: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeActivationElu:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeActivationElu(greycat.libs_by_name[algebra.name_].mapped[101], [alpha])
 
         @final
@@ -4651,7 +5579,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[3], v)
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, type: std.core.TensorType, shape: std.core.Array, with_grad: bool) -> algebra.compute.ComputeVarInOut:
+            def create(name: str, type: std.core.TensorType, shape: std.core.Array, with_grad: bool, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeVarInOut:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeVarInOut(greycat.libs_by_name[algebra.name_].mapped[102], [name, type, shape, with_grad])
 
         @final
@@ -4680,32 +5610,44 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def var_input_name(greycat: GreyCat) -> str:
+            def var_input_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[103]
                 return t.static_values[0]
 
             @staticmethod
-            def var_output_name(greycat: GreyCat) -> str:
+            def var_output_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[103]
                 return t.static_values[1]
 
             @staticmethod
-            def var_avg_name(greycat: GreyCat) -> str:
+            def var_avg_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[103]
                 return t.static_values[2]
 
             @staticmethod
-            def var_std_name(greycat: GreyCat) -> str:
+            def var_std_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[103]
                 return t.static_values[3]
 
             @staticmethod
-            def var_space_name(greycat: GreyCat) -> str:
+            def var_space_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[103]
                 return t.static_values[4]
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, type: std.core.TensorType, inverse_transform: bool) -> algebra.compute.ComputeLayerPCAScaler:
+            def create(name: str, type: std.core.TensorType, inverse_transform: bool, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeLayerPCAScaler:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeLayerPCAScaler(greycat.libs_by_name[algebra.name_].mapped[103], [name, type, inverse_transform])
 
         @final
@@ -4716,7 +5658,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerUniformIn:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeInitializerUniformIn:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeInitializerUniformIn(greycat.libs_by_name[algebra.name_].mapped[104], [])
 
         @final
@@ -4739,7 +5683,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationCos:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationCos:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationCos(greycat.libs_by_name[algebra.name_].mapped[105], [input, output])
 
         @final
@@ -4786,27 +5732,37 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[5], v)
 
             @staticmethod
-            def var_class_weights_name(greycat: GreyCat) -> str:
+            def var_class_weights_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[106]
                 return t.static_values[0]
 
             @staticmethod
-            def var_predicted_classes_name(greycat: GreyCat) -> str:
+            def var_predicted_classes_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[106]
                 return t.static_values[1]
 
             @staticmethod
-            def var_probabilities_name(greycat: GreyCat) -> str:
+            def var_probabilities_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[106]
                 return t.static_values[2]
 
             @staticmethod
-            def var_sum_reduce_name(greycat: GreyCat) -> str:
+            def var_sum_reduce_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[106]
                 return t.static_values[3]
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, reduction: algebra.compute.ComputeReduction, loss_type: algebra.compute.ComputeClassificationLoss, has_class_weights: bool, calculate_probabilities: bool, from_logits: bool) -> algebra.compute.ComputeLayerLossClassification:
+            def create(name: str, reduction: algebra.compute.ComputeReduction, loss_type: algebra.compute.ComputeClassificationLoss, has_class_weights: bool, calculate_probabilities: bool, from_logits: bool, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeLayerLossClassification:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeLayerLossClassification(greycat.libs_by_name[algebra.name_].mapped[106], [name, reduction, loss_type, has_class_weights, calculate_probabilities, from_logits])
 
         @final
@@ -4847,22 +5803,30 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[4], v)
 
             @staticmethod
-            def alpha_def(greycat: GreyCat) -> float:
+            def alpha_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[107]
                 return t.static_values[0]
 
             @staticmethod
-            def max_value_def(greycat: GreyCat) -> float:
+            def max_value_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[107]
                 return t.static_values[1]
 
             @staticmethod
-            def threshold_def(greycat: GreyCat) -> float:
+            def threshold_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[107]
                 return t.static_values[2]
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str, alpha: float, max_value: float, threshold: float) -> algebra.compute.ComputeOperationLeakyRelu:
+            def create(input: str, output: str, alpha: float, max_value: float, threshold: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationLeakyRelu:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationLeakyRelu(greycat.libs_by_name[algebra.name_].mapped[107], [input, output, alpha, max_value, threshold])
 
         @final
@@ -4879,12 +5843,16 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[0], v)
 
             @staticmethod
-            def alpha_def(greycat: GreyCat) -> float:
+            def alpha_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[108]
                 return t.static_values[0]
 
             @staticmethod
-            def create(greycat: GreyCat, alpha: float) -> algebra.compute.ComputeActivationCelu:
+            def create(alpha: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeActivationCelu:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeActivationCelu(greycat.libs_by_name[algebra.name_].mapped[108], [alpha])
 
         @final
@@ -4907,7 +5875,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationSelu:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationSelu:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationSelu(greycat.libs_by_name[algebra.name_].mapped[109], [input, output])
 
         @final
@@ -4936,12 +5906,16 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def alpha_def(greycat: GreyCat) -> float:
+            def alpha_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[110]
                 return t.static_values[0]
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str, alpha: float) -> algebra.compute.ComputeOperationCelu:
+            def create(input: str, output: str, alpha: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationCelu:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationCelu(greycat.libs_by_name[algebra.name_].mapped[110], [input, output, alpha])
 
         @final
@@ -4964,7 +5938,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationSqrt:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationSqrt:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationSqrt(greycat.libs_by_name[algebra.name_].mapped[111], [input, output])
 
         @final
@@ -4975,7 +5951,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerNormalIn:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeInitializerNormalIn:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeInitializerNormalIn(greycat.libs_by_name[algebra.name_].mapped[112], [])
 
         @final
@@ -4986,7 +5964,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeActivationSigmoid:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeActivationSigmoid:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeActivationSigmoid(greycat.libs_by_name[algebra.name_].mapped[113], [])
 
         @final
@@ -5009,7 +5989,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationAbs:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationAbs:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationAbs(greycat.libs_by_name[algebra.name_].mapped[114], [input, output])
 
         @final
@@ -5032,7 +6014,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationTanh:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationTanh:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationTanh(greycat.libs_by_name[algebra.name_].mapped[115], [input, output])
 
         @final
@@ -5061,7 +6045,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, input2: str, output: str) -> algebra.compute.ComputeOperationDiv:
+            def create(input: str, input2: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationDiv:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationDiv(greycat.libs_by_name[algebra.name_].mapped[116], [input, input2, output])
 
         @final
@@ -5132,37 +6118,51 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[9], v)
 
             @staticmethod
-            def var_input_name(greycat: GreyCat) -> str:
+            def var_input_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[117]
                 return t.static_values[0]
 
             @staticmethod
-            def var_output_name(greycat: GreyCat) -> str:
+            def var_output_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[117]
                 return t.static_values[1]
 
             @staticmethod
-            def var_weight_name(greycat: GreyCat) -> str:
+            def var_weight_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[117]
                 return t.static_values[2]
 
             @staticmethod
-            def var_bias_name(greycat: GreyCat) -> str:
+            def var_bias_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[117]
                 return t.static_values[3]
 
             @staticmethod
-            def var_mult_name(greycat: GreyCat) -> str:
+            def var_mult_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[117]
                 return t.static_values[4]
 
             @staticmethod
-            def var_pre_activation_name(greycat: GreyCat) -> str:
+            def var_pre_activation_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[117]
                 return t.static_values[5]
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, type: std.core.TensorType, inputs: int, outputs: int, use_bias: bool, weight_initializer: algebra.compute.ComputeInitializer, weight_regularizer: algebra.compute.ComputeRegularizer, bias_initializer: algebra.compute.ComputeInitializer, bias_regularizer: algebra.compute.ComputeRegularizer, activation: algebra.compute.ComputeActivation) -> algebra.compute.ComputeLayerDense:
+            def create(name: str, type: std.core.TensorType, inputs: int, outputs: int, use_bias: bool, weight_initializer: algebra.compute.ComputeInitializer, weight_regularizer: algebra.compute.ComputeRegularizer, bias_initializer: algebra.compute.ComputeInitializer, bias_regularizer: algebra.compute.ComputeRegularizer, activation: algebra.compute.ComputeActivation, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeLayerDense:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeLayerDense(greycat.libs_by_name[algebra.name_].mapped[117], [name, type, inputs, outputs, use_bias, weight_initializer, weight_regularizer, bias_initializer, bias_regularizer, activation])
 
         @final
@@ -5185,7 +6185,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationNeg:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationNeg:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationNeg(greycat.libs_by_name[algebra.name_].mapped[118], [input, output])
 
         @final
@@ -5208,7 +6210,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationLeCunTanh:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationLeCunTanh:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationLeCunTanh(greycat.libs_by_name[algebra.name_].mapped[119], [input, output])
 
         @final
@@ -5231,17 +6235,23 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def learning_rate_def(greycat: GreyCat) -> float:
+            def learning_rate_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[120]
                 return t.static_values[0]
 
             @staticmethod
-            def decay_rate_def(greycat: GreyCat) -> float:
+            def decay_rate_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[120]
                 return t.static_values[1]
 
             @staticmethod
-            def create(greycat: GreyCat, learning_rate: float, decay_rate: float) -> algebra.compute.ComputeOptimizerNesterov:
+            def create(learning_rate: float, decay_rate: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOptimizerNesterov:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOptimizerNesterov(greycat.libs_by_name[algebra.name_].mapped[120], [learning_rate, decay_rate])
 
         @final
@@ -5264,7 +6274,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, value: Any) -> algebra.compute.ComputeOperationFill:
+            def create(input: str, value: Any, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationFill:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationFill(greycat.libs_by_name[algebra.name_].mapped[121], [input, value])
 
         @final
@@ -5299,27 +6311,37 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[3], v)
 
             @staticmethod
-            def learning_rate_def(greycat: GreyCat) -> float:
+            def learning_rate_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[122]
                 return t.static_values[0]
 
             @staticmethod
-            def beta1_def(greycat: GreyCat) -> float:
+            def beta1_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[122]
                 return t.static_values[1]
 
             @staticmethod
-            def beta2_def(greycat: GreyCat) -> float:
+            def beta2_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[122]
                 return t.static_values[2]
 
             @staticmethod
-            def smooth_epsilon_def(greycat: GreyCat) -> float:
+            def smooth_epsilon_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[122]
                 return t.static_values[3]
 
             @staticmethod
-            def create(greycat: GreyCat, learning_rate: float, beta1: float, beta2: float, smooth_epsilon: float) -> algebra.compute.ComputeOptimizerAdaMax:
+            def create(learning_rate: float, beta1: float, beta2: float, smooth_epsilon: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOptimizerAdaMax:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOptimizerAdaMax(greycat.libs_by_name[algebra.name_].mapped[122], [learning_rate, beta1, beta2, smooth_epsilon])
 
         @final
@@ -5336,7 +6358,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[0], v)
 
             @staticmethod
-            def create(greycat: GreyCat, learning_rate: float) -> algebra.compute.ComputeOptimizer:
+            def create(learning_rate: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOptimizer:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOptimizer(greycat.libs_by_name[algebra.name_].mapped[123], [learning_rate])
 
         @final
@@ -5347,7 +6371,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerUniformAvg:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeInitializerUniformAvg:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeInitializerUniformAvg(greycat.libs_by_name[algebra.name_].mapped[124], [])
 
         @final
@@ -5358,7 +6384,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerNone:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeInitializerNone:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeInitializerNone(greycat.libs_by_name[algebra.name_].mapped[125], [])
 
         @final
@@ -5369,7 +6397,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerSigmoidUniform:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeInitializerSigmoidUniform:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeInitializerSigmoidUniform(greycat.libs_by_name[algebra.name_].mapped[126], [])
 
         @final
@@ -5398,7 +6428,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, input2: str, output: str) -> algebra.compute.ComputeOperationMul:
+            def create(input: str, input2: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationMul:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationMul(greycat.libs_by_name[algebra.name_].mapped[127], [input, input2, output])
 
         @final
@@ -5421,7 +6453,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperation1In1Out:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperation1In1Out:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperation1In1Out(greycat.libs_by_name[algebra.name_].mapped[128], [input, output])
 
         @final
@@ -5450,7 +6484,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str, output2: str) -> algebra.compute.ComputeOperationArg:
+            def create(input: str, output: str, output2: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationArg:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationArg(greycat.libs_by_name[algebra.name_].mapped[129], [input, output, output2])
 
         @final
@@ -5485,27 +6521,37 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[3], v)
 
             @staticmethod
-            def learning_rate_def(greycat: GreyCat) -> float:
+            def learning_rate_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[130]
                 return t.static_values[0]
 
             @staticmethod
-            def beta1_def(greycat: GreyCat) -> float:
+            def beta1_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[130]
                 return t.static_values[1]
 
             @staticmethod
-            def beta2_def(greycat: GreyCat) -> float:
+            def beta2_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[130]
                 return t.static_values[2]
 
             @staticmethod
-            def smooth_epsilon_def(greycat: GreyCat) -> float:
+            def smooth_epsilon_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[130]
                 return t.static_values[3]
 
             @staticmethod
-            def create(greycat: GreyCat, learning_rate: float, beta1: float, beta2: float, smooth_epsilon: float) -> algebra.compute.ComputeOptimizerAdam:
+            def create(learning_rate: float, beta1: float, beta2: float, smooth_epsilon: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOptimizerAdam:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOptimizerAdam(greycat.libs_by_name[algebra.name_].mapped[130], [learning_rate, beta1, beta2, smooth_epsilon])
 
         @final
@@ -5534,7 +6580,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str, axis: int) -> algebra.compute.ComputeOperationLogSoftmax:
+            def create(input: str, output: str, axis: int, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationLogSoftmax:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationLogSoftmax(greycat.libs_by_name[algebra.name_].mapped[131], [input, output, axis])
 
         @final
@@ -5563,7 +6611,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, input2: str, output: str) -> algebra.compute.ComputeOperation2In1Out:
+            def create(input: str, input2: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperation2In1Out:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperation2In1Out(greycat.libs_by_name[algebra.name_].mapped[132], [input, input2, output])
 
         @final
@@ -5592,7 +6642,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, input2: str, output: str) -> algebra.compute.ComputeOperationPow:
+            def create(input: str, input2: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationPow:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationPow(greycat.libs_by_name[algebra.name_].mapped[133], [input, input2, output])
 
         @final
@@ -5615,7 +6667,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationSigmoid:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationSigmoid:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationSigmoid(greycat.libs_by_name[algebra.name_].mapped[134], [input, output])
 
         @final
@@ -5668,22 +6722,30 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[6], v)
 
             @staticmethod
-            def transpose_def(greycat: GreyCat) -> bool:
+            def transpose_def(greycat: Optional[GreyCat] = None) -> bool:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[135]
                 return t.static_values[0]
 
             @staticmethod
-            def alpha_def(greycat: GreyCat) -> float:
+            def alpha_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[135]
                 return t.static_values[1]
 
             @staticmethod
-            def beta_def(greycat: GreyCat) -> float:
+            def beta_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[135]
                 return t.static_values[2]
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, input2: str, output: str, transposeA: bool, transposeB: bool, alpha: float, beta: float) -> algebra.compute.ComputeOperationMatMul:
+            def create(input: str, input2: str, output: str, transposeA: bool, transposeB: bool, alpha: float, beta: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationMatMul:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationMatMul(greycat.libs_by_name[algebra.name_].mapped[135], [input, input2, output, transposeA, transposeB, alpha, beta])
 
         @final
@@ -5712,7 +6774,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, input2: str, output: str) -> algebra.compute.ComputeOperationAdd:
+            def create(input: str, input2: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationAdd:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationAdd(greycat.libs_by_name[algebra.name_].mapped[136], [input, input2, output])
 
         @final
@@ -5723,32 +6787,44 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def auto(greycat: GreyCat) -> algebra.compute.ComputeReduction:
+            def auto(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeReduction:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[137]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
-            def none(greycat: GreyCat) -> algebra.compute.ComputeReduction:
+            def none(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeReduction:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[137]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
-            def sum(greycat: GreyCat) -> algebra.compute.ComputeReduction:
+            def sum(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeReduction:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[137]
                 return t.enum_values[t.generated_offsets[2]]
 
             @staticmethod
-            def mean(greycat: GreyCat) -> algebra.compute.ComputeReduction:
+            def mean(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeReduction:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[137]
                 return t.enum_values[t.generated_offsets[3]]
 
             @staticmethod
-            def disabled(greycat: GreyCat) -> algebra.compute.ComputeReduction:
+            def disabled(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeReduction:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[137]
                 return t.enum_values[t.generated_offsets[4]]
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeReduction:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeReduction:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeReduction(greycat.libs_by_name[algebra.name_].mapped[137], [])
 
         @final
@@ -5777,7 +6853,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, input2: str, output: str) -> algebra.compute.ComputeOperationSub:
+            def create(input: str, input2: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationSub:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationSub(greycat.libs_by_name[algebra.name_].mapped[138], [input, input2, output])
 
         @final
@@ -5806,22 +6884,30 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def learning_rate_def(greycat: GreyCat) -> float:
+            def learning_rate_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[139]
                 return t.static_values[0]
 
             @staticmethod
-            def decay_rate_def(greycat: GreyCat) -> float:
+            def decay_rate_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[139]
                 return t.static_values[1]
 
             @staticmethod
-            def smooth_epsilon_def(greycat: GreyCat) -> float:
+            def smooth_epsilon_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[139]
                 return t.static_values[2]
 
             @staticmethod
-            def create(greycat: GreyCat, learning_rate: float, decay_rate: float, smooth_epsilon: float) -> algebra.compute.ComputeOptimizerRmsProp:
+            def create(learning_rate: float, decay_rate: float, smooth_epsilon: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOptimizerRmsProp:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOptimizerRmsProp(greycat.libs_by_name[algebra.name_].mapped[139], [learning_rate, decay_rate, smooth_epsilon])
 
         @final
@@ -5832,7 +6918,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerXavierUniform:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeInitializerXavierUniform:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeInitializerXavierUniform(greycat.libs_by_name[algebra.name_].mapped[140], [])
 
         @final
@@ -5897,32 +6985,44 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[8], v)
 
             @staticmethod
-            def var_input_name(greycat: GreyCat) -> str:
+            def var_input_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[141]
                 return t.static_values[0]
 
             @staticmethod
-            def var_output_name(greycat: GreyCat) -> str:
+            def var_output_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[141]
                 return t.static_values[1]
 
             @staticmethod
-            def var_weight_name(greycat: GreyCat) -> str:
+            def var_weight_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[141]
                 return t.static_values[2]
 
             @staticmethod
-            def var_bias_name(greycat: GreyCat) -> str:
+            def var_bias_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[141]
                 return t.static_values[3]
 
             @staticmethod
-            def var_mult_name(greycat: GreyCat) -> str:
+            def var_mult_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[141]
                 return t.static_values[4]
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, type: std.core.TensorType, inputs: int, outputs: int, use_bias: bool, weight_initializer: algebra.compute.ComputeInitializer, weight_regularizer: algebra.compute.ComputeRegularizer, bias_initializer: algebra.compute.ComputeInitializer, bias_regularizer: algebra.compute.ComputeRegularizer) -> algebra.compute.ComputeLayerLinear:
+            def create(name: str, type: std.core.TensorType, inputs: int, outputs: int, use_bias: bool, weight_initializer: algebra.compute.ComputeInitializer, weight_regularizer: algebra.compute.ComputeRegularizer, bias_initializer: algebra.compute.ComputeInitializer, bias_regularizer: algebra.compute.ComputeRegularizer, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeLayerLinear:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeLayerLinear(greycat.libs_by_name[algebra.name_].mapped[141], [name, type, inputs, outputs, use_bias, weight_initializer, weight_regularizer, bias_initializer, bias_regularizer])
 
         @final
@@ -5945,7 +7045,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, avg: float, std: float) -> algebra.compute.ComputeInitializerNormal:
+            def create(avg: float, std: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeInitializerNormal:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeInitializerNormal(greycat.libs_by_name[algebra.name_].mapped[142], [avg, std])
 
         @final
@@ -5974,7 +7076,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, type: std.core.TensorType, shape: std.core.Array) -> algebra.compute.ComputeVarConst:
+            def create(name: str, type: std.core.TensorType, shape: std.core.Array, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeVarConst:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeVarConst(greycat.libs_by_name[algebra.name_].mapped[143], [name, type, shape])
 
         @final
@@ -6009,17 +7113,23 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[3], v)
 
             @staticmethod
-            def slope_def(greycat: GreyCat) -> float:
+            def slope_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[144]
                 return t.static_values[0]
 
             @staticmethod
-            def shift_def(greycat: GreyCat) -> float:
+            def shift_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[144]
                 return t.static_values[1]
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str, slope: float, shift: float) -> algebra.compute.ComputeOperationHardSigmoid:
+            def create(input: str, output: str, slope: float, shift: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationHardSigmoid:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationHardSigmoid(greycat.libs_by_name[algebra.name_].mapped[144], [input, output, slope, shift])
 
         @final
@@ -6036,7 +7146,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[0], v)
 
             @staticmethod
-            def create(greycat: GreyCat, name: str) -> algebra.compute.ComputeLayer:
+            def create(name: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeLayer:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeLayer(greycat.libs_by_name[algebra.name_].mapped[145], [name])
 
         @final
@@ -6065,7 +7177,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str, output2: str) -> algebra.compute.ComputeOperationArgMax:
+            def create(input: str, output: str, output2: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationArgMax:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationArgMax(greycat.libs_by_name[algebra.name_].mapped[146], [input, output, output2])
 
         @final
@@ -6100,12 +7214,16 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[3], v)
 
             @staticmethod
-            def threshold_def(greycat: GreyCat) -> float:
+            def threshold_def(greycat: Optional[GreyCat] = None) -> float:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[147]
                 return t.static_values[0]
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str, max_value: float, threshold: float) -> algebra.compute.ComputeOperationRelu:
+            def create(input: str, output: str, max_value: float, threshold: float, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationRelu:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationRelu(greycat.libs_by_name[algebra.name_].mapped[147], [input, output, max_value, threshold])
 
         @final
@@ -6141,7 +7259,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationSinh:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationSinh:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationSinh(greycat.libs_by_name[algebra.name_].mapped[149], [input, output])
 
         @final
@@ -6164,7 +7284,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, output: str) -> algebra.compute.ComputeOperationCosh:
+            def create(input: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationCosh:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationCosh(greycat.libs_by_name[algebra.name_].mapped[150], [input, output])
 
         @final
@@ -6193,7 +7315,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, input: str, input2: str, output: str) -> algebra.compute.ComputeOperationAddBias:
+            def create(input: str, input2: str, output: str, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeOperationAddBias:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeOperationAddBias(greycat.libs_by_name[algebra.name_].mapped[151], [input, input2, output])
 
         @final
@@ -6204,7 +7328,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.compute.ComputeInitializerNormalOut:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeInitializerNormalOut:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeInitializerNormalOut(greycat.libs_by_name[algebra.name_].mapped[152], [])
 
         @final
@@ -6293,87 +7419,121 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[12], v)
 
             @staticmethod
-            def var_input_name(greycat: GreyCat) -> str:
+            def var_input_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[153]
                 return t.static_values[0]
 
             @staticmethod
-            def var_output_name(greycat: GreyCat) -> str:
+            def var_output_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[153]
                 return t.static_values[1]
 
             @staticmethod
-            def var_hx_name(greycat: GreyCat) -> str:
+            def var_hx_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[153]
                 return t.static_values[2]
 
             @staticmethod
-            def var_cx_name(greycat: GreyCat) -> str:
+            def var_cx_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[153]
                 return t.static_values[3]
 
             @staticmethod
-            def var_hy_name(greycat: GreyCat) -> str:
+            def var_hy_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[153]
                 return t.static_values[4]
 
             @staticmethod
-            def var_cy_name(greycat: GreyCat) -> str:
+            def var_cy_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[153]
                 return t.static_values[5]
 
             @staticmethod
-            def var_weight_name(greycat: GreyCat) -> str:
+            def var_weight_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[153]
                 return t.static_values[6]
 
             @staticmethod
-            def var_bias_name(greycat: GreyCat) -> str:
+            def var_bias_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[153]
                 return t.static_values[7]
 
             @staticmethod
-            def var_internal_i_name(greycat: GreyCat) -> str:
+            def var_internal_i_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[153]
                 return t.static_values[8]
 
             @staticmethod
-            def var_internal_f_name(greycat: GreyCat) -> str:
+            def var_internal_f_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[153]
                 return t.static_values[9]
 
             @staticmethod
-            def var_internal_cp_name(greycat: GreyCat) -> str:
+            def var_internal_cp_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[153]
                 return t.static_values[10]
 
             @staticmethod
-            def var_internal_o_name(greycat: GreyCat) -> str:
+            def var_internal_o_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[153]
                 return t.static_values[11]
 
             @staticmethod
-            def var_internal_h_name(greycat: GreyCat) -> str:
+            def var_internal_h_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[153]
                 return t.static_values[12]
 
             @staticmethod
-            def var_internal_c_name(greycat: GreyCat) -> str:
+            def var_internal_c_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[153]
                 return t.static_values[13]
 
             @staticmethod
-            def var_internal_mult_name(greycat: GreyCat) -> str:
+            def var_internal_mult_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[153]
                 return t.static_values[14]
 
             @staticmethod
-            def var_internal_output_name(greycat: GreyCat) -> str:
+            def var_internal_output_name(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[153]
                 return t.static_values[15]
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, bias_initializer: algebra.compute.ComputeInitializer, weight_regularizer: algebra.compute.ComputeRegularizer, bias_regularizer: algebra.compute.ComputeRegularizer, type: std.core.TensorType, use_bias: bool, return_sequences: bool, bidirectional: bool, auto_init_states: bool, inputs: int, outputs: int, layers: int, sequences: int) -> algebra.compute.ComputeLayerLSTM:
+            def create(name: str, bias_initializer: algebra.compute.ComputeInitializer, weight_regularizer: algebra.compute.ComputeRegularizer, bias_regularizer: algebra.compute.ComputeRegularizer, type: std.core.TensorType, use_bias: bool, return_sequences: bool, bidirectional: bool, auto_init_states: bool, inputs: int, outputs: int, layers: int, sequences: int, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeLayerLSTM:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeLayerLSTM(greycat.libs_by_name[algebra.name_].mapped[153], [name, bias_initializer, weight_regularizer, bias_regularizer, type, use_bias, return_sequences, bidirectional, auto_init_states, inputs, outputs, layers, sequences])
 
         @final
@@ -6402,7 +7562,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, name: str, ops: std.core.Array, vars: std.core.Array) -> algebra.compute.ComputeLayerCustom:
+            def create(name: str, ops: std.core.Array, vars: std.core.Array, greycat: Optional[GreyCat] = None) -> algebra.compute.ComputeLayerCustom:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.compute.ComputeLayerCustom(greycat.libs_by_name[algebra.name_].mapped[154], [name, ops, vars])
 
     @final
@@ -6470,7 +7632,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[8], v)
 
             @staticmethod
-            def create(greycat: GreyCat, timeseries: std.core.nodeTime, state: algebra.patterns.PatternDetectionEngineState, nullStrategy: algebra.patterns.PatternNullStrategy, nullReplaceConstant: float, samplingPolicy: algebra.patterns.SamplingPolicy, pattern_tensors: std.core.Array, window_tensors: std.core.Array, std: float, matchingNormalisation: algebra.patterns.MatchingNormalisation) -> algebra.patterns.EuclideanPatternDetectionEngine:
+            def create(timeseries: std.core.nodeTime, state: algebra.patterns.PatternDetectionEngineState, nullStrategy: algebra.patterns.PatternNullStrategy, nullReplaceConstant: float, samplingPolicy: algebra.patterns.SamplingPolicy, pattern_tensors: std.core.Array, window_tensors: std.core.Array, std: float, matchingNormalisation: algebra.patterns.MatchingNormalisation, greycat: Optional[GreyCat] = None) -> algebra.patterns.EuclideanPatternDetectionEngine:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.EuclideanPatternDetectionEngine(greycat.libs_by_name[algebra.name_].mapped[155], [timeseries, state, nullStrategy, nullReplaceConstant, samplingPolicy, pattern_tensors, window_tensors, std, matchingNormalisation])
 
         @final
@@ -6481,7 +7645,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.patterns.EuclideanPatternDetector:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.patterns.EuclideanPatternDetector:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.EuclideanPatternDetector(greycat.libs_by_name[algebra.name_].mapped[156], [])
 
         @final
@@ -6558,12 +7724,16 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[10], v)
 
             @staticmethod
-            def alphabet(greycat: GreyCat) -> str:
+            def alphabet(greycat: Optional[GreyCat] = None) -> str:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[157]
                 return t.static_values[0]
 
             @staticmethod
-            def create(greycat: GreyCat, timeseries: std.core.nodeTime, state: algebra.patterns.PatternDetectionEngineState, nullStrategy: algebra.patterns.PatternNullStrategy, nullReplaceConstant: float, samplingPolicy: algebra.patterns.SamplingPolicy, alphabet_size: int, alphabet_boundaries: std.core.Array, lookup_table: std.core.nodeIndex, max_distance: float, pattern_fingerprints: std.core.Array, fingerprint_length: int) -> algebra.patterns.SaxPatternDetectionEngine:
+            def create(timeseries: std.core.nodeTime, state: algebra.patterns.PatternDetectionEngineState, nullStrategy: algebra.patterns.PatternNullStrategy, nullReplaceConstant: float, samplingPolicy: algebra.patterns.SamplingPolicy, alphabet_size: int, alphabet_boundaries: std.core.Array, lookup_table: std.core.nodeIndex, max_distance: float, pattern_fingerprints: std.core.Array, fingerprint_length: int, greycat: Optional[GreyCat] = None) -> algebra.patterns.SaxPatternDetectionEngine:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.SaxPatternDetectionEngine(greycat.libs_by_name[algebra.name_].mapped[157], [timeseries, state, nullStrategy, nullReplaceConstant, samplingPolicy, alphabet_size, alphabet_boundaries, lookup_table, max_distance, pattern_fingerprints, fingerprint_length])
 
         @final
@@ -6574,27 +7744,37 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def as_is(greycat: GreyCat) -> algebra.patterns.MatchingNormalisation:
+            def as_is(greycat: Optional[GreyCat] = None) -> algebra.patterns.MatchingNormalisation:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[158]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
-            def shift(greycat: GreyCat) -> algebra.patterns.MatchingNormalisation:
+            def shift(greycat: Optional[GreyCat] = None) -> algebra.patterns.MatchingNormalisation:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[158]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
-            def scaling(greycat: GreyCat) -> algebra.patterns.MatchingNormalisation:
+            def scaling(greycat: Optional[GreyCat] = None) -> algebra.patterns.MatchingNormalisation:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[158]
                 return t.enum_values[t.generated_offsets[2]]
 
             @staticmethod
-            def shift_and_scaling(greycat: GreyCat) -> algebra.patterns.MatchingNormalisation:
+            def shift_and_scaling(greycat: Optional[GreyCat] = None) -> algebra.patterns.MatchingNormalisation:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[158]
                 return t.enum_values[t.generated_offsets[3]]
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.patterns.MatchingNormalisation:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.patterns.MatchingNormalisation:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.MatchingNormalisation(greycat.libs_by_name[algebra.name_].mapped[158], [])
 
         @final
@@ -6647,7 +7827,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[6], v)
 
             @staticmethod
-            def create(greycat: GreyCat, timeseries: std.core.nodeTime, state: algebra.patterns.PatternDetectionEngineState, nullStrategy: algebra.patterns.PatternNullStrategy, nullReplaceConstant: float, samplingPolicy: algebra.patterns.SamplingPolicy, std: float, matchingNormalisation: algebra.patterns.MatchingNormalisation) -> algebra.patterns.DTWPatternDetectionEngine:
+            def create(timeseries: std.core.nodeTime, state: algebra.patterns.PatternDetectionEngineState, nullStrategy: algebra.patterns.PatternNullStrategy, nullReplaceConstant: float, samplingPolicy: algebra.patterns.SamplingPolicy, std: float, matchingNormalisation: algebra.patterns.MatchingNormalisation, greycat: Optional[GreyCat] = None) -> algebra.patterns.DTWPatternDetectionEngine:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.DTWPatternDetectionEngine(greycat.libs_by_name[algebra.name_].mapped[159], [timeseries, state, nullStrategy, nullReplaceConstant, samplingPolicy, std, matchingNormalisation])
 
         @final
@@ -6658,7 +7840,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.patterns.RandomPatternDetector:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.patterns.RandomPatternDetector:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.RandomPatternDetector(greycat.libs_by_name[algebra.name_].mapped[160], [])
 
         @final
@@ -6669,22 +7853,30 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def as_is(greycat: GreyCat) -> algebra.patterns.SamplingPolicy:
+            def as_is(greycat: Optional[GreyCat] = None) -> algebra.patterns.SamplingPolicy:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[161]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
-            def average_frequency(greycat: GreyCat) -> algebra.patterns.SamplingPolicy:
+            def average_frequency(greycat: Optional[GreyCat] = None) -> algebra.patterns.SamplingPolicy:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[161]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
-            def highest_frequency(greycat: GreyCat) -> algebra.patterns.SamplingPolicy:
+            def highest_frequency(greycat: Optional[GreyCat] = None) -> algebra.patterns.SamplingPolicy:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[161]
                 return t.enum_values[t.generated_offsets[2]]
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.patterns.SamplingPolicy:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.patterns.SamplingPolicy:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.SamplingPolicy(greycat.libs_by_name[algebra.name_].mapped[161], [])
 
         @final
@@ -6713,7 +7905,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, score: float, best_pattern: int, timespan: std.core.duration) -> algebra.patterns.Detection:
+            def create(score: float, best_pattern: int, timespan: std.core.duration, greycat: Optional[GreyCat] = None) -> algebra.patterns.Detection:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.Detection(greycat.libs_by_name[algebra.name_].mapped[162], [score, best_pattern, timespan])
 
         @final
@@ -6754,7 +7948,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[4], v)
 
             @staticmethod
-            def create(greycat: GreyCat, timeseries: std.core.nodeTime, state: algebra.patterns.PatternDetectionEngineState, nullStrategy: algebra.patterns.PatternNullStrategy, nullReplaceConstant: float, samplingPolicy: algebra.patterns.SamplingPolicy) -> algebra.patterns.PatternDetectionEngine:
+            def create(timeseries: std.core.nodeTime, state: algebra.patterns.PatternDetectionEngineState, nullStrategy: algebra.patterns.PatternNullStrategy, nullReplaceConstant: float, samplingPolicy: algebra.patterns.SamplingPolicy, greycat: Optional[GreyCat] = None) -> algebra.patterns.PatternDetectionEngine:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.PatternDetectionEngine(greycat.libs_by_name[algebra.name_].mapped[163], [timeseries, state, nullStrategy, nullReplaceConstant, samplingPolicy])
 
         @final
@@ -6801,7 +7997,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[5], v)
 
             @staticmethod
-            def create(greycat: GreyCat, timeseries: std.core.nodeTime, state: algebra.patterns.PatternDetectionEngineState, nullStrategy: algebra.patterns.PatternNullStrategy, nullReplaceConstant: float, samplingPolicy: algebra.patterns.SamplingPolicy, rng: std.util.Random) -> algebra.patterns.RandomPatternDetectionEngine:
+            def create(timeseries: std.core.nodeTime, state: algebra.patterns.PatternDetectionEngineState, nullStrategy: algebra.patterns.PatternNullStrategy, nullReplaceConstant: float, samplingPolicy: algebra.patterns.SamplingPolicy, rng: std.util.Random, greycat: Optional[GreyCat] = None) -> algebra.patterns.RandomPatternDetectionEngine:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.RandomPatternDetectionEngine(greycat.libs_by_name[algebra.name_].mapped[164], [timeseries, state, nullStrategy, nullReplaceConstant, samplingPolicy, rng])
 
         @final
@@ -6812,37 +8010,51 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def none(greycat: GreyCat) -> algebra.patterns.PatternDetectors:
+            def none(greycat: Optional[GreyCat] = None) -> algebra.patterns.PatternDetectors:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[165]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
-            def euclidean(greycat: GreyCat) -> algebra.patterns.PatternDetectors:
+            def euclidean(greycat: Optional[GreyCat] = None) -> algebra.patterns.PatternDetectors:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[165]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
-            def fft(greycat: GreyCat) -> algebra.patterns.PatternDetectors:
+            def fft(greycat: Optional[GreyCat] = None) -> algebra.patterns.PatternDetectors:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[165]
                 return t.enum_values[t.generated_offsets[2]]
 
             @staticmethod
-            def dtw(greycat: GreyCat) -> algebra.patterns.PatternDetectors:
+            def dtw(greycat: Optional[GreyCat] = None) -> algebra.patterns.PatternDetectors:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[165]
                 return t.enum_values[t.generated_offsets[3]]
 
             @staticmethod
-            def random(greycat: GreyCat) -> algebra.patterns.PatternDetectors:
+            def random(greycat: Optional[GreyCat] = None) -> algebra.patterns.PatternDetectors:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[165]
                 return t.enum_values[t.generated_offsets[4]]
 
             @staticmethod
-            def sax(greycat: GreyCat) -> algebra.patterns.PatternDetectors:
+            def sax(greycat: Optional[GreyCat] = None) -> algebra.patterns.PatternDetectors:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[165]
                 return t.enum_values[t.generated_offsets[5]]
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.patterns.PatternDetectors:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.patterns.PatternDetectors:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.PatternDetectors(greycat.libs_by_name[algebra.name_].mapped[165], [])
 
         @final
@@ -6871,7 +8083,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, best_pattern: int, timespan: std.core.duration, timestamp: std.core.time) -> algebra.patterns.ScoreDetailsSingleton:
+            def create(best_pattern: int, timespan: std.core.duration, timestamp: std.core.time, greycat: Optional[GreyCat] = None) -> algebra.patterns.ScoreDetailsSingleton:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.ScoreDetailsSingleton(greycat.libs_by_name[algebra.name_].mapped[166], [best_pattern, timespan, timestamp])
 
         @final
@@ -6882,7 +8096,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.patterns.FFTPatternDetector:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.patterns.FFTPatternDetector:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.FFTPatternDetector(greycat.libs_by_name[algebra.name_].mapped[167], [])
 
         @final
@@ -6911,7 +8127,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[2], v)
 
             @staticmethod
-            def create(greycat: GreyCat, distance: float, best_pattern: int, best_timespan: std.core.duration) -> algebra.patterns.FFTResult:
+            def create(distance: float, best_pattern: int, best_timespan: std.core.duration, greycat: Optional[GreyCat] = None) -> algebra.patterns.FFTResult:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.FFTResult(greycat.libs_by_name[algebra.name_].mapped[168], [distance, best_pattern, best_timespan])
 
         @final
@@ -6946,7 +8164,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[3], v)
 
             @staticmethod
-            def create(greycat: GreyCat, score: float, best_pattern: int, timespan: std.core.duration, overlap: std.core.duration) -> algebra.patterns.OverlappingDetection:
+            def create(score: float, best_pattern: int, timespan: std.core.duration, overlap: std.core.duration, greycat: Optional[GreyCat] = None) -> algebra.patterns.OverlappingDetection:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.OverlappingDetection(greycat.libs_by_name[algebra.name_].mapped[169], [score, best_pattern, timespan, overlap])
 
         @final
@@ -6957,7 +8177,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.patterns.DTWPatternDetector:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.patterns.DTWPatternDetector:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.DTWPatternDetector(greycat.libs_by_name[algebra.name_].mapped[170], [])
 
         @final
@@ -6980,7 +8202,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, threshold: float, overlap: float) -> algebra.patterns.PatternDetectionSensitivity:
+            def create(threshold: float, overlap: float, greycat: Optional[GreyCat] = None) -> algebra.patterns.PatternDetectionSensitivity:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.PatternDetectionSensitivity(greycat.libs_by_name[algebra.name_].mapped[171], [threshold, overlap])
 
         @final
@@ -6991,7 +8215,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.patterns.PatternDetector:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.patterns.PatternDetector:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.PatternDetector(greycat.libs_by_name[algebra.name_].mapped[172], [])
 
         @final
@@ -7032,7 +8258,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[4], v)
 
             @staticmethod
-            def create(greycat: GreyCat, hasScores: bool, hasDetections: bool, patterns: std.core.Array, scores: std.core.nodeList, detections: std.core.nodeTime) -> algebra.patterns.PatternDetectionEngineState:
+            def create(hasScores: bool, hasDetections: bool, patterns: std.core.Array, scores: std.core.nodeList, detections: std.core.nodeTime, greycat: Optional[GreyCat] = None) -> algebra.patterns.PatternDetectionEngineState:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.PatternDetectionEngineState(greycat.libs_by_name[algebra.name_].mapped[173], [hasScores, hasDetections, patterns, scores, detections])
 
         @final
@@ -7055,7 +8283,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, best_pattern: int, timespan: std.core.duration) -> algebra.patterns.ScoreDetails:
+            def create(best_pattern: int, timespan: std.core.duration, greycat: Optional[GreyCat] = None) -> algebra.patterns.ScoreDetails:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.ScoreDetails(greycat.libs_by_name[algebra.name_].mapped[174], [best_pattern, timespan])
 
         @final
@@ -7066,32 +8296,44 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def replace(greycat: GreyCat) -> algebra.patterns.PatternNullStrategy:
+            def replace(greycat: Optional[GreyCat] = None) -> algebra.patterns.PatternNullStrategy:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[175]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
-            def interpolate(greycat: GreyCat) -> algebra.patterns.PatternNullStrategy:
+            def interpolate(greycat: Optional[GreyCat] = None) -> algebra.patterns.PatternNullStrategy:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[175]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
-            def previous(greycat: GreyCat) -> algebra.patterns.PatternNullStrategy:
+            def previous(greycat: Optional[GreyCat] = None) -> algebra.patterns.PatternNullStrategy:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[175]
                 return t.enum_values[t.generated_offsets[2]]
 
             @staticmethod
-            def next(greycat: GreyCat) -> algebra.patterns.PatternNullStrategy:
+            def next(greycat: Optional[GreyCat] = None) -> algebra.patterns.PatternNullStrategy:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[175]
                 return t.enum_values[t.generated_offsets[3]]
 
             @staticmethod
-            def none(greycat: GreyCat) -> algebra.patterns.PatternNullStrategy:
+            def none(greycat: Optional[GreyCat] = None) -> algebra.patterns.PatternNullStrategy:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 t: Final[GreyCat.Type] = greycat.libs_by_name[algebra.name_].mapped[175]
                 return t.enum_values[t.generated_offsets[4]]
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.patterns.PatternNullStrategy:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.patterns.PatternNullStrategy:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.PatternNullStrategy(greycat.libs_by_name[algebra.name_].mapped[175], [])
 
         @final
@@ -7102,7 +8344,9 @@ class algebra(GreyCat.Library):
                 super().__init__(type, attributes)
 
             @staticmethod
-            def create(greycat: GreyCat) -> algebra.patterns.DistanceMetrics:
+            def create(greycat: Optional[GreyCat] = None) -> algebra.patterns.DistanceMetrics:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.DistanceMetrics(greycat.libs_by_name[algebra.name_].mapped[176], [])
 
         @final
@@ -7125,7 +8369,9 @@ class algebra(GreyCat.Library):
                 self._set(self.type_.generated_offsets[1], v)
 
             @staticmethod
-            def create(greycat: GreyCat, alphabet_size: int, fingerprint_length: int) -> algebra.patterns.SaxPatternDetector:
+            def create(alphabet_size: int, fingerprint_length: int, greycat: Optional[GreyCat] = None) -> algebra.patterns.SaxPatternDetector:
+                if greycat is None:
+                    greycat = GreyCat.DEFAULT
                 return algebra.patterns.SaxPatternDetector(greycat.libs_by_name[algebra.name_].mapped[177], [alphabet_size, fingerprint_length])
 
     def configure(self, loaders: dict[str, GreyCat.Loader], factories: dict[str, GreyCat.Factory]) -> None:
