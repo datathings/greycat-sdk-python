@@ -1363,6 +1363,7 @@ class GreyCat:
         return res
 
     def get_file(self, path: str) -> object:
+        path = f"files/{path}"
         if path.endswith(".gcb"):
             return self.fetch(path)
         connection: http.client.HTTPConnection | http.client.HTTPSConnection
@@ -1383,7 +1384,7 @@ class GreyCat:
             headers["Authorization"] = self.__token
         connection.request(
             "GET",
-            f"files/{path}",
+            path,
             None,
             headers
         )
