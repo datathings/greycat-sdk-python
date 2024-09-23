@@ -151,6 +151,18 @@ class std(GreyCat.Library):
                 super().__init__(type)
 
             @staticmethod
+            def sample(refs: std.core.Array, from_: std.core.time, to: std.core.time, maxRows: int, mode: std.core.SamplingMode, maxDephasing: std.core.duration, tz: std.core.TimeZone, __greycat: Optional[GreyCat] = None) -> std.core.Table:
+                if __greycat is None:
+                    __greycat = GreyCat.DEFAULT
+                return __greycat.call("core::nodeTime::sample", [refs, from_, to, maxRows, mode, maxDephasing, tz, ])
+
+            @staticmethod
+            def info(nodes: std.core.Array, __greycat: Optional[GreyCat] = None) -> std.core.Array:
+                if __greycat is None:
+                    __greycat = GreyCat.DEFAULT
+                return __greycat.call("core::nodeTime::info", [nodes, ])
+
+            @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._nodeTime:
                 if greycat is None:
                     greycat = GreyCat.DEFAULT
@@ -4111,6 +4123,12 @@ class std(GreyCat.Library):
                 super().__init__(type)
 
             @staticmethod
+            def applyMappings(table: std.core.Table, mappings: std.core.Array, __greycat: Optional[GreyCat] = None) -> std.core.Table:
+                if __greycat is None:
+                    __greycat = GreyCat.DEFAULT
+                return __greycat.call("core::Table::applyMappings", [table, mappings, ])
+
+            @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._Table:
                 if greycat is None:
                     greycat = GreyCat.DEFAULT
@@ -4239,6 +4257,18 @@ class std(GreyCat.Library):
                 super().__init__(type)
 
             @staticmethod
+            def sample(refs: std.core.Array, from_: Any, maxRows: int, mode: std.core.SamplingMode, __greycat: Optional[GreyCat] = None) -> std.core.Table:
+                if __greycat is None:
+                    __greycat = GreyCat.DEFAULT
+                return __greycat.call("core::nodeIndex::sample", [refs, from_, maxRows, mode, ])
+
+            @staticmethod
+            def info(nodes: std.core.Array, __greycat: Optional[GreyCat] = None) -> std.core.Array:
+                if __greycat is None:
+                    __greycat = GreyCat.DEFAULT
+                return __greycat.call("core::nodeIndex::info", [nodes, ])
+
+            @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._nodeIndex:
                 if greycat is None:
                     greycat = GreyCat.DEFAULT
@@ -4275,6 +4305,18 @@ class std(GreyCat.Library):
 
             def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
                 super().__init__(type)
+
+            @staticmethod
+            def sample(refs: std.core.Array, from_: int, to: int, maxRows: int, mode: std.core.SamplingMode, maxDephasing: int, __greycat: Optional[GreyCat] = None) -> std.core.Table:
+                if __greycat is None:
+                    __greycat = GreyCat.DEFAULT
+                return __greycat.call("core::nodeList::sample", [refs, from_, to, maxRows, mode, maxDephasing, ])
+
+            @staticmethod
+            def info(nodes: std.core.Array, __greycat: Optional[GreyCat] = None) -> std.core.Array:
+                if __greycat is None:
+                    __greycat = GreyCat.DEFAULT
+                return __greycat.call("core::nodeList::info", [nodes, ])
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._nodeList:
@@ -4545,6 +4587,18 @@ class std(GreyCat.Library):
                 super().__init__(type)
 
             @staticmethod
+            def sample(refs: std.core.Array, from_: std.core.geo, to: std.core.geo, maxRows: int, mode: std.core.SamplingMode, __greycat: Optional[GreyCat] = None) -> std.core.Table:
+                if __greycat is None:
+                    __greycat = GreyCat.DEFAULT
+                return __greycat.call("core::nodeGeo::sample", [refs, from_, to, maxRows, mode, ])
+
+            @staticmethod
+            def info(nodes: std.core.Array, __greycat: Optional[GreyCat] = None) -> std.core.Array:
+                if __greycat is None:
+                    __greycat = GreyCat.DEFAULT
+                return __greycat.call("core::nodeGeo::info", [nodes, ])
+
+            @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._nodeGeo:
                 if greycat is None:
                     greycat = GreyCat.DEFAULT
@@ -4556,6 +4610,12 @@ class std(GreyCat.Library):
 
             def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
                 super().__init__(type)
+
+            @staticmethod
+            def resolve_all(n: std.core.Array, __greycat: Optional[GreyCat] = None) -> std.core.Array:
+                if __greycat is None:
+                    __greycat = GreyCat.DEFAULT
+                return __greycat.call("core::node::resolve_all", [n, ])
 
             @staticmethod
             def create(greycat: Optional[GreyCat] = None) -> std_n.core._node:
