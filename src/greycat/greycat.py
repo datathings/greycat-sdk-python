@@ -749,7 +749,7 @@ class GreyCat:
                     loaded_field = field_type.loader(field_type, stream)
                 else:
                     loaded_field = GreyCat._Stream._PRIMITIVE_LOADERS[
-                        att.sbi_type.value
+                        load_type
                     ](stream)
                 if att.mapped:
                     attributes[att.mapped_att_offset] = loaded_field
