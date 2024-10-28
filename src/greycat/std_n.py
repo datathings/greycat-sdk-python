@@ -746,6 +746,7 @@ class std_n:
                 if nullables is not None:
                     stream.write_i8_array(nullables, 0, len(nullables))
                 char: c_char
+                c: c_ubyte
                 string: str
                 object: GreyCat.Object
                 if not type_is_unique:
@@ -763,7 +764,6 @@ class std_n:
                     elif c_char is unique_type:
                         stream.write_i8(PrimitiveType.CHAR)
                         stream.write_i8(0)  # TODO: manage monotonic
-                        c: c_ubyte
                         for char in self:
                             if char is not None:
                                 c = c_ubyte(char.value)
@@ -828,8 +828,8 @@ class std_n:
                             stream)
                 if PrimitiveType.UNDEFINED.value == array_primitive_type:
                     for offset in range(0, size):
-                        array[offset] = None if nullables is not None and nullables[offset] else array_type.loader(
-                            array_type, stream)
+                        array[offset] = None if nullables is not None and nullables[offset] else stream.read(
+                        )
                 elif PrimitiveType.OBJECT.value == array_primitive_type or (PrimitiveType.STATIC_FIELD.value == array_primitive_type and monotonic_value is None):
                     if array_type is None:
                         for offset in range(0, size):
@@ -1096,7 +1096,8 @@ class std_n:
                         e = self.data[col * self.rows + row]
                         if e is None:
                             if nullables is None:
-                                nullables = bytearray(repeat(0, math.ceil(len(self.rows) / 8)))
+                                nullables = bytearray(
+                                    repeat(0, math.ceil(len(self.rows) / 8)))
                             nullables[row >> 3] |= 1 << (row & 7)
                         else:
                             _type = type(e)
@@ -1115,6 +1116,7 @@ class std_n:
                     if nullables is not None:
                         stream.write_i8_array(nullables, 0, len(nullables))
                     char: c_char
+                    c: c_ubyte
                     string: str
                     object: GreyCat.Object
                     if not type_is_unique:
@@ -1134,7 +1136,6 @@ class std_n:
                         elif c_char is unique_type:
                             stream.write_i8(PrimitiveType.CHAR)
                             stream.write_i8(0)  # TODO: manage monotonic
-                            c: c_ubyte
                             for row in range(self.rows):
                                 char = self.data[col * self.rows + row]
                                 if char is not None:
@@ -1177,93 +1178,55 @@ class std_n:
                         else:
                             raise Exception("wrong state")
 
-
-
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
-                cols: Final[int] = stream.read_vu32().value
                 rows: Final[int] = stream.read_vu32().value
-                meta: list[std_n.core._Table.TableColumnMeta] = []
-                meta_col_type: c_ubyte
-                meta_index: bool
-                meta_type: c_uint32
-                meta_header_len: int
-                meta_header: str
-                for _ in repeat(None, cols):
-                    meta_col_type = stream.read_i8()
-                    meta_index = stream.read_bool()
-                    meta_type: c_int32
-                    if meta_col_type.value in [
-                        PrimitiveType.OBJECT.value,
-                        PrimitiveType.STATIC_FIELD.value,
-                    ]:
-                        meta_type = stream.read_vu32()
-                    else:
-                        meta_type = c_uint32(0)
-                    meta_header_len = stream.read_vu32().value
-                    if meta_header_len > 0:
-                        meta_header = stream.read_string(meta_header_len)
-                    else:
-                        meta_header = ''
-                    meta.append(
-                        std_n.core._Table.TableColumnMeta(
-                            meta_col_type, meta_type, meta_index, meta_header
-                        )
-                    )
+                cols: Final[int] = stream.read_vu32().value
+                data: list[std_n.core.__T] = list(repeat(None, rows * cols))
 
-                data: list[Any] = []
-                col: int
-                greycat_type: GreyCat.Type
-                col_type: int
                 for col in range(cols):
-                    col_type = meta[col].col_type.value
-                    if col_type == PrimitiveType.NULL.value:
-                        pass
-                    elif col_type == PrimitiveType.INT.value:
-                        for _ in repeat(None, rows):
-                            data.append(stream.read_vi64())
-                    elif col_type == PrimitiveType.FLOAT.value:
-                        for _ in repeat(None, rows):
-                            data.append(stream.read_f64())
-                    elif col_type == PrimitiveType.TIME.value:
-                        for _ in repeat(None, rows):
-                            data.append(
-                                std_n.core._time.load(
-                                    type.greycat.types[
-                                        type.greycat.type_offset_core_time
-                                    ],
-                                    stream,
-                                )
-                            )
-                    elif col_type == PrimitiveType.DURATION.value:
-                        for _ in repeat(None, rows):
-                            data.append(
-                                std_n.core._duration.load(
-                                    type.greycat.types[
-                                        type.greycat.type_offset_core_duration
-                                    ],
-                                    stream,
-                                )
-                            )
-                    elif col_type == PrimitiveType.STATIC_FIELD.value:
-                        greycat_type = type.greycat.types[meta[col].type.value]
-                        for _ in repeat(None, rows):
-                            data.append(greycat_type.loader(
-                                greycat_type, stream))
-                    elif col_type == PrimitiveType.OBJECT.value:
-                        greycat_type = type.greycat.types[meta[col].type.value]
-                        for _ in repeat(None, rows):
-                            data.append(greycat_type.loader(
-                                greycat_type, stream))
-                    else:
-                        for _ in repeat(None, rows):
-                            data.append(stream.read())
-                t: std_n.core._Table = type.factory(type, [])
-                t.cols = cols
-                t.rows = rows
-                t.meta = meta
-                t.data = data
-                return t
+                    nullables: list[bool] | None = None
+                    if 1 == stream.read_i8().value:
+                        nullables = list(repeat(False, rows))
+                        for row in range(0, rows, 8):
+                            flags = stream.read_i8().value
+                            for offset in range(min(rows - row, 8)):
+                                nullables(row + offset) = 1 == (flags >> offset & 1)
+                    col_primitive_type: int = stream.read_i8().value
+                    col_type: GreyCat.Type | None = None
+                    monotonic_value: Any | None = None
+                    if PrimitiveType.OBJECT.value == col_primitive_type or PrimitiveType.STATIC_FIELD.value == col_primitive_type:
+                        type_offset: int = stream.read_vu32().value
+                        if -1 != type_offset:
+                            col_type = stream.greycat.types[type_offset]
+                    if PrimitiveType.OBJECT.value != col_primitive_type and PrimitiveType.UNDEFINED != col_primitive_type:
+                        if 1 == stream.read_i8().value:
+                            monotonic_value = GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](
+                                stream)
+                    if PrimitiveType.UNDEFINED.value == col_primitive_type:
+                        for row in range(rows):
+                            data[col * rows + row] = None if nullables is not None and nullables[row] else stream.read()
+                    elif PrimitiveType.OBJECT.value == col_primitive_type or (PrimitiveType.STATIC_FIELD == col_primitive_type and monotonic_value is None):
+                        if col_type is None:
+                            for row in range(rows):
+                                # TODO: check for enums
+                                data[col * rows + row] = None if nullables is not None and nullables[row] else stream.read_object()
+                        else:
+                            for row in range(rows):
+                                data[col * rows + row] = None if nullables is not None and nullables[row] else col_type.loader(
+                                    col_type, stream)
+                    elif monotonic_value is None:
+                        for row in range(rows):
+                            if nullables is None or not nullables[row]:
+                                # TODO: check
+                                data[col * rows + row] = GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](
+                                    stream)
+
+                table: std_n.core._Table = type.factory(type)
+                table.rows = rows
+                table.cols = cols
+                table.data = data
+                return table
 
             if "numpy" in sys.modules:
 
