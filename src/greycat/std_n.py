@@ -743,11 +743,11 @@ class std_n:
                         elif value_is_monotonic and monotonic_value is not e:
                             value_is_monotonic = False
                 stream.write_i8(c_ubyte(0 if nullables is None else 1))
+                if nullables is not None:
+                    stream.write_i8_array(nullables, 0, len(nullables))
                 char: c_char
                 string: str
                 object: GreyCat.Object
-                if nullables is not None:
-                    stream.write_i8_array(nullables, 0, len(nullables))
                 if not type_is_unique:
                     stream.write_i8(PrimitiveType.UNDEFINED)
                     for e in self:
@@ -798,6 +798,8 @@ class std_n:
                         for object in self:
                             if object is not None:
                                 object._save(stream)
+                    else:
+                        raise Exception("wrong state")
 
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
@@ -808,9 +810,9 @@ class std_n:
                 nullables: list[bool] | None = None
                 if 1 == stream.read_i8().value:
                     nullables = list(repeat(False, size))
-                    for offset in slice(0, size, 8):
+                    for offset in range(0, size, 8):
                         flags = stream.read_i8().value
-                        for flags_offset in slice(0, min(size-offset, 8)):
+                        for flags_offset in range(min(size-offset, 8)):
                             nullables[offset +
                                       flags_offset] = 1 == (flags >> flags_offset & 1)
                 array_primitive_type: int = stream.read_i8().value
@@ -825,21 +827,21 @@ class std_n:
                         monotonic_value = GreyCat._Stream._PRIMITIVE_LOADERS[array_primitive_type](
                             stream)
                 if PrimitiveType.UNDEFINED.value == array_primitive_type:
-                    for offset in slice(0, size):
+                    for offset in range(0, size):
                         array[offset] = None if nullables is not None and nullables[offset] else array_type.loader(
                             array_type, stream)
                 elif PrimitiveType.OBJECT.value == array_primitive_type or (PrimitiveType.STATIC_FIELD.value == array_primitive_type and monotonic_value is None):
                     if array_type is None:
-                        for offset in slice(0, size):
+                        for offset in range(0, size):
                             # TODO: check for enums
                             array[offset] = None if nullables is not None and nullables[offset] else stream.read_object(
                             )
                     else:
-                        for offset in slice(0, size):
+                        for offset in range(0, size):
                             array[offset] = None if nullables is not None and nullables[offset] else array_type.loader(
                                 array_type, stream)
                 elif monotonic_value is None:
-                    for offset in slice(0, size):
+                    for offset in range(0, size):
                         array[offset] = None if nullables is not None and nullables[
                             offset] else GreyCat._Stream._PRIMITIVE_LOADERS[array_primitive_type](stream)
                 return array
@@ -1077,68 +1079,105 @@ class std_n:
             def __init__(self, type: GreyCat.Type) -> None:
                 self.cols: int
                 self.rows: int
-                self.meta: list[std_n.core._Table.TableColumnMeta]
                 self.data: list[std_n.core.__T]
                 super().__init__(type, None)
 
             def _save(self, stream: GreyCat._Stream) -> None:
-                stream.write_vu32(c_uint32(self.cols))
                 stream.write_vu32(c_uint32(self.rows))
-                meta_offset: int
-                col_meta: std_n.core._Table.TableColumnMeta
-                col_meta_header_bytes: bytes
-                for meta_offset in range(len(self.meta)):
-                    col_meta = self.meta[meta_offset]
-                    stream.write_i8(col_meta.col_type)
-                    stream.write_bool(col_meta.meta_index)
-                    if col_meta.col_type in [PrimitiveType.OBJECT, PrimitiveType.STATIC_FIELD]:
-                        stream.write_vu32(col_meta.type)
-                    if len(col_meta.header) > 0:
-                        col_meta_header_bytes = col_meta.header.encode("utf-8")
-                        stream.write_vu32(c_uint32(len(col_meta_header_bytes)))
-                        stream.write_i8_array(
-                            col_meta_header_bytes, 0, len(col_meta_header_bytes))
-                    else:
-                        stream.write_vu32(c_uint32(0))
-                col: int
-                row: int
-                o: GreyCat.Object
-                s: str
-                col_type: int
+                stream.write_vu32(c_uint32(self.cols))
                 for col in range(self.cols):
-                    col_type = self.meta[col].col_type.value
-                    if col_type == PrimitiveType.NULL.value:
-                        pass
-                    elif col_type == PrimitiveType.INT.value:
-                        for row in range(self.rows):
-                            stream.write_vi64(self.data[col * self.rows + row])
-                    elif col_type == PrimitiveType.FLOAT.value:
-                        for row in range(self.rows):
-                            stream.write_f64(self.data[col * self.rows + row])
-                    elif col_type == PrimitiveType.TIME.value:
-                        for row in range(self.rows):
-                            o = self.data[col * self.rows + row]
-                            o._save(stream)
-                    elif col_type == PrimitiveType.DURATION.value:
-                        for row in range(self.rows):
-                            o = self.data[col * self.rows + row]
-                            o._save(stream)
-                    elif col_type == PrimitiveType.STATIC_FIELD.value:
-                        for row in range(self.rows):
-                            o = self.data[col * self.rows + row]
-                            o._save(stream)
-                    elif col_type == PrimitiveType.OBJECT.value:
-                        if self.meta[col].type.value == self.type_.greycat.type_offset_core_string:
-                            for row in range(self.rows):
-                                stream.write_string(
-                                    self.data[col * self.rows + row], skip_type=True)
+                    nullables: bytearray | None = None
+                    type_is_unique: bool = False
+                    unique_type: type | None = None
+                    value_is_monotonic:  bool = False
+                    monotonic_value: Any | None = None
+                    e: std_n.core.__T
+                    for row in range(self.rows):
+                        e = self.data[col * self.rows + row]
+                        if e is None:
+                            if nullables is None:
+                                nullables = bytearray(repeat(0, math.ceil(len(self.rows) / 8)))
+                            nullables[row >> 3] |= 1 << (row & 7)
                         else:
-                            for row in range(self.rows):
-                                o = self.data[col * self.rows + row]
-                                o._save(stream)
-                    else:
+                            _type = type(e)
+                            # TODO: deal with ctypes shenanigans?
+                            if unique_type is None:
+                                type_is_unique = True
+                                unique_type = _type
+                            elif type_is_unique and unique_type is not _type:
+                                unique_type = False
+                            if monotonic_value is None:
+                                value_is_monotonic = True
+                                monotonic_value = e
+                            elif value_is_monotonic and monotonic_value is not e:
+                                value_is_monotonic = False
+                    stream.write_i8(c_ubyte(0 if nullables is None else 1))
+                    if nullables is not None:
+                        stream.write_i8_array(nullables, 0, len(nullables))
+                    char: c_char
+                    string: str
+                    object: GreyCat.Object
+                    if not type_is_unique:
+                        stream.write_i8(PrimitiveType.UNDEFINED)
                         for row in range(self.rows):
-                            stream.write(self.data[col * self.rows + row])
+                            e = self.data[col * self.rows + row]
+                            if e is not None:
+                                stream.write(e)
+                    else:
+                        if bool is unique_type:
+                            stream.write_i8(PrimitiveType.BOOL)
+                            stream.write_i8(0)  # TODO: manage monotonic
+                            for row in range(self.rows):
+                                e = self.data[col * self.rows + row]
+                                if e is not None:
+                                    stream.write_bool(e)
+                        elif c_char is unique_type:
+                            stream.write_i8(PrimitiveType.CHAR)
+                            stream.write_i8(0)  # TODO: manage monotonic
+                            c: c_ubyte
+                            for row in range(self.rows):
+                                char = self.data[col * self.rows + row]
+                                if char is not None:
+                                    c = c_ubyte(char.value)
+                                    if c > GreyCat._Stream.ASCII_MAX:
+                                        raise ValueError(
+                                            f"Only ASCII characters are allowed: {c}")
+                                    stream.write_i8(c)
+                        elif int is unique_type:
+                            stream.write_i8(PrimitiveType.INT)
+                            stream.write_i8(0)  # TODO: manage monotonic
+                            for row in range(self.rows):
+                                e = self.data[col * self.rows + row]
+                                if e is not None:
+                                    stream.write_vi64(c_int64(e))
+                        elif float is unique_type:
+                            stream.write_i8(PrimitiveType.FLOAT)
+                            stream.write_i8(0)  # TODO: manage monotonic
+                            for row in range(self.rows):
+                                e = self.data[col * self.rows + row]
+                                if e is not None:
+                                    stream.write_f64(c_double(e))
+                        elif str is unique_type:
+                            stream.write_i8(PrimitiveType.OBJECT)
+                            stream.write_vu32(
+                                c_uint32(stream.greycat.type_offset_core_string))
+                            for row in range(self.rows):
+                                string = self.data[col * self.rows + row]
+                                if string is not None:
+                                    data = string.encode("utf8")
+                                    stream.write_vu32(c_uint32(len(data) << 1))
+                                    stream.write_i8_array(data, 0, len(data))
+                        elif issubclass(unique_type, GreyCat.Object):
+                            object = monotonic_value
+                            object._save_type(stream)
+                            for row in range(self.rows):
+                                object = self.data[col * self.rows + row]
+                                if object is not None:
+                                    object._save(stream)
+                        else:
+                            raise Exception("wrong state")
+
+
 
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
@@ -1225,21 +1264,6 @@ class std_n:
                 t.meta = meta
                 t.data = data
                 return t
-
-            class TableColumnMeta:
-                def __init__(
-                    self, col_type: c_ubyte, type: c_uint32, index: bool, header: str
-                ) -> None:
-                    self.col_type: Final[c_ubyte] = col_type
-                    self.type: Final[c_uint32] = type
-                    self.meta_index: Final[bool] = index
-                    self.header: Final[str] = header
-
-                def __str__(self) -> str:
-                    ...
-
-                def __repr__(self) -> str:
-                    return f"{{header: {self.header}, col_type: {self.col_type}, type: {self.type}, index: {self.meta_index}}}"
 
             if "numpy" in sys.modules:
 
