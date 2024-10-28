@@ -899,6 +899,21 @@ class std_n:
                 array.extend(l)
                 return array
 
+        class _Buffer(GreyCat.Object):
+            def __init__(self, type: GreyCat.Type) -> None:
+                self.data: bytes
+                super().__init__(type, None)
+
+            def _save(self, stream: GreyCat._Stream) -> None:
+                stream.write_vu32(c_uint32(len(self.data)))
+                stream.write_i8_array(self.data, 0, len(self.data))
+
+            @staticmethod
+            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
+                buf: std_n.util._Buffer = type.factory(type, [])
+                buf.data = stream.read_i8_array(stream.read_vu32().value)
+                return buf
+
         class _Date(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.localized_epoch_s: int
@@ -1797,30 +1812,6 @@ class std_n:
     class util:
         __T = TypeVar("__T")
 
-        class _Quantizer(GreyCat.Object):
-            def __init__(self, type: GreyCat.Type) -> None:
-                super().__init__(type, None)
-                raise RuntimeError("unsupported")
-
-            @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
-                raise IOError("unsupported")
-
-        class _Buffer(GreyCat.Object):
-            def __init__(self, type: GreyCat.Type) -> None:
-                self.data: bytes
-                super().__init__(type, None)
-
-            def _save(self, stream: GreyCat._Stream) -> None:
-                stream.write_vu32(c_uint32(len(self.data)))
-                stream.write_i8_array(self.data, 0, len(self.data))
-
-            @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
-                buf: std_n.util._Buffer = type.factory(type, [])
-                buf.data = stream.read_i8_array(stream.read_vu32().value)
-                return buf
-
         class _Gaussian(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.sum: c_double
@@ -1862,198 +1853,5 @@ class std_n:
                 g.max_bound = stream.read_f64
                 return g
 
-        class _GaussianProfile(GreyCat.Object):
-            def __init__(self, type: GreyCat.Type) -> None:
-                self.data: bytes
-                self.size: c_int32
-                super().__init__(type, None)
-
-            def _save(self, stream: GreyCat._Stream) -> None:
-                stream.write_i32(self.size)
-                stream.write_i32(c_int32(len(self.data)))
-                stream.write_i8_array(self.data, 0, len(self.data))
-
-            @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
-                gp: std_n.util._GaussianProfile = type.factory(type, [])
-                gp.size = stream.read_i32()
-                gp.data = stream.read_i8_array(stream.read_i32().value)
-                return gp
-
-        class _HistogramFloat(GreyCat.Object):
-            pass
-
-        class _HistogramInt(GreyCat.Object):
-            pass
-
         class _ProgressTracker(GreyCat.Object):
             pass
-
-        class _Iban(GreyCat.Object):
-            def __init__(self, type: GreyCat.Type) -> None:
-                self.info_off: c_uint32
-                self.data: bytes
-                super().__init__(type, None)
-
-            def _save(self, stream: GreyCat._Stream) -> None:
-                stream.write_vu32(self.info_off)
-                stream.write_vu32(c_uint32(len(self.data)))
-                stream.write_i8_array(self.data, 0, len(self.data))
-
-            @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
-                iban: std_n.util._Iban = type.factory(type, [])
-                iban.info_off = stream.read_vu32()
-                iban.data = stream.read_i8_array(stream.read_vu32().value)
-                return iban
-
-        class _Queue(Generic[__T], GreyCat.Object):
-            def __init__(self, type: GreyCat.Type) -> None:
-                self.queue: Final[deque] = deque()
-                super().__init__(type, None)
-
-            def _save(self, stream: GreyCat._Stream) -> None:
-                stream.write_vi64(len(self))  # width
-                stream.write_vi64(len(self))  # size
-                stream.write_vi64(len(self))  # capacity
-                stream.write_vi64(len(self))  # TODO: head - values
-                stream.write_vi64(0)  # TODO: tail - values
-                t: std_n.core.__T
-                for t in self:
-                    stream.write(t)
-
-            @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
-                stream.read_vi64()  # width
-                size: Final[int] = stream.read_vi64().value
-                capacity: Final[int] = stream.read_vi64().value
-                stream.read_vi64()  # head - values
-                stream.read_vi64()  # tail - values
-                queue_: std_n.util._Queue = type.factory(type)
-                for _ in range(size):
-                    queue_.put(stream.read())
-                for _ in range(capacity - size):
-                    stream.read()
-                return queue_
-
-            def put(
-                self, item: std_n.core.__T, block: bool = True, timeout: Number | None = None
-            ) -> None:
-                self.queue.appendleft(item, block, timeout)
-
-            def __len__(self) -> int:
-                return len(self.queue)
-
-            def __reduce__(self) -> tuple[type[Self], tuple[()], None, Iterator[std_n.core.__T]]:
-                return self.queue.__reduce__()
-
-        class _SlidingWindow(GreyCat.Object):
-            def __init__(self, type: GreyCat.Type) -> None:
-                self.time_width: c_int64
-                self.sum_type: c_ubyte
-                self.sum: c_double
-                self.sum_sq: c_double
-                self.size: c_uint32
-                self.capacity: int
-                self.to_head: c_int64
-                self.to_tail: c_int64
-                self.values: list[Any]
-                super().__init__(type, None)
-
-            def _save(self, stream: GreyCat._Stream) -> None:
-                stream.write_vi64(self.time_width)
-                stream.write_i8(self.sum_type)
-                stream.write_f64(self.sum)
-                stream.write_f64(self.sum_sq)
-                stream.write_vu32(self.size)
-                stream.write_vu32(c_uint32(self.capacity))
-                stream.write_vi64(self.to_head)
-                stream.write_vi64(self.to_tail)
-                values_offset: int
-                for values_offset in range(len(self.values)):
-                    stream.write(self.values[values_offset])
-
-            @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
-                time_width: c_int64 = stream.read_vi64()
-                sum_type: c_ubyte = stream.read_i8()
-                sum: c_double = stream.read_f64()
-                sum_sq: c_double = stream.read_f64()
-                size: c_uint32 = stream.read_vu32()
-                capacity: int = stream.read_vu32().value
-                to_head: c_int64 = stream.read_vi64()
-                to_tail: c_int64 = stream.read_vi64()
-                values: list[Any] = [stream.read()
-                                     for _ in repeat(None, capacity)]
-                sw: std_n.util._SlidingWindow = type.factory(type, [])
-                sw.time_width = time_width
-                sw.sum_type = sum_type
-                sw.sum = sum
-                sw.sum_sq = sum_sq
-                sw.size = size
-                sw.capacity = capacity
-                sw.to_head = to_head
-                sw.to_tail = to_tail
-                sw.values = values
-                return sw
-
-        class _TimeWindow(GreyCat.Object):
-            def __init__(self, type: GreyCat.Type) -> None:
-                self.time_width: c_int64
-                self.sum_type: c_ubyte
-                self.sum: c_double
-                self.sum_sq: c_double
-                self.size: c_uint32
-                self.capacity: int
-                self.to_head: c_int64
-                self.to_tail: c_int64
-                self.value_times: list[std_n.util._TimeWindow.ValueTime]
-                super().__init__(type, None)
-
-            def _save(self, stream: GreyCat._Stream) -> None:
-                stream.write_vi64(self.time_width)
-                stream.write_i8(self.sum_type)
-                stream.write_f64(self.sum)
-                stream.write_f64(self.sum_sq)
-                stream.write_vu32(self.size)
-                stream.write_vu32(c_uint32(self.capacity))
-                stream.write_vi64(self.to_head)
-                stream.write_vi64(self.to_tail)
-                value_time_offset: int
-                value_time: std_n.util._TimeWindow.ValueTime
-                for value_time_offset in range(len(self.value_times)):
-                    value_time = self.value_times[value_time_offset]
-                    stream.write(value_time.value)
-                    stream.write_i64(value_time.time)
-
-            @staticmethod
-            def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
-                time_width: c_int64 = stream.read_vi64()
-                sum_type: c_ubyte = stream.read_i8()
-                sum: c_double = stream.read_f64()
-                sum_sq: c_double = stream.read_f64()
-                size: c_uint32 = stream.read_vu32()
-                capacity: int = stream.read_vu32().value
-                to_head: c_int64 = stream.read_vi64()
-                to_tail: c_int64 = stream.read_vi64()
-                value_times: list[std_n.util._TimeWindow.ValueTime] = [
-                    std_n.util._TimeWindow.ValueTime(
-                        stream.read(), stream.read_vi64())
-                    for _ in repeat(None, capacity)
-                ]
-                tw: std_n.util._TimeWindow = type.factory(type, [])
-                tw.time_width = time_width
-                tw.sum_type = sum_type
-                tw.sum = sum
-                tw.sum_sq = sum_sq
-                tw.size = size
-                tw.capacity = capacity
-                tw.to_head = to_head
-                tw.to_tail = to_tail
-                tw.value_times = value_times
-                return tw
-
-            class ValueTime:
-                def __init__(self, value: Any, time: c_int64) -> None:
-                    self.value: Any = value
-                    self.time: c_int64 = time
