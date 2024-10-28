@@ -200,14 +200,14 @@ class std(GreyCat.Library):
                 return std.core.geo(greycat.libs_by_name[std.name_].mapped[5], [])
 
         @final
-        class ti4d(std_n.core._ti4d):
+        class ti4d(std_n.core._t4):
             name_: Final[str] = "core::ti4d"
 
             def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
                 super().__init__(type)
 
             @staticmethod
-            def create(greycat: GreyCat) -> std_n.core._ti4d:
+            def create(greycat: GreyCat) -> std_n.core._t4:
                 return std.core.ti4d(greycat.libs_by_name[std.name_].mapped[6], [])
 
         @final
@@ -3207,14 +3207,14 @@ class std(GreyCat.Library):
                 return std.core.DurationUnit(greycat.libs_by_name[std.name_].mapped[15], [])
 
         @final
-        class tf3d(std_n.core._tf3d):
+        class tf3d(std_n.core._t3f):
             name_: Final[str] = "core::tf3d"
 
             def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
                 super().__init__(type)
 
             @staticmethod
-            def create(greycat: GreyCat) -> std_n.core._tf3d:
+            def create(greycat: GreyCat) -> std_n.core._t3f:
                 return std.core.tf3d(greycat.libs_by_name[std.name_].mapped[16], [])
 
         @final
@@ -3229,14 +3229,14 @@ class std(GreyCat.Library):
                 return std.core.Tensor(greycat.libs_by_name[std.name_].mapped[17], [])
 
         @final
-        class ti2d(std_n.core._ti2d):
+        class ti2d(std_n.core._t2):
             name_: Final[str] = "core::ti2d"
 
             def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
                 super().__init__(type)
 
             @staticmethod
-            def create(greycat: GreyCat) -> std_n.core._ti2d:
+            def create(greycat: GreyCat) -> std_n.core._t2:
                 return std.core.ti2d(greycat.libs_by_name[std.name_].mapped[18], [])
 
         @final
@@ -3338,14 +3338,14 @@ class std(GreyCat.Library):
                 return std.core.nodeIndex(greycat.libs_by_name[std.name_].mapped[21], [])
 
         @final
-        class tf4d(std_n.core._tf4d):
+        class tf4d(std_n.core._t4f):
             name_: Final[str] = "core::tf4d"
 
             def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
                 super().__init__(type)
 
             @staticmethod
-            def create(greycat: GreyCat) -> std_n.core._tf4d:
+            def create(greycat: GreyCat) -> std_n.core._t4f:
                 return std.core.tf4d(greycat.libs_by_name[std.name_].mapped[22], [])
 
         @final
@@ -3447,14 +3447,14 @@ class std(GreyCat.Library):
                 return std.core.Tuple(greycat.libs_by_name[std.name_].mapped[26], [x, y])
 
         @final
-        class tf2d(std_n.core._tf2d):
+        class tf2d(std_n.core._t2f):
             name_: Final[str] = "core::tf2d"
 
             def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
                 super().__init__(type)
 
             @staticmethod
-            def create(greycat: GreyCat) -> std_n.core._tf2d:
+            def create(greycat: GreyCat) -> std_n.core._t2f:
                 return std.core.tf2d(greycat.libs_by_name[std.name_].mapped[27], [])
 
         @final
@@ -3700,14 +3700,14 @@ class std(GreyCat.Library):
                 return std.core.DatePart(greycat.libs_by_name[std.name_].mapped[38], [])
 
         @final
-        class ti3d(std_n.core._ti3d):
+        class ti3d(std_n.core._t3):
             name_: Final[str] = "core::ti3d"
 
             def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
                 super().__init__(type)
 
             @staticmethod
-            def create(greycat: GreyCat) -> std_n.core._ti3d:
+            def create(greycat: GreyCat) -> std_n.core._t3:
                 return std.core.ti3d(greycat.libs_by_name[std.name_].mapped[39], [])
 
         @final
@@ -6498,7 +6498,7 @@ class std(GreyCat.Library):
         factories[std.core.geo.name_] = lambda type, attributes: std.core.geo(type, attributes)
         loaders[std.core.geo.name_] = lambda type, stream: std_n.core._geo.load(type, stream)
         factories[std.core.ti4d.name_] = lambda type, attributes: std.core.ti4d(type, attributes)
-        loaders[std.core.ti4d.name_] = lambda type, stream: std_n.core._ti4d.load(type, stream)
+        loaders[std.core.ti4d.name_] = lambda type, stream: std_n.core._t4.load(type, stream)
         factories[std.core.nodeTime.name_] = lambda type, attributes: std.core.nodeTime(type, attributes)
         loaders[std.core.nodeTime.name_] = lambda type, stream: std_n.core._nodeTime.load(type, stream)
         factories[std.core.Date.name_] = lambda type, attributes: std.core.Date(type, attributes)
@@ -6515,25 +6515,25 @@ class std(GreyCat.Library):
         factories[std.core.Date2.name_] = lambda type, attributes: std.core.Date2(type, attributes)
         factories[std.core.DurationUnit.name_] = lambda type, attributes: std.core.DurationUnit(type, attributes)
         factories[std.core.tf3d.name_] = lambda type, attributes: std.core.tf3d(type, attributes)
-        loaders[std.core.tf3d.name_] = lambda type, stream: std_n.core._tf3d.load(type, stream)
+        loaders[std.core.tf3d.name_] = lambda type, stream: std_n.core._t3f.load(type, stream)
         factories[std.core.Tensor.name_] = lambda type, attributes: std.core.Tensor(type, attributes)
         loaders[std.core.Tensor.name_] = lambda type, stream: std_n.core._Tensor.load(type, stream)
         factories[std.core.ti2d.name_] = lambda type, attributes: std.core.ti2d(type, attributes)
-        loaders[std.core.ti2d.name_] = lambda type, stream: std_n.core._ti2d.load(type, stream)
+        loaders[std.core.ti2d.name_] = lambda type, stream: std_n.core._t2.load(type, stream)
         factories[std.core.Map.name_] = lambda type, attributes: std.core.Map(type, attributes)
         loaders[std.core.Map.name_] = lambda type, stream: std_n.core._Map.load(type, stream)
         factories[std.core.MathConstants.name_] = lambda type, attributes: std.core.MathConstants(type, attributes)
         factories[std.core.nodeIndex.name_] = lambda type, attributes: std.core.nodeIndex(type, attributes)
         loaders[std.core.nodeIndex.name_] = lambda type, stream: std_n.core._nodeIndex.load(type, stream)
         factories[std.core.tf4d.name_] = lambda type, attributes: std.core.tf4d(type, attributes)
-        loaders[std.core.tf4d.name_] = lambda type, stream: std_n.core._tf4d.load(type, stream)
+        loaders[std.core.tf4d.name_] = lambda type, stream: std_n.core._t4f.load(type, stream)
         factories[std.core.TableColumnMapping.name_] = lambda type, attributes: std.core.TableColumnMapping(type, attributes)
         factories[std.core.nodeList.name_] = lambda type, attributes: std.core.nodeList(type, attributes)
         loaders[std.core.nodeList.name_] = lambda type, stream: std_n.core._nodeList.load(type, stream)
         factories[std.core.TensorType.name_] = lambda type, attributes: std.core.TensorType(type, attributes)
         factories[std.core.Tuple.name_] = lambda type, attributes: std.core.Tuple(type, attributes)
         factories[std.core.tf2d.name_] = lambda type, attributes: std.core.tf2d(type, attributes)
-        loaders[std.core.tf2d.name_] = lambda type, stream: std_n.core._tf2d.load(type, stream)
+        loaders[std.core.tf2d.name_] = lambda type, stream: std_n.core._t2f.load(type, stream)
         factories[std.core.function.name_] = lambda type, attributes: std.core.function(type, attributes)
         loaders[std.core.function.name_] = lambda type, stream: std_n.core._function.load(type, stream)
         factories[std.core.TableColumnMeta.name_] = lambda type, attributes: std.core.TableColumnMeta(type, attributes)
@@ -6552,7 +6552,7 @@ class std(GreyCat.Library):
         loaders[std.core.ti5d.name_] = lambda type, stream: std_n.core._ti5d.load(type, stream)
         factories[std.core.DatePart.name_] = lambda type, attributes: std.core.DatePart(type, attributes)
         factories[std.core.ti3d.name_] = lambda type, attributes: std.core.ti3d(type, attributes)
-        loaders[std.core.ti3d.name_] = lambda type, stream: std_n.core._ti3d.load(type, stream)
+        loaders[std.core.ti3d.name_] = lambda type, stream: std_n.core._t3.load(type, stream)
         factories[std.core.nodeTimeSingleton.name_] = lambda type, attributes: std.core.nodeTimeSingleton(type, attributes)
         factories[std.core.NodeInfo.name_] = lambda type, attributes: std.core.NodeInfo(type, attributes)
         factories[std.runtime.RuntimeInfo.name_] = lambda type, attributes: std.runtime.RuntimeInfo(type, attributes)

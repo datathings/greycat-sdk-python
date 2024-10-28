@@ -1,20 +1,3 @@
-// @library("std", "6.1.82-dev");
-
-@library("algebra");
-// @library("decisiontrees"); // Non-existent
-// @library("network");
-// @library("patterns");
-// @library("sql"); // reference to sql_n non-existing class
-// @library("useragent"); // Tricky useragent.useragent is tricky
-
-use io;
-use runtime;
-use util;
-
-fn fail() {
-  var out = GcbWriter::new("fail.gcb");
-}
-
 fn main() {
   var user: User = User {
     id: 0,
@@ -27,25 +10,25 @@ fn main() {
   info(Crypto::sha256hex("admin"));
   User::setPassword(user.name, Crypto::sha256hex("changeme"));
 
-  var out = GcbWriter::new("out.gcb");
+  var out = GcbWriter { path: "out.gcb", };
   write_std(out);
 }
 
 fn write_std(out: GcbWriter) {
   write_core(out);
   write_io(out);
-  write_math(out);
   write_runtime(out);
   write_util(out);
 }
 
 @expose
 fn get_gcb(): Array<any?> {
-  var fin = GcbReader::new("out.gcb");
-  var array = Array<any?>::new(0);
+  var fin = GcbReader { path: "out.gcb", };
+  var array = Array<any?> {};
   while (fin.available() > 0) {
     array.add(fin.read());
   }
+  info(array.size());
   return array;
 }
 
@@ -108,21 +91,53 @@ fn write_core(out: GcbWriter) {
   out.write(13.37);
   out.write("Hello world");
   out.write("${"Not"} ${"a"} ${"symbol"}");
-  out.write(42_lat_12_lng);
-  out.write(GeoBox::new(13_lat_37_lng, 42_lat_12_lng));
-  out.write(nodeList<int>::new());
+  out.write(geo {42, 12});
+  out.write(GeoBox {sw: geo {13, 37}, ne: geo {42, 12}, });
+  out.write(nodeList<int> {});
   out.write(TimeZone::Europe_Luxembourg);
-  out.write(node<float>::new(13.37));
-  out.write(Error::new(""));
+  out.write(node<float> {13.37});
+  out.write([]);
+  out.write(Array<ErrorFrame> {});
+  out.write(Array<int> {0, 1, 2});
+  out.write(Array<int?> {0, null, 2});
+  out.write(Array<String?> {"Hello", null, "world"});
+  out.write(Error { stack: Array<ErrorFrame> {}, }); // TODO
   out.write(ErrorCode::none);
   out.write(SamplingMode::adaptative);
   out.write(DurationUnit::days);
   out.write(TensorType::c128);
-  out.write(Table<node>::new(0));
-  var table = Table::new(2);
-  for (var row = 0; row < 10; ++row) {
-    table.set(row, 0, row);
-    table.set(row, 1, row + 1);
+  out.write(Table<node> {});
+  var table = Table<int> {};
+  for (var row = 0; row < 3; ++row) {
+    table.set_cell(row, 0, row);
+    table.set_cell(row, 1, row + 1);
+    table.set_cell(row, 2, row + 2);
+  }
+  out.write(table);
+  table = Table<int?> {};
+  for (var row = 0; row < 3; ++row) {
+    if (0 == row) {
+      table.set_cell(row, 0, null);
+    } else {
+      table.set_cell(row, 0, row);
+    }
+    if (1 == row) {
+      table.set_cell(row, 1, null);
+    } else {
+      table.set_cell(row, 1, row + 1);
+    }
+    if (2 == row) {
+      table.set_cell(row, 2, null);
+    } else {
+      table.set_cell(row, 2, row + 2);
+    }
+  }
+  out.write(table);
+  table = Table{};
+  for (row, data in [[0, 1.0, "2.0"], [null, "null", "${null}"], [[], Map<any?, any?>{}, Table{}]]) {
+    for (col, value in data) {
+      table.set_cell(row, col, value);
+    }
   }
   out.write(table);
   // out.write(Tensor::new());
@@ -136,35 +151,46 @@ fn write_core(out: GcbWriter) {
   //   }
   // }
   // out.write(tensor);
-  out.write(GeoCircle::new(42_lat_12_lng, 13.37));
-  out.write(Date::new(2012, 12, 12, 12, 12, 12, 12, TimeZone::Europe_Luxembourg));
-  out.write(Map<geo, time>::new());
-  var map = Map::new();
+  out.write(GeoCircle {center: geo {42, 12}, radius: 13.37 });
+  out.write(Date {year: 2012, month: 12, day: 12, hour: 12, minute: 12, second: 12, microsecond: 12 });
+  out.write(Map<geo, time> {});
+  var map = Map<any?, any?> {};
   map.set(42, 13.37);
   out.write(map);
   out.write(duration::new(12, DurationUnit::microseconds));
-  out.write(nodeTime<nodeGeo>::new());
-  out.write(Array<nodeTime>::new(0));
+  out.write(nodeTime<nodeGeo> {});
+  out.write(Array<nodeTime> {});
   out.write([
-      null, true, '*', 12, 13.37, "Hello world", 42_lat_12_lng, GeoBox::new(13_lat_37_lng, 42_lat_12_lng), nodeList<int>::new(),
-      TimeZone::Europe_Luxembourg, node<float>::new(13.37), Error::new(""),
-      duration::new(12, DurationUnit::microseconds), nodeTime<nodeGeo>::new()
+      null, true, '*', 12, 13.37, "Hello world", geo {42_, 12_}, GeoBox {sw: geo {13_, 37_}, ne: geo {42_, 12_}, }, nodeList<int> {},
+      TimeZone::Europe_Luxembourg, node<float> {13.37}, Error {stack: Array<ErrorFrame> {}, },
+      duration::new(12, DurationUnit::microseconds), nodeTime<nodeGeo> {}
     ]);
-  out.write(Tuple<Array, Map>::new(Array::new(0), Map::new()));
-  out.write(nodeIndex<Tuple>::new());
-  out.write(GeoPoly { points: [13_lat_37_lng, 42_lat_12_lng, 13_lat_37_lng] });
+  out.write(Tuple<Array, Map> {x: Array<any?> {}, y: Map<any?, any?> {} });
+  out.write(nodeIndex<Tuple, any?> {});
+  out.write(GeoPoly { points: [geo {13_, 37_}, geo {42_, 12_}, geo {13_, 37_},], });
   out.write(12_time);
-  out.write(DatePart::days);
-  out.write(nodeGeo<DatePart>::new());
-  out.write(ti2d::new(13, 37));
-  out.write(ti3d::new(13, 37, 42));
-  out.write(ti4d::new(13, 37, 42, 12));
-  out.write(ti5d::new(-1, 13, 37, 42, 12));
-  out.write(ti6d::new(-1, 13, 37, 42, 12, -12));
-  out.write(ti10d::new(-1, 13, 27, 22, 12, 1, -13, -27, -22, -12));
-  out.write(tf2d::new(13.37, 12.42));
-  out.write(tf3d::new(13.37, 12.42, -13.37));
-  out.write(tf4d::new(13.37, 12.42, -13.37, -12.42));
+  // out.write(DatePart::days);
+  out.write(nodeGeo<GeoPoly> {});
+  out.write(t2 {13, 37});
+  out.write(t3 {13, 37, 42});
+  out.write(t4 {13, 37, 42, 12});
+  out.write(t2f {13.37, 12.42});
+  out.write(t3f {13.37, 12.42, -13.37});
+  out.write(t4f {13.37, 12.42, -13.37, -12.42});
+  out.write(Buffer {});
+  out.write(MathConstants::e);
+  out.write(MathConstants::log_2e);
+  out.write(MathConstants::log_10e);
+  out.write(MathConstants::ln2);
+  out.write(MathConstants::ln10);
+  out.write(MathConstants::pi);
+  out.write(MathConstants::pi_2);
+  out.write(MathConstants::pi_4);
+  out.write(MathConstants::m1_pi);
+  out.write(MathConstants::m2_pi);
+  out.write(MathConstants::m2_sqrt_pi);
+  out.write(MathConstants::sqrt2);
+  out.write(MathConstants::sqrt1_2);
 }
 
 fn write_io(out: GcbWriter) {
@@ -200,22 +226,6 @@ fn write_io(out: GcbWriter) {
   // out.write(Directory::open(".")); // unsupported
   // out.write(FileWriter::new("project.gcl", true)); // unsupported
 */
-}
-
-fn write_math(out: GcbWriter) {
-  out.write(MathConstants::e);
-  out.write(MathConstants::log_2e);
-  out.write(MathConstants::log_10e);
-  out.write(MathConstants::ln2);
-  out.write(MathConstants::ln10);
-  out.write(MathConstants::pi);
-  out.write(MathConstants::pi_2);
-  out.write(MathConstants::pi_4);
-  out.write(MathConstants::m1_pi);
-  out.write(MathConstants::m2_pi);
-  out.write(MathConstants::m2_sqrt_pi);
-  out.write(MathConstants::sqrt2);
-  out.write(MathConstants::sqrt1_2);
 }
 
 fn write_runtime(out: GcbWriter) {
@@ -255,7 +265,7 @@ fn write_runtime(out: GcbWriter) {
     });
   out.write(UserRole {
       name: "",
-      permissions: [],
+      permissions: Array<String> {},
     });
   // out.write(PeriodicTask {
   //     name: "",
@@ -291,11 +301,7 @@ fn write_runtime(out: GcbWriter) {
       available_ratio: 0.2,
     });
   out.write(System {});
-  out.write(SecurityPolicy {
-      entities: [],
-      credentials: Map<String, UserCredential>::new(),
-      roles: Map<String, UserRole>::new(),
-    });
+  out.write(SecurityPolicy {});
 }
 
 fn write_util(out: GcbWriter) {
@@ -303,15 +309,14 @@ fn write_util(out: GcbWriter) {
       seed: 42,
       v: 13.37,
     });
-  out.write(Buffer::new());
   out.write(Assert {});
   out.write(ProgressTracker { start: 0_time });
   // out.write(Iban::new(""));
   out.write(Gaussian {});
   // out.write(Quantizer::new()); // unsupported
-  out.write(GaussianProfile::new(0));
-  out.write(TimeWindow::new());
-  out.write(SlidingWindow::new());
+  out.write(GaussianProfile {quantizer: LinearQuantizer {min: 0.0, max: 1.0, bins: 12, }, precision: FloatPrecision::p1, });
+  out.write(TimeWindow { span: 42s, });
+  out.write(SlidingWindow { span: 42 });
   // out.write(Queue<SlidingWindow>::new()); // Deliberately(?) different on load & save
   /* wrong null for T fields
   out.write(BoxPlotF64{
