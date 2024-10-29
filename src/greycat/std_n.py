@@ -74,6 +74,9 @@ class std_n:
                         "us", "μs"] else c_int64(td.astype("timedelta64[us]").astype(int))
                     return duration
 
+        class _field(GreyCat.Object):
+            pass  # TODO
+
         class _function(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 super().__init__(type, None)
@@ -315,6 +318,9 @@ class std_n:
                 res: std_n.core._nodeTime = type.factory(type, [])
                 res.ref = stream.read_vu64()
                 return res
+
+        class _str(GreyCat.Object):
+            pass  # TODO
 
         class _t2(GreyCat.Object):
             _INT32_MIN: int = -2147483648
@@ -705,6 +711,9 @@ class std_n:
             def __str__(self) -> str:
                 return f"time{{timestamp: {int(self.value.value / 1_000_000)}, us_offset: {self.value.value % 1_000_000}}}"
 
+        class _type(GreyCat.Object):
+            pass  # TODO
+
         # Object types
 
         class _Array(Generic[__T], GreyCat.Object):
@@ -805,6 +814,7 @@ class std_n:
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
                 size: int = stream.read_vu32().value
                 array: std_n.core._Array = type.factory(type, [])
+                array.attributes = list(repeat(None, size))
                 if 0 == size:
                     return array
                 nullables: list[bool] | None = None
@@ -827,21 +837,21 @@ class std_n:
                         monotonic_value = GreyCat._Stream._PRIMITIVE_LOADERS[array_primitive_type](
                             stream)
                 if PrimitiveType.UNDEFINED.value == array_primitive_type:
-                    for offset in range(0, size):
+                    for offset in range(size):
                         array[offset] = None if nullables is not None and nullables[offset] else stream.read(
                         )
                 elif PrimitiveType.OBJECT.value == array_primitive_type or (PrimitiveType.STATIC_FIELD.value == array_primitive_type and monotonic_value is None):
                     if array_type is None:
-                        for offset in range(0, size):
+                        for offset in range(size):
                             # TODO: check for enums
                             array[offset] = None if nullables is not None and nullables[offset] else stream.read_object(
                             )
                     else:
-                        for offset in range(0, size):
+                        for offset in range(size):
                             array[offset] = None if nullables is not None and nullables[offset] else array_type.loader(
                                 array_type, stream)
                 elif monotonic_value is None:
-                    for offset in range(0, size):
+                    for offset in range(size):
                         array[offset] = None if nullables is not None and nullables[
                             offset] else GreyCat._Stream._PRIMITIVE_LOADERS[array_primitive_type](stream)
                 return array
@@ -1057,7 +1067,7 @@ class std_n:
                 return key
 
             def __str__(self) -> str:
-                res: str = f"{{"
+                res: str = f"{self.type_.name}{{"
                 if len(self) > 0:
                     res = f"{res}\n"
                 for key, value in self.items():
@@ -1097,7 +1107,7 @@ class std_n:
                         if e is None:
                             if nullables is None:
                                 nullables = bytearray(
-                                    repeat(0, math.ceil(len(self.rows) / 8)))
+                                    repeat(0, math.ceil(self.rows / 8)))
                             nullables[row >> 3] |= 1 << (row & 7)
                         else:
                             _type = type(e)
@@ -1106,7 +1116,7 @@ class std_n:
                                 type_is_unique = True
                                 unique_type = _type
                             elif type_is_unique and unique_type is not _type:
-                                unique_type = False
+                                type_is_unique = False
                             if monotonic_value is None:
                                 value_is_monotonic = True
                                 monotonic_value = e
@@ -1183,7 +1193,6 @@ class std_n:
                 rows: Final[int] = stream.read_vu32().value
                 cols: Final[int] = stream.read_vu32().value
                 data: list[std_n.core.__T] = list(repeat(None, rows * cols))
-
                 for col in range(cols):
                     nullables: list[bool] | None = None
                     if 1 == stream.read_i8().value:
@@ -1191,22 +1200,23 @@ class std_n:
                         for row in range(0, rows, 8):
                             flags = stream.read_i8().value
                             for offset in range(min(rows - row, 8)):
-                                nullables(row + offset) = 1 == (flags >> offset & 1)
+                                nullables[row +
+                                          offset] = 1 == (flags >> offset & 1)
                     col_primitive_type: int = stream.read_i8().value
                     col_type: GreyCat.Type | None = None
                     monotonic_value: Any | None = None
                     if PrimitiveType.OBJECT.value == col_primitive_type or PrimitiveType.STATIC_FIELD.value == col_primitive_type:
-                        type_offset: int = stream.read_vu32().value
+                        type_offset: int = c_int32(stream.read_vu32().value).value
                         if -1 != type_offset:
                             col_type = stream.greycat.types[type_offset]
-                    if PrimitiveType.OBJECT.value != col_primitive_type and PrimitiveType.UNDEFINED != col_primitive_type:
+                    if PrimitiveType.OBJECT.value != col_primitive_type and PrimitiveType.UNDEFINED.value != col_primitive_type:
                         if 1 == stream.read_i8().value:
                             monotonic_value = GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](
                                 stream)
                     if PrimitiveType.UNDEFINED.value == col_primitive_type:
                         for row in range(rows):
                             data[col * rows + row] = None if nullables is not None and nullables[row] else stream.read()
-                    elif PrimitiveType.OBJECT.value == col_primitive_type or (PrimitiveType.STATIC_FIELD == col_primitive_type and monotonic_value is None):
+                    elif PrimitiveType.OBJECT.value == col_primitive_type or (PrimitiveType.STATIC_FIELD.value == col_primitive_type and monotonic_value is None):
                         if col_type is None:
                             for row in range(rows):
                                 # TODO: check for enums
@@ -1221,12 +1231,21 @@ class std_n:
                                 # TODO: check
                                 data[col * rows + row] = GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](
                                     stream)
-
-                table: std_n.core._Table = type.factory(type)
+                table: std_n.core._Table = type.factory(type, [])
                 table.rows = rows
                 table.cols = cols
                 table.data = data
                 return table
+            
+            def __str__(self)-> str:
+                str = f"{self.type_.name}{{"
+                for col in range(self.cols):
+                    str = f"{str}\n\t"
+                    for row in range(self.rows):
+                        str = f"{str}{self.data[col * self.rows + row]}, "
+                if 0 < self.cols and 0 < self.rows:
+                    str = f"{str}\n"
+                return f"{str}}}"
 
             if "numpy" in sys.modules:
 

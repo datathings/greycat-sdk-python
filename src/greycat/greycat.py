@@ -743,10 +743,11 @@ class GreyCat:
                             field_type, stream)
                 elif load_type == PrimitiveType.OBJECT.value:
                     field_type: GreyCat.Type = type.greycat.types[att.abi_type]
-                    if (not field_type.is_native) and (
-                        field_type.is_abstract
-                        or att.sbi_type.value == PrimitiveType.UNDEFINED.value
-                    ):
+                    # if (not field_type.is_native) and (
+                    #     field_type.is_abstract
+                    #     or att.sbi_type.value == PrimitiveType.UNDEFINED.value
+                    # ):
+                    if field_type.is_ambiguous or type.greycat.type_offset_core_any == field_type.offset or ((not field_type.is_native) and att.sbi_type.value == PrimitiveType.UNDEFINED.value):
                         field_type = type.greycat.types[stream.read_vu32(
                         ).value]
                     loaded_field = field_type.loader(field_type, stream)
@@ -861,7 +862,7 @@ class GreyCat:
                 resolved: int | None = self.attribute_off_by_name.get(arg)
                 if resolved is None:
                     raise ValueError(
-                        "unmapped generated field, please re-generate this code!"
+                        f"unmapped generated field, please re-generate this code!"
                     )
                 self.generated_offsets.append(resolved)
 
@@ -1008,7 +1009,7 @@ class GreyCat:
                             stream.write_i8_array(bytes, 0, len(data))
                     else:
                         o: GreyCat.Object = value
-                        if field.abi_type != o.type_.offset:
+                        if field.abi_type != o.type_.offset and self.type_.greycat.types[field.abi_type].genericAbiType != o.type_.offset:
                             stream.write_vu32(o.type_.offset)
                         o._save(stream)
                 # elif field.sbi_type.value == PrimitiveType.BLOCK_REF: # TODO

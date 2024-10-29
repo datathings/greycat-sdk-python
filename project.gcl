@@ -22,6 +22,19 @@ fn write_std(out: GcbWriter) {
 }
 
 @expose
+fn fail(): Array<any?> {
+  var array = Array<any?>{};
+  var table = Table{};
+  for (row, data in [[0, 1.0, "2.0"], [null, "null", "${null}"], [[], Map<any?, any?>{}, Table{}]]) {
+    for (col, value in data) {
+      table.set_cell(row, col, value);
+    }
+  }
+  array.add(table);
+  return array;
+}
+
+@expose
 fn get_gcb(): Array<any?> {
   var fin = GcbReader { path: "out.gcb", };
   var array = Array<any?> {};
