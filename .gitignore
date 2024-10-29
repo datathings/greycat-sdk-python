@@ -3,7 +3,7 @@
 /build/
 /dist/
 /gcdata/
-/src/greycat/project_lib.py
+/src/greycat/project.py
 
 /*.gcb
 /project.gcp

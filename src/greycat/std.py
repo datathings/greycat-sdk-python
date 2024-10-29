@@ -15,66 +15,55 @@ class std(GreyCat.Library):
 
     @final
     class core:
-        __floor = TypeVar("__floor")
-        __p100000 = TypeVar("__p100000")
-        __char = TypeVar("__char")
-        __point = TypeVar("__point")
-        __month = TypeVar("__month")
-        __DurationUnit = TypeVar("__DurationUnit")
-        __size = TypeVar("__size")
-        __field_get = TypeVar("__field_get")
-        __p10 = TypeVar("__p10")
-        __expose = TypeVar("__expose")
-        __initPos = TypeVar("__initPos")
-        __nb_enum_values = TypeVar("__nb_enum_values")
-        __enum_type = TypeVar("__enum_type")
-        __T = TypeVar("__T")
-        __String = TypeVar("__String")
-        __startPos = TypeVar("__startPos")
-        __dayOfYear = TypeVar("__dayOfYear")
-        __reqTime = TypeVar("__reqTime")
         __endOfWeek = TypeVar("__endOfWeek")
-        __TableColumnMapping = TypeVar("__TableColumnMapping")
-        __println = TypeVar("__println")
-        __replace = TypeVar("__replace")
-        __await_ = TypeVar("__await_")
-        __forbidden = TypeVar("__forbidden")
         __newAt = TypeVar("__newAt")
+        __DurationUnit = TypeVar("__DurationUnit")
+        __String = TypeVar("__String")
+        __field_get = TypeVar("__field_get")
+        __CalendarUnit = TypeVar("__CalendarUnit")
+        __TableColumnMapping = TypeVar("__TableColumnMapping")
+        __month = TypeVar("__month")
+        __expose = TypeVar("__expose")
+        __is_nullable = TypeVar("__is_nullable")
+        __p10 = TypeVar("__p10")
+        __enum_values = TypeVar("__enum_values")
+        __size = TypeVar("__size")
+        __char = TypeVar("__char")
+        __T = TypeVar("__T")
+        __America_Buenos_Aires = TypeVar("__America_Buenos_Aires")
+        __point = TypeVar("__point")
+        __resolveTimeAt = TypeVar("__resolveTimeAt")
+        __nb_enum_values = TypeVar("__nb_enum_values")
+        __resolveAtWithin = TypeVar("__resolveAtWithin")
+        __totalDaysInMonth = TypeVar("__totalDaysInMonth")
+        __reqTime = TypeVar("__reqTime")
+        __v = TypeVar("__v")
+        __p100000 = TypeVar("__p100000")
+        __add_all = TypeVar("__add_all")
+        __forbidden = TypeVar("__forbidden")
+        __line = TypeVar("__line")
+        __std = TypeVar("__std")
         __U = TypeVar("__U")
+        __last = TypeVar("__last")
+        __hour = TypeVar("__hour")
+        __to_complex_tensor = TypeVar("__to_complex_tensor")
+        __toGeohash = TypeVar("__toGeohash")
+        __replace = TypeVar("__replace")
         __from_ = TypeVar("__from_")
         __core = TypeVar("__core")
-        __enum_values = TypeVar("__enum_values")
-        __CalendarUnit = TypeVar("__CalendarUnit")
-        __America_Buenos_Aires = TypeVar("__America_Buenos_Aires")
-        __add_all = TypeVar("__add_all")
-        __std = TypeVar("__std")
-        __resolveTimeAt = TypeVar("__resolveTimeAt")
-        __setAt = TypeVar("__setAt")
         __K = TypeVar("__K")
         __V = TypeVar("__V")
-        __is_nullable = TypeVar("__is_nullable")
-        __totalDaysInMonth = TypeVar("__totalDaysInMonth")
-        __to_complex_tensor = TypeVar("__to_complex_tensor")
         __MathConstants = TypeVar("__MathConstants")
-        __v = TypeVar("__v")
+        __floor = TypeVar("__floor")
+        __enum_type = TypeVar("__enum_type")
+        __await_ = TypeVar("__await_")
+        __startPos = TypeVar("__startPos")
+        __initPos = TypeVar("__initPos")
         __value = TypeVar("__value")
-        __last = TypeVar("__last")
-        __toGeohash = TypeVar("__toGeohash")
         __clone = TypeVar("__clone")
-        __hour = TypeVar("__hour")
-        __resolveAtWithin = TypeVar("__resolveAtWithin")
-        __line = TypeVar("__line")
-
-        @final
-        class geo(std_n.core._geo):
-            name_: Final[str] = "core::geo"
-
-            def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
-                super().__init__(type)
-
-            @staticmethod
-            def create(greycat: GreyCat) -> std_n.core._geo:
-                return std.core.geo(greycat.libs_by_name[std.name_].mapped[0], [])
+        __println = TypeVar("__println")
+        __setAt = TypeVar("__setAt")
+        __dayOfYear = TypeVar("__dayOfYear")
 
         @final
         class t4f(std_n.core._t4f):
@@ -85,7 +74,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._t4f:
-                return std.core.t4f(greycat.libs_by_name[std.name_].mapped[1], [])
+                return std.core.t4f(greycat.libs_by_name[std.name_].mapped[0], [])
 
         @final
         class t2f(std_n.core._t2f):
@@ -96,7 +85,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._t2f:
-                return std.core.t2f(greycat.libs_by_name[std.name_].mapped[2], [])
+                return std.core.t2f(greycat.libs_by_name[std.name_].mapped[1], [])
 
         @final
         class nodeTime(Generic[__T], std_n.core._nodeTime[__T]):
@@ -107,7 +96,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._nodeTime:
-                return std.core.nodeTime(greycat.libs_by_name[std.name_].mapped[3], [])
+                return std.core.nodeTime(greycat.libs_by_name[std.name_].mapped[2], [])
 
         @final
         class function(std_n.core._function):
@@ -118,7 +107,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._function:
-                return std.core.function(greycat.libs_by_name[std.name_].mapped[4], [])
+                return std.core.function(greycat.libs_by_name[std.name_].mapped[3], [])
 
         @final
         class DurationUnit(GreyCat.Enum):
@@ -129,37 +118,37 @@ class std(GreyCat.Library):
 
             @staticmethod
             def microseconds(greycat: GreyCat) -> std.core.DurationUnit:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[5]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[4]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
             def milliseconds(greycat: GreyCat) -> std.core.DurationUnit:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[5]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[4]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
             def seconds(greycat: GreyCat) -> std.core.DurationUnit:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[5]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[4]
                 return t.enum_values[t.generated_offsets[2]]
 
             @staticmethod
             def minutes(greycat: GreyCat) -> std.core.DurationUnit:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[5]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[4]
                 return t.enum_values[t.generated_offsets[3]]
 
             @staticmethod
             def hours(greycat: GreyCat) -> std.core.DurationUnit:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[5]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[4]
                 return t.enum_values[t.generated_offsets[4]]
 
             @staticmethod
             def days(greycat: GreyCat) -> std.core.DurationUnit:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[5]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[4]
                 return t.enum_values[t.generated_offsets[5]]
 
             @staticmethod
             def create(greycat: GreyCat) -> std.core.DurationUnit:
-                return std.core.DurationUnit(greycat.libs_by_name[std.name_].mapped[5], [])
+                return std.core.DurationUnit(greycat.libs_by_name[std.name_].mapped[4], [])
 
         @final
         class ErrorCode(GreyCat.Enum):
@@ -170,37 +159,37 @@ class std(GreyCat.Library):
 
             @staticmethod
             def none(greycat: GreyCat) -> std.core.ErrorCode:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[6]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[5]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
             def interrupted(greycat: GreyCat) -> std.core.ErrorCode:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[6]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[5]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
             def await_(greycat: GreyCat) -> std.core.ErrorCode:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[6]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[5]
                 return t.enum_values[t.generated_offsets[2]]
 
             @staticmethod
             def timeout(greycat: GreyCat) -> std.core.ErrorCode:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[6]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[5]
                 return t.enum_values[t.generated_offsets[3]]
 
             @staticmethod
             def forbidden(greycat: GreyCat) -> std.core.ErrorCode:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[6]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[5]
                 return t.enum_values[t.generated_offsets[4]]
 
             @staticmethod
             def runtime_error(greycat: GreyCat) -> std.core.ErrorCode:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[6]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[5]
                 return t.enum_values[t.generated_offsets[5]]
 
             @staticmethod
             def create(greycat: GreyCat) -> std.core.ErrorCode:
-                return std.core.ErrorCode(greycat.libs_by_name[std.name_].mapped[6], [])
+                return std.core.ErrorCode(greycat.libs_by_name[std.name_].mapped[5], [])
 
         @final
         class Date(GreyCat.Object):
@@ -259,7 +248,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, year: int, month: int, day: int, hour: int, minute: int, second: int, microsecond: int) -> std.core.Date:
-                return std.core.Date(greycat.libs_by_name[std.name_].mapped[7], [year, month, day, hour, minute, second, microsecond])
+                return std.core.Date(greycat.libs_by_name[std.name_].mapped[6], [year, month, day, hour, minute, second, microsecond])
 
         @final
         class nodeTimeSingleton(GreyCat.Object):
@@ -282,7 +271,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, t: std.core.time, v: Any) -> std.core.nodeTimeSingleton:
-                return std.core.nodeTimeSingleton(greycat.libs_by_name[std.name_].mapped[8], [t, v])
+                return std.core.nodeTimeSingleton(greycat.libs_by_name[std.name_].mapped[7], [t, v])
 
         @final
         class t4(std_n.core._t4):
@@ -293,7 +282,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._t4:
-                return std.core.t4(greycat.libs_by_name[std.name_].mapped[9], [])
+                return std.core.t4(greycat.libs_by_name[std.name_].mapped[8], [])
 
         @final
         class GeoCircle(GreyCat.Object):
@@ -316,7 +305,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, center: std.core.geo, radius: float) -> std.core.GeoCircle:
-                return std.core.GeoCircle(greycat.libs_by_name[std.name_].mapped[10], [center, radius])
+                return std.core.GeoCircle(greycat.libs_by_name[std.name_].mapped[9], [center, radius])
 
         @final
         class Array(Generic[__T], std_n.core._Array[__T]):
@@ -327,7 +316,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._Array:
-                return std.core.Array(greycat.libs_by_name[std.name_].mapped[11], [])
+                return std.core.Array(greycat.libs_by_name[std.name_].mapped[10], [])
 
         @final
         class GeoPoly(GreyCat.Object):
@@ -344,7 +333,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, points: std.core.Array) -> std.core.GeoPoly:
-                return std.core.GeoPoly(greycat.libs_by_name[std.name_].mapped[12], [points])
+                return std.core.GeoPoly(greycat.libs_by_name[std.name_].mapped[11], [points])
 
         @final
         class Error(GreyCat.Object):
@@ -367,7 +356,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, message: str, stack: std.core.Array) -> std.core.Error:
-                return std.core.Error(greycat.libs_by_name[std.name_].mapped[13], [message, stack])
+                return std.core.Error(greycat.libs_by_name[std.name_].mapped[12], [message, stack])
 
         @final
         class Tuple(Generic[__T, __U], GreyCat.Object):
@@ -390,7 +379,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, x: std.core.__, y: std.core.__) -> std.core.Tuple[TypeVar("T"), TypeVar("U")]:
-                return std.core.Tuple(greycat.libs_by_name[std.name_].mapped[14], [x, y])
+                return std.core.Tuple(greycat.libs_by_name[std.name_].mapped[13], [x, y])
 
         @final
         class SamplingMode(GreyCat.Enum):
@@ -401,27 +390,27 @@ class std(GreyCat.Library):
 
             @staticmethod
             def fixed(greycat: GreyCat) -> std.core.SamplingMode:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[15]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
             def fixed_reg(greycat: GreyCat) -> std.core.SamplingMode:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[15]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
             def adaptative(greycat: GreyCat) -> std.core.SamplingMode:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[15]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[2]]
 
             @staticmethod
             def dense(greycat: GreyCat) -> std.core.SamplingMode:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[15]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[14]
                 return t.enum_values[t.generated_offsets[3]]
 
             @staticmethod
             def create(greycat: GreyCat) -> std.core.SamplingMode:
-                return std.core.SamplingMode(greycat.libs_by_name[std.name_].mapped[15], [])
+                return std.core.SamplingMode(greycat.libs_by_name[std.name_].mapped[14], [])
 
         @final
         class t3f(std_n.core._t3f):
@@ -432,7 +421,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._t3f:
-                return std.core.t3f(greycat.libs_by_name[std.name_].mapped[16], [])
+                return std.core.t3f(greycat.libs_by_name[std.name_].mapped[15], [])
 
         @final
         class Table(Generic[__T], std_n.core._Table[__T]):
@@ -443,7 +432,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._Table:
-                return std.core.Table(greycat.libs_by_name[std.name_].mapped[17], [])
+                return std.core.Table(greycat.libs_by_name[std.name_].mapped[16], [])
 
         @final
         class String(std_n.core._String):
@@ -454,7 +443,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._String:
-                return std.core.String(greycat.libs_by_name[std.name_].mapped[18], [])
+                return std.core.String(greycat.libs_by_name[std.name_].mapped[17], [])
 
         @final
         class field(std_n.core._field):
@@ -465,7 +454,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._field:
-                return std.core.field(greycat.libs_by_name[std.name_].mapped[19], [])
+                return std.core.field(greycat.libs_by_name[std.name_].mapped[18], [])
 
         @final
         class t3(std_n.core._t3):
@@ -476,7 +465,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._t3:
-                return std.core.t3(greycat.libs_by_name[std.name_].mapped[20], [])
+                return std.core.t3(greycat.libs_by_name[std.name_].mapped[19], [])
 
         @final
         class Map(Generic[__K, __V], std_n.core._Map[__K, __V]):
@@ -487,7 +476,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._Map:
-                return std.core.Map(greycat.libs_by_name[std.name_].mapped[21], [])
+                return std.core.Map(greycat.libs_by_name[std.name_].mapped[20], [])
 
         @final
         class nodeGeo(Generic[__T], std_n.core._nodeGeo[__T]):
@@ -498,7 +487,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._nodeGeo:
-                return std.core.nodeGeo(greycat.libs_by_name[std.name_].mapped[22], [])
+                return std.core.nodeGeo(greycat.libs_by_name[std.name_].mapped[21], [])
 
         @final
         class NodeInfo(Generic[__T], GreyCat.Object):
@@ -527,7 +516,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, size: int, from_: std.core.__, to: std.core.__) -> std.core.NodeInfo[TypeVar("T")]:
-                return std.core.NodeInfo(greycat.libs_by_name[std.name_].mapped[23], [size, from_, to])
+                return std.core.NodeInfo(greycat.libs_by_name[std.name_].mapped[22], [size, from_, to])
 
         @final
         class FloatPrecision(GreyCat.Enum):
@@ -538,62 +527,62 @@ class std(GreyCat.Library):
 
             @staticmethod
             def p1(greycat: GreyCat) -> std.core.FloatPrecision:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[24]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[23]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
             def p10(greycat: GreyCat) -> std.core.FloatPrecision:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[24]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[23]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
             def p100(greycat: GreyCat) -> std.core.FloatPrecision:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[24]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[23]
                 return t.enum_values[t.generated_offsets[2]]
 
             @staticmethod
             def p1000(greycat: GreyCat) -> std.core.FloatPrecision:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[24]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[23]
                 return t.enum_values[t.generated_offsets[3]]
 
             @staticmethod
             def p10000(greycat: GreyCat) -> std.core.FloatPrecision:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[24]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[23]
                 return t.enum_values[t.generated_offsets[4]]
 
             @staticmethod
             def p100000(greycat: GreyCat) -> std.core.FloatPrecision:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[24]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[23]
                 return t.enum_values[t.generated_offsets[5]]
 
             @staticmethod
             def p1000000(greycat: GreyCat) -> std.core.FloatPrecision:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[24]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[23]
                 return t.enum_values[t.generated_offsets[6]]
 
             @staticmethod
             def p10000000(greycat: GreyCat) -> std.core.FloatPrecision:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[24]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[23]
                 return t.enum_values[t.generated_offsets[7]]
 
             @staticmethod
             def p100000000(greycat: GreyCat) -> std.core.FloatPrecision:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[24]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[23]
                 return t.enum_values[t.generated_offsets[8]]
 
             @staticmethod
             def p1000000000(greycat: GreyCat) -> std.core.FloatPrecision:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[24]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[23]
                 return t.enum_values[t.generated_offsets[9]]
 
             @staticmethod
             def p10000000000(greycat: GreyCat) -> std.core.FloatPrecision:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[24]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[23]
                 return t.enum_values[t.generated_offsets[10]]
 
             @staticmethod
             def create(greycat: GreyCat) -> std.core.FloatPrecision:
-                return std.core.FloatPrecision(greycat.libs_by_name[std.name_].mapped[24], [])
+                return std.core.FloatPrecision(greycat.libs_by_name[std.name_].mapped[23], [])
 
         @final
         class t2(std_n.core._t2):
@@ -604,7 +593,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._t2:
-                return std.core.t2(greycat.libs_by_name[std.name_].mapped[25], [])
+                return std.core.t2(greycat.libs_by_name[std.name_].mapped[24], [])
 
         @final
         class str(std_n.core._str):
@@ -615,7 +604,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._str:
-                return std.core.str(greycat.libs_by_name[std.name_].mapped[26], [])
+                return std.core.str(greycat.libs_by_name[std.name_].mapped[25], [])
 
         @final
         class duration(std_n.core._duration):
@@ -626,7 +615,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._duration:
-                return std.core.duration(greycat.libs_by_name[std.name_].mapped[27], [])
+                return std.core.duration(greycat.libs_by_name[std.name_].mapped[26], [])
 
         @final
         class TableColumnMapping(GreyCat.Object):
@@ -649,7 +638,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, column: int, extractors: std.core.Array) -> std.core.TableColumnMapping:
-                return std.core.TableColumnMapping(greycat.libs_by_name[std.name_].mapped[28], [column, extractors])
+                return std.core.TableColumnMapping(greycat.libs_by_name[std.name_].mapped[27], [column, extractors])
 
         @final
         class ErrorFrame(GreyCat.Object):
@@ -684,7 +673,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, module: str, function: str, line: int, column: int) -> std.core.ErrorFrame:
-                return std.core.ErrorFrame(greycat.libs_by_name[std.name_].mapped[29], [module, function, line, column])
+                return std.core.ErrorFrame(greycat.libs_by_name[std.name_].mapped[28], [module, function, line, column])
 
         @final
         class MathConstants(GreyCat.Object):
@@ -695,72 +684,72 @@ class std(GreyCat.Library):
 
             @staticmethod
             def e(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[30]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[29]
                 return t.static_values[0]
 
             @staticmethod
             def log_2e(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[30]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[29]
                 return t.static_values[1]
 
             @staticmethod
             def log_10e(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[30]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[29]
                 return t.static_values[2]
 
             @staticmethod
             def ln2(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[30]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[29]
                 return t.static_values[3]
 
             @staticmethod
             def ln10(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[30]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[29]
                 return t.static_values[4]
 
             @staticmethod
             def pi(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[30]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[29]
                 return t.static_values[5]
 
             @staticmethod
             def pi_2(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[30]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[29]
                 return t.static_values[6]
 
             @staticmethod
             def pi_4(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[30]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[29]
                 return t.static_values[7]
 
             @staticmethod
             def m1_pi(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[30]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[29]
                 return t.static_values[8]
 
             @staticmethod
             def m2_pi(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[30]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[29]
                 return t.static_values[9]
 
             @staticmethod
             def m2_sqrt_pi(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[30]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[29]
                 return t.static_values[10]
 
             @staticmethod
             def sqrt2(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[30]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[29]
                 return t.static_values[11]
 
             @staticmethod
             def sqrt1_2(greycat: GreyCat) -> float:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[30]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[29]
                 return t.static_values[12]
 
             @staticmethod
             def create(greycat: GreyCat) -> std.core.MathConstants:
-                return std.core.MathConstants(greycat.libs_by_name[std.name_].mapped[30], [])
+                return std.core.MathConstants(greycat.libs_by_name[std.name_].mapped[29], [])
 
         @final
         class time(std_n.core._time):
@@ -771,7 +760,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._time:
-                return std.core.time(greycat.libs_by_name[std.name_].mapped[31], [])
+                return std.core.time(greycat.libs_by_name[std.name_].mapped[30], [])
 
         @final
         class CalendarUnit(GreyCat.Enum):
@@ -782,42 +771,42 @@ class std(GreyCat.Library):
 
             @staticmethod
             def year(greycat: GreyCat) -> std.core.CalendarUnit:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[32]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[31]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
             def month(greycat: GreyCat) -> std.core.CalendarUnit:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[32]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[31]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
             def day(greycat: GreyCat) -> std.core.CalendarUnit:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[32]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[31]
                 return t.enum_values[t.generated_offsets[2]]
 
             @staticmethod
             def hour(greycat: GreyCat) -> std.core.CalendarUnit:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[32]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[31]
                 return t.enum_values[t.generated_offsets[3]]
 
             @staticmethod
             def minute(greycat: GreyCat) -> std.core.CalendarUnit:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[32]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[31]
                 return t.enum_values[t.generated_offsets[4]]
 
             @staticmethod
             def second(greycat: GreyCat) -> std.core.CalendarUnit:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[32]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[31]
                 return t.enum_values[t.generated_offsets[5]]
 
             @staticmethod
             def microsecond(greycat: GreyCat) -> std.core.CalendarUnit:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[32]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[31]
                 return t.enum_values[t.generated_offsets[6]]
 
             @staticmethod
             def create(greycat: GreyCat) -> std.core.CalendarUnit:
-                return std.core.CalendarUnit(greycat.libs_by_name[std.name_].mapped[32], [])
+                return std.core.CalendarUnit(greycat.libs_by_name[std.name_].mapped[31], [])
 
         @final
         class Buffer(std_n.core._Buffer):
@@ -828,7 +817,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._Buffer:
-                return std.core.Buffer(greycat.libs_by_name[std.name_].mapped[33], [])
+                return std.core.Buffer(greycat.libs_by_name[std.name_].mapped[32], [])
 
         @final
         class Tensor(std_n.core._Tensor):
@@ -839,7 +828,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._Tensor:
-                return std.core.Tensor(greycat.libs_by_name[std.name_].mapped[34], [])
+                return std.core.Tensor(greycat.libs_by_name[std.name_].mapped[33], [])
 
         @final
         class nodeIndex(Generic[__K, __V], std_n.core._nodeIndex[__K, __V]):
@@ -850,7 +839,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._nodeIndex:
-                return std.core.nodeIndex(greycat.libs_by_name[std.name_].mapped[35], [])
+                return std.core.nodeIndex(greycat.libs_by_name[std.name_].mapped[34], [])
 
         @final
         class TensorType(GreyCat.Enum):
@@ -861,37 +850,37 @@ class std(GreyCat.Library):
 
             @staticmethod
             def i32(greycat: GreyCat) -> std.core.TensorType:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[36]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[35]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
             def i64(greycat: GreyCat) -> std.core.TensorType:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[36]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[35]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
             def f32(greycat: GreyCat) -> std.core.TensorType:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[36]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[35]
                 return t.enum_values[t.generated_offsets[2]]
 
             @staticmethod
             def f64(greycat: GreyCat) -> std.core.TensorType:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[36]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[35]
                 return t.enum_values[t.generated_offsets[3]]
 
             @staticmethod
             def c64(greycat: GreyCat) -> std.core.TensorType:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[36]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[35]
                 return t.enum_values[t.generated_offsets[4]]
 
             @staticmethod
             def c128(greycat: GreyCat) -> std.core.TensorType:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[36]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[35]
                 return t.enum_values[t.generated_offsets[5]]
 
             @staticmethod
             def create(greycat: GreyCat) -> std.core.TensorType:
-                return std.core.TensorType(greycat.libs_by_name[std.name_].mapped[36], [])
+                return std.core.TensorType(greycat.libs_by_name[std.name_].mapped[35], [])
 
         @final
         class GeoBox(GreyCat.Object):
@@ -914,7 +903,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat, sw: std.core.geo, ne: std.core.geo) -> std.core.GeoBox:
-                return std.core.GeoBox(greycat.libs_by_name[std.name_].mapped[37], [sw, ne])
+                return std.core.GeoBox(greycat.libs_by_name[std.name_].mapped[36], [sw, ne])
 
         @final
         class TimeZone(GreyCat.Enum):
@@ -925,2817 +914,2817 @@ class std(GreyCat.Library):
 
             @staticmethod
             def Africa_Accra(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
             def Africa_Bamako(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
             def Africa_Banjul(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[2]]
 
             @staticmethod
             def Africa_Conakry(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[3]]
 
             @staticmethod
             def Africa_Dakar(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[4]]
 
             @staticmethod
             def Africa_Freetown(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[5]]
 
             @staticmethod
             def Africa_Lome(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[6]]
 
             @staticmethod
             def Africa_Nouakchott(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[7]]
 
             @staticmethod
             def Africa_Ouagadougou(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[8]]
 
             @staticmethod
             def Africa_Timbuktu(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[9]]
 
             @staticmethod
             def Atlantic_Reykjavik(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[10]]
 
             @staticmethod
             def Atlantic_St_Helena(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[11]]
 
             @staticmethod
             def Iceland(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[12]]
 
             @staticmethod
             def Egypt(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[13]]
 
             @staticmethod
             def Africa_Maseru(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[14]]
 
             @staticmethod
             def Africa_Mbabane(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[15]]
 
             @staticmethod
             def Africa_Bangui(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[16]]
 
             @staticmethod
             def Africa_Brazzaville(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[17]]
 
             @staticmethod
             def Africa_Douala(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[18]]
 
             @staticmethod
             def Africa_Kinshasa(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[19]]
 
             @staticmethod
             def Africa_Libreville(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[20]]
 
             @staticmethod
             def Africa_Luanda(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[21]]
 
             @staticmethod
             def Africa_Malabo(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[22]]
 
             @staticmethod
             def Africa_Niamey(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[23]]
 
             @staticmethod
             def Africa_Porto_Novo(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[24]]
 
             @staticmethod
             def Africa_Blantyre(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[25]]
 
             @staticmethod
             def Africa_Bujumbura(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[26]]
 
             @staticmethod
             def Africa_Gaborone(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[27]]
 
             @staticmethod
             def Africa_Harare(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[28]]
 
             @staticmethod
             def Africa_Kigali(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[29]]
 
             @staticmethod
             def Africa_Lubumbashi(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[30]]
 
             @staticmethod
             def Africa_Lusaka(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[31]]
 
             @staticmethod
             def Africa_Addis_Ababa(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[32]]
 
             @staticmethod
             def Africa_Asmara(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[33]]
 
             @staticmethod
             def Africa_Asmera(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[34]]
 
             @staticmethod
             def Africa_Dar_es_Salaam(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[35]]
 
             @staticmethod
             def Africa_Djibouti(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[36]]
 
             @staticmethod
             def Africa_Kampala(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[37]]
 
             @staticmethod
             def Africa_Mogadishu(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[38]]
 
             @staticmethod
             def Indian_Antananarivo(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[39]]
 
             @staticmethod
             def Indian_Comoro(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[40]]
 
             @staticmethod
             def Indian_Mayotte(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[41]]
 
             @staticmethod
             def Libya(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[42]]
 
             @staticmethod
             def America_Atka(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[43]]
 
             @staticmethod
             def US_Aleutian(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[44]]
 
             @staticmethod
             def US_Alaska(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[45]]
 
             @staticmethod
             def America_Buenos_Aires(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[46]]
 
             @staticmethod
             def America_Argentina_ComodRivadavia(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[47]]
 
             @staticmethod
             def America_Catamarca(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[48]]
 
             @staticmethod
             def America_Cordoba(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[49]]
 
             @staticmethod
             def America_Rosario(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[50]]
 
             @staticmethod
             def America_Jujuy(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[51]]
 
             @staticmethod
             def America_Mendoza(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[52]]
 
             @staticmethod
             def US_Central(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[53]]
 
             @staticmethod
             def America_Shiprock(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[54]]
 
             @staticmethod
             def Navajo(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[55]]
 
             @staticmethod
             def US_Mountain(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[56]]
 
             @staticmethod
             def US_Michigan(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[57]]
 
             @staticmethod
             def America_Yellowknife(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[58]]
 
             @staticmethod
             def Canada_Mountain(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[59]]
 
             @staticmethod
             def Canada_Atlantic(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[60]]
 
             @staticmethod
             def Cuba(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[61]]
 
             @staticmethod
             def America_Fort_Wayne(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[62]]
 
             @staticmethod
             def America_Indianapolis(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[63]]
 
             @staticmethod
             def US_East_Indiana(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[64]]
 
             @staticmethod
             def America_Knox_IN(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[65]]
 
             @staticmethod
             def US_Indiana_Starke(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[66]]
 
             @staticmethod
             def America_Pangnirtung(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[67]]
 
             @staticmethod
             def Jamaica(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[68]]
 
             @staticmethod
             def America_Louisville(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[69]]
 
             @staticmethod
             def US_Pacific(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[70]]
 
             @staticmethod
             def Brazil_West(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[71]]
 
             @staticmethod
             def Mexico_BajaSur(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[72]]
 
             @staticmethod
             def Mexico_General(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[73]]
 
             @staticmethod
             def US_Eastern(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[74]]
 
             @staticmethod
             def Brazil_DeNoronha(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[75]]
 
             @staticmethod
             def America_Godthab(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[76]]
 
             @staticmethod
             def America_Atikokan(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[77]]
 
             @staticmethod
             def America_Cayman(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[78]]
 
             @staticmethod
             def America_Coral_Harbour(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[79]]
 
             @staticmethod
             def America_Creston(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[80]]
 
             @staticmethod
             def US_Arizona(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[81]]
 
             @staticmethod
             def America_Anguilla(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[82]]
 
             @staticmethod
             def America_Antigua(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[83]]
 
             @staticmethod
             def America_Aruba(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[84]]
 
             @staticmethod
             def America_Blanc_Sablon(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[85]]
 
             @staticmethod
             def America_Curacao(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[86]]
 
             @staticmethod
             def America_Dominica(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[87]]
 
             @staticmethod
             def America_Grenada(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[88]]
 
             @staticmethod
             def America_Guadeloupe(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[89]]
 
             @staticmethod
             def America_Kralendijk(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[90]]
 
             @staticmethod
             def America_Lower_Princes(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[91]]
 
             @staticmethod
             def America_Marigot(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[92]]
 
             @staticmethod
             def America_Montserrat(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[93]]
 
             @staticmethod
             def America_Port_of_Spain(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[94]]
 
             @staticmethod
             def America_St_Barthelemy(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[95]]
 
             @staticmethod
             def America_St_Kitts(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[96]]
 
             @staticmethod
             def America_St_Lucia(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[97]]
 
             @staticmethod
             def America_St_Thomas(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[98]]
 
             @staticmethod
             def America_St_Vincent(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[99]]
 
             @staticmethod
             def America_Tortola(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[100]]
 
             @staticmethod
             def America_Virgin(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[101]]
 
             @staticmethod
             def Canada_Saskatchewan(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[102]]
 
             @staticmethod
             def America_Porto_Acre(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[103]]
 
             @staticmethod
             def Brazil_Acre(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[104]]
 
             @staticmethod
             def Chile_Continental(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[105]]
 
             @staticmethod
             def Brazil_East(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[106]]
 
             @staticmethod
             def Canada_Newfoundland(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[107]]
 
             @staticmethod
             def America_Ensenada(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[108]]
 
             @staticmethod
             def America_Santa_Isabel(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[109]]
 
             @staticmethod
             def Mexico_BajaNorte(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[110]]
 
             @staticmethod
             def America_Montreal(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[111]]
 
             @staticmethod
             def America_Nassau(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[112]]
 
             @staticmethod
             def America_Nipigon(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[113]]
 
             @staticmethod
             def America_Thunder_Bay(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[114]]
 
             @staticmethod
             def Canada_Eastern(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[115]]
 
             @staticmethod
             def Canada_Pacific(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[116]]
 
             @staticmethod
             def Canada_Yukon(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[117]]
 
             @staticmethod
             def America_Rainy_River(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[118]]
 
             @staticmethod
             def Canada_Central(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[119]]
 
             @staticmethod
             def Asia_Ashkhabad(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[120]]
 
             @staticmethod
             def Asia_Phnom_Penh(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[121]]
 
             @staticmethod
             def Asia_Vientiane(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[122]]
 
             @staticmethod
             def Indian_Christmas(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[123]]
 
             @staticmethod
             def Asia_Dacca(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[124]]
 
             @staticmethod
             def Asia_Muscat(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[125]]
 
             @staticmethod
             def Indian_Mahe(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[126]]
 
             @staticmethod
             def Indian_Reunion(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[127]]
 
             @staticmethod
             def Asia_Saigon(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[128]]
 
             @staticmethod
             def Hongkong(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[129]]
 
             @staticmethod
             def Asia_Tel_Aviv(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[130]]
 
             @staticmethod
             def Israel(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[131]]
 
             @staticmethod
             def Asia_Katmandu(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[132]]
 
             @staticmethod
             def Asia_Calcutta(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[133]]
 
             @staticmethod
             def Asia_Brunei(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[134]]
 
             @staticmethod
             def Asia_Macao(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[135]]
 
             @staticmethod
             def Asia_Ujung_Pandang(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[136]]
 
             @staticmethod
             def Europe_Nicosia(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[137]]
 
             @staticmethod
             def Asia_Bahrain(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[138]]
 
             @staticmethod
             def Antarctica_Syowa(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[139]]
 
             @staticmethod
             def Asia_Aden(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[140]]
 
             @staticmethod
             def Asia_Kuwait(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[141]]
 
             @staticmethod
             def ROK(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[142]]
 
             @staticmethod
             def Asia_Chongqing(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[143]]
 
             @staticmethod
             def Asia_Chungking(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[144]]
 
             @staticmethod
             def Asia_Harbin(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[145]]
 
             @staticmethod
             def PRC(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[146]]
 
             @staticmethod
             def Asia_Kuala_Lumpur(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[147]]
 
             @staticmethod
             def Singapore(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[148]]
 
             @staticmethod
             def ROC(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[149]]
 
             @staticmethod
             def Iran(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[150]]
 
             @staticmethod
             def Asia_Thimbu(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[151]]
 
             @staticmethod
             def Japan(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[152]]
 
             @staticmethod
             def Asia_Ulan_Bator(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[153]]
 
             @staticmethod
             def Asia_Kashgar(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[154]]
 
             @staticmethod
             def Asia_Rangoon(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[155]]
 
             @staticmethod
             def Indian_Cocos(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[156]]
 
             @staticmethod
             def Atlantic_Faeroe(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[157]]
 
             @staticmethod
             def Australia_South(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[158]]
 
             @staticmethod
             def Australia_Queensland(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[159]]
 
             @staticmethod
             def Australia_Yancowinna(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[160]]
 
             @staticmethod
             def Australia_North(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[161]]
 
             @staticmethod
             def Australia_Currie(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[162]]
 
             @staticmethod
             def Australia_Tasmania(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[163]]
 
             @staticmethod
             def Australia_LHI(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[164]]
 
             @staticmethod
             def Australia_Victoria(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[165]]
 
             @staticmethod
             def Australia_West(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[166]]
 
             @staticmethod
             def Australia_ACT(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[167]]
 
             @staticmethod
             def Australia_Canberra(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[168]]
 
             @staticmethod
             def Australia_NSW(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[169]]
 
             @staticmethod
             def GMT(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[170]]
 
             @staticmethod
             def GMTx0(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[171]]
 
             @staticmethod
             def GMT_0(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[172]]
 
             @staticmethod
             def GMT0(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[173]]
 
             @staticmethod
             def Greenwich(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[174]]
 
             @staticmethod
             def UCT(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[175]]
 
             @staticmethod
             def UTC(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[176]]
 
             @staticmethod
             def Universal(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[177]]
 
             @staticmethod
             def Zulu(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[178]]
 
             @staticmethod
             def Europe_Ljubljana(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[179]]
 
             @staticmethod
             def Europe_Podgorica(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[180]]
 
             @staticmethod
             def Europe_Sarajevo(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[181]]
 
             @staticmethod
             def Europe_Skopje(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[182]]
 
             @staticmethod
             def Europe_Zagreb(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[183]]
 
             @staticmethod
             def Arctic_Longyearbyen(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[184]]
 
             @staticmethod
             def Atlantic_Jan_Mayen(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[185]]
 
             @staticmethod
             def Europe_Copenhagen(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[186]]
 
             @staticmethod
             def Europe_Oslo(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[187]]
 
             @staticmethod
             def Europe_Stockholm(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[188]]
 
             @staticmethod
             def Europe_Amsterdam(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[189]]
 
             @staticmethod
             def Europe_Luxembourg(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[190]]
 
             @staticmethod
             def Europe_Tiraspol(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[191]]
 
             @staticmethod
             def Eire(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[192]]
 
             @staticmethod
             def Europe_Mariehamn(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[193]]
 
             @staticmethod
             def Asia_Istanbul(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[194]]
 
             @staticmethod
             def Turkey(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[195]]
 
             @staticmethod
             def Europe_Kiev(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[196]]
 
             @staticmethod
             def Europe_Uzhgorod(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[197]]
 
             @staticmethod
             def Europe_Zaporozhye(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[198]]
 
             @staticmethod
             def Portugal(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[199]]
 
             @staticmethod
             def Europe_Belfast(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[200]]
 
             @staticmethod
             def Europe_Guernsey(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[201]]
 
             @staticmethod
             def Europe_Isle_of_Man(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[202]]
 
             @staticmethod
             def Europe_Jersey(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[203]]
 
             @staticmethod
             def GB(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[204]]
 
             @staticmethod
             def GB_Eire(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[205]]
 
             @staticmethod
             def W_SU(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[206]]
 
             @staticmethod
             def Europe_Monaco(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[207]]
 
             @staticmethod
             def Europe_Bratislava(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[208]]
 
             @staticmethod
             def Europe_San_Marino(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[209]]
 
             @staticmethod
             def Europe_Vatican(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[210]]
 
             @staticmethod
             def Poland(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[211]]
 
             @staticmethod
             def Europe_Busingen(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[212]]
 
             @staticmethod
             def Europe_Vaduz(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[213]]
 
             @staticmethod
             def Indian_Kerguelen(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[214]]
 
             @staticmethod
             def Antarctica_McMurdo(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[215]]
 
             @staticmethod
             def Antarctica_South_Pole(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[216]]
 
             @staticmethod
             def NZ(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[217]]
 
             @staticmethod
             def NZ_CHAT(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[218]]
 
             @staticmethod
             def Chile_EasterIsland(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[219]]
 
             @staticmethod
             def Pacific_Pohnpei(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[220]]
 
             @staticmethod
             def Pacific_Ponape(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[221]]
 
             @staticmethod
             def Pacific_Saipan(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[222]]
 
             @staticmethod
             def Pacific_Johnston(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[223]]
 
             @staticmethod
             def US_Hawaii(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[224]]
 
             @staticmethod
             def Pacific_Enderbury(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[225]]
 
             @staticmethod
             def Kwajalein(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[226]]
 
             @staticmethod
             def Pacific_Midway(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[227]]
 
             @staticmethod
             def Pacific_Samoa(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[228]]
 
             @staticmethod
             def US_Samoa(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[229]]
 
             @staticmethod
             def Antarctica_DumontDUrville(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[230]]
 
             @staticmethod
             def Pacific_Chuuk(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[231]]
 
             @staticmethod
             def Pacific_Truk(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[232]]
 
             @staticmethod
             def Pacific_Yap(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[233]]
 
             @staticmethod
             def Pacific_Funafuti(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[234]]
 
             @staticmethod
             def Pacific_Majuro(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[235]]
 
             @staticmethod
             def Pacific_Wake(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[236]]
 
             @staticmethod
             def Pacific_Wallis(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[237]]
 
             @staticmethod
             def Africa_Abidjan(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[238]]
 
             @staticmethod
             def Africa_Algiers(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[239]]
 
             @staticmethod
             def Africa_Bissau(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[240]]
 
             @staticmethod
             def Africa_Cairo(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[241]]
 
             @staticmethod
             def Africa_Casablanca(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[242]]
 
             @staticmethod
             def Africa_Ceuta(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[243]]
 
             @staticmethod
             def Africa_El_Aaiun(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[244]]
 
             @staticmethod
             def Africa_Johannesburg(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[245]]
 
             @staticmethod
             def Africa_Juba(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[246]]
 
             @staticmethod
             def Africa_Khartoum(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[247]]
 
             @staticmethod
             def Africa_Lagos(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[248]]
 
             @staticmethod
             def Africa_Maputo(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[249]]
 
             @staticmethod
             def Africa_Monrovia(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[250]]
 
             @staticmethod
             def Africa_Nairobi(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[251]]
 
             @staticmethod
             def Africa_Ndjamena(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[252]]
 
             @staticmethod
             def Africa_Sao_Tome(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[253]]
 
             @staticmethod
             def Africa_Tripoli(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[254]]
 
             @staticmethod
             def Africa_Tunis(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[255]]
 
             @staticmethod
             def Africa_Windhoek(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[256]]
 
             @staticmethod
             def America_Adak(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[257]]
 
             @staticmethod
             def America_Anchorage(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[258]]
 
             @staticmethod
             def America_Araguaina(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[259]]
 
             @staticmethod
             def America_Argentina_Buenos_Aires(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[260]]
 
             @staticmethod
             def America_Argentina_Catamarca(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[261]]
 
             @staticmethod
             def America_Argentina_Cordoba(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[262]]
 
             @staticmethod
             def America_Argentina_Jujuy(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[263]]
 
             @staticmethod
             def America_Argentina_La_Rioja(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[264]]
 
             @staticmethod
             def America_Argentina_Mendoza(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[265]]
 
             @staticmethod
             def America_Argentina_Rio_Gallegos(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[266]]
 
             @staticmethod
             def America_Argentina_Salta(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[267]]
 
             @staticmethod
             def America_Argentina_San_Juan(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[268]]
 
             @staticmethod
             def America_Argentina_San_Luis(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[269]]
 
             @staticmethod
             def America_Argentina_Tucuman(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[270]]
 
             @staticmethod
             def America_Argentina_Ushuaia(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[271]]
 
             @staticmethod
             def America_Asuncion(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[272]]
 
             @staticmethod
             def America_Bahia(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[273]]
 
             @staticmethod
             def America_Bahia_Banderas(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[274]]
 
             @staticmethod
             def America_Barbados(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[275]]
 
             @staticmethod
             def America_Belem(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[276]]
 
             @staticmethod
             def America_Belize(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[277]]
 
             @staticmethod
             def America_Boa_Vista(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[278]]
 
             @staticmethod
             def America_Bogota(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[279]]
 
             @staticmethod
             def America_Boise(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[280]]
 
             @staticmethod
             def America_Cambridge_Bay(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[281]]
 
             @staticmethod
             def America_Campo_Grande(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[282]]
 
             @staticmethod
             def America_Cancun(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[283]]
 
             @staticmethod
             def America_Caracas(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[284]]
 
             @staticmethod
             def America_Cayenne(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[285]]
 
             @staticmethod
             def America_Chicago(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[286]]
 
             @staticmethod
             def America_Chihuahua(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[287]]
 
             @staticmethod
             def America_Ciudad_Juarez(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[288]]
 
             @staticmethod
             def America_Costa_Rica(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[289]]
 
             @staticmethod
             def America_Cuiaba(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[290]]
 
             @staticmethod
             def America_Danmarkshavn(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[291]]
 
             @staticmethod
             def America_Dawson(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[292]]
 
             @staticmethod
             def America_Dawson_Creek(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[293]]
 
             @staticmethod
             def America_Denver(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[294]]
 
             @staticmethod
             def America_Detroit(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[295]]
 
             @staticmethod
             def America_Edmonton(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[296]]
 
             @staticmethod
             def America_Eirunepe(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[297]]
 
             @staticmethod
             def America_El_Salvador(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[298]]
 
             @staticmethod
             def America_Fort_Nelson(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[299]]
 
             @staticmethod
             def America_Fortaleza(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[300]]
 
             @staticmethod
             def America_Glace_Bay(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[301]]
 
             @staticmethod
             def America_Goose_Bay(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[302]]
 
             @staticmethod
             def America_Grand_Turk(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[303]]
 
             @staticmethod
             def America_Guatemala(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[304]]
 
             @staticmethod
             def America_Guayaquil(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[305]]
 
             @staticmethod
             def America_Guyana(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[306]]
 
             @staticmethod
             def America_Halifax(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[307]]
 
             @staticmethod
             def America_Havana(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[308]]
 
             @staticmethod
             def America_Hermosillo(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[309]]
 
             @staticmethod
             def America_Indiana_Indianapolis(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[310]]
 
             @staticmethod
             def America_Indiana_Knox(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[311]]
 
             @staticmethod
             def America_Indiana_Marengo(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[312]]
 
             @staticmethod
             def America_Indiana_Petersburg(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[313]]
 
             @staticmethod
             def America_Indiana_Tell_City(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[314]]
 
             @staticmethod
             def America_Indiana_Vevay(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[315]]
 
             @staticmethod
             def America_Indiana_Vincennes(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[316]]
 
             @staticmethod
             def America_Indiana_Winamac(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[317]]
 
             @staticmethod
             def America_Inuvik(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[318]]
 
             @staticmethod
             def America_Iqaluit(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[319]]
 
             @staticmethod
             def America_Jamaica(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[320]]
 
             @staticmethod
             def America_Juneau(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[321]]
 
             @staticmethod
             def America_Kentucky_Louisville(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[322]]
 
             @staticmethod
             def America_Kentucky_Monticello(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[323]]
 
             @staticmethod
             def America_La_Paz(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[324]]
 
             @staticmethod
             def America_Lima(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[325]]
 
             @staticmethod
             def America_Los_Angeles(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[326]]
 
             @staticmethod
             def America_Maceio(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[327]]
 
             @staticmethod
             def America_Managua(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[328]]
 
             @staticmethod
             def America_Manaus(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[329]]
 
             @staticmethod
             def America_Martinique(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[330]]
 
             @staticmethod
             def America_Matamoros(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[331]]
 
             @staticmethod
             def America_Mazatlan(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[332]]
 
             @staticmethod
             def America_Menominee(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[333]]
 
             @staticmethod
             def America_Merida(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[334]]
 
             @staticmethod
             def America_Metlakatla(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[335]]
 
             @staticmethod
             def America_Mexico_City(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[336]]
 
             @staticmethod
             def America_Miquelon(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[337]]
 
             @staticmethod
             def America_Moncton(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[338]]
 
             @staticmethod
             def America_Monterrey(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[339]]
 
             @staticmethod
             def America_Montevideo(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[340]]
 
             @staticmethod
             def America_New_York(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[341]]
 
             @staticmethod
             def America_Nome(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[342]]
 
             @staticmethod
             def America_Noronha(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[343]]
 
             @staticmethod
             def America_North_Dakota_Beulah(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[344]]
 
             @staticmethod
             def America_North_Dakota_Center(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[345]]
 
             @staticmethod
             def America_North_Dakota_New_Salem(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[346]]
 
             @staticmethod
             def America_Nuuk(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[347]]
 
             @staticmethod
             def America_Ojinaga(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[348]]
 
             @staticmethod
             def America_Panama(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[349]]
 
             @staticmethod
             def America_Paramaribo(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[350]]
 
             @staticmethod
             def America_Phoenix(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[351]]
 
             @staticmethod
             def America_Port_au_Prince(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[352]]
 
             @staticmethod
             def America_Porto_Velho(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[353]]
 
             @staticmethod
             def America_Puerto_Rico(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[354]]
 
             @staticmethod
             def America_Punta_Arenas(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[355]]
 
             @staticmethod
             def America_Rankin_Inlet(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[356]]
 
             @staticmethod
             def America_Recife(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[357]]
 
             @staticmethod
             def America_Regina(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[358]]
 
             @staticmethod
             def America_Resolute(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[359]]
 
             @staticmethod
             def America_Rio_Branco(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[360]]
 
             @staticmethod
             def America_Santarem(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[361]]
 
             @staticmethod
             def America_Santiago(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[362]]
 
             @staticmethod
             def America_Santo_Domingo(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[363]]
 
             @staticmethod
             def America_Sao_Paulo(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[364]]
 
             @staticmethod
             def America_Scoresbysund(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[365]]
 
             @staticmethod
             def America_Sitka(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[366]]
 
             @staticmethod
             def America_St_Johns(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[367]]
 
             @staticmethod
             def America_Swift_Current(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[368]]
 
             @staticmethod
             def America_Tegucigalpa(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[369]]
 
             @staticmethod
             def America_Thule(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[370]]
 
             @staticmethod
             def America_Tijuana(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[371]]
 
             @staticmethod
             def America_Toronto(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[372]]
 
             @staticmethod
             def America_Vancouver(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[373]]
 
             @staticmethod
             def America_Whitehorse(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[374]]
 
             @staticmethod
             def America_Winnipeg(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[375]]
 
             @staticmethod
             def America_Yakutat(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[376]]
 
             @staticmethod
             def Antarctica_Casey(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[377]]
 
             @staticmethod
             def Antarctica_Davis(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[378]]
 
             @staticmethod
             def Antarctica_Macquarie(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[379]]
 
             @staticmethod
             def Antarctica_Mawson(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[380]]
 
             @staticmethod
             def Antarctica_Palmer(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[381]]
 
             @staticmethod
             def Antarctica_Rothera(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[382]]
 
             @staticmethod
             def Antarctica_Troll(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[383]]
 
             @staticmethod
             def Antarctica_Vostok(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[384]]
 
             @staticmethod
             def Asia_Almaty(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[385]]
 
             @staticmethod
             def Asia_Amman(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[386]]
 
             @staticmethod
             def Asia_Anadyr(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[387]]
 
             @staticmethod
             def Asia_Aqtau(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[388]]
 
             @staticmethod
             def Asia_Aqtobe(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[389]]
 
             @staticmethod
             def Asia_Ashgabat(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[390]]
 
             @staticmethod
             def Asia_Atyrau(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[391]]
 
             @staticmethod
             def Asia_Baghdad(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[392]]
 
             @staticmethod
             def Asia_Baku(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[393]]
 
             @staticmethod
             def Asia_Bangkok(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[394]]
 
             @staticmethod
             def Asia_Barnaul(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[395]]
 
             @staticmethod
             def Asia_Beirut(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[396]]
 
             @staticmethod
             def Asia_Bishkek(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[397]]
 
             @staticmethod
             def Asia_Chita(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[398]]
 
             @staticmethod
             def Asia_Choibalsan(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[399]]
 
             @staticmethod
             def Asia_Colombo(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[400]]
 
             @staticmethod
             def Asia_Damascus(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[401]]
 
             @staticmethod
             def Asia_Dhaka(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[402]]
 
             @staticmethod
             def Asia_Dili(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[403]]
 
             @staticmethod
             def Asia_Dubai(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[404]]
 
             @staticmethod
             def Asia_Dushanbe(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[405]]
 
             @staticmethod
             def Asia_Famagusta(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[406]]
 
             @staticmethod
             def Asia_Gaza(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[407]]
 
             @staticmethod
             def Asia_Hebron(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[408]]
 
             @staticmethod
             def Asia_Ho_Chi_Minh(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[409]]
 
             @staticmethod
             def Asia_Hong_Kong(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[410]]
 
             @staticmethod
             def Asia_Hovd(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[411]]
 
             @staticmethod
             def Asia_Irkutsk(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[412]]
 
             @staticmethod
             def Asia_Jakarta(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[413]]
 
             @staticmethod
             def Asia_Jayapura(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[414]]
 
             @staticmethod
             def Asia_Jerusalem(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[415]]
 
             @staticmethod
             def Asia_Kabul(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[416]]
 
             @staticmethod
             def Asia_Kamchatka(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[417]]
 
             @staticmethod
             def Asia_Karachi(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[418]]
 
             @staticmethod
             def Asia_Kathmandu(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[419]]
 
             @staticmethod
             def Asia_Khandyga(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[420]]
 
             @staticmethod
             def Asia_Kolkata(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[421]]
 
             @staticmethod
             def Asia_Krasnoyarsk(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[422]]
 
             @staticmethod
             def Asia_Kuching(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[423]]
 
             @staticmethod
             def Asia_Macau(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[424]]
 
             @staticmethod
             def Asia_Magadan(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[425]]
 
             @staticmethod
             def Asia_Makassar(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[426]]
 
             @staticmethod
             def Asia_Manila(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[427]]
 
             @staticmethod
             def Asia_Nicosia(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[428]]
 
             @staticmethod
             def Asia_Novokuznetsk(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[429]]
 
             @staticmethod
             def Asia_Novosibirsk(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[430]]
 
             @staticmethod
             def Asia_Omsk(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[431]]
 
             @staticmethod
             def Asia_Oral(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[432]]
 
             @staticmethod
             def Asia_Pontianak(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[433]]
 
             @staticmethod
             def Asia_Pyongyang(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[434]]
 
             @staticmethod
             def Asia_Qatar(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[435]]
 
             @staticmethod
             def Asia_Qostanay(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[436]]
 
             @staticmethod
             def Asia_Qyzylorda(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[437]]
 
             @staticmethod
             def Asia_Riyadh(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[438]]
 
             @staticmethod
             def Asia_Sakhalin(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[439]]
 
             @staticmethod
             def Asia_Samarkand(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[440]]
 
             @staticmethod
             def Asia_Seoul(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[441]]
 
             @staticmethod
             def Asia_Shanghai(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[442]]
 
             @staticmethod
             def Asia_Singapore(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[443]]
 
             @staticmethod
             def Asia_Srednekolymsk(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[444]]
 
             @staticmethod
             def Asia_Taipei(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[445]]
 
             @staticmethod
             def Asia_Tashkent(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[446]]
 
             @staticmethod
             def Asia_Tbilisi(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[447]]
 
             @staticmethod
             def Asia_Tehran(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[448]]
 
             @staticmethod
             def Asia_Thimphu(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[449]]
 
             @staticmethod
             def Asia_Tokyo(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[450]]
 
             @staticmethod
             def Asia_Tomsk(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[451]]
 
             @staticmethod
             def Asia_Ulaanbaatar(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[452]]
 
             @staticmethod
             def Asia_Urumqi(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[453]]
 
             @staticmethod
             def Asia_Ust_Nera(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[454]]
 
             @staticmethod
             def Asia_Vladivostok(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[455]]
 
             @staticmethod
             def Asia_Yakutsk(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[456]]
 
             @staticmethod
             def Asia_Yangon(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[457]]
 
             @staticmethod
             def Asia_Yekaterinburg(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[458]]
 
             @staticmethod
             def Asia_Yerevan(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[459]]
 
             @staticmethod
             def Atlantic_Azores(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[460]]
 
             @staticmethod
             def Atlantic_Bermuda(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[461]]
 
             @staticmethod
             def Atlantic_Canary(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[462]]
 
             @staticmethod
             def Atlantic_Cape_Verde(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[463]]
 
             @staticmethod
             def Atlantic_Faroe(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[464]]
 
             @staticmethod
             def Atlantic_Madeira(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[465]]
 
             @staticmethod
             def Atlantic_South_Georgia(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[466]]
 
             @staticmethod
             def Atlantic_Stanley(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[467]]
 
             @staticmethod
             def Australia_Adelaide(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[468]]
 
             @staticmethod
             def Australia_Brisbane(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[469]]
 
             @staticmethod
             def Australia_Broken_Hill(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[470]]
 
             @staticmethod
             def Australia_Darwin(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[471]]
 
             @staticmethod
             def Australia_Eucla(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[472]]
 
             @staticmethod
             def Australia_Hobart(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[473]]
 
             @staticmethod
             def Australia_Lindeman(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[474]]
 
             @staticmethod
             def Australia_Lord_Howe(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[475]]
 
             @staticmethod
             def Australia_Melbourne(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[476]]
 
             @staticmethod
             def Australia_Perth(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[477]]
 
             @staticmethod
             def Australia_Sydney(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[478]]
 
             @staticmethod
             def CET(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[479]]
 
             @staticmethod
             def CST6CDT(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[480]]
 
             @staticmethod
             def EET(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[481]]
 
             @staticmethod
             def EST(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[482]]
 
             @staticmethod
             def EST5EDT(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[483]]
 
             @staticmethod
             def Europe_Andorra(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[484]]
 
             @staticmethod
             def Europe_Astrakhan(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[485]]
 
             @staticmethod
             def Europe_Athens(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[486]]
 
             @staticmethod
             def Europe_Belgrade(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[487]]
 
             @staticmethod
             def Europe_Berlin(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[488]]
 
             @staticmethod
             def Europe_Brussels(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[489]]
 
             @staticmethod
             def Europe_Bucharest(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[490]]
 
             @staticmethod
             def Europe_Budapest(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[491]]
 
             @staticmethod
             def Europe_Chisinau(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[492]]
 
             @staticmethod
             def Europe_Dublin(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[493]]
 
             @staticmethod
             def Europe_Gibraltar(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[494]]
 
             @staticmethod
             def Europe_Helsinki(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[495]]
 
             @staticmethod
             def Europe_Istanbul(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[496]]
 
             @staticmethod
             def Europe_Kaliningrad(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[497]]
 
             @staticmethod
             def Europe_Kirov(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[498]]
 
             @staticmethod
             def Europe_Kyiv(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[499]]
 
             @staticmethod
             def Europe_Lisbon(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[500]]
 
             @staticmethod
             def Europe_London(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[501]]
 
             @staticmethod
             def Europe_Madrid(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[502]]
 
             @staticmethod
             def Europe_Malta(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[503]]
 
             @staticmethod
             def Europe_Minsk(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[504]]
 
             @staticmethod
             def Europe_Moscow(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[505]]
 
             @staticmethod
             def Europe_Paris(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[506]]
 
             @staticmethod
             def Europe_Prague(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[507]]
 
             @staticmethod
             def Europe_Riga(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[508]]
 
             @staticmethod
             def Europe_Rome(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[509]]
 
             @staticmethod
             def Europe_Samara(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[510]]
 
             @staticmethod
             def Europe_Saratov(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[511]]
 
             @staticmethod
             def Europe_Simferopol(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[512]]
 
             @staticmethod
             def Europe_Sofia(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[513]]
 
             @staticmethod
             def Europe_Tallinn(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[514]]
 
             @staticmethod
             def Europe_Tirane(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[515]]
 
             @staticmethod
             def Europe_Ulyanovsk(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[516]]
 
             @staticmethod
             def Europe_Vienna(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[517]]
 
             @staticmethod
             def Europe_Vilnius(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[518]]
 
             @staticmethod
             def Europe_Volgograd(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[519]]
 
             @staticmethod
             def Europe_Warsaw(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[520]]
 
             @staticmethod
             def Europe_Zurich(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[521]]
 
             @staticmethod
             def Factory(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[522]]
 
             @staticmethod
             def HST(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[523]]
 
             @staticmethod
             def Indian_Chagos(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[524]]
 
             @staticmethod
             def Indian_Maldives(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[525]]
 
             @staticmethod
             def Indian_Mauritius(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[526]]
 
             @staticmethod
             def MET(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[527]]
 
             @staticmethod
             def MST(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[528]]
 
             @staticmethod
             def MST7MDT(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[529]]
 
             @staticmethod
             def PST8PDT(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[530]]
 
             @staticmethod
             def Pacific_Apia(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[531]]
 
             @staticmethod
             def Pacific_Auckland(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[532]]
 
             @staticmethod
             def Pacific_Bougainville(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[533]]
 
             @staticmethod
             def Pacific_Chatham(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[534]]
 
             @staticmethod
             def Pacific_Easter(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[535]]
 
             @staticmethod
             def Pacific_Efate(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[536]]
 
             @staticmethod
             def Pacific_Fakaofo(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[537]]
 
             @staticmethod
             def Pacific_Fiji(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[538]]
 
             @staticmethod
             def Pacific_Galapagos(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[539]]
 
             @staticmethod
             def Pacific_Gambier(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[540]]
 
             @staticmethod
             def Pacific_Guadalcanal(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[541]]
 
             @staticmethod
             def Pacific_Guam(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[542]]
 
             @staticmethod
             def Pacific_Honolulu(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[543]]
 
             @staticmethod
             def Pacific_Kanton(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[544]]
 
             @staticmethod
             def Pacific_Kiritimati(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[545]]
 
             @staticmethod
             def Pacific_Kosrae(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[546]]
 
             @staticmethod
             def Pacific_Kwajalein(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[547]]
 
             @staticmethod
             def Pacific_Marquesas(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[548]]
 
             @staticmethod
             def Pacific_Nauru(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[549]]
 
             @staticmethod
             def Pacific_Niue(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[550]]
 
             @staticmethod
             def Pacific_Norfolk(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[551]]
 
             @staticmethod
             def Pacific_Noumea(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[552]]
 
             @staticmethod
             def Pacific_Pago_Pago(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[553]]
 
             @staticmethod
             def Pacific_Palau(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[554]]
 
             @staticmethod
             def Pacific_Pitcairn(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[555]]
 
             @staticmethod
             def Pacific_Port_Moresby(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[556]]
 
             @staticmethod
             def Pacific_Rarotonga(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[557]]
 
             @staticmethod
             def Pacific_Tahiti(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[558]]
 
             @staticmethod
             def Pacific_Tarawa(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[559]]
 
             @staticmethod
             def Pacific_Tongatapu(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[560]]
 
             @staticmethod
             def WET(greycat: GreyCat) -> std.core.TimeZone:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[38]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[37]
                 return t.enum_values[t.generated_offsets[561]]
 
             @staticmethod
             def create(greycat: GreyCat) -> std.core.TimeZone:
-                return std.core.TimeZone(greycat.libs_by_name[std.name_].mapped[38], [])
+                return std.core.TimeZone(greycat.libs_by_name[std.name_].mapped[37], [])
 
         @final
         class type(std_n.core._type):
@@ -3746,7 +3735,7 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._type:
-                return std.core.type(greycat.libs_by_name[std.name_].mapped[39], [])
+                return std.core.type(greycat.libs_by_name[std.name_].mapped[38], [])
 
         @final
         class node(Generic[__T], std_n.core._node[__T]):
@@ -3757,7 +3746,18 @@ class std(GreyCat.Library):
 
             @staticmethod
             def create(greycat: GreyCat) -> std_n.core._node:
-                return std.core.node(greycat.libs_by_name[std.name_].mapped[40], [])
+                return std.core.node(greycat.libs_by_name[std.name_].mapped[39], [])
+
+        @final
+        class nodeList(Generic[__T], std_n.core._nodeList[__T]):
+            name_: Final[str] = "core::nodeList"
+
+            def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
+                super().__init__(type)
+
+            @staticmethod
+            def create(greycat: GreyCat) -> std_n.core._nodeList:
+                return std.core.nodeList(greycat.libs_by_name[std.name_].mapped[40], [])
 
         @final
         class nodeTimeCursor(Generic[__T], GreyCat.Object):
@@ -3783,17 +3783,6 @@ class std(GreyCat.Library):
                 return std.core.nodeTimeCursor(greycat.libs_by_name[std.name_].mapped[41], [n, req_time])
 
         @final
-        class nodeList(Generic[__T], std_n.core._nodeList[__T]):
-            name_: Final[str] = "core::nodeList"
-
-            def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
-                super().__init__(type)
-
-            @staticmethod
-            def create(greycat: GreyCat) -> std_n.core._nodeList:
-                return std.core.nodeList(greycat.libs_by_name[std.name_].mapped[42], [])
-
-        @final
         class SortOrder(GreyCat.Enum):
             name_: Final[str] = "core::SortOrder"
 
@@ -3802,17 +3791,28 @@ class std(GreyCat.Library):
 
             @staticmethod
             def asc(greycat: GreyCat) -> std.core.SortOrder:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[43]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[42]
                 return t.enum_values[t.generated_offsets[0]]
 
             @staticmethod
             def desc(greycat: GreyCat) -> std.core.SortOrder:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[43]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[42]
                 return t.enum_values[t.generated_offsets[1]]
 
             @staticmethod
             def create(greycat: GreyCat) -> std.core.SortOrder:
-                return std.core.SortOrder(greycat.libs_by_name[std.name_].mapped[43], [])
+                return std.core.SortOrder(greycat.libs_by_name[std.name_].mapped[42], [])
+
+        @final
+        class geo(std_n.core._geo):
+            name_: Final[str] = "core::geo"
+
+            def __init__(self, type: GreyCat.Type, _: list[Any] = []) -> None:
+                super().__init__(type)
+
+            @staticmethod
+            def create(greycat: GreyCat) -> std_n.core._geo:
+                return std.core.geo(greycat.libs_by_name[std.name_].mapped[43], [])
 
     @final
     class runtime:
@@ -5320,8 +5320,8 @@ class std(GreyCat.Library):
 
     @final
     class io:
-        __reqTime = TypeVar("__reqTime")
         __T = TypeVar("__T")
+        __reqTime = TypeVar("__reqTime")
 
         @final
         class SmtpAuth(GreyCat.Enum):
@@ -5503,53 +5503,6 @@ class std(GreyCat.Library):
                 return std.io.File(greycat.libs_by_name[std.name_].mapped[82], [path, size, last_modification])
 
         @final
-        class Smtp(GreyCat.Object):
-            name_: Final[str] = "io::Smtp"
-
-            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
-                super().__init__(type, attributes)
-
-            def host(self) -> str:
-                return self._get(self.type_.generated_offsets[0])
-
-            def set_host(self, v: str) -> None:
-                self._set(self.type_.generated_offsets[0], v)
-
-            def port(self) -> int:
-                return self._get(self.type_.generated_offsets[1])
-
-            def set_port(self, v: int) -> None:
-                self._set(self.type_.generated_offsets[1], v)
-
-            def mode(self) -> std.io.SmtpMode:
-                return self._get(self.type_.generated_offsets[2])
-
-            def set_mode(self, v: std.io.SmtpMode) -> None:
-                self._set(self.type_.generated_offsets[2], v)
-
-            def authenticate(self) -> std.io.SmtpAuth:
-                return self._get(self.type_.generated_offsets[3])
-
-            def set_authenticate(self, v: std.io.SmtpAuth) -> None:
-                self._set(self.type_.generated_offsets[3], v)
-
-            def user(self) -> str:
-                return self._get(self.type_.generated_offsets[4])
-
-            def set_user(self, v: str) -> None:
-                self._set(self.type_.generated_offsets[4], v)
-
-            def pass_(self) -> str:
-                return self._get(self.type_.generated_offsets[5])
-
-            def set_pass(self, v: str) -> None:
-                self._set(self.type_.generated_offsets[5], v)
-
-            @staticmethod
-            def create(greycat: GreyCat, host: str, port: int, mode: std.io.SmtpMode, authenticate: std.io.SmtpAuth, user: str, pass_: str) -> std.io.Smtp:
-                return std.io.Smtp(greycat.libs_by_name[std.name_].mapped[83], [host, port, mode, authenticate, user, pass_])
-
-        @final
         class CsvAnalysisConfig(GreyCat.Object):
             name_: Final[str] = "io::CsvAnalysisConfig"
 
@@ -5612,17 +5565,64 @@ class std(GreyCat.Library):
 
             @staticmethod
             def enumerable_limit_default(greycat: GreyCat) -> int:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[84]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[83]
                 return t.static_values[0]
 
             @staticmethod
             def date_check_limit_default(greycat: GreyCat) -> int:
-                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[84]
+                t: Final[GreyCat.Type] = greycat.libs_by_name[std.name_].mapped[83]
                 return t.static_values[1]
 
             @staticmethod
             def create(greycat: GreyCat, header_lines: int, separator: c_char, string_delimiter: c_char, decimal_separator: c_char, thousands_separator: c_char, row_limit: int, enumerable_limit: int, date_check_limit: int, date_formats: std.core.Array) -> std.io.CsvAnalysisConfig:
-                return std.io.CsvAnalysisConfig(greycat.libs_by_name[std.name_].mapped[84], [header_lines, separator, string_delimiter, decimal_separator, thousands_separator, row_limit, enumerable_limit, date_check_limit, date_formats])
+                return std.io.CsvAnalysisConfig(greycat.libs_by_name[std.name_].mapped[83], [header_lines, separator, string_delimiter, decimal_separator, thousands_separator, row_limit, enumerable_limit, date_check_limit, date_formats])
+
+        @final
+        class Smtp(GreyCat.Object):
+            name_: Final[str] = "io::Smtp"
+
+            def __init__(self, type: GreyCat.Type, attributes: list[Any] = []) -> None:
+                super().__init__(type, attributes)
+
+            def host(self) -> str:
+                return self._get(self.type_.generated_offsets[0])
+
+            def set_host(self, v: str) -> None:
+                self._set(self.type_.generated_offsets[0], v)
+
+            def port(self) -> int:
+                return self._get(self.type_.generated_offsets[1])
+
+            def set_port(self, v: int) -> None:
+                self._set(self.type_.generated_offsets[1], v)
+
+            def mode(self) -> std.io.SmtpMode:
+                return self._get(self.type_.generated_offsets[2])
+
+            def set_mode(self, v: std.io.SmtpMode) -> None:
+                self._set(self.type_.generated_offsets[2], v)
+
+            def authenticate(self) -> std.io.SmtpAuth:
+                return self._get(self.type_.generated_offsets[3])
+
+            def set_authenticate(self, v: std.io.SmtpAuth) -> None:
+                self._set(self.type_.generated_offsets[3], v)
+
+            def user(self) -> str:
+                return self._get(self.type_.generated_offsets[4])
+
+            def set_user(self, v: str) -> None:
+                self._set(self.type_.generated_offsets[4], v)
+
+            def pass_(self) -> str:
+                return self._get(self.type_.generated_offsets[5])
+
+            def set_pass(self, v: str) -> None:
+                self._set(self.type_.generated_offsets[5], v)
+
+            @staticmethod
+            def create(greycat: GreyCat, host: str, port: int, mode: std.io.SmtpMode, authenticate: std.io.SmtpAuth, user: str, pass_: str) -> std.io.Smtp:
+                return std.io.Smtp(greycat.libs_by_name[std.name_].mapped[84], [host, port, mode, authenticate, user, pass_])
 
         @final
         class Email(GreyCat.Object):
@@ -6561,8 +6561,8 @@ class std(GreyCat.Library):
 
     @final
     class util:
-        __resolveTimeAt = TypeVar("__resolveTimeAt")
         __T = TypeVar("__T")
+        __resolveTimeAt = TypeVar("__resolveTimeAt")
 
         @final
         class Random(GreyCat.Object):
@@ -7223,8 +7223,6 @@ class std(GreyCat.Library):
                 return std.util.Gaussian(greycat.libs_by_name[std.name_].mapped[132], [sum, sumsq, count, min, max])
 
     def configure(self, loaders: dict[str, GreyCat.Loader], factories: dict[str, GreyCat.Factory]) -> None:
-        factories[std.core.geo.name_] = lambda type, attributes: std.core.geo(type, attributes)
-        loaders[std.core.geo.name_] = lambda type, stream: std_n.core._geo.load(type, stream)
         factories[std.core.t4f.name_] = lambda type, attributes: std.core.t4f(type, attributes)
         loaders[std.core.t4f.name_] = lambda type, stream: std_n.core._t4f.load(type, stream)
         factories[std.core.t2f.name_] = lambda type, attributes: std.core.t2f(type, attributes)
@@ -7287,10 +7285,12 @@ class std(GreyCat.Library):
         loaders[std.core.type.name_] = lambda type, stream: std_n.core._type.load(type, stream)
         factories[std.core.node.name_] = lambda type, attributes: std.core.node(type, attributes)
         loaders[std.core.node.name_] = lambda type, stream: std_n.core._node.load(type, stream)
-        factories[std.core.nodeTimeCursor.name_] = lambda type, attributes: std.core.nodeTimeCursor(type, attributes)
         factories[std.core.nodeList.name_] = lambda type, attributes: std.core.nodeList(type, attributes)
         loaders[std.core.nodeList.name_] = lambda type, stream: std_n.core._nodeList.load(type, stream)
+        factories[std.core.nodeTimeCursor.name_] = lambda type, attributes: std.core.nodeTimeCursor(type, attributes)
         factories[std.core.SortOrder.name_] = lambda type, attributes: std.core.SortOrder(type, attributes)
+        factories[std.core.geo.name_] = lambda type, attributes: std.core.geo(type, attributes)
+        loaders[std.core.geo.name_] = lambda type, stream: std_n.core._geo.load(type, stream)
         factories[std.runtime.LogType.name_] = lambda type, attributes: std.runtime.LogType(type, attributes)
         factories[std.runtime.SecurityEntity.name_] = lambda type, attributes: std.runtime.SecurityEntity(type, attributes)
         factories[std.runtime.UserGroupPolicyType.name_] = lambda type, attributes: std.runtime.UserGroupPolicyType(type, attributes)
@@ -7330,8 +7330,8 @@ class std(GreyCat.Library):
         factories[std.io.TextEncoder.name_] = lambda type, attributes: std.io.TextEncoder(type, attributes)
         factories[std.io.CsvWriter.name_] = lambda type, attributes: std.io.CsvWriter(type, attributes)
         factories[std.io.File.name_] = lambda type, attributes: std.io.File(type, attributes)
-        factories[std.io.Smtp.name_] = lambda type, attributes: std.io.Smtp(type, attributes)
         factories[std.io.CsvAnalysisConfig.name_] = lambda type, attributes: std.io.CsvAnalysisConfig(type, attributes)
+        factories[std.io.Smtp.name_] = lambda type, attributes: std.io.Smtp(type, attributes)
         factories[std.io.Email.name_] = lambda type, attributes: std.io.Email(type, attributes)
         factories[std.io.TextWriter.name_] = lambda type, attributes: std.io.TextWriter(type, attributes)
         factories[std.io.CsvColumnStatistics.name_] = lambda type, attributes: std.io.CsvColumnStatistics(type, attributes)
@@ -7383,7 +7383,6 @@ class std(GreyCat.Library):
 
     def init(self, greycat: GreyCat) -> None:
         self.mapped: list[GreyCat.Type] = [
-            greycat.types_by_name[std.core.geo.name_],
             greycat.types_by_name[std.core.t4f.name_],
             greycat.types_by_name[std.core.t2f.name_],
             greycat.types_by_name[std.core.nodeTime.name_],
@@ -7424,9 +7423,10 @@ class std(GreyCat.Library):
             greycat.types_by_name[std.core.TimeZone.name_],
             greycat.types_by_name[std.core.type.name_],
             greycat.types_by_name[std.core.node.name_],
-            greycat.types_by_name[std.core.nodeTimeCursor.name_],
             greycat.types_by_name[std.core.nodeList.name_],
+            greycat.types_by_name[std.core.nodeTimeCursor.name_],
             greycat.types_by_name[std.core.SortOrder.name_],
+            greycat.types_by_name[std.core.geo.name_],
             greycat.types_by_name[std.runtime.LogType.name_],
             greycat.types_by_name[std.runtime.SecurityEntity.name_],
             greycat.types_by_name[std.runtime.UserGroupPolicyType.name_],
@@ -7466,8 +7466,8 @@ class std(GreyCat.Library):
             greycat.types_by_name[std.io.TextEncoder.name_],
             greycat.types_by_name[std.io.CsvWriter.name_],
             greycat.types_by_name[std.io.File.name_],
-            greycat.types_by_name[std.io.Smtp.name_],
             greycat.types_by_name[std.io.CsvAnalysisConfig.name_],
+            greycat.types_by_name[std.io.Smtp.name_],
             greycat.types_by_name[std.io.Email.name_],
             greycat.types_by_name[std.io.TextWriter.name_],
             greycat.types_by_name[std.io.CsvColumnStatistics.name_],
@@ -7517,28 +7517,28 @@ class std(GreyCat.Library):
             greycat.types_by_name[std.util.HistogramStats.name_],
             greycat.types_by_name[std.util.Gaussian.name_],
         ]
-        self.mapped[0].static_values = [greycat.create_geo(float.fromhex("-0x1.54345b1903bbap+6"), float.fromhex("-0x1.67fffffe98p+7")), greycat.create_geo(float.fromhex("0x1.54345b1903bbap+6"), float.fromhex("0x1.67fffffe98p+7"))]
-        self.mapped[5].resolve_generated_offset_with_values("microseconds", 1, "milliseconds", 1000, "seconds", 1000000, "minutes", 60000000, "hours", 3600000000, "days", 86400000000)
-        self.mapped[6].resolve_generated_offset_with_values("none", 0, "interrupted", 1, "await", 2, "timeout", 6, "forbidden", 7, "runtime_error", 8)
-        self.mapped[7].resolve_generated_offsets("year", "month", "day", "hour", "minute", "second", "microsecond")
-        self.mapped[8].resolve_generated_offsets("t", "v")
-        self.mapped[10].resolve_generated_offsets("center", "radius")
-        self.mapped[12].resolve_generated_offsets("points")
-        self.mapped[13].resolve_generated_offsets("message", "stack")
-        self.mapped[14].resolve_generated_offsets("x", "y")
-        self.mapped[15].resolve_generated_offset_with_values("fixed", 0, "fixed_reg", 1, "adaptative", 2, "dense", 3)
-        self.mapped[23].resolve_generated_offsets("size", "from", "to")
-        self.mapped[24].resolve_generated_offset_with_values("p1", float.fromhex("0x1p+0"), "p10", float.fromhex("0x1.999999999999ap-4"), "p100", float.fromhex("0x1.47ae147ae147bp-7"), "p1000", float.fromhex("0x1.0624dd2f1a9fcp-10"), "p10000", float.fromhex("0x1.a36e2eb1c432dp-14"), "p100000", float.fromhex("0x1.4f8b588e368f1p-17"), "p1000000", float.fromhex("0x1.0c6f7a0b5ed8dp-20"), "p10000000", float.fromhex("0x1.ad7f29abcaf48p-24"), "p100000000", float.fromhex("0x1.5798ee2308c3ap-27"), "p1000000000", float.fromhex("0x1.12e0be826d695p-30"), "p10000000000", float.fromhex("0x1.b7cdfd9d7bdbbp-34"))
-        self.mapped[28].resolve_generated_offsets("column", "extractors")
-        self.mapped[29].resolve_generated_offsets("module", "function", "line", "column")
-        self.mapped[30].static_values = [float.fromhex("0x1.5bf0a8b145769p+1"), float.fromhex("0x1.71547652b82fep+0"), float.fromhex("0x1.bcb7b1526e50ep-2"), float.fromhex("0x1.62e42fefa39efp-1"), float.fromhex("0x1.26bb1bbb55516p+1"), float.fromhex("0x1.921fb54442d18p+1"), float.fromhex("0x1.921fb54442d18p+0"), float.fromhex("0x1.921fb54442d18p-1"), float.fromhex("0x1.45f306dc9c883p-2"), float.fromhex("0x1.45f306dc9c883p-1"), float.fromhex("0x1.20dd750429b6dp+0"), float.fromhex("0x1.6a09e667f3bcdp+0"), float.fromhex("0x1.6a09e667f3bcdp-1")]
-        self.mapped[31].static_values = [greycat.create_time(-9223372036854775808), greycat.create_time(9223372036854775807)]
-        self.mapped[32].resolve_generated_offset_with_values("year", 0, "month", 1, "day", 2, "hour", 3, "minute", 4, "second", 5, "microsecond", 6)
-        self.mapped[36].resolve_generated_offset_with_values("i32", 4, "i64", 8, "f32", 4, "f64", 8, "c64", 8, "c128", 16)
-        self.mapped[37].resolve_generated_offsets("sw", "ne")
-        self.mapped[38].resolve_generated_offset_with_values("Africa_Accra", "Africa/Accra", "Africa_Bamako", "Africa/Bamako", "Africa_Banjul", "Africa/Banjul", "Africa_Conakry", "Africa/Conakry", "Africa_Dakar", "Africa/Dakar", "Africa_Freetown", "Africa/Freetown", "Africa_Lome", "Africa/Lome", "Africa_Nouakchott", "Africa/Nouakchott", "Africa_Ouagadougou", "Africa/Ouagadougou", "Africa_Timbuktu", "Africa/Timbuktu", "Atlantic_Reykjavik", "Atlantic/Reykjavik", "Atlantic_St_Helena", "Atlantic/St_Helena", "Iceland", "Iceland", "Egypt", "Egypt", "Africa_Maseru", "Africa/Maseru", "Africa_Mbabane", "Africa/Mbabane", "Africa_Bangui", "Africa/Bangui", "Africa_Brazzaville", "Africa/Brazzaville", "Africa_Douala", "Africa/Douala", "Africa_Kinshasa", "Africa/Kinshasa", "Africa_Libreville", "Africa/Libreville", "Africa_Luanda", "Africa/Luanda", "Africa_Malabo", "Africa/Malabo", "Africa_Niamey", "Africa/Niamey", "Africa_Porto_Novo", "Africa/Porto-Novo", "Africa_Blantyre", "Africa/Blantyre", "Africa_Bujumbura", "Africa/Bujumbura", "Africa_Gaborone", "Africa/Gaborone", "Africa_Harare", "Africa/Harare", "Africa_Kigali", "Africa/Kigali", "Africa_Lubumbashi", "Africa/Lubumbashi", "Africa_Lusaka", "Africa/Lusaka", "Africa_Addis_Ababa", "Africa/Addis_Ababa", "Africa_Asmara", "Africa/Asmara", "Africa_Asmera", "Africa/Asmera", "Africa_Dar_es_Salaam", "Africa/Dar_es_Salaam", "Africa_Djibouti", "Africa/Djibouti", "Africa_Kampala", "Africa/Kampala", "Africa_Mogadishu", "Africa/Mogadishu", "Indian_Antananarivo", "Indian/Antananarivo", "Indian_Comoro", "Indian/Comoro", "Indian_Mayotte", "Indian/Mayotte", "Libya", "Libya", "America_Atka", "America/Atka", "US_Aleutian", "US/Aleutian", "US_Alaska", "US/Alaska", "America_Buenos_Aires", "America/Buenos_Aires", "America_Argentina_ComodRivadavia", "America/Argentina/ComodRivadavia", "America_Catamarca", "America/Catamarca", "America_Cordoba", "America/Cordoba", "America_Rosario", "America/Rosario", "America_Jujuy", "America/Jujuy", "America_Mendoza", "America/Mendoza", "US_Central", "US/Central", "America_Shiprock", "America/Shiprock", "Navajo", "Navajo", "US_Mountain", "US/Mountain", "US_Michigan", "US/Michigan", "America_Yellowknife", "America/Yellowknife", "Canada_Mountain", "Canada/Mountain", "Canada_Atlantic", "Canada/Atlantic", "Cuba", "Cuba", "America_Fort_Wayne", "America/Fort_Wayne", "America_Indianapolis", "America/Indianapolis", "US_East_Indiana", "US/East-Indiana", "America_Knox_IN", "America/Knox_IN", "US_Indiana_Starke", "US/Indiana-Starke", "America_Pangnirtung", "America/Pangnirtung", "Jamaica", "Jamaica", "America_Louisville", "America/Louisville", "US_Pacific", "US/Pacific", "Brazil_West", "Brazil/West", "Mexico_BajaSur", "Mexico/BajaSur", "Mexico_General", "Mexico/General", "US_Eastern", "US/Eastern", "Brazil_DeNoronha", "Brazil/DeNoronha", "America_Godthab", "America/Godthab", "America_Atikokan", "America/Atikokan", "America_Cayman", "America/Cayman", "America_Coral_Harbour", "America/Coral_Harbour", "America_Creston", "America/Creston", "US_Arizona", "US/Arizona", "America_Anguilla", "America/Anguilla", "America_Antigua", "America/Antigua", "America_Aruba", "America/Aruba", "America_Blanc_Sablon", "America/Blanc-Sablon", "America_Curacao", "America/Curacao", "America_Dominica", "America/Dominica", "America_Grenada", "America/Grenada", "America_Guadeloupe", "America/Guadeloupe", "America_Kralendijk", "America/Kralendijk", "America_Lower_Princes", "America/Lower_Princes", "America_Marigot", "America/Marigot", "America_Montserrat", "America/Montserrat", "America_Port_of_Spain", "America/Port_of_Spain", "America_St_Barthelemy", "America/St_Barthelemy", "America_St_Kitts", "America/St_Kitts", "America_St_Lucia", "America/St_Lucia", "America_St_Thomas", "America/St_Thomas", "America_St_Vincent", "America/St_Vincent", "America_Tortola", "America/Tortola", "America_Virgin", "America/Virgin", "Canada_Saskatchewan", "Canada/Saskatchewan", "America_Porto_Acre", "America/Porto_Acre", "Brazil_Acre", "Brazil/Acre", "Chile_Continental", "Chile/Continental", "Brazil_East", "Brazil/East", "Canada_Newfoundland", "Canada/Newfoundland", "America_Ensenada", "America/Ensenada", "America_Santa_Isabel", "America/Santa_Isabel", "Mexico_BajaNorte", "Mexico/BajaNorte", "America_Montreal", "America/Montreal", "America_Nassau", "America/Nassau", "America_Nipigon", "America/Nipigon", "America_Thunder_Bay", "America/Thunder_Bay", "Canada_Eastern", "Canada/Eastern", "Canada_Pacific", "Canada/Pacific", "Canada_Yukon", "Canada/Yukon", "America_Rainy_River", "America/Rainy_River", "Canada_Central", "Canada/Central", "Asia_Ashkhabad", "Asia/Ashkhabad", "Asia_Phnom_Penh", "Asia/Phnom_Penh", "Asia_Vientiane", "Asia/Vientiane", "Indian_Christmas", "Indian/Christmas", "Asia_Dacca", "Asia/Dacca", "Asia_Muscat", "Asia/Muscat", "Indian_Mahe", "Indian/Mahe", "Indian_Reunion", "Indian/Reunion", "Asia_Saigon", "Asia/Saigon", "Hongkong", "Hongkong", "Asia_Tel_Aviv", "Asia/Tel_Aviv", "Israel", "Israel", "Asia_Katmandu", "Asia/Katmandu", "Asia_Calcutta", "Asia/Calcutta", "Asia_Brunei", "Asia/Brunei", "Asia_Macao", "Asia/Macao", "Asia_Ujung_Pandang", "Asia/Ujung_Pandang", "Europe_Nicosia", "Europe/Nicosia", "Asia_Bahrain", "Asia/Bahrain", "Antarctica_Syowa", "Antarctica/Syowa", "Asia_Aden", "Asia/Aden", "Asia_Kuwait", "Asia/Kuwait", "ROK", "ROK", "Asia_Chongqing", "Asia/Chongqing", "Asia_Chungking", "Asia/Chungking", "Asia_Harbin", "Asia/Harbin", "PRC", "PRC", "Asia_Kuala_Lumpur", "Asia/Kuala_Lumpur", "Singapore", "Singapore", "ROC", "ROC", "Iran", "Iran", "Asia_Thimbu", "Asia/Thimbu", "Japan", "Japan", "Asia_Ulan_Bator", "Asia/Ulan_Bator", "Asia_Kashgar", "Asia/Kashgar", "Asia_Rangoon", "Asia/Rangoon", "Indian_Cocos", "Indian/Cocos", "Atlantic_Faeroe", "Atlantic/Faeroe", "Australia_South", "Australia/South", "Australia_Queensland", "Australia/Queensland", "Australia_Yancowinna", "Australia/Yancowinna", "Australia_North", "Australia/North", "Australia_Currie", "Australia/Currie", "Australia_Tasmania", "Australia/Tasmania", "Australia_LHI", "Australia/LHI", "Australia_Victoria", "Australia/Victoria", "Australia_West", "Australia/West", "Australia_ACT", "Australia/ACT", "Australia_Canberra", "Australia/Canberra", "Australia_NSW", "Australia/NSW", "GMT", "GMT", "GMTx0", "GMT+0", "GMT_0", "GMT-0", "GMT0", "GMT0", "Greenwich", "Greenwich", "UCT", "UCT", "UTC", "UTC", "Universal", "Universal", "Zulu", "Zulu", "Europe_Ljubljana", "Europe/Ljubljana", "Europe_Podgorica", "Europe/Podgorica", "Europe_Sarajevo", "Europe/Sarajevo", "Europe_Skopje", "Europe/Skopje", "Europe_Zagreb", "Europe/Zagreb", "Arctic_Longyearbyen", "Arctic/Longyearbyen", "Atlantic_Jan_Mayen", "Atlantic/Jan_Mayen", "Europe_Copenhagen", "Europe/Copenhagen", "Europe_Oslo", "Europe/Oslo", "Europe_Stockholm", "Europe/Stockholm", "Europe_Amsterdam", "Europe/Amsterdam", "Europe_Luxembourg", "Europe/Luxembourg", "Europe_Tiraspol", "Europe/Tiraspol", "Eire", "Eire", "Europe_Mariehamn", "Europe/Mariehamn", "Asia_Istanbul", "Asia/Istanbul", "Turkey", "Turkey", "Europe_Kiev", "Europe/Kiev", "Europe_Uzhgorod", "Europe/Uzhgorod", "Europe_Zaporozhye", "Europe/Zaporozhye", "Portugal", "Portugal", "Europe_Belfast", "Europe/Belfast", "Europe_Guernsey", "Europe/Guernsey", "Europe_Isle_of_Man", "Europe/Isle_of_Man", "Europe_Jersey", "Europe/Jersey", "GB", "GB", "GB_Eire", "GB-Eire", "W_SU", "W-SU", "Europe_Monaco", "Europe/Monaco", "Europe_Bratislava", "Europe/Bratislava", "Europe_San_Marino", "Europe/San_Marino", "Europe_Vatican", "Europe/Vatican", "Poland", "Poland", "Europe_Busingen", "Europe/Busingen", "Europe_Vaduz", "Europe/Vaduz", "Indian_Kerguelen", "Indian/Kerguelen", "Antarctica_McMurdo", "Antarctica/McMurdo", "Antarctica_South_Pole", "Antarctica/South_Pole", "NZ", "NZ", "NZ_CHAT", "NZ-CHAT", "Chile_EasterIsland", "Chile/EasterIsland", "Pacific_Pohnpei", "Pacific/Pohnpei", "Pacific_Ponape", "Pacific/Ponape", "Pacific_Saipan", "Pacific/Saipan", "Pacific_Johnston", "Pacific/Johnston", "US_Hawaii", "US/Hawaii", "Pacific_Enderbury", "Pacific/Enderbury", "Kwajalein", "Kwajalein", "Pacific_Midway", "Pacific/Midway", "Pacific_Samoa", "Pacific/Samoa", "US_Samoa", "US/Samoa", "Antarctica_DumontDUrville", "Antarctica/DumontDUrville", "Pacific_Chuuk", "Pacific/Chuuk", "Pacific_Truk", "Pacific/Truk", "Pacific_Yap", "Pacific/Yap", "Pacific_Funafuti", "Pacific/Funafuti", "Pacific_Majuro", "Pacific/Majuro", "Pacific_Wake", "Pacific/Wake", "Pacific_Wallis", "Pacific/Wallis", "Africa_Abidjan", "Africa/Abidjan", "Africa_Algiers", "Africa/Algiers", "Africa_Bissau", "Africa/Bissau", "Africa_Cairo", "Africa/Cairo", "Africa_Casablanca", "Africa/Casablanca", "Africa_Ceuta", "Africa/Ceuta", "Africa_El_Aaiun", "Africa/El_Aaiun", "Africa_Johannesburg", "Africa/Johannesburg", "Africa_Juba", "Africa/Juba", "Africa_Khartoum", "Africa/Khartoum", "Africa_Lagos", "Africa/Lagos", "Africa_Maputo", "Africa/Maputo", "Africa_Monrovia", "Africa/Monrovia", "Africa_Nairobi", "Africa/Nairobi", "Africa_Ndjamena", "Africa/Ndjamena", "Africa_Sao_Tome", "Africa/Sao_Tome", "Africa_Tripoli", "Africa/Tripoli", "Africa_Tunis", "Africa/Tunis", "Africa_Windhoek", "Africa/Windhoek", "America_Adak", "America/Adak", "America_Anchorage", "America/Anchorage", "America_Araguaina", "America/Araguaina", "America_Argentina_Buenos_Aires", "America/Argentina/Buenos_Aires", "America_Argentina_Catamarca", "America/Argentina/Catamarca", "America_Argentina_Cordoba", "America/Argentina/Cordoba", "America_Argentina_Jujuy", "America/Argentina/Jujuy", "America_Argentina_La_Rioja", "America/Argentina/La_Rioja", "America_Argentina_Mendoza", "America/Argentina/Mendoza", "America_Argentina_Rio_Gallegos", "America/Argentina/Rio_Gallegos", "America_Argentina_Salta", "America/Argentina/Salta", "America_Argentina_San_Juan", "America/Argentina/San_Juan", "America_Argentina_San_Luis", "America/Argentina/San_Luis", "America_Argentina_Tucuman", "America/Argentina/Tucuman", "America_Argentina_Ushuaia", "America/Argentina/Ushuaia", "America_Asuncion", "America/Asuncion", "America_Bahia", "America/Bahia", "America_Bahia_Banderas", "America/Bahia_Banderas", "America_Barbados", "America/Barbados", "America_Belem", "America/Belem", "America_Belize", "America/Belize", "America_Boa_Vista", "America/Boa_Vista", "America_Bogota", "America/Bogota", "America_Boise", "America/Boise", "America_Cambridge_Bay", "America/Cambridge_Bay", "America_Campo_Grande", "America/Campo_Grande", "America_Cancun", "America/Cancun", "America_Caracas", "America/Caracas", "America_Cayenne", "America/Cayenne", "America_Chicago", "America/Chicago", "America_Chihuahua", "America/Chihuahua", "America_Ciudad_Juarez", "America/Ciudad_Juarez", "America_Costa_Rica", "America/Costa_Rica", "America_Cuiaba", "America/Cuiaba", "America_Danmarkshavn", "America/Danmarkshavn", "America_Dawson", "America/Dawson", "America_Dawson_Creek", "America/Dawson_Creek", "America_Denver", "America/Denver", "America_Detroit", "America/Detroit", "America_Edmonton", "America/Edmonton", "America_Eirunepe", "America/Eirunepe", "America_El_Salvador", "America/El_Salvador", "America_Fort_Nelson", "America/Fort_Nelson", "America_Fortaleza", "America/Fortaleza", "America_Glace_Bay", "America/Glace_Bay", "America_Goose_Bay", "America/Goose_Bay", "America_Grand_Turk", "America/Grand_Turk", "America_Guatemala", "America/Guatemala", "America_Guayaquil", "America/Guayaquil", "America_Guyana", "America/Guyana", "America_Halifax", "America/Halifax", "America_Havana", "America/Havana", "America_Hermosillo", "America/Hermosillo", "America_Indiana_Indianapolis", "America/Indiana/Indianapolis", "America_Indiana_Knox", "America/Indiana/Knox", "America_Indiana_Marengo", "America/Indiana/Marengo", "America_Indiana_Petersburg", "America/Indiana/Petersburg", "America_Indiana_Tell_City", "America/Indiana/Tell_City", "America_Indiana_Vevay", "America/Indiana/Vevay", "America_Indiana_Vincennes", "America/Indiana/Vincennes", "America_Indiana_Winamac", "America/Indiana/Winamac", "America_Inuvik", "America/Inuvik", "America_Iqaluit", "America/Iqaluit", "America_Jamaica", "America/Jamaica", "America_Juneau", "America/Juneau", "America_Kentucky_Louisville", "America/Kentucky/Louisville", "America_Kentucky_Monticello", "America/Kentucky/Monticello", "America_La_Paz", "America/La_Paz", "America_Lima", "America/Lima", "America_Los_Angeles", "America/Los_Angeles", "America_Maceio", "America/Maceio", "America_Managua", "America/Managua", "America_Manaus", "America/Manaus", "America_Martinique", "America/Martinique", "America_Matamoros", "America/Matamoros", "America_Mazatlan", "America/Mazatlan", "America_Menominee", "America/Menominee", "America_Merida", "America/Merida", "America_Metlakatla", "America/Metlakatla", "America_Mexico_City", "America/Mexico_City", "America_Miquelon", "America/Miquelon", "America_Moncton", "America/Moncton", "America_Monterrey", "America/Monterrey", "America_Montevideo", "America/Montevideo", "America_New_York", "America/New_York", "America_Nome", "America/Nome", "America_Noronha", "America/Noronha", "America_North_Dakota_Beulah", "America/North_Dakota/Beulah", "America_North_Dakota_Center", "America/North_Dakota/Center", "America_North_Dakota_New_Salem", "America/North_Dakota/New_Salem", "America_Nuuk", "America/Nuuk", "America_Ojinaga", "America/Ojinaga", "America_Panama", "America/Panama", "America_Paramaribo", "America/Paramaribo", "America_Phoenix", "America/Phoenix", "America_Port_au_Prince", "America/Port-au-Prince", "America_Porto_Velho", "America/Porto_Velho", "America_Puerto_Rico", "America/Puerto_Rico", "America_Punta_Arenas", "America/Punta_Arenas", "America_Rankin_Inlet", "America/Rankin_Inlet", "America_Recife", "America/Recife", "America_Regina", "America/Regina", "America_Resolute", "America/Resolute", "America_Rio_Branco", "America/Rio_Branco", "America_Santarem", "America/Santarem", "America_Santiago", "America/Santiago", "America_Santo_Domingo", "America/Santo_Domingo", "America_Sao_Paulo", "America/Sao_Paulo", "America_Scoresbysund", "America/Scoresbysund", "America_Sitka", "America/Sitka", "America_St_Johns", "America/St_Johns", "America_Swift_Current", "America/Swift_Current", "America_Tegucigalpa", "America/Tegucigalpa", "America_Thule", "America/Thule", "America_Tijuana", "America/Tijuana", "America_Toronto", "America/Toronto", "America_Vancouver", "America/Vancouver", "America_Whitehorse", "America/Whitehorse", "America_Winnipeg", "America/Winnipeg", "America_Yakutat", "America/Yakutat", "Antarctica_Casey", "Antarctica/Casey", "Antarctica_Davis", "Antarctica/Davis", "Antarctica_Macquarie", "Antarctica/Macquarie", "Antarctica_Mawson", "Antarctica/Mawson", "Antarctica_Palmer", "Antarctica/Palmer", "Antarctica_Rothera", "Antarctica/Rothera", "Antarctica_Troll", "Antarctica/Troll", "Antarctica_Vostok", "Antarctica/Vostok", "Asia_Almaty", "Asia/Almaty", "Asia_Amman", "Asia/Amman", "Asia_Anadyr", "Asia/Anadyr", "Asia_Aqtau", "Asia/Aqtau", "Asia_Aqtobe", "Asia/Aqtobe", "Asia_Ashgabat", "Asia/Ashgabat", "Asia_Atyrau", "Asia/Atyrau", "Asia_Baghdad", "Asia/Baghdad", "Asia_Baku", "Asia/Baku", "Asia_Bangkok", "Asia/Bangkok", "Asia_Barnaul", "Asia/Barnaul", "Asia_Beirut", "Asia/Beirut", "Asia_Bishkek", "Asia/Bishkek", "Asia_Chita", "Asia/Chita", "Asia_Choibalsan", "Asia/Choibalsan", "Asia_Colombo", "Asia/Colombo", "Asia_Damascus", "Asia/Damascus", "Asia_Dhaka", "Asia/Dhaka", "Asia_Dili", "Asia/Dili", "Asia_Dubai", "Asia/Dubai", "Asia_Dushanbe", "Asia/Dushanbe", "Asia_Famagusta", "Asia/Famagusta", "Asia_Gaza", "Asia/Gaza", "Asia_Hebron", "Asia/Hebron", "Asia_Ho_Chi_Minh", "Asia/Ho_Chi_Minh", "Asia_Hong_Kong", "Asia/Hong_Kong", "Asia_Hovd", "Asia/Hovd", "Asia_Irkutsk", "Asia/Irkutsk", "Asia_Jakarta", "Asia/Jakarta", "Asia_Jayapura", "Asia/Jayapura", "Asia_Jerusalem", "Asia/Jerusalem", "Asia_Kabul", "Asia/Kabul", "Asia_Kamchatka", "Asia/Kamchatka", "Asia_Karachi", "Asia/Karachi", "Asia_Kathmandu", "Asia/Kathmandu", "Asia_Khandyga", "Asia/Khandyga", "Asia_Kolkata", "Asia/Kolkata", "Asia_Krasnoyarsk", "Asia/Krasnoyarsk", "Asia_Kuching", "Asia/Kuching", "Asia_Macau", "Asia/Macau", "Asia_Magadan", "Asia/Magadan", "Asia_Makassar", "Asia/Makassar", "Asia_Manila", "Asia/Manila", "Asia_Nicosia", "Asia/Nicosia", "Asia_Novokuznetsk", "Asia/Novokuznetsk", "Asia_Novosibirsk", "Asia/Novosibirsk", "Asia_Omsk", "Asia/Omsk", "Asia_Oral", "Asia/Oral", "Asia_Pontianak", "Asia/Pontianak", "Asia_Pyongyang", "Asia/Pyongyang", "Asia_Qatar", "Asia/Qatar", "Asia_Qostanay", "Asia/Qostanay", "Asia_Qyzylorda", "Asia/Qyzylorda", "Asia_Riyadh", "Asia/Riyadh", "Asia_Sakhalin", "Asia/Sakhalin", "Asia_Samarkand", "Asia/Samarkand", "Asia_Seoul", "Asia/Seoul", "Asia_Shanghai", "Asia/Shanghai", "Asia_Singapore", "Asia/Singapore", "Asia_Srednekolymsk", "Asia/Srednekolymsk", "Asia_Taipei", "Asia/Taipei", "Asia_Tashkent", "Asia/Tashkent", "Asia_Tbilisi", "Asia/Tbilisi", "Asia_Tehran", "Asia/Tehran", "Asia_Thimphu", "Asia/Thimphu", "Asia_Tokyo", "Asia/Tokyo", "Asia_Tomsk", "Asia/Tomsk", "Asia_Ulaanbaatar", "Asia/Ulaanbaatar", "Asia_Urumqi", "Asia/Urumqi", "Asia_Ust_Nera", "Asia/Ust-Nera", "Asia_Vladivostok", "Asia/Vladivostok", "Asia_Yakutsk", "Asia/Yakutsk", "Asia_Yangon", "Asia/Yangon", "Asia_Yekaterinburg", "Asia/Yekaterinburg", "Asia_Yerevan", "Asia/Yerevan", "Atlantic_Azores", "Atlantic/Azores", "Atlantic_Bermuda", "Atlantic/Bermuda", "Atlantic_Canary", "Atlantic/Canary", "Atlantic_Cape_Verde", "Atlantic/Cape_Verde", "Atlantic_Faroe", "Atlantic/Faroe", "Atlantic_Madeira", "Atlantic/Madeira", "Atlantic_South_Georgia", "Atlantic/South_Georgia", "Atlantic_Stanley", "Atlantic/Stanley", "Australia_Adelaide", "Australia/Adelaide", "Australia_Brisbane", "Australia/Brisbane", "Australia_Broken_Hill", "Australia/Broken_Hill", "Australia_Darwin", "Australia/Darwin", "Australia_Eucla", "Australia/Eucla", "Australia_Hobart", "Australia/Hobart", "Australia_Lindeman", "Australia/Lindeman", "Australia_Lord_Howe", "Australia/Lord_Howe", "Australia_Melbourne", "Australia/Melbourne", "Australia_Perth", "Australia/Perth", "Australia_Sydney", "Australia/Sydney", "CET", "CET", "CST6CDT", "CST6CDT", "EET", "EET", "EST", "EST", "EST5EDT", "EST5EDT", "Europe_Andorra", "Europe/Andorra", "Europe_Astrakhan", "Europe/Astrakhan", "Europe_Athens", "Europe/Athens", "Europe_Belgrade", "Europe/Belgrade", "Europe_Berlin", "Europe/Berlin", "Europe_Brussels", "Europe/Brussels", "Europe_Bucharest", "Europe/Bucharest", "Europe_Budapest", "Europe/Budapest", "Europe_Chisinau", "Europe/Chisinau", "Europe_Dublin", "Europe/Dublin", "Europe_Gibraltar", "Europe/Gibraltar", "Europe_Helsinki", "Europe/Helsinki", "Europe_Istanbul", "Europe/Istanbul", "Europe_Kaliningrad", "Europe/Kaliningrad", "Europe_Kirov", "Europe/Kirov", "Europe_Kyiv", "Europe/Kyiv", "Europe_Lisbon", "Europe/Lisbon", "Europe_London", "Europe/London", "Europe_Madrid", "Europe/Madrid", "Europe_Malta", "Europe/Malta", "Europe_Minsk", "Europe/Minsk", "Europe_Moscow", "Europe/Moscow", "Europe_Paris", "Europe/Paris", "Europe_Prague", "Europe/Prague", "Europe_Riga", "Europe/Riga", "Europe_Rome", "Europe/Rome", "Europe_Samara", "Europe/Samara", "Europe_Saratov", "Europe/Saratov", "Europe_Simferopol", "Europe/Simferopol", "Europe_Sofia", "Europe/Sofia", "Europe_Tallinn", "Europe/Tallinn", "Europe_Tirane", "Europe/Tirane", "Europe_Ulyanovsk", "Europe/Ulyanovsk", "Europe_Vienna", "Europe/Vienna", "Europe_Vilnius", "Europe/Vilnius", "Europe_Volgograd", "Europe/Volgograd", "Europe_Warsaw", "Europe/Warsaw", "Europe_Zurich", "Europe/Zurich", "Factory", "Factory", "HST", "HST", "Indian_Chagos", "Indian/Chagos", "Indian_Maldives", "Indian/Maldives", "Indian_Mauritius", "Indian/Mauritius", "MET", "MET", "MST", "MST", "MST7MDT", "MST7MDT", "PST8PDT", "PST8PDT", "Pacific_Apia", "Pacific/Apia", "Pacific_Auckland", "Pacific/Auckland", "Pacific_Bougainville", "Pacific/Bougainville", "Pacific_Chatham", "Pacific/Chatham", "Pacific_Easter", "Pacific/Easter", "Pacific_Efate", "Pacific/Efate", "Pacific_Fakaofo", "Pacific/Fakaofo", "Pacific_Fiji", "Pacific/Fiji", "Pacific_Galapagos", "Pacific/Galapagos", "Pacific_Gambier", "Pacific/Gambier", "Pacific_Guadalcanal", "Pacific/Guadalcanal", "Pacific_Guam", "Pacific/Guam", "Pacific_Honolulu", "Pacific/Honolulu", "Pacific_Kanton", "Pacific/Kanton", "Pacific_Kiritimati", "Pacific/Kiritimati", "Pacific_Kosrae", "Pacific/Kosrae", "Pacific_Kwajalein", "Pacific/Kwajalein", "Pacific_Marquesas", "Pacific/Marquesas", "Pacific_Nauru", "Pacific/Nauru", "Pacific_Niue", "Pacific/Niue", "Pacific_Norfolk", "Pacific/Norfolk", "Pacific_Noumea", "Pacific/Noumea", "Pacific_Pago_Pago", "Pacific/Pago_Pago", "Pacific_Palau", "Pacific/Palau", "Pacific_Pitcairn", "Pacific/Pitcairn", "Pacific_Port_Moresby", "Pacific/Port_Moresby", "Pacific_Rarotonga", "Pacific/Rarotonga", "Pacific_Tahiti", "Pacific/Tahiti", "Pacific_Tarawa", "Pacific/Tarawa", "Pacific_Tongatapu", "Pacific/Tongatapu", "WET", "WET")
+        self.mapped[4].resolve_generated_offset_with_values("microseconds", 1, "milliseconds", 1000, "seconds", 1000000, "minutes", 60000000, "hours", 3600000000, "days", 86400000000)
+        self.mapped[5].resolve_generated_offset_with_values("none", 0, "interrupted", 1, "await", 2, "timeout", 6, "forbidden", 7, "runtime_error", 8)
+        self.mapped[6].resolve_generated_offsets("year", "month", "day", "hour", "minute", "second", "microsecond")
+        self.mapped[7].resolve_generated_offsets("t", "v")
+        self.mapped[9].resolve_generated_offsets("center", "radius")
+        self.mapped[11].resolve_generated_offsets("points")
+        self.mapped[12].resolve_generated_offsets("message", "stack")
+        self.mapped[13].resolve_generated_offsets("x", "y")
+        self.mapped[14].resolve_generated_offset_with_values("fixed", 0, "fixed_reg", 1, "adaptative", 2, "dense", 3)
+        self.mapped[22].resolve_generated_offsets("size", "from", "to")
+        self.mapped[23].resolve_generated_offset_with_values("p1", float.fromhex("0x1p+0"), "p10", float.fromhex("0x1.999999999999ap-4"), "p100", float.fromhex("0x1.47ae147ae147bp-7"), "p1000", float.fromhex("0x1.0624dd2f1a9fcp-10"), "p10000", float.fromhex("0x1.a36e2eb1c432dp-14"), "p100000", float.fromhex("0x1.4f8b588e368f1p-17"), "p1000000", float.fromhex("0x1.0c6f7a0b5ed8dp-20"), "p10000000", float.fromhex("0x1.ad7f29abcaf48p-24"), "p100000000", float.fromhex("0x1.5798ee2308c3ap-27"), "p1000000000", float.fromhex("0x1.12e0be826d695p-30"), "p10000000000", float.fromhex("0x1.b7cdfd9d7bdbbp-34"))
+        self.mapped[27].resolve_generated_offsets("column", "extractors")
+        self.mapped[28].resolve_generated_offsets("module", "function", "line", "column")
+        self.mapped[29].static_values = [float.fromhex("0x1.5bf0a8b145769p+1"), float.fromhex("0x1.71547652b82fep+0"), float.fromhex("0x1.bcb7b1526e50ep-2"), float.fromhex("0x1.62e42fefa39efp-1"), float.fromhex("0x1.26bb1bbb55516p+1"), float.fromhex("0x1.921fb54442d18p+1"), float.fromhex("0x1.921fb54442d18p+0"), float.fromhex("0x1.921fb54442d18p-1"), float.fromhex("0x1.45f306dc9c883p-2"), float.fromhex("0x1.45f306dc9c883p-1"), float.fromhex("0x1.20dd750429b6dp+0"), float.fromhex("0x1.6a09e667f3bcdp+0"), float.fromhex("0x1.6a09e667f3bcdp-1")]
+        self.mapped[30].static_values = [greycat.create_time(-9223372036854775808), greycat.create_time(9223372036854775807)]
+        self.mapped[31].resolve_generated_offset_with_values("year", 0, "month", 1, "day", 2, "hour", 3, "minute", 4, "second", 5, "microsecond", 6)
+        self.mapped[35].resolve_generated_offset_with_values("i32", 4, "i64", 8, "f32", 4, "f64", 8, "c64", 8, "c128", 16)
+        self.mapped[36].resolve_generated_offsets("sw", "ne")
+        self.mapped[37].resolve_generated_offset_with_values("Africa_Accra", "Africa/Accra", "Africa_Bamako", "Africa/Bamako", "Africa_Banjul", "Africa/Banjul", "Africa_Conakry", "Africa/Conakry", "Africa_Dakar", "Africa/Dakar", "Africa_Freetown", "Africa/Freetown", "Africa_Lome", "Africa/Lome", "Africa_Nouakchott", "Africa/Nouakchott", "Africa_Ouagadougou", "Africa/Ouagadougou", "Africa_Timbuktu", "Africa/Timbuktu", "Atlantic_Reykjavik", "Atlantic/Reykjavik", "Atlantic_St_Helena", "Atlantic/St_Helena", "Iceland", "Iceland", "Egypt", "Egypt", "Africa_Maseru", "Africa/Maseru", "Africa_Mbabane", "Africa/Mbabane", "Africa_Bangui", "Africa/Bangui", "Africa_Brazzaville", "Africa/Brazzaville", "Africa_Douala", "Africa/Douala", "Africa_Kinshasa", "Africa/Kinshasa", "Africa_Libreville", "Africa/Libreville", "Africa_Luanda", "Africa/Luanda", "Africa_Malabo", "Africa/Malabo", "Africa_Niamey", "Africa/Niamey", "Africa_Porto_Novo", "Africa/Porto-Novo", "Africa_Blantyre", "Africa/Blantyre", "Africa_Bujumbura", "Africa/Bujumbura", "Africa_Gaborone", "Africa/Gaborone", "Africa_Harare", "Africa/Harare", "Africa_Kigali", "Africa/Kigali", "Africa_Lubumbashi", "Africa/Lubumbashi", "Africa_Lusaka", "Africa/Lusaka", "Africa_Addis_Ababa", "Africa/Addis_Ababa", "Africa_Asmara", "Africa/Asmara", "Africa_Asmera", "Africa/Asmera", "Africa_Dar_es_Salaam", "Africa/Dar_es_Salaam", "Africa_Djibouti", "Africa/Djibouti", "Africa_Kampala", "Africa/Kampala", "Africa_Mogadishu", "Africa/Mogadishu", "Indian_Antananarivo", "Indian/Antananarivo", "Indian_Comoro", "Indian/Comoro", "Indian_Mayotte", "Indian/Mayotte", "Libya", "Libya", "America_Atka", "America/Atka", "US_Aleutian", "US/Aleutian", "US_Alaska", "US/Alaska", "America_Buenos_Aires", "America/Buenos_Aires", "America_Argentina_ComodRivadavia", "America/Argentina/ComodRivadavia", "America_Catamarca", "America/Catamarca", "America_Cordoba", "America/Cordoba", "America_Rosario", "America/Rosario", "America_Jujuy", "America/Jujuy", "America_Mendoza", "America/Mendoza", "US_Central", "US/Central", "America_Shiprock", "America/Shiprock", "Navajo", "Navajo", "US_Mountain", "US/Mountain", "US_Michigan", "US/Michigan", "America_Yellowknife", "America/Yellowknife", "Canada_Mountain", "Canada/Mountain", "Canada_Atlantic", "Canada/Atlantic", "Cuba", "Cuba", "America_Fort_Wayne", "America/Fort_Wayne", "America_Indianapolis", "America/Indianapolis", "US_East_Indiana", "US/East-Indiana", "America_Knox_IN", "America/Knox_IN", "US_Indiana_Starke", "US/Indiana-Starke", "America_Pangnirtung", "America/Pangnirtung", "Jamaica", "Jamaica", "America_Louisville", "America/Louisville", "US_Pacific", "US/Pacific", "Brazil_West", "Brazil/West", "Mexico_BajaSur", "Mexico/BajaSur", "Mexico_General", "Mexico/General", "US_Eastern", "US/Eastern", "Brazil_DeNoronha", "Brazil/DeNoronha", "America_Godthab", "America/Godthab", "America_Atikokan", "America/Atikokan", "America_Cayman", "America/Cayman", "America_Coral_Harbour", "America/Coral_Harbour", "America_Creston", "America/Creston", "US_Arizona", "US/Arizona", "America_Anguilla", "America/Anguilla", "America_Antigua", "America/Antigua", "America_Aruba", "America/Aruba", "America_Blanc_Sablon", "America/Blanc-Sablon", "America_Curacao", "America/Curacao", "America_Dominica", "America/Dominica", "America_Grenada", "America/Grenada", "America_Guadeloupe", "America/Guadeloupe", "America_Kralendijk", "America/Kralendijk", "America_Lower_Princes", "America/Lower_Princes", "America_Marigot", "America/Marigot", "America_Montserrat", "America/Montserrat", "America_Port_of_Spain", "America/Port_of_Spain", "America_St_Barthelemy", "America/St_Barthelemy", "America_St_Kitts", "America/St_Kitts", "America_St_Lucia", "America/St_Lucia", "America_St_Thomas", "America/St_Thomas", "America_St_Vincent", "America/St_Vincent", "America_Tortola", "America/Tortola", "America_Virgin", "America/Virgin", "Canada_Saskatchewan", "Canada/Saskatchewan", "America_Porto_Acre", "America/Porto_Acre", "Brazil_Acre", "Brazil/Acre", "Chile_Continental", "Chile/Continental", "Brazil_East", "Brazil/East", "Canada_Newfoundland", "Canada/Newfoundland", "America_Ensenada", "America/Ensenada", "America_Santa_Isabel", "America/Santa_Isabel", "Mexico_BajaNorte", "Mexico/BajaNorte", "America_Montreal", "America/Montreal", "America_Nassau", "America/Nassau", "America_Nipigon", "America/Nipigon", "America_Thunder_Bay", "America/Thunder_Bay", "Canada_Eastern", "Canada/Eastern", "Canada_Pacific", "Canada/Pacific", "Canada_Yukon", "Canada/Yukon", "America_Rainy_River", "America/Rainy_River", "Canada_Central", "Canada/Central", "Asia_Ashkhabad", "Asia/Ashkhabad", "Asia_Phnom_Penh", "Asia/Phnom_Penh", "Asia_Vientiane", "Asia/Vientiane", "Indian_Christmas", "Indian/Christmas", "Asia_Dacca", "Asia/Dacca", "Asia_Muscat", "Asia/Muscat", "Indian_Mahe", "Indian/Mahe", "Indian_Reunion", "Indian/Reunion", "Asia_Saigon", "Asia/Saigon", "Hongkong", "Hongkong", "Asia_Tel_Aviv", "Asia/Tel_Aviv", "Israel", "Israel", "Asia_Katmandu", "Asia/Katmandu", "Asia_Calcutta", "Asia/Calcutta", "Asia_Brunei", "Asia/Brunei", "Asia_Macao", "Asia/Macao", "Asia_Ujung_Pandang", "Asia/Ujung_Pandang", "Europe_Nicosia", "Europe/Nicosia", "Asia_Bahrain", "Asia/Bahrain", "Antarctica_Syowa", "Antarctica/Syowa", "Asia_Aden", "Asia/Aden", "Asia_Kuwait", "Asia/Kuwait", "ROK", "ROK", "Asia_Chongqing", "Asia/Chongqing", "Asia_Chungking", "Asia/Chungking", "Asia_Harbin", "Asia/Harbin", "PRC", "PRC", "Asia_Kuala_Lumpur", "Asia/Kuala_Lumpur", "Singapore", "Singapore", "ROC", "ROC", "Iran", "Iran", "Asia_Thimbu", "Asia/Thimbu", "Japan", "Japan", "Asia_Ulan_Bator", "Asia/Ulan_Bator", "Asia_Kashgar", "Asia/Kashgar", "Asia_Rangoon", "Asia/Rangoon", "Indian_Cocos", "Indian/Cocos", "Atlantic_Faeroe", "Atlantic/Faeroe", "Australia_South", "Australia/South", "Australia_Queensland", "Australia/Queensland", "Australia_Yancowinna", "Australia/Yancowinna", "Australia_North", "Australia/North", "Australia_Currie", "Australia/Currie", "Australia_Tasmania", "Australia/Tasmania", "Australia_LHI", "Australia/LHI", "Australia_Victoria", "Australia/Victoria", "Australia_West", "Australia/West", "Australia_ACT", "Australia/ACT", "Australia_Canberra", "Australia/Canberra", "Australia_NSW", "Australia/NSW", "GMT", "GMT", "GMTx0", "GMT+0", "GMT_0", "GMT-0", "GMT0", "GMT0", "Greenwich", "Greenwich", "UCT", "UCT", "UTC", "UTC", "Universal", "Universal", "Zulu", "Zulu", "Europe_Ljubljana", "Europe/Ljubljana", "Europe_Podgorica", "Europe/Podgorica", "Europe_Sarajevo", "Europe/Sarajevo", "Europe_Skopje", "Europe/Skopje", "Europe_Zagreb", "Europe/Zagreb", "Arctic_Longyearbyen", "Arctic/Longyearbyen", "Atlantic_Jan_Mayen", "Atlantic/Jan_Mayen", "Europe_Copenhagen", "Europe/Copenhagen", "Europe_Oslo", "Europe/Oslo", "Europe_Stockholm", "Europe/Stockholm", "Europe_Amsterdam", "Europe/Amsterdam", "Europe_Luxembourg", "Europe/Luxembourg", "Europe_Tiraspol", "Europe/Tiraspol", "Eire", "Eire", "Europe_Mariehamn", "Europe/Mariehamn", "Asia_Istanbul", "Asia/Istanbul", "Turkey", "Turkey", "Europe_Kiev", "Europe/Kiev", "Europe_Uzhgorod", "Europe/Uzhgorod", "Europe_Zaporozhye", "Europe/Zaporozhye", "Portugal", "Portugal", "Europe_Belfast", "Europe/Belfast", "Europe_Guernsey", "Europe/Guernsey", "Europe_Isle_of_Man", "Europe/Isle_of_Man", "Europe_Jersey", "Europe/Jersey", "GB", "GB", "GB_Eire", "GB-Eire", "W_SU", "W-SU", "Europe_Monaco", "Europe/Monaco", "Europe_Bratislava", "Europe/Bratislava", "Europe_San_Marino", "Europe/San_Marino", "Europe_Vatican", "Europe/Vatican", "Poland", "Poland", "Europe_Busingen", "Europe/Busingen", "Europe_Vaduz", "Europe/Vaduz", "Indian_Kerguelen", "Indian/Kerguelen", "Antarctica_McMurdo", "Antarctica/McMurdo", "Antarctica_South_Pole", "Antarctica/South_Pole", "NZ", "NZ", "NZ_CHAT", "NZ-CHAT", "Chile_EasterIsland", "Chile/EasterIsland", "Pacific_Pohnpei", "Pacific/Pohnpei", "Pacific_Ponape", "Pacific/Ponape", "Pacific_Saipan", "Pacific/Saipan", "Pacific_Johnston", "Pacific/Johnston", "US_Hawaii", "US/Hawaii", "Pacific_Enderbury", "Pacific/Enderbury", "Kwajalein", "Kwajalein", "Pacific_Midway", "Pacific/Midway", "Pacific_Samoa", "Pacific/Samoa", "US_Samoa", "US/Samoa", "Antarctica_DumontDUrville", "Antarctica/DumontDUrville", "Pacific_Chuuk", "Pacific/Chuuk", "Pacific_Truk", "Pacific/Truk", "Pacific_Yap", "Pacific/Yap", "Pacific_Funafuti", "Pacific/Funafuti", "Pacific_Majuro", "Pacific/Majuro", "Pacific_Wake", "Pacific/Wake", "Pacific_Wallis", "Pacific/Wallis", "Africa_Abidjan", "Africa/Abidjan", "Africa_Algiers", "Africa/Algiers", "Africa_Bissau", "Africa/Bissau", "Africa_Cairo", "Africa/Cairo", "Africa_Casablanca", "Africa/Casablanca", "Africa_Ceuta", "Africa/Ceuta", "Africa_El_Aaiun", "Africa/El_Aaiun", "Africa_Johannesburg", "Africa/Johannesburg", "Africa_Juba", "Africa/Juba", "Africa_Khartoum", "Africa/Khartoum", "Africa_Lagos", "Africa/Lagos", "Africa_Maputo", "Africa/Maputo", "Africa_Monrovia", "Africa/Monrovia", "Africa_Nairobi", "Africa/Nairobi", "Africa_Ndjamena", "Africa/Ndjamena", "Africa_Sao_Tome", "Africa/Sao_Tome", "Africa_Tripoli", "Africa/Tripoli", "Africa_Tunis", "Africa/Tunis", "Africa_Windhoek", "Africa/Windhoek", "America_Adak", "America/Adak", "America_Anchorage", "America/Anchorage", "America_Araguaina", "America/Araguaina", "America_Argentina_Buenos_Aires", "America/Argentina/Buenos_Aires", "America_Argentina_Catamarca", "America/Argentina/Catamarca", "America_Argentina_Cordoba", "America/Argentina/Cordoba", "America_Argentina_Jujuy", "America/Argentina/Jujuy", "America_Argentina_La_Rioja", "America/Argentina/La_Rioja", "America_Argentina_Mendoza", "America/Argentina/Mendoza", "America_Argentina_Rio_Gallegos", "America/Argentina/Rio_Gallegos", "America_Argentina_Salta", "America/Argentina/Salta", "America_Argentina_San_Juan", "America/Argentina/San_Juan", "America_Argentina_San_Luis", "America/Argentina/San_Luis", "America_Argentina_Tucuman", "America/Argentina/Tucuman", "America_Argentina_Ushuaia", "America/Argentina/Ushuaia", "America_Asuncion", "America/Asuncion", "America_Bahia", "America/Bahia", "America_Bahia_Banderas", "America/Bahia_Banderas", "America_Barbados", "America/Barbados", "America_Belem", "America/Belem", "America_Belize", "America/Belize", "America_Boa_Vista", "America/Boa_Vista", "America_Bogota", "America/Bogota", "America_Boise", "America/Boise", "America_Cambridge_Bay", "America/Cambridge_Bay", "America_Campo_Grande", "America/Campo_Grande", "America_Cancun", "America/Cancun", "America_Caracas", "America/Caracas", "America_Cayenne", "America/Cayenne", "America_Chicago", "America/Chicago", "America_Chihuahua", "America/Chihuahua", "America_Ciudad_Juarez", "America/Ciudad_Juarez", "America_Costa_Rica", "America/Costa_Rica", "America_Cuiaba", "America/Cuiaba", "America_Danmarkshavn", "America/Danmarkshavn", "America_Dawson", "America/Dawson", "America_Dawson_Creek", "America/Dawson_Creek", "America_Denver", "America/Denver", "America_Detroit", "America/Detroit", "America_Edmonton", "America/Edmonton", "America_Eirunepe", "America/Eirunepe", "America_El_Salvador", "America/El_Salvador", "America_Fort_Nelson", "America/Fort_Nelson", "America_Fortaleza", "America/Fortaleza", "America_Glace_Bay", "America/Glace_Bay", "America_Goose_Bay", "America/Goose_Bay", "America_Grand_Turk", "America/Grand_Turk", "America_Guatemala", "America/Guatemala", "America_Guayaquil", "America/Guayaquil", "America_Guyana", "America/Guyana", "America_Halifax", "America/Halifax", "America_Havana", "America/Havana", "America_Hermosillo", "America/Hermosillo", "America_Indiana_Indianapolis", "America/Indiana/Indianapolis", "America_Indiana_Knox", "America/Indiana/Knox", "America_Indiana_Marengo", "America/Indiana/Marengo", "America_Indiana_Petersburg", "America/Indiana/Petersburg", "America_Indiana_Tell_City", "America/Indiana/Tell_City", "America_Indiana_Vevay", "America/Indiana/Vevay", "America_Indiana_Vincennes", "America/Indiana/Vincennes", "America_Indiana_Winamac", "America/Indiana/Winamac", "America_Inuvik", "America/Inuvik", "America_Iqaluit", "America/Iqaluit", "America_Jamaica", "America/Jamaica", "America_Juneau", "America/Juneau", "America_Kentucky_Louisville", "America/Kentucky/Louisville", "America_Kentucky_Monticello", "America/Kentucky/Monticello", "America_La_Paz", "America/La_Paz", "America_Lima", "America/Lima", "America_Los_Angeles", "America/Los_Angeles", "America_Maceio", "America/Maceio", "America_Managua", "America/Managua", "America_Manaus", "America/Manaus", "America_Martinique", "America/Martinique", "America_Matamoros", "America/Matamoros", "America_Mazatlan", "America/Mazatlan", "America_Menominee", "America/Menominee", "America_Merida", "America/Merida", "America_Metlakatla", "America/Metlakatla", "America_Mexico_City", "America/Mexico_City", "America_Miquelon", "America/Miquelon", "America_Moncton", "America/Moncton", "America_Monterrey", "America/Monterrey", "America_Montevideo", "America/Montevideo", "America_New_York", "America/New_York", "America_Nome", "America/Nome", "America_Noronha", "America/Noronha", "America_North_Dakota_Beulah", "America/North_Dakota/Beulah", "America_North_Dakota_Center", "America/North_Dakota/Center", "America_North_Dakota_New_Salem", "America/North_Dakota/New_Salem", "America_Nuuk", "America/Nuuk", "America_Ojinaga", "America/Ojinaga", "America_Panama", "America/Panama", "America_Paramaribo", "America/Paramaribo", "America_Phoenix", "America/Phoenix", "America_Port_au_Prince", "America/Port-au-Prince", "America_Porto_Velho", "America/Porto_Velho", "America_Puerto_Rico", "America/Puerto_Rico", "America_Punta_Arenas", "America/Punta_Arenas", "America_Rankin_Inlet", "America/Rankin_Inlet", "America_Recife", "America/Recife", "America_Regina", "America/Regina", "America_Resolute", "America/Resolute", "America_Rio_Branco", "America/Rio_Branco", "America_Santarem", "America/Santarem", "America_Santiago", "America/Santiago", "America_Santo_Domingo", "America/Santo_Domingo", "America_Sao_Paulo", "America/Sao_Paulo", "America_Scoresbysund", "America/Scoresbysund", "America_Sitka", "America/Sitka", "America_St_Johns", "America/St_Johns", "America_Swift_Current", "America/Swift_Current", "America_Tegucigalpa", "America/Tegucigalpa", "America_Thule", "America/Thule", "America_Tijuana", "America/Tijuana", "America_Toronto", "America/Toronto", "America_Vancouver", "America/Vancouver", "America_Whitehorse", "America/Whitehorse", "America_Winnipeg", "America/Winnipeg", "America_Yakutat", "America/Yakutat", "Antarctica_Casey", "Antarctica/Casey", "Antarctica_Davis", "Antarctica/Davis", "Antarctica_Macquarie", "Antarctica/Macquarie", "Antarctica_Mawson", "Antarctica/Mawson", "Antarctica_Palmer", "Antarctica/Palmer", "Antarctica_Rothera", "Antarctica/Rothera", "Antarctica_Troll", "Antarctica/Troll", "Antarctica_Vostok", "Antarctica/Vostok", "Asia_Almaty", "Asia/Almaty", "Asia_Amman", "Asia/Amman", "Asia_Anadyr", "Asia/Anadyr", "Asia_Aqtau", "Asia/Aqtau", "Asia_Aqtobe", "Asia/Aqtobe", "Asia_Ashgabat", "Asia/Ashgabat", "Asia_Atyrau", "Asia/Atyrau", "Asia_Baghdad", "Asia/Baghdad", "Asia_Baku", "Asia/Baku", "Asia_Bangkok", "Asia/Bangkok", "Asia_Barnaul", "Asia/Barnaul", "Asia_Beirut", "Asia/Beirut", "Asia_Bishkek", "Asia/Bishkek", "Asia_Chita", "Asia/Chita", "Asia_Choibalsan", "Asia/Choibalsan", "Asia_Colombo", "Asia/Colombo", "Asia_Damascus", "Asia/Damascus", "Asia_Dhaka", "Asia/Dhaka", "Asia_Dili", "Asia/Dili", "Asia_Dubai", "Asia/Dubai", "Asia_Dushanbe", "Asia/Dushanbe", "Asia_Famagusta", "Asia/Famagusta", "Asia_Gaza", "Asia/Gaza", "Asia_Hebron", "Asia/Hebron", "Asia_Ho_Chi_Minh", "Asia/Ho_Chi_Minh", "Asia_Hong_Kong", "Asia/Hong_Kong", "Asia_Hovd", "Asia/Hovd", "Asia_Irkutsk", "Asia/Irkutsk", "Asia_Jakarta", "Asia/Jakarta", "Asia_Jayapura", "Asia/Jayapura", "Asia_Jerusalem", "Asia/Jerusalem", "Asia_Kabul", "Asia/Kabul", "Asia_Kamchatka", "Asia/Kamchatka", "Asia_Karachi", "Asia/Karachi", "Asia_Kathmandu", "Asia/Kathmandu", "Asia_Khandyga", "Asia/Khandyga", "Asia_Kolkata", "Asia/Kolkata", "Asia_Krasnoyarsk", "Asia/Krasnoyarsk", "Asia_Kuching", "Asia/Kuching", "Asia_Macau", "Asia/Macau", "Asia_Magadan", "Asia/Magadan", "Asia_Makassar", "Asia/Makassar", "Asia_Manila", "Asia/Manila", "Asia_Nicosia", "Asia/Nicosia", "Asia_Novokuznetsk", "Asia/Novokuznetsk", "Asia_Novosibirsk", "Asia/Novosibirsk", "Asia_Omsk", "Asia/Omsk", "Asia_Oral", "Asia/Oral", "Asia_Pontianak", "Asia/Pontianak", "Asia_Pyongyang", "Asia/Pyongyang", "Asia_Qatar", "Asia/Qatar", "Asia_Qostanay", "Asia/Qostanay", "Asia_Qyzylorda", "Asia/Qyzylorda", "Asia_Riyadh", "Asia/Riyadh", "Asia_Sakhalin", "Asia/Sakhalin", "Asia_Samarkand", "Asia/Samarkand", "Asia_Seoul", "Asia/Seoul", "Asia_Shanghai", "Asia/Shanghai", "Asia_Singapore", "Asia/Singapore", "Asia_Srednekolymsk", "Asia/Srednekolymsk", "Asia_Taipei", "Asia/Taipei", "Asia_Tashkent", "Asia/Tashkent", "Asia_Tbilisi", "Asia/Tbilisi", "Asia_Tehran", "Asia/Tehran", "Asia_Thimphu", "Asia/Thimphu", "Asia_Tokyo", "Asia/Tokyo", "Asia_Tomsk", "Asia/Tomsk", "Asia_Ulaanbaatar", "Asia/Ulaanbaatar", "Asia_Urumqi", "Asia/Urumqi", "Asia_Ust_Nera", "Asia/Ust-Nera", "Asia_Vladivostok", "Asia/Vladivostok", "Asia_Yakutsk", "Asia/Yakutsk", "Asia_Yangon", "Asia/Yangon", "Asia_Yekaterinburg", "Asia/Yekaterinburg", "Asia_Yerevan", "Asia/Yerevan", "Atlantic_Azores", "Atlantic/Azores", "Atlantic_Bermuda", "Atlantic/Bermuda", "Atlantic_Canary", "Atlantic/Canary", "Atlantic_Cape_Verde", "Atlantic/Cape_Verde", "Atlantic_Faroe", "Atlantic/Faroe", "Atlantic_Madeira", "Atlantic/Madeira", "Atlantic_South_Georgia", "Atlantic/South_Georgia", "Atlantic_Stanley", "Atlantic/Stanley", "Australia_Adelaide", "Australia/Adelaide", "Australia_Brisbane", "Australia/Brisbane", "Australia_Broken_Hill", "Australia/Broken_Hill", "Australia_Darwin", "Australia/Darwin", "Australia_Eucla", "Australia/Eucla", "Australia_Hobart", "Australia/Hobart", "Australia_Lindeman", "Australia/Lindeman", "Australia_Lord_Howe", "Australia/Lord_Howe", "Australia_Melbourne", "Australia/Melbourne", "Australia_Perth", "Australia/Perth", "Australia_Sydney", "Australia/Sydney", "CET", "CET", "CST6CDT", "CST6CDT", "EET", "EET", "EST", "EST", "EST5EDT", "EST5EDT", "Europe_Andorra", "Europe/Andorra", "Europe_Astrakhan", "Europe/Astrakhan", "Europe_Athens", "Europe/Athens", "Europe_Belgrade", "Europe/Belgrade", "Europe_Berlin", "Europe/Berlin", "Europe_Brussels", "Europe/Brussels", "Europe_Bucharest", "Europe/Bucharest", "Europe_Budapest", "Europe/Budapest", "Europe_Chisinau", "Europe/Chisinau", "Europe_Dublin", "Europe/Dublin", "Europe_Gibraltar", "Europe/Gibraltar", "Europe_Helsinki", "Europe/Helsinki", "Europe_Istanbul", "Europe/Istanbul", "Europe_Kaliningrad", "Europe/Kaliningrad", "Europe_Kirov", "Europe/Kirov", "Europe_Kyiv", "Europe/Kyiv", "Europe_Lisbon", "Europe/Lisbon", "Europe_London", "Europe/London", "Europe_Madrid", "Europe/Madrid", "Europe_Malta", "Europe/Malta", "Europe_Minsk", "Europe/Minsk", "Europe_Moscow", "Europe/Moscow", "Europe_Paris", "Europe/Paris", "Europe_Prague", "Europe/Prague", "Europe_Riga", "Europe/Riga", "Europe_Rome", "Europe/Rome", "Europe_Samara", "Europe/Samara", "Europe_Saratov", "Europe/Saratov", "Europe_Simferopol", "Europe/Simferopol", "Europe_Sofia", "Europe/Sofia", "Europe_Tallinn", "Europe/Tallinn", "Europe_Tirane", "Europe/Tirane", "Europe_Ulyanovsk", "Europe/Ulyanovsk", "Europe_Vienna", "Europe/Vienna", "Europe_Vilnius", "Europe/Vilnius", "Europe_Volgograd", "Europe/Volgograd", "Europe_Warsaw", "Europe/Warsaw", "Europe_Zurich", "Europe/Zurich", "Factory", "Factory", "HST", "HST", "Indian_Chagos", "Indian/Chagos", "Indian_Maldives", "Indian/Maldives", "Indian_Mauritius", "Indian/Mauritius", "MET", "MET", "MST", "MST", "MST7MDT", "MST7MDT", "PST8PDT", "PST8PDT", "Pacific_Apia", "Pacific/Apia", "Pacific_Auckland", "Pacific/Auckland", "Pacific_Bougainville", "Pacific/Bougainville", "Pacific_Chatham", "Pacific/Chatham", "Pacific_Easter", "Pacific/Easter", "Pacific_Efate", "Pacific/Efate", "Pacific_Fakaofo", "Pacific/Fakaofo", "Pacific_Fiji", "Pacific/Fiji", "Pacific_Galapagos", "Pacific/Galapagos", "Pacific_Gambier", "Pacific/Gambier", "Pacific_Guadalcanal", "Pacific/Guadalcanal", "Pacific_Guam", "Pacific/Guam", "Pacific_Honolulu", "Pacific/Honolulu", "Pacific_Kanton", "Pacific/Kanton", "Pacific_Kiritimati", "Pacific/Kiritimati", "Pacific_Kosrae", "Pacific/Kosrae", "Pacific_Kwajalein", "Pacific/Kwajalein", "Pacific_Marquesas", "Pacific/Marquesas", "Pacific_Nauru", "Pacific/Nauru", "Pacific_Niue", "Pacific/Niue", "Pacific_Norfolk", "Pacific/Norfolk", "Pacific_Noumea", "Pacific/Noumea", "Pacific_Pago_Pago", "Pacific/Pago_Pago", "Pacific_Palau", "Pacific/Palau", "Pacific_Pitcairn", "Pacific/Pitcairn", "Pacific_Port_Moresby", "Pacific/Port_Moresby", "Pacific_Rarotonga", "Pacific/Rarotonga", "Pacific_Tahiti", "Pacific/Tahiti", "Pacific_Tarawa", "Pacific/Tarawa", "Pacific_Tongatapu", "Pacific/Tongatapu", "WET", "WET")
         self.mapped[41].resolve_generated_offsets("n", "req_time")
-        self.mapped[43].resolve_generated_offset_with_values("asc", None, "desc", None)
+        self.mapped[42].resolve_generated_offset_with_values("asc", None, "desc", None)
+        self.mapped[43].static_values = [greycat.create_geo(float.fromhex("-0x1.54345b1903bbap+6"), float.fromhex("-0x1.67fffffe98p+7")), greycat.create_geo(float.fromhex("0x1.54345b1903bbap+6"), float.fromhex("0x1.67fffffe98p+7"))]
         self.mapped[44].resolve_generated_offset_with_values("sys", None, "run", None, "req", None, "task", None)
         self.mapped[45].resolve_generated_offsets("id", "name", "activated")
         self.mapped[46].resolve_generated_offset_with_values("read", 0, "write", 1, "execute", 2)
@@ -7575,9 +7575,9 @@ class std(GreyCat.Library):
         self.mapped[80].resolve_generated_offset_with_values("plain", None, "base64", None, "base64url", None, "hexadecimal", None)
         self.mapped[81].resolve_generated_offsets("path", "append", "format")
         self.mapped[82].resolve_generated_offsets("path", "size", "last_modification")
-        self.mapped[83].resolve_generated_offsets("host", "port", "mode", "authenticate", "user", "pass")
-        self.mapped[84].resolve_generated_offsets("header_lines", "separator", "string_delimiter", "decimal_separator", "thousands_separator", "row_limit", "enumerable_limit", "date_check_limit", "date_formats")
-        self.mapped[84].static_values = [100, 100]
+        self.mapped[83].resolve_generated_offsets("header_lines", "separator", "string_delimiter", "decimal_separator", "thousands_separator", "row_limit", "enumerable_limit", "date_check_limit", "date_formats")
+        self.mapped[83].static_values = [100, 100]
+        self.mapped[84].resolve_generated_offsets("host", "port", "mode", "authenticate", "user", "pass")
         self.mapped[85].resolve_generated_offsets("from", "subject", "body", "body_is_html", "to", "cc", "bcc")
         self.mapped[86].resolve_generated_offsets("path", "append")
         self.mapped[87].resolve_generated_offsets("name", "example", "null_count", "bool_count", "int_count", "float_count", "string_count", "date_count", "date_format_count", "enumerable_count", "profile")
