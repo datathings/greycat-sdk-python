@@ -967,24 +967,6 @@ class GreyCat:
                 elif field.sbi_type.value == PrimitiveType.T4.value:
                     o = value
                     o._save(stream)
-                elif field.sbi_type.value == PrimitiveType.TU5D.value:
-                    o = value
-                    o._save(stream)
-                elif field.sbi_type.value == PrimitiveType.TU6D.value:
-                    o = value
-                    o._save(stream)
-                elif field.sbi_type.value == PrimitiveType.TU10D.value:
-                    o = value
-                    o._save(stream)
-                elif field.sbi_type.value == PrimitiveType.TUF2D.value:
-                    o = value
-                    o._save(stream)
-                elif field.sbi_type.value == PrimitiveType.TUF3D.value:
-                    o = value
-                    o._save(stream)
-                elif field.sbi_type.value == PrimitiveType.TUF4D.value:
-                    o = value
-                    o._save(stream)
                 elif field.sbi_type.value == PrimitiveType.TIME.value:
                     o = value
                     o._save(stream)
@@ -1010,7 +992,7 @@ class GreyCat:
                     else:
                         o: GreyCat.Object = value
                         if field.abi_type != o.type_.offset and self.type_.greycat.types[field.abi_type].genericAbiType != o.type_.offset:
-                            stream.write_vu32(o.type_.offset)
+                            stream.write_vu32(c_uint32(o.type_.offset))
                         o._save(stream)
                 # elif field.sbi_type.value == PrimitiveType.BLOCK_REF: # TODO
                 # elif field.sbi_type.value == PrimitiveType.FUNCTION: # TODO

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from _collections_abc import dict_keys, dict_values, dict_items
 from collections import deque
+import ctypes
 from ctypes import *
 from itertools import repeat
 import math
@@ -368,7 +369,7 @@ class std_n:
 
             @final
             def _save_type(self, stream: GreyCat._Stream) -> None:
-                stream.write_i8(PrimitiveType.TUF2D)
+                stream.write_i8(PrimitiveType.T2F)
 
             @final
             def _save(self, stream: GreyCat._Stream) -> None:
@@ -416,7 +417,7 @@ class std_n:
 
             @final
             def _save_type(self, stream: GreyCat._Stream) -> None:
-                stream.write_i8(PrimitiveType.TU3D)
+                stream.write_i8(PrimitiveType.T3)
 
             @final
             def _save(self, stream: GreyCat._Stream) -> None:
@@ -472,7 +473,7 @@ class std_n:
 
             @final
             def _save_type(self, stream: GreyCat._Stream) -> None:
-                stream.write_i8(PrimitiveType.TUF3D)
+                stream.write_i8(PrimitiveType.T3F)
 
             @final
             def _save(self, stream: GreyCat._Stream) -> None:
@@ -556,7 +557,7 @@ class std_n:
 
             @final
             def _save_type(self, stream: GreyCat._Stream) -> None:
-                stream.write_i8(PrimitiveType.TU4D)
+                stream.write_i8(PrimitiveType.T4)
 
             @final
             def _save(self, stream: GreyCat._Stream) -> None:
@@ -603,7 +604,7 @@ class std_n:
 
             @final
             def _save_type(self, stream: GreyCat._Stream) -> None:
-                stream.write_i8(PrimitiveType.TUF4D)
+                stream.write_i8(PrimitiveType.T4F)
 
             @final
             def _save(self, stream: GreyCat._Stream) -> None:
@@ -787,13 +788,21 @@ class std_n:
                         stream.write_i8(PrimitiveType.INT)
                         stream.write_i8(0)  # TODO: manage monotonic
                         for e in self:
-                            if e is not None:
+                            if isinstance(e, c_int64):
+                                stream.write_vi64(e)
+                            elif e is not None:
+                                if isinstance(e, ctypes._SimpleCData):
+                                    e = e.value
                                 stream.write_vi64(c_int64(e))
                     elif float is unique_type:
                         stream.write_i8(PrimitiveType.FLOAT)
                         stream.write_i8(0)  # TODO: manage monotonic
                         for e in self:
-                            if e is not None:
+                            if isinstance(e, c_double):
+                                stream.write_f64(e)
+                            elif e is not None:
+                                if isinstance(e, ctypes._SimpleCData):
+                                    e = e.value
                                 stream.write_f64(c_double(e))
                     elif str is unique_type:
                         stream.write_i8(PrimitiveType.OBJECT)
@@ -1114,7 +1123,10 @@ class std_n:
                             nullables[row >> 3] |= 1 << (row & 7)
                         else:
                             _type = type(e)
-                            # TODO: deal with ctypes shenanigans?
+                            if issubclass(_type, c_int64) or issubclass(_type, c_uint32) or issubclass(_type, c_int32) or issubclass(_type, c_uint16) or issubclass(_type, c_uint16) or issubclass(_type, c_uint8) or issubclass(_type, c_int8):
+                                _type = int
+                            elif issubclass(_type, c_double) or issubclass(_type, c_float):
+                                _type = float
                             if unique_type is None:
                                 type_is_unique = True
                                 unique_type = _type
@@ -1162,14 +1174,22 @@ class std_n:
                             stream.write_i8(0)  # TODO: manage monotonic
                             for row in range(self.rows):
                                 e = self.data[col * self.rows + row]
-                                if e is not None:
+                                if isinstance(e, c_int64):
+                                    stream.write_vi64(e)
+                                elif e is not None:
+                                    if isinstance(e, ctypes._SimpleCData):
+                                        e = e.value
                                     stream.write_vi64(c_int64(e))
                         elif float is unique_type:
                             stream.write_i8(PrimitiveType.FLOAT)
                             stream.write_i8(0)  # TODO: manage monotonic
                             for row in range(self.rows):
                                 e = self.data[col * self.rows + row]
-                                if e is not None:
+                                if isinstance(e, c_double):
+                                    stream.write_f64(e)
+                                elif e is not None:
+                                    if isinstance(e, ctypes._SimpleCData):
+                                        e = e.value
                                     stream.write_f64(c_double(e))
                         elif str is unique_type:
                             stream.write_i8(PrimitiveType.OBJECT)
