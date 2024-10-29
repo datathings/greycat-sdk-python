@@ -740,7 +740,10 @@ class std_n:
                         nullables[offset >> 3] |= 1 << (offset & 7)
                     else:
                         _type = type(e)
-                        # TODO: deal with ctypes shenanigans?
+                        if issubclass(_type, c_int64) or issubclass(_type, c_uint32) or issubclass(_type, c_int32) or issubclass(_type, c_uint16) or issubclass(_type, c_uint16) or issubclass(_type, c_uint8) or issubclass(_type, c_int8):
+                            _type = int
+                        elif issubclass(_type, c_double) or issubclass(_type, c_float):
+                            _type = float
                         if unique_type is None:
                             type_is_unique = True
                             unique_type = _type
