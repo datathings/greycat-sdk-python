@@ -1229,7 +1229,8 @@ class std_n:
                     col_type: GreyCat.Type | None = None
                     monotonic_value: Any | None = None
                     if PrimitiveType.OBJECT.value == col_primitive_type or PrimitiveType.STATIC_FIELD.value == col_primitive_type:
-                        type_offset: int = c_int32(stream.read_vu32().value).value
+                        type_offset: int = c_int32(
+                            stream.read_vu32().value).value
                         if -1 != type_offset:
                             col_type = stream.greycat.types[type_offset]
                     if PrimitiveType.OBJECT.value != col_primitive_type and PrimitiveType.UNDEFINED.value != col_primitive_type:
@@ -1259,8 +1260,8 @@ class std_n:
                 table.cols = cols
                 table.data = data
                 return table
-            
-            def __str__(self)-> str:
+
+            def __str__(self) -> str:
                 str = f"{self.type_.name}{{"
                 for col in range(self.cols):
                     str = f"{str}\n\t"
@@ -1275,7 +1276,7 @@ class std_n:
                 def to_numpy(self) -> tuple[numpy.ndarray]:
                     nda: numpy.ndarray = numpy.reshape(
                         [
-                            elem.value if type(elem) in [c_double, c_int64]
+                            elem.value if isinstance(elem, ctypes._SimpleCData)
                             else elem.to_numpy() if isinstance(elem, std_n.core._time) or isinstance(elem, std_n.core._duration)
                             else elem.map if isinstance(elem, std_n.core._Map)
                             else elem
@@ -1284,13 +1285,6 @@ class std_n:
                         (self.rows, self.cols),
                         "F",
                     )
-                    null_indices: list[int] = []
-                    for index, col_meta in enumerate(self.meta):
-                        if col_meta.col_type == PrimitiveType.NULL:
-                            null_indices.append(index - len(null_indices))
-                    if len(null_indices) > 0:
-                        nda = nda.astype(numpy.dtype(object))
-                        nda = numpy.insert(nda, null_indices, None, axis=1)
                     return nda
 
                 @staticmethod
@@ -1318,9 +1312,7 @@ class std_n:
                     return elem
 
                 @staticmethod
-                def from_numpy(
-                    gc: GreyCat, nda: numpy.ndarray, meta: Optional[list[std_n.core._Table.TableColumnMeta]] = None
-                ) -> std_n.core._Table:
+                def from_numpy(gc: GreyCat, nda: numpy.ndarray) -> std_n.core._Table:
                     type_: GreyCat.Type = gc.types_by_name["core::Table"]
                     table: std_n.core._Table = type_.factory(type_, None)
                     if nda.dtype == numpy.dtype(float):
@@ -1341,15 +1333,6 @@ class std_n:
                         raise ValueError(f"Unknown dtype: {nda.dtype}")
                     table.rows = nda.shape[0]
                     table.cols = nda.shape[1]
-                    if meta is not None:
-                        table.meta = meta
-                    if not hasattr(table, "meta"):
-                        table.meta = [
-                            std_n.core._Table.TableColumnMeta(
-                                PrimitiveType.UNDEFINED, c_uint32(0), False, ""
-                            )
-                            for _ in repeat(None, table.cols)
-                        ]
                     return table
 
                 if "pandas" in sys.modules:
@@ -1365,73 +1348,13 @@ class std_n:
                         return map
 
                     def to_pandas(self) -> pandas.DataFrame:
-                        nda = self.to_numpy()
-                        columns: list[str | int] = list(
-                            map(lambda meta: meta.header, self.meta))
-                        dtypes: map[str | int, numpy.dtype] = {}
-                        dtype: numpy.dtype
-                        if len(set(columns)) < len(columns):
-                            columns = list(range(len(columns)))
-                        for offset, meta in enumerate(self.meta):
-                            if PrimitiveType.FLOAT.value == meta.col_type.value:
-                                dtype = numpy.dtype(float)
-                            elif PrimitiveType.INT.value == meta.col_type.value:
-                                dtype = numpy.dtype(int)
-                            elif PrimitiveType.BOOL.value == meta.col_type.value:
-                                dtype = numpy.dtype(bool)
-                            elif PrimitiveType.TIME.value == meta.col_type.value:
-                                dtype = numpy.dtype('datetime64[us]')
-                            elif PrimitiveType.DURATION.value == meta.col_type.value:
-                                dtype = numpy.dtype('timedelta64[us]')
-                            elif meta.col_type.value == PrimitiveType.OBJECT.value:
-                                if meta.type.value == self.type_.greycat.type_offset_core_string:
-                                    dtype = pandas.StringDtype()
-                                else:
-                                    dtype = numpy.dtype(object)
-                            elif meta.col_type.value == PrimitiveType.UNDEFINED.value:
-                                dtype = numpy.dtype(object)
-                            else:
-                                raise ValueError(
-                                    f"Unknown col type: {meta.col_type.value}")
-                            dtypes[columns[offset]] = dtype
-                        return pandas.DataFrame(nda, columns=columns).astype(dtypes)
+                        return pandas.DataFrame(self.to_numpy())
 
                     @staticmethod
                     def from_pandas(
                         greycat: GreyCat, df: pandas.DataFrame
                     ) -> std_n.core._Table:
-                        nda = df.to_numpy()
-                        meta: list[std_n.core._Table.TableColumnMeta] = []
-                        dtype: numpy.dtype
-                        col_type: c_ubyte
-                        _type: c_uint32
-                        index: bool = False
-                        header: str
-                        for typed_header in df.dtypes.items():
-                            dtype = typed_header[1]
-                            _type = c_uint32(PrimitiveType.UNDEFINED.value)
-                            if dtype is numpy.dtype(float):
-                                col_type = PrimitiveType.FLOAT
-                            elif dtype is numpy.dtype(int):
-                                col_type = PrimitiveType.INT
-                            elif type(dtype) is pandas.StringDtype:
-                                col_type = PrimitiveType.OBJECT
-                                _type = c_uint32(
-                                    greycat.type_offset_core_string)
-                            elif dtype.type is numpy.datetime64:
-                                col_type = PrimitiveType.TIME
-                            elif dtype.type is numpy.timedelta64:
-                                col_type = PrimitiveType.DURATION
-                            elif dtype is numpy.dtype(bool):
-                                col_type = PrimitiveType.BOOL
-                            # elif dtype is numpy.dtype(object):
-                            #     col_type = PrimitiveType.UNDEFINED
-                            else:
-                                col_type = PrimitiveType.UNDEFINED
-                            header = typed_header[0]
-                            meta.append(std_n.core._Table.TableColumnMeta(
-                                col_type, _type, index, header))
-                        return std_n.core._Table.from_numpy(greycat, nda, meta=meta)
+                        return std_n.core._Table.from_numpy(greycat, df.to_numpy())
 
                 if "tensorflow" in sys.modules:
                     def to_tf_tensor(self) -> tensorflow.Tensor:
