@@ -94,7 +94,7 @@ fn write_core(out: GcbWriter) {
   out.write(geo {42, 12});
   out.write(GeoBox {sw: geo {13, 37}, ne: geo {42, 12}, });
   out.write(nodeList<int> {});
-  out.write(TimeZone::Europe_Luxembourg);
+  out.write(TimeZone::"Europe/Luxembourg");
   out.write(node<float> {13.37});
   out.write([]);
   out.write(Array<ErrorFrame> {});
@@ -162,7 +162,7 @@ fn write_core(out: GcbWriter) {
   out.write(Array<nodeTime> {});
   out.write([
       null, true, '*', 12, 13.37, "Hello world", geo {42_, 12_}, GeoBox {sw: geo {13_, 37_}, ne: geo {42_, 12_}, }, nodeList<int> {},
-      TimeZone::Europe_Luxembourg, node<float> {13.37}, Error {stack: Array<ErrorFrame> {}, },
+      TimeZone::"Europe/Luxembourg", node<float> {13.37}, Error {stack: Array<ErrorFrame> {}, },
       duration::new(12, DurationUnit::microseconds), nodeTime<nodeGeo> {}
     ]);
   out.write(Tuple<Array, Map> {x: Array<any?> {}, y: Map<any?, any?> {} });

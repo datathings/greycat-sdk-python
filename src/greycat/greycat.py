@@ -1114,6 +1114,7 @@ class GreyCat:
             generic_abi_type: Final[int] = abi_stream.read_vu32().value
             g1_abi_type_desc: Final[int] = abi_stream.read_vu32().value
             g2_abi_type_desc: Final[int] = abi_stream.read_vu32().value
+            parent_type_id: Final[int] = abi_stream.read_vu32().value # TODO: use?
             attributes_len: int = abi_stream.read_vu32().value
             abi_stream.read_vu32()  # unused field
             abi_stream.read_vu32()  # unused field
@@ -1126,6 +1127,7 @@ class GreyCat:
             is_enum: bool = 0 != (flags & (1 << 2))
             is_masked: bool = 0 != (flags & (1 << 3))
             is_ambiguous: bool = 0 != (flags & (1 << 4))
+            is_volatile: bool = 0 != (flags & (1 << 5))
             type_attributes: Final[List[GreyCat.Type.Attribute]] = []
             for _ in repeat(None, attributes_len):
                 name: Final[str] = self.symbols[abi_stream.read_vu32().value]
@@ -1150,6 +1152,8 @@ class GreyCat:
                         mapped,
                     )
                 )
+            if is_volatile or 0 != generic_abi_type: # TODO: check
+                continue
             factory: GreyCat.Factory | None = None
             if fqn in factories:
                 factory = factories[fqn]
@@ -1296,6 +1300,8 @@ class GreyCat:
         self.type_offset_core_field: Final[int] = tmp.offset
 
         abi_stream.close()
+        print(self.types_by_name.keys())
+        print(self.types_by_name["core::Date"])
         for lib in self.libs_by_name.values():
             lib.init(self)
 
