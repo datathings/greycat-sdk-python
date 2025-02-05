@@ -1300,8 +1300,6 @@ class GreyCat:
         self.type_offset_core_field: Final[int] = tmp.offset
 
         abi_stream.close()
-        print(self.types_by_name.keys())
-        print(self.types_by_name["core::Date"])
         for lib in self.libs_by_name.values():
             lib.init(self)
 
