@@ -8,6 +8,7 @@ from io import *
 from itertools import repeat
 import json
 import os
+import re
 import socket
 from struct import pack, unpack
 from typing import *
@@ -1152,14 +1153,21 @@ class GreyCat:
                         mapped,
                     )
                 )
-            if is_volatile or 0 != generic_abi_type: # TODO: check
+            if is_volatile:
                 continue
             factory: GreyCat.Factory | None = None
-            if fqn in factories:
-                factory = factories[fqn]
             loader: GreyCat.Loader | None = None
-            if fqn in loaders:
-                loader = loaders[fqn]
+            if 0 == generic_abi_type:
+                if fqn in factories:
+                    factory = factories[fqn]
+                if fqn in loaders:
+                    loader = loaders[fqn]
+            else:
+                super_fqn = re.sub("<.*$", "", fqn)
+                if super_fqn in factories:
+                    factory = factories[super_fqn]
+                if super_fqn in loaders:
+                    loader = loaders[super_fqn]
             abi_type: GreyCat.Type = GreyCat.Type(
                 type_offset,
                 fqn,

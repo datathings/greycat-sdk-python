@@ -97,10 +97,10 @@ fn write_core(out: GcbWriter) {
   out.write(TimeZone::"Europe/Luxembourg");
   out.write(node<float> {13.37});
   out.write([]);
-  out.write(Array<ErrorFrame> {});
-  out.write(Array<int> {0, 1, 2});
-  out.write(Array<int?> {0, null, 2});
-  out.write(Array<String?> {"Hello", null, "world"});
+  out.write(Array<ErrorFrame> {}); // TODO
+  out.write(Array<int> {0, 1, 2}); // TODO
+  out.write(Array<int?> {0, null, 2}); // TODO
+  out.write(Array<String?> {"Hello", null, "world"}); // TODO
   out.write(Error { stack: Array<ErrorFrame> {}, }); // TODO
   out.write(ErrorCode::none);
   out.write(SamplingMode::adaptative);
