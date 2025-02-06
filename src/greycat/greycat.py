@@ -8,7 +8,6 @@ from io import *
 from itertools import repeat
 import json
 import os
-import re
 import socket
 from struct import pack, unpack
 from typing import *
@@ -1163,7 +1162,7 @@ class GreyCat:
                 if fqn in loaders:
                     loader = loaders[fqn]
             else:
-                super_fqn = re.sub("<.*$", "", fqn)
+                super_fqn: str = self.types[generic_abi_type].name
                 if super_fqn in factories:
                     factory = factories[super_fqn]
                 if super_fqn in loaders:
