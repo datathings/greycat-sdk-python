@@ -227,7 +227,7 @@ class GreyCat:
 
         def read_i64(self) -> int:
             tmp: bytes = self.read_i8_array(8)
-            return c_int64(
+            return (
                 (tmp[7] << 56)
                 + ((tmp[6] << 56) >> 8)
                 + ((tmp[5] << 56) >> 16)
@@ -236,7 +236,7 @@ class GreyCat:
                 + ((tmp[2] << 56) >> 40)
                 + ((tmp[1] << 56) >> 48)
                 + ((tmp[0] << 56) >> 56)
-            ).value
+            )
 
         def read_vi64(self) -> int:
             sign_swapped_value: int = self.read_vu64()

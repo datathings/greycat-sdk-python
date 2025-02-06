@@ -385,17 +385,17 @@ class std_n:
 
             def __interleave(self) -> int:
                 return std_n.core._interleave64_2d(
-                    unpack("q", pack("d", self.x0))[
+                    unpack("I", pack("f", self.x0))[
                         0] + std_n.core._t2._UINT32_MIN,
-                    unpack("q", pack("d", self.x1))[
+                    unpack("I", pack("f", self.x1))[
                         0] + std_n.core._t2._UINT32_MIN,
                 )
 
             def __deinterleave(self, interleaved: int) -> None:
                 dc: int = std_n.core._deinterleave64_2d(interleaved)
                 self.x0 = unpack(
-                    "d", pack("q", (dc & 0xFFFFFFFF) + std_n.core._t2._INT32_MIN))[0]
-                self.x1 = unpack("d", pack("q", (dc >> 32) +
+                    "f", pack("I", (dc & 0xFFFFFFFF) + std_n.core._t2._INT32_MIN))[0]
+                self.x1 = unpack("f", pack("I", (dc >> 32) +
                                  std_n.core._t2._INT32_MIN))[0]
 
         class _t3(GreyCat.Object):
@@ -771,7 +771,6 @@ class std_n:
                     for offset in range(size):
                         array[offset] = None if nullables is not None and nullables[offset] else stream.read(
                         )
-                        print(f"DEBUG: {offset}: {array[offset]}")
                 elif PrimitiveType.OBJECT == array_primitive_type or (PrimitiveType.STATIC_FIELD == array_primitive_type and monotonic_value is None):
                     if array_type is None:
                         for offset in range(size):
