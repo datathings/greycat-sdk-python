@@ -46,7 +46,7 @@ class std_n:
 
         class _duration(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
-                self.value: c_int64
+                self.value: int
                 super().__init__(type, None)
 
             @final
@@ -65,14 +65,14 @@ class std_n:
 
             if "numpy" in sys.modules:
                 def to_numpy(self) -> numpy.timedelta64:
-                    return numpy.timedelta64(self.value.value, "us")
+                    return numpy.timedelta64(self.value, "us")
 
                 @staticmethod
                 def from_numpy(greycat: GreyCat, td: numpy.timedelta64) -> std_n.core._duration:
                     duration = std_n.core._duration(
                         greycat.type_offset_core_duration)
-                    duration.value = c_int64(td.astype(int)) if numpy.datetime_data(td)[0] in [
-                        "us", "μs"] else c_int64(td.astype("timedelta64[us]").astype(int))
+                    duration.value = td.astype(int) if numpy.datetime_data(td)[0] in [
+                        "us", "μs"] else td.astype("timedelta64[us]").astype(int)
                     return duration
 
         class _field(GreyCat.Object):
@@ -99,7 +99,7 @@ class std_n:
                 lat: float | None = None,
                 lng: float | None = None,
             ):
-                self.geocode: c_int64
+                self.geocode: int
                 self.lat: float
                 self.lng: float
                 super().__init__(type, None)
@@ -119,7 +119,7 @@ class std_n:
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
                 geo: std_n.core._geo = type.factory(type, [])
-                value: c_int64 = stream.read_i64()
+                value: int = stream.read_i64()
                 geo.geocode = value
                 lat_offset: int
                 lng_offset: int
@@ -143,7 +143,7 @@ class std_n:
                 return f"geo{{lat={self.lat},lng={self.lng}}}"
 
             @staticmethod
-            def __interleave64(xlo: int, ylo: int) -> c_int64:
+            def __interleave64(xlo: int, ylo: int) -> int:
                 B: list[int] = [
                     6148914691236517205,
                     3689348814741910323,
@@ -167,7 +167,7 @@ class std_n:
                 return x | (y << 1)
 
             @staticmethod
-            def __deinterleave64(interleaved: c_int64) -> tuple[int, int]:
+            def __deinterleave64(interleaved: int) -> tuple[int, int]:
                 B: list[int] = [
                     6148914691236517205,
                     3689348814741910323,
@@ -177,8 +177,8 @@ class std_n:
                     4294967295,
                 ]
                 S: list[int] = [0, 1, 2, 4, 8, 16]
-                x: int = interleaved.value
-                y: int = interleaved.value >> 1
+                x: int = interleaved
+                y: int = interleaved >> 1
                 x = (x | (x >> S[0])) & B[0]
                 y = (y | (y >> S[0])) & B[0]
                 x = (x | (x >> S[1])) & B[1]
@@ -194,7 +194,7 @@ class std_n:
                 return x, y
 
             @staticmethod
-            def __encode(latitude: float, longitude: float) -> c_int64:
+            def __encode(latitude: float, longitude: float) -> int:
                 if latitude < std_n.core._geo.__GC_CORE_GEO_LAT_MIN:
                     latitude = std_n.core._geo.__GC_CORE_GEO_LAT_MIN
                 if latitude >= std_n.core._geo.__GC_CORE_GEO_LAT_MAX:
@@ -347,21 +347,20 @@ class std_n:
                 return res
 
             def __str__(self) -> str:
-                return f"ti2d{{x0={self.x0},x1={self.x1}}}"
+                return f"t2{{x0={self.x0},x1={self.x1}}}"
 
-            def __interleave(self) -> c_int64:
+            def __interleave(self) -> int:
                 return std_n.core._interleave64_2d(
                     self.x0 + std_n.core._t2._UINT32_MIN,
                     self.x1 + std_n.core._t2._UINT32_MIN,
                 )
 
-            def __deinterleave(self, interleaved: c_int64) -> None:
+            def __deinterleave(self, interleaved: int) -> None:
                 dc: int = std_n.core._deinterleave64_2d(interleaved)
-                self.x0 = c_int32(dc + std_n.core._t2._INT32_MIN).value
-                self.x1 = c_int32(
-                    (dc >> 32) + std_n.core._t2._INT32_MIN).value
+                self.x0 = (dc & 0xFFFFFFFF) + std_n.core._t2._INT32_MIN
+                self.x1 = (dc >> 32) + std_n.core._t2._INT32_MIN
 
-        class _t2f(GreyCat.Object):
+        class _t2f(GreyCat.Object):  # TODO: fix
             def __init__(self, type: GreyCat.Type) -> None:
                 self.x0: float
                 self.x1: float
@@ -382,9 +381,9 @@ class std_n:
                 return res
 
             def __str__(self) -> str:
-                return f"tf2d{{x0={self.x0},x1={self.x1}}}"
+                return f"t2f{{x0={self.x0},x1={self.x1}}}"
 
-            def __interleave(self) -> c_int64:
+            def __interleave(self) -> int:
                 return std_n.core._interleave64_2d(
                     unpack("q", pack("d", self.x0))[
                         0] + std_n.core._t2._UINT32_MIN,
@@ -392,17 +391,12 @@ class std_n:
                         0] + std_n.core._t2._UINT32_MIN,
                 )
 
-            def __deinterleave(self, interleaved: c_int64) -> None:
+            def __deinterleave(self, interleaved: int) -> None:
                 dc: int = std_n.core._deinterleave64_2d(interleaved)
                 self.x0 = unpack(
-                    "d", pack("q", c_int32(
-                        dc + std_n.core._t2._INT32_MIN).value)
-                )[0]
-                self.x1 = unpack(
-                    "d",
-                    pack("q", c_int32((dc >> 32) +
-                         std_n.core._t2._INT32_MIN).value),
-                )[0]
+                    "d", pack("q", (dc & 0xFFFFFFFF) + std_n.core._t2._INT32_MIN))[0]
+                self.x1 = unpack("d", pack("q", (dc >> 32) +
+                                 std_n.core._t2._INT32_MIN))[0]
 
         class _t3(GreyCat.Object):
             _INT21_MIN: int = -1048575 - 1
@@ -430,16 +424,16 @@ class std_n:
                 return res
 
             def __str__(self) -> str:
-                return f"ti3d{{x0={self.x0},x1={self.x1},x2={self.x2}}}"
+                return f"t3{{x0={self.x0},x1={self.x1},x2={self.x2}}}"
 
-            def __interleave(self) -> c_int64:
+            def __interleave(self) -> int:
                 return std_n.core._interleave64_3d(
                     self.x0 + std_n.core._t3._UINT21_MIN,
                     self.x1 + std_n.core._t3._UINT21_MIN,
                     self.x2 + std_n.core._t3._UINT21_MIN,
                 )
 
-            def __deinterleave(self, interleaved: c_int64) -> None:
+            def __deinterleave(self, interleaved: int) -> None:
                 B: list[int] = [
                     0x10C30C30C30C30C3,
                     0x100F00F00F00F00F,
@@ -449,20 +443,12 @@ class std_n:
                 ]
                 S: list[int] = [2, 4, 8, 16, 32]
 
-                self.x0 = (
-                    std_n.core._deinterleave64_3d(interleaved)
-                    + std_n.core._t3._INT21_MIN
-                )
-                self.x1 = (
-                    std_n.core._deinterleave64_3d(
-                        c_int64(interleaved.value >> 1))
-                    + std_n.core._t3._INT21_MIN
-                )
-                self.x2 = (
-                    std_n.core._deinterleave64_3d(
-                        c_int64(interleaved.value >> 2))
-                    + std_n.core._t3._INT21_MIN
-                )
+                self.x0 = std_n.core._deinterleave64_3d(
+                    interleaved) + std_n.core._t3._INT21_MIN
+                self.x1 = std_n.core._deinterleave64_3d(
+                    interleaved >> 1) + std_n.core._t3._INT21_MIN
+                self.x2 = std_n.core._deinterleave64_3d(
+                    interleaved >> 2) + std_n.core._t3._INT21_MIN
 
         class _t3f(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
@@ -486,7 +472,7 @@ class std_n:
                 return res
 
             def __str__(self) -> str:
-                return f"tf3d{{x0={self.x0},x1={self.x1},x2={self.x2}}}"
+                return f"t3f{{x0={self.x0},x1={self.x1},x2={self.x2}}}"
 
             def __interleave(self) -> c_int64:
                 return std_n.core._interleave64_3d(
@@ -498,50 +484,13 @@ class std_n:
                     + std_n.core._t3._UINT21_MIN,
                 )
 
-            def __deinterleave(self, interleaved: c_int64) -> None:
-                self.x0 = unpack(
-                    "f",
-                    pack(
-                        "i",
-                        c_int32(
-                            (
-                                std_n.core._deinterleave64_3d(interleaved)
-                                + std_n.core._t3._INT21_MIN
-                            )
-                            << 11
-                        ).value,
-                    ),
-                )[0]
-                self.x1 = unpack(
-                    "f",
-                    pack(
-                        "i",
-                        c_int32(
-                            (
-                                std_n.core._deinterleave64_3d(
-                                    c_int64(interleaved.value >> 1)
-                                )
-                                + std_n.core._t3._INT21_MIN
-                            )
-                            << 11
-                        ).value,
-                    ),
-                )[0]
-                self.x2 = unpack(
-                    "f",
-                    pack(
-                        "i",
-                        c_int32(
-                            (
-                                std_n.core._deinterleave64_3d(
-                                    c_int64(interleaved.value >> 2)
-                                )
-                                + std_n.core._t3._INT21_MIN
-                            )
-                            << 11
-                        ).value,
-                    ),
-                )[0]
+            def __deinterleave(self, interleaved: int) -> None:
+                self.x0 = unpack("f", pack("i", (std_n.core._deinterleave64_3d(
+                    interleaved) + std_n.core._t3._INT21_MIN) << 11))[0]
+                self.x1 = unpack("f", pack("i", (std_n.core._deinterleave64_3d(
+                    interleaved >> 1) + std_n.core._t3._INT21_MIN) << 11))[0]
+                self.x2 = unpack("f", pack("i", (std_n.core._deinterleave64_3d(
+                    interleaved >> 2) + std_n.core._t3._INT21_MIN) << 11))[0]
 
         class _t4(GreyCat.Object):
             _INT16_MIN: int = -32768
@@ -570,25 +519,24 @@ class std_n:
                 return res
 
             def __str__(self) -> str:
-                return f"ti4d{{x0={self.x0},x1={self.x1},x2={self.x2},x3={self.x3}}}"
+                return f"t4{{x0={self.x0},x1={self.x1},x2={self.x2},x3={self.x3}}}"
 
-            def __interleave(self) -> c_int64:
+            def __interleave(self) -> int:
                 return std_n.core._interleave64_2d(
                     std_n.core._interleave64_2d(
                         self.x0 + std_n.core._t4._UINT16_MIN,
                         self.x2 + std_n.core._t4._UINT16_MIN,
-                    ).value,
+                    ),
                     std_n.core._interleave64_2d(
                         self.x1 + std_n.core._t4._UINT16_MIN,
                         self.x3 + std_n.core._t4._UINT16_MIN,
-                    ).value,
+                    )
                 )
 
             def __deinterleave(self, interleaved: c_int64) -> None:
                 x3120: int = std_n.core._deinterleave64_2d(interleaved)
-                x20: int = std_n.core._deinterleave64_2d(
-                    c_int64(x3120 & 0xFFFFFFFF))
-                x31: int = std_n.core._deinterleave64_2d(c_int64(x3120 >> 32))
+                x20: int = std_n.core._deinterleave64_2d(x3120 & 0xFFFFFFFF)
+                x31: int = std_n.core._deinterleave64_2d(x3120 >> 32)
                 self.x0 = (x20 & 0xFFFF) + std_n.core._t4._INT16_MIN
                 self.x1 = (x31 & 0xFFFF) + std_n.core._t4._INT16_MIN
                 self.x2 = (x20 >> 32) + std_n.core._t4._INT16_MIN
@@ -617,81 +565,52 @@ class std_n:
                 return res
 
             def __str__(self) -> str:
-                return f"tf4d{{x0={self.x0},x1={self.x1},x2={self.x2},x3={self.x3}}}"
+                return f"t4f{{x0={self.x0},x1={self.x1},x2={self.x2},x3={self.x3}}}"
 
-            def __interleave(self) -> c_int64:
+            def __interleave(self) -> int:
                 return std_n.core._interleave64_2d(
                     std_n.core._interleave64_2d(
                         (unpack("i", pack("f", self.x0))[0] >> 16)
                         + std_n.core._t4._UINT16_MIN,
                         (unpack("i", pack("f", self.x2))[0] >> 16)
                         + std_n.core._t4._UINT16_MIN,
-                    ).value,
+                    ),
                     std_n.core._interleave64_2d(
                         (unpack("i", pack("f", self.x1))[0] >> 16)
                         + std_n.core._t4._UINT16_MIN,
                         (unpack("i", pack("f", self.x3))[0] >> 16)
                         + std_n.core._t4._UINT16_MIN,
-                    ).value,
+                    )
                 )
 
             def __deinterleave(self, interleaved: c_int64) -> None:
-                d3120: int = c_int64(
-                    std_n.core._deinterleave64_2d(interleaved)).value
+                d3120: int = std_n.core._deinterleave64_2d(interleaved)
                 d20: int = std_n.core._deinterleave64_2d(
-                    c_int64(d3120 & 0xFFFFFFFF))
-                d31: int = std_n.core._deinterleave64_2d(c_int64(d3120 >> 32))
+                    d3120 & 0xFFFFFFFF)
+                d31: int = std_n.core._deinterleave64_2d(d3120 >> 32)
                 self.x0 = unpack(
-                    "f",
-                    pack(
-                        "i",
-                        c_int32(
-                            ((d20 & 0xFFFF) + std_n.core._t4._INT16_MIN) << 16
-                        ).value,
-                    ),
-                )[0]
+                    "f", pack("i", ((d20 & 0xFFFF) + std_n.core._t4._INT16_MIN) << 16))[0]
                 self.x1 = unpack(
-                    "f",
-                    pack(
-                        "i",
-                        c_int32(
-                            ((d31 & 0xFFFF) + std_n.core._t4._INT16_MIN) << 16
-                        ).value,
-                    ),
-                )[0]
+                    "f", pack("i", ((d31 & 0xFFFF) + std_n.core._t4._INT16_MIN) << 16))[0]
                 self.x2 = unpack(
-                    "f",
-                    pack(
-                        "i",
-                        c_int32(
-                            ((d20 >> 32) + std_n.core._t4._INT16_MIN) << 16
-                        ).value,
-                    ),
-                )[0]
+                    "f", pack("i", ((d20 >> 32) + std_n.core._t4._INT16_MIN) << 16))[0]
                 self.x3 = unpack(
-                    "f",
-                    pack(
-                        "i",
-                        c_int32(
-                            ((d31 >> 32) + std_n.core._t4._INT16_MIN) << 16
-                        ).value,
-                    ),
-                )[0]
+                    "f", pack("i", ((d31 >> 32) + std_n.core._t4._INT16_MIN) << 16))[0]
 
         class _time(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
-                self.value: c_int64
+                self.value: int
                 super().__init__(type, None)
 
-            @final
+            @ final
             def _save_type(self, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.TIME)
 
-            @final
+            @ final
             def _save(self, stream: GreyCat._Stream) -> None:
                 stream.write_vi64(self.value)
 
-            @staticmethod
+            @ staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
                 res: std_n.core._time = type.factory(type, [])
                 res.value = stream.read_vi64()
@@ -701,16 +620,16 @@ class std_n:
                 def to_numpy(self) -> numpy.datetime64:
                     return numpy.datetime64(self.value.value, "us")
 
-                @staticmethod
+                @ staticmethod
                 def from_numpy(greycat: GreyCat, dt: numpy.datetime64) -> std_n.core._time:
                     time = std_n.core._time(
                         greycat.types[greycat.type_offset_core_time])
-                    time.value = c_int64(dt.astype(int)) if numpy.datetime_data(dt)[0] in [
-                        "us", "μs"] else c_int64(dt.astype("datetime64[us]").astype(int))
+                    time.value = dt.astype(int) if numpy.datetime_data(dt)[0] in [
+                        "us", "μs"] else dt.astype("datetime64[us]").astype(int)
                     return time
 
             def __str__(self) -> str:
-                return f"time{{timestamp: {int(self.value.value / 1_000_000)}, us_offset: {self.value.value % 1_000_000}}}"
+                return f"time{{timestamp: {int(self.value / 1_000_000)}, us_offset: {self.value % 1_000_000}}}"
 
         class _type(GreyCat.Object):
             pass  # TODO
@@ -721,12 +640,12 @@ class std_n:
             def __init__(self, type: GreyCat.Type) -> None:
                 super().__init__(type, [])
 
-            @final
+            @ final
             def _save(self, stream: GreyCat._Stream) -> None:
                 if (self.attributes is None or 0 == len(self)):
-                    stream.write_vu32(c_uint32(0))
+                    stream.write_vu32(0)
                     return
-                stream.write_vu32(c_uint32(len(self)))
+                stream.write_vu32(len(self))
                 nullables: bytearray | None = None
                 type_is_unique: bool = False
                 unique_type: type | None = None
@@ -755,7 +674,7 @@ class std_n:
                             monotonic_value = e
                         elif value_is_monotonic and monotonic_value is not e:
                             value_is_monotonic = False
-                stream.write_i8(c_ubyte(0 if nullables is None else 1))
+                stream.write_i8(0 if nullables is None else 1)
                 if nullables is not None:
                     stream.write_i8_array(nullables, 0, len(nullables))
                 char: c_char
@@ -789,29 +708,29 @@ class std_n:
                         stream.write_i8(0)  # TODO: manage monotonic
                         for e in self:
                             if isinstance(e, c_int64):
-                                stream.write_vi64(e)
+                                stream.write_vi64(e.value)
                             elif e is not None:
                                 if isinstance(e, ctypes._SimpleCData):
                                     e = e.value
-                                stream.write_vi64(c_int64(e))
+                                stream.write_vi64(e)
                     elif float is unique_type:
                         stream.write_i8(PrimitiveType.FLOAT)
                         stream.write_i8(0)  # TODO: manage monotonic
                         for e in self:
                             if isinstance(e, c_double):
-                                stream.write_f64(e)
+                                stream.write_f64(e.value)
                             elif e is not None:
                                 if isinstance(e, ctypes._SimpleCData):
                                     e = e.value
-                                stream.write_f64(c_double(e))
+                                stream.write_f64(e)
                     elif str is unique_type:
                         stream.write_i8(PrimitiveType.OBJECT)
                         stream.write_vu32(
-                            c_uint32(stream.greycat.type_offset_core_string))
+                            stream.greycat.type_offset_core_string)
                         for string in self:
                             if string is not None:
                                 data = string.encode("utf8")
-                                stream.write_vu32(c_uint32(len(data) << 1))
+                                stream.write_vu32(len(data) << 1)
                                 stream.write_i8_array(data, 0, len(data))
                     elif issubclass(unique_type, GreyCat.Object):
                         object = monotonic_value
@@ -824,35 +743,36 @@ class std_n:
 
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
-                size: int = stream.read_vu32().value
+                size: int = stream.read_vu32()
                 array: std_n.core._Array = type.factory(type, [])
                 array.attributes = list(repeat(None, size))
                 if 0 == size:
                     return array
                 nullables: list[bool] | None = None
-                if 1 == stream.read_i8().value:
+                if 1 == stream.read_i8():
                     nullables = list(repeat(False, size))
                     for offset in range(0, size, 8):
-                        flags = stream.read_i8().value
+                        flags = stream.read_i8()
                         for flags_offset in range(min(size-offset, 8)):
                             nullables[offset +
                                       flags_offset] = 1 == (flags >> flags_offset & 1)
-                array_primitive_type: int = stream.read_i8().value
+                array_primitive_type: int = stream.read_i8()
                 array_type: GreyCat.Type | None = None
                 monotonic_value: Any | None = None
-                if PrimitiveType.OBJECT.value == array_primitive_type or PrimitiveType.STATIC_FIELD.value == array_primitive_type:
-                    type_offset: int = stream.read_vu32().value
+                if PrimitiveType.OBJECT == array_primitive_type or PrimitiveType.STATIC_FIELD == array_primitive_type:
+                    type_offset: int = stream.read_vu32()
                     if -1 != type_offset:
                         array_type = stream.greycat.types[type_offset]
-                if PrimitiveType.OBJECT.value != array_primitive_type and PrimitiveType.UNDEFINED.value != array_primitive_type:
-                    if 1 == stream.read_i8().value:
+                if PrimitiveType.OBJECT != array_primitive_type and PrimitiveType.UNDEFINED != array_primitive_type:
+                    if 1 == stream.read_i8():
                         monotonic_value = GreyCat._Stream._PRIMITIVE_LOADERS[array_primitive_type](
                             stream)
-                if PrimitiveType.UNDEFINED.value == array_primitive_type:
+                if PrimitiveType.UNDEFINED == array_primitive_type:
                     for offset in range(size):
                         array[offset] = None if nullables is not None and nullables[offset] else stream.read(
                         )
-                elif PrimitiveType.OBJECT.value == array_primitive_type or (PrimitiveType.STATIC_FIELD.value == array_primitive_type and monotonic_value is None):
+                        print(f"DEBUG: {offset}: {array[offset]}")
+                elif PrimitiveType.OBJECT == array_primitive_type or (PrimitiveType.STATIC_FIELD == array_primitive_type and monotonic_value is None):
                     if array_type is None:
                         for offset in range(size):
                             # TODO: check for enums
@@ -929,13 +849,13 @@ class std_n:
                 super().__init__(type, None)
 
             def _save(self, stream: GreyCat._Stream) -> None:
-                stream.write_vu32(c_uint32(len(self.data)))
+                stream.write_vu32(len(self.data))
                 stream.write_i8_array(self.data, 0, len(self.data))
 
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
                 buf: std_n.util._Buffer = type.factory(type, [])
-                buf.data = stream.read_i8_array(stream.read_vu32().value)
+                buf.data = stream.read_i8_array(stream.read_vu32())
                 return buf
 
         class _Date(GreyCat.Object):
@@ -1032,7 +952,7 @@ class std_n:
 
             @final
             def _save(self, stream: GreyCat._Stream) -> None:
-                stream.write_vu32(c_int32(len(self)))
+                stream.write_vu32(len(self))
                 key: std_n.core.__T
                 value: std_n.core.__U
                 for key, value in self.items():
@@ -1042,7 +962,7 @@ class std_n:
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
                 map: Final[std_n.core._Map] = type.factory(type, [])
-                map_length: int = stream.read_vu32().value
+                map_length: int = stream.read_vu32()
                 key: Any
                 for _ in range(map_length):
                     key = std_n.core._Map.__hashable(stream.read())
@@ -1092,7 +1012,7 @@ class std_n:
 
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
-                len_: int = stream.read_vu32().value
+                len_: int = stream.read_vu32()
                 if 0 != (len_ & 1):
                     return type.greycat.symbols[len_ >> 1]
                 return stream.read_string(len_ >> 1)
@@ -1105,8 +1025,8 @@ class std_n:
                 super().__init__(type, None)
 
             def _save(self, stream: GreyCat._Stream) -> None:
-                stream.write_vu32(c_uint32(self.rows))
-                stream.write_vu32(c_uint32(self.cols))
+                stream.write_vu32(self.rows)
+                stream.write_vu32(self.cols)
                 for col in range(self.cols):
                     nullables: bytearray | None = None
                     type_is_unique: bool = False
@@ -1137,7 +1057,7 @@ class std_n:
                                 monotonic_value = e
                             elif value_is_monotonic and monotonic_value is not e:
                                 value_is_monotonic = False
-                    stream.write_i8(c_ubyte(0 if nullables is None else 1))
+                    stream.write_i8(0 if nullables is None else 1)
                     if nullables is not None:
                         stream.write_i8_array(nullables, 0, len(nullables))
                     char: c_char
@@ -1175,22 +1095,22 @@ class std_n:
                             for row in range(self.rows):
                                 e = self.data[col * self.rows + row]
                                 if isinstance(e, c_int64):
-                                    stream.write_vi64(e)
+                                    stream.write_vi64(e.value)
                                 elif e is not None:
                                     if isinstance(e, ctypes._SimpleCData):
                                         e = e.value
-                                    stream.write_vi64(c_int64(e))
+                                    stream.write_vi64(e)
                         elif float is unique_type:
                             stream.write_i8(PrimitiveType.FLOAT)
                             stream.write_i8(0)  # TODO: manage monotonic
                             for row in range(self.rows):
                                 e = self.data[col * self.rows + row]
                                 if isinstance(e, c_double):
-                                    stream.write_f64(e)
+                                    stream.write_f64(e.value)
                                 elif e is not None:
                                     if isinstance(e, ctypes._SimpleCData):
                                         e = e.value
-                                    stream.write_f64(c_double(e))
+                                    stream.write_f64(e)
                         elif str is unique_type:
                             stream.write_i8(PrimitiveType.OBJECT)
                             stream.write_vu32(
@@ -1213,34 +1133,34 @@ class std_n:
 
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
-                rows: Final[int] = stream.read_vu32().value
-                cols: Final[int] = stream.read_vu32().value
+                rows: Final[int] = stream.read_vu32()
+                cols: Final[int] = stream.read_vu32()
                 data: list[std_n.core.__T] = list(repeat(None, rows * cols))
                 for col in range(cols):
+                    print(f"DEBUG: {col} / {cols}")
                     nullables: list[bool] | None = None
-                    if 1 == stream.read_i8().value:
+                    if 1 == stream.read_i8():
                         nullables = list(repeat(False, rows))
                         for row in range(0, rows, 8):
-                            flags = stream.read_i8().value
+                            flags = stream.read_i8()
                             for offset in range(min(rows - row, 8)):
                                 nullables[row +
                                           offset] = 1 == (flags >> offset & 1)
-                    col_primitive_type: int = stream.read_i8().value
+                    col_primitive_type: int = stream.read_i8()
                     col_type: GreyCat.Type | None = None
                     monotonic_value: Any | None = None
-                    if PrimitiveType.OBJECT.value == col_primitive_type or PrimitiveType.STATIC_FIELD.value == col_primitive_type:
-                        type_offset: int = c_int32(
-                            stream.read_vu32().value).value
+                    if PrimitiveType.OBJECT == col_primitive_type or PrimitiveType.STATIC_FIELD == col_primitive_type:
+                        type_offset: int = c_int32(stream.read_vu32()).value
                         if -1 != type_offset:
                             col_type = stream.greycat.types[type_offset]
-                    if PrimitiveType.OBJECT.value != col_primitive_type and PrimitiveType.UNDEFINED.value != col_primitive_type:
-                        if 1 == stream.read_i8().value:
+                    if PrimitiveType.OBJECT != col_primitive_type and PrimitiveType.UNDEFINED != col_primitive_type:
+                        if 1 == stream.read_i8():
                             monotonic_value = GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](
                                 stream)
-                    if PrimitiveType.UNDEFINED.value == col_primitive_type:
+                    if PrimitiveType.UNDEFINED == col_primitive_type:
                         for row in range(rows):
                             data[col * rows + row] = None if nullables is not None and nullables[row] else stream.read()
-                    elif PrimitiveType.OBJECT.value == col_primitive_type or (PrimitiveType.STATIC_FIELD.value == col_primitive_type and monotonic_value is None):
+                    elif PrimitiveType.OBJECT == col_primitive_type or (PrimitiveType.STATIC_FIELD == col_primitive_type and monotonic_value is None):
                         if col_type is None:
                             for row in range(rows):
                                 # TODO: check for enums
@@ -1621,7 +1541,7 @@ class std_n:
         __S_2D: list[int] = [0, 1, 2, 4, 8, 16]
 
         @staticmethod
-        def _interleave64_2d(x: int, y: int) -> c_int64:
+        def _interleave64_2d(x: int, y: int) -> int:
             x = (x | (x << std_n.core.__S_2D[5])) & std_n.core.__B_2D[4]
             y = (y | (y << std_n.core.__S_2D[5])) & std_n.core.__B_2D[4]
 
@@ -1637,12 +1557,12 @@ class std_n:
             x = (x | (x << std_n.core.__S_2D[1])) & std_n.core.__B_2D[0]
             y = (y | (y << std_n.core.__S_2D[1])) & std_n.core.__B_2D[0]
 
-            return c_int64(x | (y << 1))
+            return x | (y << 1)
 
         @staticmethod
-        def _deinterleave64_2d(interleaved: c_int64) -> int:
-            x: int = interleaved.value
-            y: int = interleaved.value >> 1
+        def _deinterleave64_2d(interleaved: int) -> int:
+            x: int = interleaved
+            y: int = interleaved >> 1
 
             x = (x | (x >> std_n.core.__S_2D[0])) & std_n.core.__B_2D[0]
             y = (y | (y >> std_n.core.__S_2D[0])) & std_n.core.__B_2D[0]
@@ -1675,7 +1595,7 @@ class std_n:
         __S_3D: list[int] = [2, 4, 8, 16, 32]
 
         @staticmethod
-        def _interleave64_3d(x: int, y: int, z: int) -> c_int64:
+        def _interleave64_3d(x: int, y: int, z: int) -> int:
             x &= std_n.core.__B_3D[5]
             x = (x ^ (x << std_n.core.__S_3D[4])) & std_n.core.__B_3D[4]
             x = (x ^ (x << std_n.core.__S_3D[3])) & std_n.core.__B_3D[3]
@@ -1697,11 +1617,11 @@ class std_n:
             z = (z ^ (z << std_n.core.__S_3D[1])) & std_n.core.__B_3D[1]
             z = (z ^ (z << std_n.core.__S_3D[0])) & std_n.core.__B_3D[0]
 
-            return c_int64(x | (y << 1) | (z << 2))
+            return x | (y << 1) | (z << 2)
 
         @staticmethod
-        def _deinterleave64_3d(interleaved: c_int64) -> int:
-            x: int = interleaved.value & std_n.core.__B_3D[0]
+        def _deinterleave64_3d(interleaved: int) -> int:
+            x: int = interleaved & std_n.core.__B_3D[0]
             x = (x ^ (x >> std_n.core.__S_3D[0])) & std_n.core.__B_3D[1]
             x = (x ^ (x >> std_n.core.__S_3D[1])) & std_n.core.__B_3D[2]
             x = (x ^ (x >> std_n.core.__S_3D[2])) & std_n.core.__B_3D[3]
@@ -1753,8 +1673,8 @@ class std_n:
             return c_int64(x0 | (x1 << 1) | (x2 << 2) | (x3 << 3) | (x4 << 4))
 
         @staticmethod
-        def _deinterleave64_5d(interleaved: c_int64) -> int:
-            x: int = interleaved.value & std_n.core.__B_5D[0]
+        def _deinterleave64_5d(interleaved: int) -> int:
+            x: int = interleaved & std_n.core.__B_5D[0]
             x = (x ^ (x >> std_n.core.__S_5D[0])) & std_n.core.__B_5D[1]
             x = (x ^ (x >> std_n.core.__S_5D[1])) & std_n.core.__B_5D[2]
             x = (x ^ (x >> std_n.core.__S_5D[2])) & std_n.core.__B_5D[3]
