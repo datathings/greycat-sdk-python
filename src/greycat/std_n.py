@@ -1136,7 +1136,6 @@ class std_n:
                 cols: Final[int] = stream.read_vu32()
                 data: list[std_n.core.__T] = list(repeat(None, rows * cols))
                 for col in range(cols):
-                    print(f"DEBUG: {col} / {cols}")
                     nullables: list[bool] | None = None
                     if 1 == stream.read_i8():
                         nullables = list(repeat(False, rows))
