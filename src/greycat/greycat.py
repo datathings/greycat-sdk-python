@@ -13,6 +13,66 @@ from struct import pack, unpack
 from typing import *
 import greycat
 
+try:
+    import flask
+    import flask.typing
+
+    class GreyCatServer(flask.Flask):
+        def __init__(
+            self,
+            import_name: str,
+            gc_abi_path: str,
+            static_url_path: str | None = None,
+            static_folder: str | os.PathLike[str] | None = "static",
+            static_host: str | None = None,
+            host_matching: bool = False,
+            subdomain_matching: bool = False,
+            template_folder: str | os.PathLike[str] | None = "templates",
+            instance_path: str | None = None,
+            instance_relative_config: bool = False,
+            root_path: str | None = None,
+        ):
+            super().__init__(
+                import_name=import_name,
+                static_url_path=static_url_path,
+                static_folder=static_folder,
+                static_host=static_host,
+                host_matching=host_matching,
+                subdomain_matching=subdomain_matching,
+                template_folder=template_folder,
+                instance_path=instance_path,
+                instance_relative_config=instance_relative_config,
+                root_path=root_path,
+            )
+            self.before_request_funcs  = {None: [self.unwrap_payload]}
+            self.bio: BytesIO = BytesIO()
+            self.stream: GreyCat._Stream = GreyCat._Stream(
+                GreyCat(gc_abi_path), self.bio)
+
+        @final
+        @override
+        def make_response(self, rv: flask.typing.ResponseReturnValue) -> flask.Response:
+            self.stream.write_abi_header()
+            self.stream.write(rv)
+            response = super().make_response(self.bio.getvalue())
+            self.bio.seek(0)
+            self.bio.truncate(0)
+            return response
+
+        def unwrap_payload(self) -> flask.typing.ResponseReturnValue | None:
+            if 0 < len(flask.request.data):
+                self.bio.write(flask.request.data)
+                self.stream.read_abi_header()
+                unwrapped = self.stream.read()
+                self.bio.seek(0)
+                self.bio.truncate(0)
+                return unwrapped
+        
+
+
+except ModuleNotFoundError:
+    pass
+
 
 @final
 class PrimitiveType:
@@ -1104,7 +1164,8 @@ class GreyCat:
             module_name: str = self.symbols[abi_stream.read_vu32()]
             type_name: str = self.symbols[abi_stream.read_vu32()]
             lib_name: str = self.symbols[abi_stream.read_vu32()]
-            fqn: str = f'{"" if module_name is None else f"{module_name}::"}{type_name}'
+            fqn: str = f'{"" if module_name is None else f"{module_name}::"}{
+                type_name}'
             generic_abi_type: Final[int] = abi_stream.read_vu32()
             g1_abi_type_desc: Final[int] = abi_stream.read_vu32()
             g2_abi_type_desc: Final[int] = abi_stream.read_vu32()
@@ -1194,7 +1255,8 @@ class GreyCat:
             type_name: str = self.symbols[abi_stream.read_vu32()]
             function_name: str = self.symbols[abi_stream.read_vu32()]
             lib_name: str = self.symbols[abi_stream.read_vu32()]
-            fqn: str = f'{"" if module_name is None else f"{module_name}::"}{"" if type_name is None else f"{type_name}::"}{function_name}'
+            fqn: str = f'{"" if module_name is None else f"{module_name}::"}{
+                "" if type_name is None else f"{type_name}::"}{function_name}'
             nb_params: int = abi_stream.read_vu32()
             param_offset: int
             for param_offset in range(nb_params):
