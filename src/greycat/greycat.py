@@ -1487,7 +1487,7 @@ class GreyCat:
             runtime_url = runtime_url.replace("file://", "", 1)
         return GreyCat._Stream(
             self, open(os.path.join(
-                runtime_url, "gcdata", "store", "abi"), "rb")
+                runtime_url, "gcdata", "abi"), "rb")
         )
 
     def __get_abi(self, runtime_url: str) -> GreyCat._Stream:
