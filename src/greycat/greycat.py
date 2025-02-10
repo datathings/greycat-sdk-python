@@ -22,7 +22,11 @@ try:
 
         class Request(flask.Request):
             def __init__(self):
-                self.gc_params: list
+                self.gcargs: list
+
+        @staticmethod
+        def request() -> GreyCatServer.Request:
+            return flask.request
 
         def __init__(self, import_name: str, gc_abi_path: str, *kwargs):
             super().__init__(import_name=import_name, *kwargs)
@@ -73,17 +77,15 @@ try:
             return response
 
         def unwrap_payload(self) -> flask.typing.ResponseReturnValue | None:
-            if 0 < len(flask.request.data):
-                self.bio.write(flask.request.data)
+            request: GreyCatServer.Request = GreyCatServer.request()
+            payload_len = len(request.data)
+            if 0 < payload_len:
+                self.bio.write(request.data)
                 self.bio.seek(0)
                 self.stream.read_abi_header()
-                unwrapped: list = []
-                while True:
-                    try:
-                        unwrapped.append(self.stream.read())
-                    except:
-                        break
-                flask.request.gcargs = unwrapped
+                request.gcargs = []
+                while payload_len > self.bio.tell():
+                    request.gcargs.append(self.stream.read())
                 self.bio.seek(0)
                 self.bio.truncate(0)
 
