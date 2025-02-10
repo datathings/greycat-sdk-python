@@ -18,11 +18,17 @@ try:
     import flask.typing
 
     class GreyCatServer(flask.Flask):
+        abi_url_path: str = "/runtime::Runtime::abi"
+
+        class Request(flask.Request):
+            def __init__(self):
+                self.gc_params: list
+
         def __init__(self, import_name: str, gc_abi_path: str, *kwargs):
             super().__init__(import_name=import_name, *kwargs)
             self.abi_path = gc_abi_path
             self.before_request_funcs = {None: [self.unwrap_payload]}
-            self.add_url_rule("/runtime::Runtime::abi",
+            self.add_url_rule(GreyCatServer.abi_url_path,
                               view_func=self.post_abi)
             self.bio: BytesIO = BytesIO()
             self.gc = GreyCat(gc_abi_path)
@@ -56,11 +62,12 @@ try:
 
         @override
         def make_response(self, rv: flask.typing.ResponseReturnValue) -> flask.Response:
-            if isinstance(rv, flask.Response):
+            if GreyCatServer.abi_url_path == flask.request.path:
                 return rv
-            # self.stream.write_abi_header()
+            self.stream.write_abi_header()
             self.stream.write(rv)
-            response = super().make_response(self.bio.getvalue())
+            response: flask.Response = super().make_response(self.bio.getvalue())
+            response.headers["Content-Type"] = "application/octet-stream"
             self.bio.seek(0)
             self.bio.truncate(0)
             return response
@@ -68,15 +75,24 @@ try:
         def unwrap_payload(self) -> flask.typing.ResponseReturnValue | None:
             if 0 < len(flask.request.data):
                 self.bio.write(flask.request.data)
-                # self.stream.read_abi_header()
-                unwrapped = self.stream.read()
+                self.bio.seek(0)
+                self.stream.read_abi_header()
+                unwrapped: list = []
+                while True:
+                    try:
+                        unwrapped.append(self.stream.read())
+                    except:
+                        break
+                flask.g.request_parameters = unwrapped
                 self.bio.seek(0)
                 self.bio.truncate(0)
-                return unwrapped
 
         def post_abi(self) -> flask.Response:
+            response: flask.Response
             with open(os.path.join(self.abi_path, "gcdata", "abi"), "rb") as abi:
-                return super().make_response(abi.read())
+                response = super().make_response(abi.read())
+            response.headers["Content-Type"] = "application/octet-stream"
+            return response
 
 
 except ModuleNotFoundError:
@@ -408,12 +424,10 @@ class GreyCat:
                 self.write_f64(value.value)
             elif type(value) is str:
                 self.write_string(value)
-            elif (
-                issubclass(type(value), GreyCat.Object) or type(
-                    value) is GreyCat.Object
-            ):
-                value._save_type(self)
-                value._save(self)
+            elif issubclass(type(value), greycat.GreyCat.Object):
+                o: GreyCat.Object = value
+                o._save_type(self)
+                o._save(self)
 
         def write_string(self, s: str, skip_type: bool = False) -> None:
             if s in self.greycat._symbols_off_by_value:
@@ -1381,9 +1395,6 @@ class GreyCat:
             raise RuntimeError(
                 "Remote calls are not available on local GreyCat handles"
             )
-        fn: GreyCat.Function = self.functions_by_name[fqn]
-        if fn is None:
-            raise RuntimeError(f"Function not found with name {fqn}")
         url: str = f"{self.__runtime_url}"
         connection: http.client.HTTPConnection | http.client.HTTPSConnection
         if url.startswith("http://"):
@@ -1411,7 +1422,7 @@ class GreyCat:
             headers["Authorization"] = self.__token
         connection.request(
             "POST",
-            fqn,
+            f"/{fqn}",
             body,
             headers,
         )
@@ -1446,7 +1457,7 @@ class GreyCat:
             headers["Authorization"] = self.__token
         connection.request(
             "GET",
-            path,
+            f"/{path}",
             None,
             headers
         )
@@ -1542,7 +1553,7 @@ class GreyCat:
             headers["Authorization"] = self.__token
         connection.request(
             "POST",
-            "runtime::Runtime::abi",
+            "/runtime::Runtime::abi",
             None,
             headers,
         )
