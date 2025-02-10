@@ -20,15 +20,45 @@ try:
     class GreyCatServer(flask.Flask):
         def __init__(self, import_name: str, gc_abi_path: str, *kwargs):
             super().__init__(import_name=import_name, *kwargs)
+            self.abi_path = gc_abi_path
             self.before_request_funcs = {None: [self.unwrap_payload]}
+            self.add_url_rule("/runtime::Runtime::abi",
+                              view_func=self.post_abi)
             self.bio: BytesIO = BytesIO()
+            self.gc = GreyCat(gc_abi_path)
             self.stream: GreyCat._Stream = GreyCat._Stream(
                 GreyCat(gc_abi_path), self.bio)
 
-        @final
+        @override
+        def add_url_rule(
+            self,
+            rule: str,
+            endpoint: str | None = None,
+            view_func: flask.typing.RouteCallable | None = None,
+            provide_automatic_options: bool | None = None,
+            **options: Any,
+        ) -> None:
+            options["methods"] = list(
+                set(options.get("methods", [])) | {"POST"})
+            super().add_url_rule(rule, endpoint=endpoint, view_func=view_func,
+                                 provide_automatic_options=provide_automatic_options, **options)
+
+        @override
+        def run(
+            self,
+            host: str | None = None,
+            port: int = 8080,
+            debug: bool | None = None,
+            load_dotenv: bool = True,
+            **options: Any,
+        ) -> None:
+            super().run(host=host, port=port, debug=debug, load_dotenv=load_dotenv, **options)
+
         @override
         def make_response(self, rv: flask.typing.ResponseReturnValue) -> flask.Response:
-            self.stream.write_abi_header()
+            if isinstance(rv, flask.Response):
+                return rv
+            # self.stream.write_abi_header()
             self.stream.write(rv)
             response = super().make_response(self.bio.getvalue())
             self.bio.seek(0)
@@ -38,11 +68,15 @@ try:
         def unwrap_payload(self) -> flask.typing.ResponseReturnValue | None:
             if 0 < len(flask.request.data):
                 self.bio.write(flask.request.data)
-                self.stream.read_abi_header()
+                # self.stream.read_abi_header()
                 unwrapped = self.stream.read()
                 self.bio.seek(0)
                 self.bio.truncate(0)
                 return unwrapped
+
+        def post_abi(self) -> flask.Response:
+            with open(os.path.join(self.abi_path, "gcdata", "abi"), "rb") as abi:
+                return super().make_response(abi.read())
 
 
 except ModuleNotFoundError:
