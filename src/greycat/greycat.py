@@ -83,7 +83,7 @@ try:
                         unwrapped.append(self.stream.read())
                     except:
                         break
-                flask.g.request_parameters = unwrapped
+                flask.request.gcargs = unwrapped
                 self.bio.seek(0)
                 self.bio.truncate(0)
 
