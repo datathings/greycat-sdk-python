@@ -1129,7 +1129,7 @@ class std_n:
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
                 rows: Final[int] = stream.read_vu32()
                 cols: Final[int] = stream.read_vu32()
-                data: list[std_n.core.__T] = list(repeat(None, rows * cols))
+                cols_data: list[list | numpy.ndarray] = []
                 table: std_n.core._Table = type.factory(type, [])
                 table.rows = rows
                 table.cols = cols
@@ -1154,34 +1154,39 @@ class std_n:
                         if 1 == stream.read_i8():
                             monotonic_value = GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](
                                 stream)
-                    if PrimitiveType.UNDEFINED == col_primitive_type:
-                        for row in range(rows):
-                            data[col * rows + row] = None if nullables is not None and nullables[row] else stream.read()
-                    elif PrimitiveType.OBJECT == col_primitive_type or (PrimitiveType.STATIC_FIELD == col_primitive_type and monotonic_value is None):
+
+                    if monotonic_value is not None or (nullables is not None and all(nullables)):
+                        cols_data.append(numpy.array([monotonic_value] * rows))
+                    elif PrimitiveType.FLOAT == col_primitive_type:
+                        cols_data.append(numpy.frombuffer(
+                            stream.read_i8_array(8 * rows)))
+                    elif PrimitiveType.UNDEFINED == col_primitive_type:
+                        cols_data.append(numpy.array(
+                            [None if nullables is not None and nullables[row] else stream.read() for row in range(rows)]))
+                    elif PrimitiveType.OBJECT == col_primitive_type or PrimitiveType.STATIC_FIELD == col_primitive_type:
                         if col_type is None:
-                            for row in range(rows):
-                                # TODO: check for enums
-                                data[col * rows + row] = None if nullables is not None and nullables[row] else stream.read_object()
+                            cols_data.append(numpy.array(
+                                [None if nullables is not None and nullables[row] else stream.read_object() for row in range(rows)]))
                         else:
-                            for row in range(rows):
-                                data[col * rows + row] = None if nullables is not None and nullables[row] else col_type.loader(
-                                    col_type, stream)
-                    elif monotonic_value is None:
-                        for row in range(rows):
-                            if nullables is None or not nullables[row]:
-                                # TODO: check
-                                data[col * rows + row] = GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](
-                                    stream)
+                            cols_data.append(numpy.array([None if nullables is not None and nullables[row] else col_type.loader(
+                                col_type, stream) for row in range(rows)]))
+                    else:
+                        cols_data.append(numpy.array([None if nullables is not None and nullables[row]
+                                         else GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](stream) for row in range(rows)]))
+
                     if PrimitiveType.UNDEFINED != col_primitive_type:
                         if PrimitiveType.TIME == col_primitive_type:
                             table._col_types[col] = std_n.core._time
                         elif PrimitiveType.DURATION == col_primitive_type:
                             table._col_types[col] = std_n.core._duration
-                        elif PrimitiveType.OBJECT == col_primitive_type and issubclass(col_type, std_n.core._Map):
+                        elif PrimitiveType.OBJECT == col_primitive_type and type.greycat.types_by_name["core::Map"] == col_type:
                             table._col_types[col] = std_n.core._Map
                         else:
                             table._col_types[col] = object
-                table.data = data
+                table.data = numpy.empty((rows, cols), dtype=numpy.result_type(
+                    *[col_data.dtype for col_data in cols_data]), order="F")
+                for col in range(cols):
+                    table.data[:, col] = cols_data[col]
                 return table
 
             def __str__(self) -> str:
@@ -1320,28 +1325,28 @@ class std_n:
 
             @staticmethod
             def load(type_: GreyCat.Type, stream: GreyCat._Stream) -> Any:
-                nb_dim: Final[int] = stream.read_i8().value
+                nb_dim: Final[int] = stream.read_i8()
                 tensor_type: Final[c_byte] = stream.read_i8()
                 shape: list[c_uint32] = [stream.read_i32()
                                          for _ in repeat(None, nb_dim)]
                 size: c_uint32 = stream.read_i32()
-                dtype = type_.greycat.types_by_name[greycat.std.core.TensorType.name_].enum_values[tensor_type.value]
+                dtype = type_.greycat.types_by_name[greycat.std.core.TensorType.name_].enum_values[tensor_type]
                 format_: str
-                if dtype == greycat.std.core.TensorType.i32(type_.greycat):
+                if dtype == greycat.std.core.TensorType[("i32", type_.greycat)]:
                     format_ = "=i"
-                elif dtype == greycat.std.core.TensorType.i64(type_.greycat):
+                elif dtype == greycat.std.core.TensorType[("i64", type_.greycat)]:
                     format_ = "=q"
-                elif dtype == greycat.std.core.TensorType.f32(type_.greycat):
+                elif dtype == greycat.std.core.TensorType[("f32", type_.greycat)]:
                     format_ = "=f"
-                elif dtype == greycat.std.core.TensorType.f64(type_.greycat):
+                elif dtype == greycat.std.core.TensorType[("f64", type_.greycat)]:
                     format_ = "=d"
-                elif dtype == greycat.std.core.TensorType.c64(type_.greycat):
+                elif dtype == greycat.std.core.TensorType[("c64", type_.greycat)]:
                     format_ = "=ff"
-                elif dtype == greycat.std.core.TensorType.c128(type_.greycat):
+                elif dtype == greycat.std.core.TensorType[("c128", type_.greycat)]:
                     format_ = "=dd"
                 else:
                     raise ValueError(f"${tensor_type}")
-                bin_size: int = size.value * dtype.value
+                bin_size: int = size * dtype.value
                 res: std_n.core._Tensor = type_.factory(type_, [])
                 res.shape = shape
                 res.tensor_type = tensor_type
