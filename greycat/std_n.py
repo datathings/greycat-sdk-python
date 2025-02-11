@@ -7,25 +7,21 @@ from ctypes import *
 from itertools import repeat
 import math
 from numbers import Number
+import numpy
 from struct import pack, unpack
 import sys
 from types import MappingProxyType
 from typing import *
 
+
 try:
-    import numpy
+    import pandas
 except ModuleNotFoundError:
     pass
-
-if "numpy" in sys.modules:
-    try:
-        import pandas
-    except ModuleNotFoundError:
-        pass
-    try:
-        import tensorflow
-    except ModuleNotFoundError:
-        pass
+try:
+    import tensorflow
+except ModuleNotFoundError:
+    pass
 
 try:
     import torch
@@ -63,17 +59,16 @@ class std_n:
                 res.value = stream.read_vi64()
                 return res
 
-            if "numpy" in sys.modules:
-                def to_numpy(self) -> numpy.timedelta64:
-                    return numpy.timedelta64(self.value, "us")
+            def to_numpy(self) -> numpy.timedelta64:
+                return numpy.timedelta64(self.value, "us")
 
-                @staticmethod
-                def from_numpy(greycat: GreyCat, td: numpy.timedelta64) -> std_n.core._duration:
-                    duration = std_n.core._duration(
-                        greycat.type_offset_core_duration)
-                    duration.value = td.astype(int) if numpy.datetime_data(td)[0] in [
-                        "us", "μs"] else td.astype("timedelta64[us]").astype(int)
-                    return duration
+            @staticmethod
+            def from_numpy(greycat: GreyCat, td: numpy.timedelta64) -> std_n.core._duration:
+                duration = std_n.core._duration(
+                    greycat.type_offset_core_duration)
+                duration.value = td.astype(int) if numpy.datetime_data(td)[0] in [
+                    "us", "μs"] else td.astype("timedelta64[us]").astype(int)
+                return duration
 
         class _field(GreyCat.Object):
             pass  # TODO
@@ -602,31 +597,30 @@ class std_n:
                 self.value: int
                 super().__init__(type, None)
 
-            @ final
+            @final
             def _save_type(self, stream: GreyCat._Stream) -> None:
                 stream.write_i8(PrimitiveType.TIME)
 
-            @ final
+            @final
             def _save(self, stream: GreyCat._Stream) -> None:
                 stream.write_vi64(self.value)
 
-            @ staticmethod
+            @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
                 res: std_n.core._time = type.factory(type, [])
                 res.value = stream.read_vi64()
                 return res
 
-            if "numpy" in sys.modules:
-                def to_numpy(self) -> numpy.datetime64:
-                    return numpy.datetime64(self.value.value, "us")
+            def to_numpy(self) -> numpy.datetime64:
+                return numpy.datetime64(self.value.value, "us")
 
-                @ staticmethod
-                def from_numpy(greycat: GreyCat, dt: numpy.datetime64) -> std_n.core._time:
-                    time = std_n.core._time(
-                        greycat.types[greycat.type_offset_core_time])
-                    time.value = dt.astype(int) if numpy.datetime_data(dt)[0] in [
-                        "us", "μs"] else dt.astype("datetime64[us]").astype(int)
-                    return time
+            @staticmethod
+            def from_numpy(greycat: GreyCat, dt: numpy.datetime64) -> std_n.core._time:
+                time = std_n.core._time(
+                    greycat.types[greycat.type_offset_core_time])
+                time.value = dt.astype(int) if numpy.datetime_data(dt)[0] in [
+                    "us", "μs"] else dt.astype("datetime64[us]").astype(int)
+                return time
 
             def __str__(self) -> str:
                 return f"time{{timestamp: {int(self.value / 1_000_000)}, us_offset: {self.value % 1_000_000}}}"
@@ -640,7 +634,7 @@ class std_n:
             def __init__(self, type: GreyCat.Type) -> None:
                 super().__init__(type, [])
 
-            @ final
+            @final
             def _save(self, stream: GreyCat._Stream) -> None:
                 if (self.attributes is None or 0 == len(self)):
                     stream.write_vu32(0)
@@ -1019,6 +1013,7 @@ class std_n:
         class _Table(Generic[__T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.cols: int
+                self._col_types: list[type | None]
                 self.rows: int
                 self.data: list[std_n.core.__T]
                 super().__init__(type, None)
@@ -1135,6 +1130,10 @@ class std_n:
                 rows: Final[int] = stream.read_vu32()
                 cols: Final[int] = stream.read_vu32()
                 data: list[std_n.core.__T] = list(repeat(None, rows * cols))
+                table: std_n.core._Table = type.factory(type, [])
+                table.rows = rows
+                table.cols = cols
+                table._col_types = list(repeat(None, cols))
                 for col in range(cols):
                     nullables: list[bool] | None = None
                     if 1 == stream.read_i8():
@@ -1173,9 +1172,15 @@ class std_n:
                                 # TODO: check
                                 data[col * rows + row] = GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](
                                     stream)
-                table: std_n.core._Table = type.factory(type, [])
-                table.rows = rows
-                table.cols = cols
+                    if PrimitiveType.UNDEFINED != col_primitive_type:
+                        if PrimitiveType.TIME == col_primitive_type:
+                            table._col_types[col] = std_n.core._time
+                        elif PrimitiveType.DURATION == col_primitive_type:
+                            table._col_types[col] = std_n.core._duration
+                        elif PrimitiveType.OBJECT == col_primitive_type and issubclass(col_type, std_n.core._Map):
+                            table._col_types[col] = std_n.core._Map
+                        else:
+                            table._col_types[col] = object
                 table.data = data
                 return table
 
@@ -1189,101 +1194,108 @@ class std_n:
                     str = f"{str}\n"
                 return f"{str}}}"
 
-            if "numpy" in sys.modules:
-
-                def to_numpy(self) -> tuple[numpy.ndarray]:
-                    nda: numpy.ndarray = numpy.reshape(
-                        [
-                            elem.value if isinstance(elem, ctypes._SimpleCData)
-                            else elem.to_numpy() if isinstance(elem, std_n.core._time) or isinstance(elem, std_n.core._duration)
+            def to_numpy(self) -> tuple[numpy.ndarray]:
+                nda = numpy.ndarray(shape=(self.rows, self.cols), order="F")
+                print(f"{self.rows} × {self.cols}")
+                col_data: list
+                for col in range(self.cols):
+                    col_data = self.data[col *
+                                         self.rows: (col + 1) * self.rows]
+                    if self._col_types[col] is None:
+                        nda[:, col] = [
+                            elem.to_numpy() if isinstance(elem, (std_n.core._time, std_n.core._duration))
                             else elem.map if isinstance(elem, std_n.core._Map)
                             else elem
-                            for elem in self.data
-                        ],
-                        (self.rows, self.cols),
-                        "F",
-                    )
-                    return nda
-
-                @staticmethod
-                def __parse_numpy_elem(gc: GreyCat, elem) -> Any:
-                    elem_type = type(elem)
-                    if isinstance(elem, numpy.floating) or elem_type is float:
-                        return c_double(elem)
-                    if isinstance(elem, numpy.integer) or elem_type is int:
-                        return c_int64(elem)
-                    if isinstance(elem, numpy.complex128) or elem_type is complex:
-                        return greycat.std.core.Tuple.create(gc, float(numpy.real(elem)), float(numpy.imag(elem)))
-                    if isinstance(elem, numpy.datetime64):
-                        return std_n.core._time.from_numpy(gc, elem)
-                    if isinstance(elem, numpy.timedelta64):
-                        return std_n.core._duration.from_numpy(gc, elem)
-                    if "pandas" in sys.modules:
-                        if isinstance(elem, pandas.Timestamp):
-                            return std_n.core._time.from_numpy(gc, elem.to_numpy())
-                        if isinstance(elem, pandas.Timedelta):
-                            return std_n.core._duration.from_numpy(gc, elem.to_numpy())
-                        if isinstance(elem, pandas.Period):
-                            return greycat.std.core.Tuple.create(gc, std_n.core._time.from_numpy(gc, elem.start_time.to_numpy()), f"{elem.freq}")
-                        if isinstance(elem, pandas.Interval):
-                            return std_n.core._Table.__interval_to_map(gc, elem)
-                    return elem
-
-                @staticmethod
-                def from_numpy(gc: GreyCat, nda: numpy.ndarray) -> std_n.core._Table:
-                    type_: GreyCat.Type = gc.types_by_name["core::Table"]
-                    table: std_n.core._Table = type_.factory(type_, None)
-                    if nda.dtype == numpy.dtype(float):
-                        table.data = [c_double(elem)
-                                      for elem in nda.flatten("F")]
-                    elif nda.dtype == numpy.dtype(int):
-                        table.data = [c_int64(elem)
-                                      for elem in nda.flatten("F")]
-                    elif nda.dtype == numpy.dtype(object):
-                        if len(list(filter(lambda elem: type(elem) is int and not -2 ** 63 <= elem < 2 ** 63, nda))) > 0:
-                            raise ValueError(
-                                "Numpy array contains ints larger than max int64")
-                        table.data = [
-                            std_n.core._Table.__parse_numpy_elem(gc, elem)
-                            for elem in nda.flatten("F")
+                            for elem in col_data
                         ]
+                    elif issubclass(self._col_types[col], (std_n.core._time, std_n.core._duration)):
+                        nda[:, col] = [elem.to_numpy()
+                                       for elem in col_data]
+                    elif issubclass(self._col_types[col], std_n.core._Map):
+                        nda[:, col] = [elem.map for elem in col_data]
                     else:
-                        raise ValueError(f"Unknown dtype: {nda.dtype}")
-                    table.rows = nda.shape[0]
-                    table.cols = nda.shape[1]
-                    return table
+                        nda[:, col] = col_data
+                return nda
 
+            @staticmethod
+            def __parse_numpy_elem(gc: GreyCat, elem) -> Any:
+                elem_type = type(elem)
+                if isinstance(elem, numpy.floating) or elem_type is float:
+                    return c_double(elem)
+                if isinstance(elem, numpy.integer) or elem_type is int:
+                    return c_int64(elem)
+                if isinstance(elem, numpy.complex128) or elem_type is complex:
+                    return greycat.std.core.Tuple.create(gc, float(numpy.real(elem)), float(numpy.imag(elem)))
+                if isinstance(elem, numpy.datetime64):
+                    return std_n.core._time.from_numpy(gc, elem)
+                if isinstance(elem, numpy.timedelta64):
+                    return std_n.core._duration.from_numpy(gc, elem)
                 if "pandas" in sys.modules:
-                    @staticmethod
-                    def __interval_to_map(gc: GreyCat, interval: pandas.Interval) -> std_n.core._Map[std_n.core._String, Any]:
-                        map = std_n.core._Map(gc.types_by_name["core::Map"])
-                        map["left"] = std_n.core._Table.__parse_numpy_elem(
-                            gc, interval.left)
-                        map["right"] = std_n.core._Table.__parse_numpy_elem(
-                            gc, interval.right)
-                        map["closed_left"] = interval.closed_left
-                        map["closed_right"] = interval.closed_right
-                        return map
+                    if isinstance(elem, pandas.Timestamp):
+                        return std_n.core._time.from_numpy(gc, elem.to_numpy())
+                    if isinstance(elem, pandas.Timedelta):
+                        return std_n.core._duration.from_numpy(gc, elem.to_numpy())
+                    if isinstance(elem, pandas.Period):
+                        return greycat.std.core.Tuple.create(gc, std_n.core._time.from_numpy(gc, elem.start_time.to_numpy()), f"{elem.freq}")
+                    if isinstance(elem, pandas.Interval):
+                        return std_n.core._Table.__interval_to_map(gc, elem)
+                return elem
 
-                    def to_pandas(self) -> pandas.DataFrame:
-                        return pandas.DataFrame(self.to_numpy())
+            @staticmethod
+            def from_numpy(gc: GreyCat, nda: numpy.ndarray) -> std_n.core._Table:
+                type_: GreyCat.Type = gc.types_by_name["core::Table"]
+                table: std_n.core._Table = type_.factory(type_, None)
+                if nda.dtype == numpy.dtype(float):
+                    table.data = [c_double(elem)
+                                  for elem in nda.flatten("F")]
+                elif nda.dtype == numpy.dtype(int):
+                    table.data = [c_int64(elem)
+                                  for elem in nda.flatten("F")]
+                elif nda.dtype == numpy.dtype(object):
+                    if len(list(filter(lambda elem: type(elem) is int and not -2 ** 63 <= elem < 2 ** 63, nda))) > 0:
+                        raise ValueError(
+                            "Numpy array contains ints larger than max int64")
+                    table.data = [
+                        std_n.core._Table.__parse_numpy_elem(gc, elem)
+                        for elem in nda.flatten("F")
+                    ]
+                else:
+                    raise ValueError(f"Unknown dtype: {nda.dtype}")
+                table.rows = nda.shape[0]
+                table.cols = nda.shape[1]
+                return table
 
-                    @staticmethod
-                    def from_pandas(
-                        greycat: GreyCat, df: pandas.DataFrame
-                    ) -> std_n.core._Table:
-                        return std_n.core._Table.from_numpy(greycat, df.to_numpy())
+            if "pandas" in sys.modules:
+                @staticmethod
+                def __interval_to_map(gc: GreyCat, interval: pandas.Interval) -> std_n.core._Map[std_n.core._String, Any]:
+                    map = std_n.core._Map(gc.types_by_name["core::Map"])
+                    map["left"] = std_n.core._Table.__parse_numpy_elem(
+                        gc, interval.left)
+                    map["right"] = std_n.core._Table.__parse_numpy_elem(
+                        gc, interval.right)
+                    map["closed_left"] = interval.closed_left
+                    map["closed_right"] = interval.closed_right
+                    return map
 
-                if "tensorflow" in sys.modules:
-                    def to_tf_tensor(self) -> tensorflow.Tensor:
-                        return tensorflow.constant(self.to_numpy())
+                def to_pandas(self) -> pandas.DataFrame:
+                    return pandas.DataFrame(self.to_numpy())
 
-                    @staticmethod
-                    def from_tf_tensor(greycat: GreyCat, tf_tensor: tensorflow.Tensor, session: tensorflow.compat.v1.Session | None = None) -> std_n.core._Table:
-                        if tensorflow.executing_eagerly():
-                            return std_n.core._Table.from_numpy(greycat, tf_tensor.numpy())
-                        if session is not None:
-                            return std_n.core._Table.from_numpy(greycat, session.run(tf_tensor))
+                @staticmethod
+                def from_pandas(
+                    greycat: GreyCat, df: pandas.DataFrame
+                ) -> std_n.core._Table:
+                    return std_n.core._Table.from_numpy(greycat, df.to_numpy())
+
+            if "tensorflow" in sys.modules:
+                def to_tf_tensor(self) -> tensorflow.Tensor:
+                    return tensorflow.constant(self.to_numpy())
+
+                @staticmethod
+                def from_tf_tensor(greycat: GreyCat, tf_tensor: tensorflow.Tensor, session: tensorflow.compat.v1.Session | None = None) -> std_n.core._Table:
+                    if tensorflow.executing_eagerly():
+                        return std_n.core._Table.from_numpy(greycat, tf_tensor.numpy())
+                    if session is not None:
+                        return std_n.core._Table.from_numpy(greycat, session.run(tf_tensor))
                         return std_n.core._Table.from_numpy(greycat, tensorflow.compat.v1.Session().run(tf_tensor))
 
         class _Tensor(GreyCat.Object):
@@ -1355,8 +1367,69 @@ class std_n:
                     return unpacked
                 return unpacked[0]
 
-            if "numpy" in sys.modules:
-                def to_numpy(self) -> numpy.ndarray:
+            def to_numpy(self) -> numpy.ndarray:
+                dtype: numpy.dtype
+                if self.dtype == greycat.std.core.TensorType.i32(self.type_.greycat):
+                    dtype = numpy.dtype('int32')
+                elif self.dtype == greycat.std.core.TensorType.i64(self.type_.greycat):
+                    dtype = numpy.dtype('int64')
+                elif self.dtype == greycat.std.core.TensorType.f32(self.type_.greycat):
+                    dtype = numpy.dtype('float32')
+                elif self.dtype == greycat.std.core.TensorType.f64(self.type_.greycat):
+                    dtype = numpy.dtype('float64')
+                elif self.dtype == greycat.std.core.TensorType.c64(self.type_.greycat):
+                    dtype = numpy.dtype('complex64')
+                elif self.dtype == greycat.std.core.TensorType.c128(self.type_.greycat):
+                    dtype = numpy.dtype('complex128')
+                else:
+                    raise ValueError(f"${self.tensor_type}")
+                return numpy.frombuffer(self.data, dtype=dtype).reshape([dim.value for dim in self.shape])
+
+            @staticmethod
+            def from_numpy(greycat_: GreyCat, nda: numpy.ndarray) -> std_n.core._Table:
+                if nda.dtype in (numpy.dtype('int8'), numpy.dtype('int16')):
+                    nda = nda.astype(numpy.dtype('int32'))
+                elif nda.dtype == numpy.dtype('float16'):
+                    nda = nda.astype(numpy.dtype('float32'))
+                elif nda.dtype == numpy.dtype('float128'):
+                    nda = nda.astype(numpy.dtype('float64'))
+                elif nda.dtype == numpy.dtype('complex256'):
+                    nda = nda.astype(numpy.dtype('complex128'))
+                dtype: greycat.std.core.TensorType
+                format_: str
+                if nda.dtype == numpy.dtype('int32'):
+                    dtype = greycat.std.core.TensorType.i32(greycat_)
+                    format_ = "=i"
+                elif nda.dtype == numpy.dtype('int64'):
+                    dtype = greycat.std.core.TensorType.i64(greycat_)
+                    format_ = "=q"
+                elif nda.dtype == numpy.dtype('float32'):
+                    dtype = greycat.std.core.TensorType.f32(greycat_)
+                    format_ = "=f"
+                elif nda.dtype == numpy.dtype('float64'):
+                    dtype = greycat.std.core.TensorType.f64(greycat_)
+                    format_ = "=d"
+                elif nda.dtype == numpy.dtype('complex64'):
+                    dtype = greycat.std.core.TensorType.c64(greycat_)
+                    format_ = "=ff"
+                elif nda.dtype == numpy.dtype('complex128'):
+                    dtype = greycat.std.core.TensorType.c128(greycat_)
+                    format_ = "=dd"
+                else:
+                    raise ValueError(
+                        f"Only int, float and complex dtypes are allowed: {nda.dtype}")
+                type_: GreyCat.Type = greycat_.types_by_name["core::Tensor"]
+                tensor: std_n.core._Tensor = type_.factory(type_, None)
+                tensor.shape = [c_uint32(dim) for dim in nda.shape]
+                tensor.tensor_type = c_byte(dtype.offset)
+                tensor.dtype = dtype
+                tensor.format = format_
+                tensor.data = nda.tobytes()
+                tensor.size = len(tensor.data)
+                return tensor
+
+            if "tensorflow" in sys.modules:
+                def to_tf_tensor(self) -> tensorflow.Tensor:
                     dtype: numpy.dtype
                     if self.dtype == greycat.std.core.TensorType.i32(self.type_.greycat):
                         dtype = numpy.dtype('int32')
@@ -1372,77 +1445,15 @@ class std_n:
                         dtype = numpy.dtype('complex128')
                     else:
                         raise ValueError(f"${self.tensor_type}")
-                    return numpy.frombuffer(self.data, dtype=dtype).reshape([dim.value for dim in self.shape])
+                    return tensorflow.constant(numpy.frombuffer(self.data, dtype=dtype), [dim.value for dim in self.shape])
 
                 @staticmethod
-                def from_numpy(greycat_: GreyCat, nda: numpy.ndarray) -> std_n.core._Table:
-                    if nda.dtype in (numpy.dtype('int8'), numpy.dtype('int16')):
-                        nda = nda.astype(numpy.dtype('int32'))
-                    elif nda.dtype == numpy.dtype('float16'):
-                        nda = nda.astype(numpy.dtype('float32'))
-                    elif nda.dtype == numpy.dtype('float128'):
-                        nda = nda.astype(numpy.dtype('float64'))
-                    elif nda.dtype == numpy.dtype('complex256'):
-                        nda = nda.astype(numpy.dtype('complex128'))
-                    dtype: greycat.std.core.TensorType
-                    format_: str
-                    if nda.dtype == numpy.dtype('int32'):
-                        dtype = greycat.std.core.TensorType.i32(greycat_)
-                        format_ = "=i"
-                    elif nda.dtype == numpy.dtype('int64'):
-                        dtype = greycat.std.core.TensorType.i64(greycat_)
-                        format_ = "=q"
-                    elif nda.dtype == numpy.dtype('float32'):
-                        dtype = greycat.std.core.TensorType.f32(greycat_)
-                        format_ = "=f"
-                    elif nda.dtype == numpy.dtype('float64'):
-                        dtype = greycat.std.core.TensorType.f64(greycat_)
-                        format_ = "=d"
-                    elif nda.dtype == numpy.dtype('complex64'):
-                        dtype = greycat.std.core.TensorType.c64(greycat_)
-                        format_ = "=ff"
-                    elif nda.dtype == numpy.dtype('complex128'):
-                        dtype = greycat.std.core.TensorType.c128(greycat_)
-                        format_ = "=dd"
-                    else:
-                        raise ValueError(
-                            f"Only int, float and complex dtypes are allowed: {nda.dtype}")
-                    type_: GreyCat.Type = greycat_.types_by_name["core::Tensor"]
-                    tensor: std_n.core._Tensor = type_.factory(type_, None)
-                    tensor.shape = [c_uint32(dim) for dim in nda.shape]
-                    tensor.tensor_type = c_byte(dtype.offset)
-                    tensor.dtype = dtype
-                    tensor.format = format_
-                    tensor.data = nda.tobytes()
-                    tensor.size = len(tensor.data)
-                    return tensor
-
-                if "tensorflow" in sys.modules:
-                    def to_tf_tensor(self) -> tensorflow.Tensor:
-                        dtype: numpy.dtype
-                        if self.dtype == greycat.std.core.TensorType.i32(self.type_.greycat):
-                            dtype = numpy.dtype('int32')
-                        elif self.dtype == greycat.std.core.TensorType.i64(self.type_.greycat):
-                            dtype = numpy.dtype('int64')
-                        elif self.dtype == greycat.std.core.TensorType.f32(self.type_.greycat):
-                            dtype = numpy.dtype('float32')
-                        elif self.dtype == greycat.std.core.TensorType.f64(self.type_.greycat):
-                            dtype = numpy.dtype('float64')
-                        elif self.dtype == greycat.std.core.TensorType.c64(self.type_.greycat):
-                            dtype = numpy.dtype('complex64')
-                        elif self.dtype == greycat.std.core.TensorType.c128(self.type_.greycat):
-                            dtype = numpy.dtype('complex128')
-                        else:
-                            raise ValueError(f"${self.tensor_type}")
-                        return tensorflow.constant(numpy.frombuffer(self.data, dtype=dtype), [dim.value for dim in self.shape])
-
-                    @staticmethod
-                    def from_tf_tensor(greycat: GreyCat, tf_tensor: tensorflow.Tensor, tf_session: tensorflow.compat.v1.Session | None = None) -> std_n.core._Tensor:
-                        if tensorflow.executing_eagerly():
-                            return std_n.core._Tensor.from_numpy(greycat, tf_tensor.numpy())
-                        if tf_session is not None:
-                            return std_n.core._Tensor.from_numpy(greycat, tf_session.run(tf_tensor))
-                        return std_n.core._Tensor.from_numpy(greycat, tensorflow.compat.v1.Session().run(tf_tensor))
+                def from_tf_tensor(greycat: GreyCat, tf_tensor: tensorflow.Tensor, tf_session: tensorflow.compat.v1.Session | None = None) -> std_n.core._Tensor:
+                    if tensorflow.executing_eagerly():
+                        return std_n.core._Tensor.from_numpy(greycat, tf_tensor.numpy())
+                    if tf_session is not None:
+                        return std_n.core._Tensor.from_numpy(greycat, tf_session.run(tf_tensor))
+                    return std_n.core._Tensor.from_numpy(greycat, tensorflow.compat.v1.Session().run(tf_tensor))
 
             if "torch" in sys.modules:
                 def to_torch_tensor(self, requires_grad: bool = False) -> torch.Tensor:
