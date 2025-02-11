@@ -2,6 +2,6 @@ from .greycat import *
 from .std import *
 
 try:
-    from .algebra import algebra
+    from .algebra import *
 except ModuleNotFoundError:
     pass
