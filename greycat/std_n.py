@@ -1015,7 +1015,7 @@ class std_n:
                 self.cols: int
                 self._col_types: list[type | None]
                 self.rows: int
-                self.data: list[std_n.core.__T]
+                self.data: numpy.ndarray
                 super().__init__(type, None)
 
             def _save(self, stream: GreyCat._Stream) -> None:
