@@ -1012,28 +1012,27 @@ class std_n:
 
         class _Table(Generic[__T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
-                self.cols: int
-                self._col_types: list[type | None]
-                self.rows: int
                 self.data: numpy.ndarray
                 super().__init__(type, None)
 
             def _save(self, stream: GreyCat._Stream) -> None:
-                stream.write_vu32(self.rows)
-                stream.write_vu32(self.cols)
-                for col in range(self.cols):
+                rows = self.data.shape[0]
+                cols = self.data.shape[1]
+                stream.write_vu32(rows)
+                stream.write_vu32(cols)
+                for col in range(cols):
                     nullables: bytearray | None = None
                     type_is_unique: bool = False
                     unique_type: type | None = None
                     value_is_monotonic:  bool = False
                     monotonic_value: Any | None = None
                     e: std_n.core.__T
-                    for row in range(self.rows):
-                        e = self.data[col * self.rows + row]
+                    for row in range(rows):
+                        e = self.data[row, col]
                         if e is None:
                             if nullables is None:
                                 nullables = bytearray(
-                                    repeat(0, math.ceil(self.rows / 8)))
+                                    repeat(0, math.ceil(rows / 8)))
                             nullables[row >> 3] |= 1 << (row & 7)
                         else:
                             _type = type(e)
@@ -1060,23 +1059,23 @@ class std_n:
                     object: GreyCat.Object
                     if not type_is_unique:
                         stream.write_i8(PrimitiveType.UNDEFINED)
-                        for row in range(self.rows):
-                            e = self.data[col * self.rows + row]
+                        for row in range(rows):
+                            e = self.data[row, col]
                             if e is not None:
                                 stream.write(e)
                     else:
                         if bool is unique_type:
                             stream.write_i8(PrimitiveType.BOOL)
                             stream.write_i8(0)  # TODO: manage monotonic
-                            for row in range(self.rows):
-                                e = self.data[col * self.rows + row]
+                            for row in range(rows):
+                                e = self.data[row, col]
                                 if e is not None:
                                     stream.write_bool(e)
                         elif c_char is unique_type:
                             stream.write_i8(PrimitiveType.CHAR)
                             stream.write_i8(0)  # TODO: manage monotonic
-                            for row in range(self.rows):
-                                char = self.data[col * self.rows + row]
+                            for row in range(rows):
+                                char = self.data[row, col]
                                 if char is not None:
                                     c = c_ubyte(char.value)
                                     if c > GreyCat._Stream.ASCII_MAX:
@@ -1086,31 +1085,24 @@ class std_n:
                         elif int is unique_type:
                             stream.write_i8(PrimitiveType.INT)
                             stream.write_i8(0)  # TODO: manage monotonic
-                            for row in range(self.rows):
-                                e = self.data[col * self.rows + row]
+                            for row in range(rows):
+                                e = self.data[row, col]
                                 if isinstance(e, c_int64):
                                     stream.write_vi64(e.value)
                                 elif e is not None:
                                     if isinstance(e, ctypes._SimpleCData):
                                         e = e.value
                                     stream.write_vi64(e)
-                        elif float is unique_type:
+                        elif numpy.float64 is unique_type:
                             stream.write_i8(PrimitiveType.FLOAT)
                             stream.write_i8(0)  # TODO: manage monotonic
-                            for row in range(self.rows):
-                                e = self.data[col * self.rows + row]
-                                if isinstance(e, c_double):
-                                    stream.write_f64(e.value)
-                                elif e is not None:
-                                    if isinstance(e, ctypes._SimpleCData):
-                                        e = e.value
-                                    stream.write_f64(e)
+                            stream.write_i8_array(self.data[:, col].data.tobytes(), 0, 8 * rows)
                         elif str is unique_type:
                             stream.write_i8(PrimitiveType.OBJECT)
                             stream.write_vu32(
-                                c_uint32(stream.greycat.type_offset_core_string))
-                            for row in range(self.rows):
-                                string = self.data[col * self.rows + row]
+                                stream.greycat.type_offset_core_string)
+                            for row in range(rows):
+                                string = self.data[row, col]
                                 if string is not None:
                                     data = string.encode("utf8")
                                     stream.write_vu32(c_uint32(len(data) << 1))
@@ -1118,8 +1110,8 @@ class std_n:
                         elif issubclass(unique_type, GreyCat.Object):
                             object = monotonic_value
                             object._save_type(stream)
-                            for row in range(self.rows):
-                                object = self.data[col * self.rows + row]
+                            for row in range(rows):
+                                object = self.data[row, col]
                                 if object is not None:
                                     object._save(stream)
                         else:
@@ -1130,11 +1122,8 @@ class std_n:
                 rows: Final[int] = stream.read_vu32()
                 cols: Final[int] = stream.read_vu32()
                 cols_data: list[list | numpy.ndarray] = []
-                table: std_n.core._Table = type.factory(type, [])
-                table.rows = rows
-                table.cols = cols
-                table._col_types = list(repeat(None, cols))
                 for col in range(cols):
+                    # Read column metadata
                     nullables: list[bool] | None = None
                     if 1 == stream.read_i8():
                         nullables = list(repeat(False, rows))
@@ -1154,7 +1143,7 @@ class std_n:
                         if 1 == stream.read_i8():
                             monotonic_value = GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](
                                 stream)
-
+                    # Read column data
                     if monotonic_value is not None or (nullables is not None and all(nullables)):
                         cols_data.append(numpy.array([monotonic_value] * rows))
                     elif PrimitiveType.FLOAT == col_primitive_type:
@@ -1173,16 +1162,7 @@ class std_n:
                     else:
                         cols_data.append(numpy.array([None if nullables is not None and nullables[row]
                                          else GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](stream) for row in range(rows)]))
-
-                    if PrimitiveType.UNDEFINED != col_primitive_type:
-                        if PrimitiveType.TIME == col_primitive_type:
-                            table._col_types[col] = std_n.core._time
-                        elif PrimitiveType.DURATION == col_primitive_type:
-                            table._col_types[col] = std_n.core._duration
-                        elif PrimitiveType.OBJECT == col_primitive_type and type.greycat.types_by_name["core::Map"] == col_type:
-                            table._col_types[col] = std_n.core._Map
-                        else:
-                            table._col_types[col] = object
+                table: std_n.core._Table = type.factory(type, [])
                 table.data = numpy.empty((rows, cols), dtype=numpy.result_type(
                     *[col_data.dtype for col_data in cols_data]), order="F")
                 for col in range(cols):
@@ -1199,91 +1179,20 @@ class std_n:
                     str = f"{str}\n"
                 return f"{str}}}"
 
-            def to_numpy(self) -> tuple[numpy.ndarray]:
-                nda = numpy.ndarray(shape=(self.rows, self.cols), order="F")
-                print(f"{self.rows} × {self.cols}")
-                col_data: list
-                for col in range(self.cols):
-                    col_data = self.data[col *
-                                         self.rows: (col + 1) * self.rows]
-                    if self._col_types[col] is None:
-                        nda[:, col] = [
-                            elem.to_numpy() if isinstance(elem, (std_n.core._time, std_n.core._duration))
-                            else elem.map if isinstance(elem, std_n.core._Map)
-                            else elem
-                            for elem in col_data
-                        ]
-                    elif issubclass(self._col_types[col], (std_n.core._time, std_n.core._duration)):
-                        nda[:, col] = [elem.to_numpy()
-                                       for elem in col_data]
-                    elif issubclass(self._col_types[col], std_n.core._Map):
-                        nda[:, col] = [elem.map for elem in col_data]
-                    else:
-                        nda[:, col] = col_data
-                return nda
-
-            @staticmethod
-            def __parse_numpy_elem(gc: GreyCat, elem) -> Any:
-                elem_type = type(elem)
-                if isinstance(elem, numpy.floating) or elem_type is float:
-                    return c_double(elem)
-                if isinstance(elem, numpy.integer) or elem_type is int:
-                    return c_int64(elem)
-                if isinstance(elem, numpy.complex128) or elem_type is complex:
-                    return greycat.std.core.Tuple.create(gc, float(numpy.real(elem)), float(numpy.imag(elem)))
-                if isinstance(elem, numpy.datetime64):
-                    return std_n.core._time.from_numpy(gc, elem)
-                if isinstance(elem, numpy.timedelta64):
-                    return std_n.core._duration.from_numpy(gc, elem)
-                if "pandas" in sys.modules:
-                    if isinstance(elem, pandas.Timestamp):
-                        return std_n.core._time.from_numpy(gc, elem.to_numpy())
-                    if isinstance(elem, pandas.Timedelta):
-                        return std_n.core._duration.from_numpy(gc, elem.to_numpy())
-                    if isinstance(elem, pandas.Period):
-                        return greycat.std.core.Tuple.create(gc, std_n.core._time.from_numpy(gc, elem.start_time.to_numpy()), f"{elem.freq}")
-                    if isinstance(elem, pandas.Interval):
-                        return std_n.core._Table.__interval_to_map(gc, elem)
-                return elem
+            def to_numpy(self) -> numpy.ndarray:
+                return self.data
 
             @staticmethod
             def from_numpy(gc: GreyCat, nda: numpy.ndarray) -> std_n.core._Table:
                 type_: GreyCat.Type = gc.types_by_name["core::Table"]
                 table: std_n.core._Table = type_.factory(type_, None)
-                if nda.dtype == numpy.dtype(float):
-                    table.data = [c_double(elem)
-                                  for elem in nda.flatten("F")]
-                elif nda.dtype == numpy.dtype(int):
-                    table.data = [c_int64(elem)
-                                  for elem in nda.flatten("F")]
-                elif nda.dtype == numpy.dtype(object):
-                    if len(list(filter(lambda elem: type(elem) is int and not -2 ** 63 <= elem < 2 ** 63, nda))) > 0:
-                        raise ValueError(
-                            "Numpy array contains ints larger than max int64")
-                    table.data = [
-                        std_n.core._Table.__parse_numpy_elem(gc, elem)
-                        for elem in nda.flatten("F")
-                    ]
-                else:
-                    raise ValueError(f"Unknown dtype: {nda.dtype}")
-                table.rows = nda.shape[0]
-                table.cols = nda.shape[1]
+                table.data = nda
                 return table
 
             if "pandas" in sys.modules:
-                @staticmethod
-                def __interval_to_map(gc: GreyCat, interval: pandas.Interval) -> std_n.core._Map[std_n.core._String, Any]:
-                    map = std_n.core._Map(gc.types_by_name["core::Map"])
-                    map["left"] = std_n.core._Table.__parse_numpy_elem(
-                        gc, interval.left)
-                    map["right"] = std_n.core._Table.__parse_numpy_elem(
-                        gc, interval.right)
-                    map["closed_left"] = interval.closed_left
-                    map["closed_right"] = interval.closed_right
-                    return map
 
                 def to_pandas(self) -> pandas.DataFrame:
-                    return pandas.DataFrame(self.to_numpy())
+                    return pandas.DataFrame(self.data)
 
                 @staticmethod
                 def from_pandas(
@@ -1292,6 +1201,7 @@ class std_n:
                     return std_n.core._Table.from_numpy(greycat, df.to_numpy())
 
             if "tensorflow" in sys.modules:
+
                 def to_tf_tensor(self) -> tensorflow.Tensor:
                     return tensorflow.constant(self.to_numpy())
 
@@ -1301,7 +1211,7 @@ class std_n:
                         return std_n.core._Table.from_numpy(greycat, tf_tensor.numpy())
                     if session is not None:
                         return std_n.core._Table.from_numpy(greycat, session.run(tf_tensor))
-                        return std_n.core._Table.from_numpy(greycat, tensorflow.compat.v1.Session().run(tf_tensor))
+                        # return std_n.core._Table.from_numpy(greycat, tensorflow.compat.v1.Session().run(tf_tensor))
 
         class _Tensor(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
