@@ -1038,10 +1038,6 @@ class std_n:
                             nullables[row >> 3] |= 1 << (row & 7)
                         else:
                             _type = type(e)
-                            if issubclass(_type, c_int64) or issubclass(_type, c_uint32) or issubclass(_type, c_int32) or issubclass(_type, c_uint16) or issubclass(_type, c_uint16) or issubclass(_type, c_uint8) or issubclass(_type, c_int8):
-                                _type = int
-                            elif issubclass(_type, c_double) or issubclass(_type, c_float):
-                                _type = float
                             if unique_type is None:
                                 type_is_unique = True
                                 unique_type = _type
@@ -1087,22 +1083,25 @@ class std_n:
                                         raise ValueError(
                                             f"Only ASCII characters are allowed: {c}")
                                     stream.write_i8(c)
-                        elif int is unique_type:
+                        elif issubclass(unique_type, (int, numpy.integer)):
                             stream.write_i8(PrimitiveType.INT)
                             stream.write_i8(0)  # TODO: manage monotonic
                             for row in range(rows):
                                 e = self.data[row, col]
-                                if isinstance(e, c_int64):
-                                    stream.write_vi64(e.value)
-                                elif e is not None:
-                                    if isinstance(e, ctypes._SimpleCData):
-                                        e = e.value
+                                if e is not None:
                                     stream.write_vi64(e)
-                        elif numpy.float64 is unique_type:
+                        elif issubclass(unique_type, (float, numpy.floating)):
                             stream.write_i8(PrimitiveType.FLOAT)
                             stream.write_i8(0)  # TODO: manage monotonic
-                            stream.write_i8_array(
-                                self.data[:, col].data.tobytes(), 0, 8 * rows)
+                            if nullables is None and numpy.float64 is unique_type:
+                                # GreyCat’s Array<float> is stored the exact same as Python’s numpy<float64>
+                                stream.write_i8_array(
+                                    self.data[:, col].data.tobytes(), 0, 8 * rows)
+                            else:
+                                for row in range(rows):
+                                    e = self.data[row, col]
+                                    if e is not None:
+                                        stream.write_f64(e)
                         elif numpy.datetime64 is unique_type:
                             stream.write_i8(PrimitiveType.TIME)
                             stream.write_i8(0)  # TODO: manage monotonic
@@ -1170,8 +1169,13 @@ class std_n:
                     if monotonic_value is not None or (nullables is not None and all(nullables)):
                         cols_data.append(numpy.array([monotonic_value] * rows))
                     elif PrimitiveType.FLOAT == col_primitive_type:
-                        cols_data.append(numpy.frombuffer(
-                            stream.read_i8_array(8 * rows)))
+                        if nullables is None:
+                            # GreyCat’s Array<float> is stored the exact same as Python’s numpy<float64>
+                            cols_data.append(numpy.frombuffer(
+                                stream.read_i8_array(8 * rows))),
+                        else:
+                            cols_data.append(numpy.array(
+                                [None if nullables[row] else stream.read_f64() for row in range(rows)]))
                     elif col_primitive_type in [PrimitiveType.TIME, PrimitiveType.DURATION]:
                         cols_data.append(numpy.array([None if nullables is not None and nullables[row] else GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](
                             stream).to_numpy() for row in range(rows)]))
@@ -1186,7 +1190,6 @@ class std_n:
                             cols_data.append(numpy.array([None if nullables is not None and nullables[row] else col_type.loader(
                                 col_type, stream) for row in range(rows)]))
                     else:
-                        print(col, col_primitive_type)
                         cols_data.append(numpy.array([None if nullables is not None and nullables[row]
                                          else GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](stream) for row in range(rows)]))
                 table: std_n.core._Table = type.factory(type, [])
