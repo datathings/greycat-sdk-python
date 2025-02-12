@@ -1013,6 +1013,10 @@ class std_n:
                 self.data: numpy.ndarray
                 super().__init__(type, None)
 
+            @property
+            def shape(self):
+                return self.data.shape
+
             def _save(self, stream: GreyCat._Stream) -> None:
                 rows = self.data.shape[0]
                 cols = self.data.shape[1]
