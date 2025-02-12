@@ -59,11 +59,11 @@ class std_n:
                 res.value = stream.read_vi64()
                 return res
 
-            def to_np_timedelta(self) -> numpy.timedelta64:
+            def to_numpy(self) -> numpy.timedelta64:
                 return numpy.timedelta64(self.value, "us")
 
             @staticmethod
-            def from_np_timedelta(greycat: GreyCat, td: numpy.timedelta64) -> std_n.core._duration:
+            def from_numpy(greycat: GreyCat, td: numpy.timedelta64) -> std_n.core._duration:
                 duration = std_n.core._duration(
                     greycat.type_offset_core_duration)
                 duration.value = td.astype(int) if numpy.datetime_data(td)[0] in [
@@ -611,11 +611,11 @@ class std_n:
                 res.value = stream.read_vi64()
                 return res
 
-            def to_np_datetime(self) -> numpy.datetime64:
+            def to_numpy(self) -> numpy.datetime64:
                 return numpy.datetime64(self.value, "us")
 
             @staticmethod
-            def from_np_datetime(greycat: GreyCat, dt: numpy.datetime64) -> std_n.core._time:
+            def from_numpy(greycat: GreyCat, dt: numpy.datetime64) -> std_n.core._time:
                 time = std_n.core._time(
                     greycat.types[greycat.type_offset_core_time])
                 time.value = dt.astype(int) if numpy.datetime_data(dt)[0] in [
@@ -1057,6 +1057,8 @@ class std_n:
                     c: c_ubyte
                     string: str
                     object: GreyCat.Object
+                    dt: numpy.datetime64
+                    td: numpy.timedelta64
                     if not type_is_unique:
                         stream.write_i8(PrimitiveType.UNDEFINED)
                         for row in range(rows):
@@ -1098,6 +1100,20 @@ class std_n:
                             stream.write_i8(0)  # TODO: manage monotonic
                             stream.write_i8_array(
                                 self.data[:, col].data.tobytes(), 0, 8 * rows)
+                        elif numpy.datetime64 is unique_type:
+                            stream.write_i8(PrimitiveType.TIME)
+                            stream.write_i8(0) # TODO: manage monotonic
+                            for row in range(rows):
+                                dt = self.data[row, col]
+                                if dt is not None:
+                                    std_n.core._time.from_numpy(self.type_.greycat, dt)._save(stream)
+                        elif numpy.timedelta64 is unique_type:
+                            stream.write_i8(PrimitiveType.TIME)
+                            stream.write_i8(0) # TODO: manage monotonic
+                            for row in range(rows):
+                                td = self.data[row, col]
+                                if td is not None:
+                                    std_n.core._duration.from_numpy(self.type_.greycat, td)._save(stream)
                         elif str is unique_type:
                             stream.write_i8(PrimitiveType.OBJECT)
                             stream.write_vu32(
@@ -1151,6 +1167,8 @@ class std_n:
                     elif PrimitiveType.FLOAT == col_primitive_type:
                         cols_data.append(numpy.frombuffer(
                             stream.read_i8_array(8 * rows)))
+                    elif col_primitive_type in [PrimitiveType.TIME, PrimitiveType.DURATION]:
+                        cols_data.append(numpy.array([None if nullables is not None and nullables[row] else GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](stream).to_numpy() for row in range(rows)]))
                     elif PrimitiveType.UNDEFINED == col_primitive_type:
                         cols_data.append(numpy.array(
                             [None if nullables is not None and nullables[row] else stream.read() for row in range(rows)]))
