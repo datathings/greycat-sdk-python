@@ -1057,7 +1057,6 @@ class std_n:
                     object: GreyCat.Object
                     dt: numpy.datetime64
                     td: numpy.timedelta64
-                    print(type_is_unique, unique_type)
                     if not type_is_unique:
                         stream.write_i8(PrimitiveType.UNDEFINED)
                         for row in range(rows):
