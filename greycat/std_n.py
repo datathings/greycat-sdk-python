@@ -1008,6 +1008,7 @@ class std_n:
                     return type.greycat.symbols[len_ >> 1]
                 return stream.read_string(len_ >> 1)
 
+        # Table is implemented as a thin wrapper around numpy.ndarray with boilerplate to map elements types back and forth
         class _Table(Generic[__T], GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.data: numpy.ndarray
