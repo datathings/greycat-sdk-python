@@ -59,11 +59,11 @@ class std_n:
                 res.value = stream.read_vi64()
                 return res
 
-            def to_numpy(self) -> numpy.timedelta64:
+            def to_np_timedelta(self) -> numpy.timedelta64:
                 return numpy.timedelta64(self.value, "us")
 
             @staticmethod
-            def from_numpy(greycat: GreyCat, td: numpy.timedelta64) -> std_n.core._duration:
+            def from_np_timedelta(greycat: GreyCat, td: numpy.timedelta64) -> std_n.core._duration:
                 duration = std_n.core._duration(
                     greycat.type_offset_core_duration)
                 duration.value = td.astype(int) if numpy.datetime_data(td)[0] in [
@@ -611,11 +611,11 @@ class std_n:
                 res.value = stream.read_vi64()
                 return res
 
-            def to_numpy(self) -> numpy.datetime64:
+            def to_np_datetime(self) -> numpy.datetime64:
                 return numpy.datetime64(self.value, "us")
 
             @staticmethod
-            def from_numpy(greycat: GreyCat, dt: numpy.datetime64) -> std_n.core._time:
+            def from_np_datetime(greycat: GreyCat, dt: numpy.datetime64) -> std_n.core._time:
                 time = std_n.core._time(
                     greycat.types[greycat.type_offset_core_time])
                 time.value = dt.astype(int) if numpy.datetime_data(dt)[0] in [
@@ -1111,6 +1111,7 @@ class std_n:
                         elif issubclass(unique_type, GreyCat.Object):
                             object = monotonic_value
                             object._save_type(stream)
+                            stream.write_i8(0) # TODO: manage monotonic
                             for row in range(rows):
                                 object = self.data[row, col]
                                 if object is not None:
@@ -1150,13 +1151,9 @@ class std_n:
                     elif PrimitiveType.FLOAT == col_primitive_type:
                         cols_data.append(numpy.frombuffer(
                             stream.read_i8_array(8 * rows)))
-                    elif col_primitive_type in [PrimitiveType.TIME, PrimitiveType.DURATION]:
-                        # TODO: check
-                        cols_data.append(numpy.array([None if nullables is not None and nullables[row] else GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](
-                            stream).to_numpy() for row in range(rows)]))
                     elif PrimitiveType.UNDEFINED == col_primitive_type:
-                        cols_data.append(numpy.array([None if nullables is not None and nullables[row] else std_n.core._Table.parse_undefined(
-                            stream.read()) for row in range(rows)]))
+                        cols_data.append(numpy.array(
+                            [None if nullables is not None and nullables[row] else stream.read() for row in range(rows)]))
                     elif PrimitiveType.OBJECT == col_primitive_type or PrimitiveType.STATIC_FIELD == col_primitive_type:
                         if col_type is None:
                             cols_data.append(numpy.array(
@@ -1174,12 +1171,6 @@ class std_n:
                 for col in range(cols):
                     table.data[:, col] = cols_data[col]
                 return table
-
-            @staticmethod
-            def parse_undefined(v: Any) -> Any:
-                if isinstance(v, (std_n.core._time, std_n.core._duration)):
-                    return v.to_numpy()
-                return v
 
             def __str__(self) -> str:
                 str = f"{self.type_.name}{{"
