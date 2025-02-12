@@ -6,11 +6,9 @@ import ctypes
 from ctypes import *
 from itertools import repeat
 import math
-from numbers import Number
 import numpy
 from struct import pack, unpack
 import sys
-from types import MappingProxyType
 from typing import *
 
 
@@ -1064,7 +1062,8 @@ class std_n:
                         for row in range(rows):
                             e = self.data[row, col]
                             if e is not None:
-                                stream.write(e) # TODO: time & duration
+                                stream.write(std_n.core._Table.ser(
+                                    e, self.type_.greycat))
                     else:
                         if bool is unique_type:
                             stream.write_i8(PrimitiveType.BOOL)
@@ -1102,18 +1101,20 @@ class std_n:
                                 self.data[:, col].data.tobytes(), 0, 8 * rows)
                         elif numpy.datetime64 is unique_type:
                             stream.write_i8(PrimitiveType.TIME)
-                            stream.write_i8(0) # TODO: manage monotonic
+                            stream.write_i8(0)  # TODO: manage monotonic
                             for row in range(rows):
                                 dt = self.data[row, col]
                                 if dt is not None:
-                                    std_n.core._time.from_numpy(self.type_.greycat, dt)._save(stream)
+                                    std_n.core._time.from_numpy(
+                                        self.type_.greycat, dt)._save(stream)
                         elif numpy.timedelta64 is unique_type:
                             stream.write_i8(PrimitiveType.DURATION)
-                            stream.write_i8(0) # TODO: manage monotonic
+                            stream.write_i8(0)  # TODO: manage monotonic
                             for row in range(rows):
                                 td = self.data[row, col]
                                 if td is not None:
-                                    std_n.core._duration.from_numpy(self.type_.greycat, td)._save(stream)
+                                    std_n.core._duration.from_numpy(
+                                        self.type_.greycat, td)._save(stream)
                         elif str is unique_type:
                             stream.write_i8(PrimitiveType.OBJECT)
                             stream.write_vu32(
@@ -1127,7 +1128,7 @@ class std_n:
                         elif issubclass(unique_type, GreyCat.Object):
                             object = monotonic_value
                             object._save_type(stream)
-                            stream.write_i8(0) # TODO: manage monotonic
+                            stream.write_i8(0)  # TODO: manage monotonic
                             for row in range(rows):
                                 object = self.data[row, col]
                                 if object is not None:
@@ -1168,11 +1169,11 @@ class std_n:
                         cols_data.append(numpy.frombuffer(
                             stream.read_i8_array(8 * rows)))
                     elif col_primitive_type in [PrimitiveType.TIME, PrimitiveType.DURATION]:
-                        cols_data.append(numpy.array([None if nullables is not None and nullables[row] else GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](stream).to_numpy() for row in range(rows)]))
+                        cols_data.append(numpy.array([None if nullables is not None and nullables[row] else GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](
+                            stream).to_numpy() for row in range(rows)]))
                     elif PrimitiveType.UNDEFINED == col_primitive_type:
-                        # TODO: time & duration
                         cols_data.append(numpy.array(
-                            [None if nullables is not None and nullables[row] else stream.read() for row in range(rows)]))
+                            [None if nullables is not None and nullables[row] else std_n.core._Table.deser(stream.read()) for row in range(rows)]))
                     elif PrimitiveType.OBJECT == col_primitive_type or PrimitiveType.STATIC_FIELD == col_primitive_type:
                         if col_type is None:
                             cols_data.append(numpy.array(
@@ -1191,15 +1192,11 @@ class std_n:
                     table.data[:, col] = cols_data[col]
                 return table
 
+            def __repr__(self) -> str:
+                return self.data.__repr__()
+
             def __str__(self) -> str:
-                str = f"{self.type_.name}{{"
-                for col in range(self.cols):
-                    str = f"{str}\n\t"
-                    for row in range(self.rows):
-                        str = f"{str}{self.data[col * self.rows + row]}, "
-                if 0 < self.cols and 0 < self.rows:
-                    str = f"{str}\n"
-                return f"{str}}}"
+                return self.data.__str__()
 
             def to_numpy(self) -> numpy.ndarray:
                 return self.data
@@ -1210,6 +1207,20 @@ class std_n:
                 table: std_n.core._Table = type_.factory(type_, None)
                 table.data = nda
                 return table
+
+            @staticmethod
+            def ser(value: Any, gc: GreyCat) -> Any:
+                if isinstance(value, numpy.datetime64):
+                    return std_n.core._time.from_numpy(gc, value)
+                if isinstance(value, numpy.timedelta64):
+                    return std_n.core._duration.from_numpy(gc, value)
+                return value
+
+            @staticmethod
+            def deser(value: Any) -> Any:
+                if isinstance(value, (std_n.core._time, std_n.core._duration)):
+                    return value.to_numpy()
+                return value
 
             if "pandas" in sys.modules:
 
