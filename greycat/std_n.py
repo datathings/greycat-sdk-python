@@ -1064,7 +1064,7 @@ class std_n:
                         for row in range(rows):
                             e = self.data[row, col]
                             if e is not None:
-                                stream.write(e)
+                                stream.write(e) # TODO: time & duration
                     else:
                         if bool is unique_type:
                             stream.write_i8(PrimitiveType.BOOL)
@@ -1108,7 +1108,7 @@ class std_n:
                                 if dt is not None:
                                     std_n.core._time.from_numpy(self.type_.greycat, dt)._save(stream)
                         elif numpy.timedelta64 is unique_type:
-                            stream.write_i8(PrimitiveType.TIME)
+                            stream.write_i8(PrimitiveType.DURATION)
                             stream.write_i8(0) # TODO: manage monotonic
                             for row in range(rows):
                                 td = self.data[row, col]
@@ -1170,6 +1170,7 @@ class std_n:
                     elif col_primitive_type in [PrimitiveType.TIME, PrimitiveType.DURATION]:
                         cols_data.append(numpy.array([None if nullables is not None and nullables[row] else GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](stream).to_numpy() for row in range(rows)]))
                     elif PrimitiveType.UNDEFINED == col_primitive_type:
+                        # TODO: time & duration
                         cols_data.append(numpy.array(
                             [None if nullables is not None and nullables[row] else stream.read() for row in range(rows)]))
                     elif PrimitiveType.OBJECT == col_primitive_type or PrimitiveType.STATIC_FIELD == col_primitive_type:
