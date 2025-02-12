@@ -1057,6 +1057,7 @@ class std_n:
                     object: GreyCat.Object
                     dt: numpy.datetime64
                     td: numpy.timedelta64
+                    print(type_is_unique, unique_type)
                     if not type_is_unique:
                         stream.write_i8(PrimitiveType.UNDEFINED)
                         for row in range(rows):
@@ -1118,7 +1119,7 @@ class std_n:
                                 if td is not None:
                                     std_n.core._duration.from_numpy(
                                         self.type_.greycat, td)._save(stream)
-                        elif str is unique_type:
+                        elif issubclass(unique_type, (str, numpy.str_)):
                             stream.write_i8(PrimitiveType.OBJECT)
                             stream.write_vu32(
                                 stream.greycat.type_offset_core_string)
@@ -1126,7 +1127,7 @@ class std_n:
                                 string = self.data[row, col]
                                 if string is not None:
                                     data = string.encode("utf8")
-                                    stream.write_vu32(c_uint32(len(data) << 1))
+                                    stream.write_vu32(len(data) << 1)
                                     stream.write_i8_array(data, 0, len(data))
                         elif issubclass(unique_type, GreyCat.Object):
                             object = monotonic_value
