@@ -1065,7 +1065,7 @@ class std_n:
                                 stream.write(std_n.core._Table.ser(
                                     e, self.type_.greycat))
                     else:
-                        if bool is unique_type:
+                        if issubclass(unique_type, (bool, numpy.bool_)):
                             stream.write_i8(PrimitiveType.BOOL)
                             stream.write_i8(0)  # TODO: manage monotonic
                             for row in range(rows):
@@ -1094,7 +1094,7 @@ class std_n:
                             stream.write_i8(PrimitiveType.FLOAT)
                             stream.write_i8(0)  # TODO: manage monotonic
                             if nullables is None and numpy.float64 is unique_type:
-                                # GreyCat’s Array<float> is stored the exact same as Python’s numpy<float64>
+                                # GreyCat’s Array<float> is stored the exact same as numpy.array[float64]
                                 stream.write_i8_array(
                                     self.data[:, col].data.tobytes(), 0, 8 * rows)
                             else:
@@ -1170,7 +1170,7 @@ class std_n:
                         cols_data.append(numpy.array([monotonic_value] * rows))
                     elif PrimitiveType.FLOAT == col_primitive_type:
                         if nullables is None:
-                            # GreyCat’s Array<float> is stored the exact same as Python’s numpy<float64>
+                            # GreyCat’s Array<float> is stored the exact same as numpy.array[float64]
                             cols_data.append(numpy.frombuffer(
                                 stream.read_i8_array(8 * rows))),
                         else:
