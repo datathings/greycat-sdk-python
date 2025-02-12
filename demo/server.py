@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-import numpy
 import pandas
 import time
 
