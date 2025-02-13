@@ -14,7 +14,6 @@ from typing import *
 import greycat
 
 try:
-    import enum
     import flask
     import flask.typing
 
@@ -28,30 +27,20 @@ try:
         def request() -> GreyCatServer.Request:
             return flask.request
 
-        def __init__(self, import_name: str, gc_abi_path: str, **kwargs):
-            super().__init__(import_name=import_name, **kwargs)
+        def __init__(self, import_name: str, gc_abi_path: str, static_url_path: str | None, static_folder: str | os.PathLike[str] | None, **kwargs):
+            super().__init__(import_name=import_name, static_url_path=static_url_path,
+                             static_folder=static_folder, **kwargs)
             self.abi_path = gc_abi_path
             self.before_request_funcs = {None: [self.unwrap_payload]}
-            self.add_url_rule("/runtime::Runtime::abi",
+            if None not in [static_url_path, static_folder]:
+                self.add_url_rule(
+                    f"/{static_url_path}", view_func=lambda: self.send_static_file("index.html"))
+            self.add_url_rule("/runtime::Runtime::abi", methods=["POST"],
                               view_func=self.runtime_abi)
             self.bio: BytesIO = BytesIO()
             self.gc = GreyCat(gc_abi_path)
             self.stream: GreyCat._Stream = GreyCat._Stream(
                 GreyCat(gc_abi_path), self.bio)
-
-        @override
-        def add_url_rule(
-            self,
-            rule: str,
-            endpoint: str | None = None,
-            view_func: flask.typing.RouteCallable | None = None,
-            provide_automatic_options: bool | None = None,
-            **options: Any,
-        ) -> None:
-            options["methods"] = list(
-                set(options.get("methods", [])) | {"POST"})
-            super().add_url_rule(rule, endpoint=endpoint, view_func=view_func,
-                                 provide_automatic_options=provide_automatic_options, **options)
 
         @override
         def make_response(self, rv: flask.typing.ResponseReturnValue) -> flask.Response:

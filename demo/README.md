@@ -9,6 +9,8 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 mkdir -p data
 python -m demo.generate_data
+mkdir -p demo/js/webroot/web
+curl -L https://get.greycat.io/files/sdk/web/dev/7.0/7.0.301-dev.js -o demo/js/webroot/web/greycat.js
 ```
 
 ### Start server
@@ -17,9 +19,4 @@ python -m demo.generate_data
 python -m demo.server
 ```
 
-### Test Python client
-
-In another terminal:
-```bash
-python -m demo.client
-```
+Demo is then accessible at http://localhost:5000

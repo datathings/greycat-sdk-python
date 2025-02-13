@@ -22,10 +22,11 @@ class ServerNamespace(argparse.Namespace):
 
 
 args: ServerNamespace = ServerNamespace.parse_args()
-app: GreyCatServer = GreyCatServer(__name__, args.greycat_abi_path)
+app: GreyCatServer = GreyCatServer(__name__, args.greycat_abi_path, static_url_path="",
+                                   static_folder=os.path.join(os.getcwd(), "demo", "js", "webroot"))
 
 
-@app.route("/project::get_csv")
+@app.route("/project::get_csv", methods=["POST"])
 def get_csv():
     csv_path: str
     csv_path, = GreyCatServer.request().gcargs
@@ -43,17 +44,6 @@ def get_csv():
     print("\t%.6fs" % (end - start))
 
     return table
-
-
-@app.route("/", methods=["GET"])
-def root():
-    return flask.send_from_directory(os.path.join(os.getcwd(), "demo", "js", "webroot"), "index.html")
-
-
-@app.route("/<path:path>", methods=["GET"])
-def web(path):
-    print(path)
-    return flask.send_from_directory(os.path.join(os.getcwd(), "demo", "js", "webroot"), path)
 
 
 app.run()
