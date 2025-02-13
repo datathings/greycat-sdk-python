@@ -31,15 +31,36 @@ try:
             super().__init__(import_name=import_name, static_url_path=static_url_path,
                              static_folder=static_folder, **kwargs)
             self.abi_path = gc_abi_path
-            if None not in [static_url_path, static_folder]:
-                self.add_url_rule(
-                    f"/{static_url_path}", view_func=lambda: self.send_static_file("index.html"))
+            self.add_url_rule(
+                f"/{"" if static_url_path is None else static_url_path}", view_func=lambda: self.send_static_file("index.html"))
             self.add_url_rule("/runtime::Runtime::abi", methods=["POST"],
                               view_func=self.runtime_abi)
             self.bio: BytesIO = BytesIO()
             self.gc = GreyCat(gc_abi_path)
             self.stream: GreyCat._Stream = GreyCat._Stream(
                 GreyCat(gc_abi_path), self.bio)
+
+        def runtime_abi(self) -> flask.Response:
+            response: flask.Response
+            with open(os.path.join(self.abi_path, "gcdata", "abi"), "rb") as abi:
+                response = super().make_response(abi.read())
+            response.headers["Content-Type"] = "application/octet-stream"
+            return response
+
+        def expose(self, rule: str, **options: Any):
+            options["methods"] = list(set(options.get("methods", [])) | {"POST"})
+
+            def decorator(f):
+                endpoint = options.pop("endpoint", None)
+
+                def wrapped_f():
+                    args = self.unwrap_payload()
+                    return self.wrap_response(f(*args))
+
+                self.add_url_rule(rule, endpoint, wrapped_f, **options)
+                return wrapped_f
+
+            return decorator
 
         def unwrap_payload(self) -> list[Any]:
             request: GreyCatServer.Request = GreyCatServer.request()
@@ -63,28 +84,6 @@ try:
             self.bio.seek(0)
             self.bio.truncate(0)
             return rv
-
-        def runtime_abi(self) -> flask.Response:
-            response: flask.Response
-            with open(os.path.join(self.abi_path, "gcdata", "abi"), "rb") as abi:
-                response = super().make_response(abi.read())
-            response.headers["Content-Type"] = "application/octet-stream"
-            return response
-
-        def expose(self, rule: str, **options: Any):
-            options["methods"] = ["POST"]
-
-            def decorator(f):
-                endpoint = options.pop("endpoint", None)
-
-                def wrapped_f():
-                    args = self.unwrap_payload()
-                    return self.wrap_response(f(*args))
-
-                self.add_url_rule(rule, endpoint, wrapped_f, **options)
-                return wrapped_f
-
-            return decorator
 
 
 except ModuleNotFoundError:
