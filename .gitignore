@@ -13,7 +13,5 @@
 /sandbox.gcl
 /tests/sandbox.py
 
-/demo/js/files
-/demo/js/gcdata
 /demo/js/lib
 /demo/js/webroot/web

@@ -19,8 +19,6 @@ try:
     import flask.typing
 
     class GreyCatServer(flask.Flask):
-        class UrlPaths(enum.Enum):
-            RUNTIME_ABI: GreyCatServer.UrlPaths = "/runtime::Runtime::abi"
 
         class Request(flask.Request):
             def __init__(self):
@@ -30,21 +28,16 @@ try:
         def request() -> GreyCatServer.Request:
             return flask.request
 
-        def __init__(self, import_name: str, gc_abi_path: str, headers: dict | None = None, * kwargs):
-            super().__init__(import_name=import_name, *kwargs)
+        def __init__(self, import_name: str, gc_abi_path: str, **kwargs):
+            super().__init__(import_name=import_name, **kwargs)
             self.abi_path = gc_abi_path
             self.before_request_funcs = {None: [self.unwrap_payload]}
-            self.add_url_rule(GreyCatServer.UrlPaths.RUNTIME_ABI.value,
+            self.add_url_rule("/runtime::Runtime::abi",
                               view_func=self.runtime_abi)
             self.bio: BytesIO = BytesIO()
             self.gc = GreyCat(gc_abi_path)
-            self.headers = headers
             self.stream: GreyCat._Stream = GreyCat._Stream(
                 GreyCat(gc_abi_path), self.bio)
-
-        @property
-        def reserved_url_paths(self) -> list[str]:
-            return [url_path.value for url_path in GreyCatServer.UrlPaths.__members__.values()]
 
         @override
         def add_url_rule(
@@ -62,16 +55,13 @@ try:
 
         @override
         def make_response(self, rv: flask.typing.ResponseReturnValue) -> flask.Response:
-            if flask.request.path not in self.reserved_url_paths:
+            if not isinstance(rv, flask.Response):
                 self.stream.write_abi_header()
                 self.stream.write(rv)
                 rv = super().make_response(self.bio.getvalue())
                 rv.headers["Content-Type"] = "application/octet-stream"
                 self.bio.seek(0)
                 self.bio.truncate(0)
-            if self.headers is not None:
-                for key, value in self.headers.items():
-                    rv.headers[key] = value
             return rv
 
         def unwrap_payload(self) -> flask.typing.ResponseReturnValue | None:

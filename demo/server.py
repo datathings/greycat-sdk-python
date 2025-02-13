@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import argparse
+import flask
 import pandas
+import os
 import time
 
 from greycat import GreyCatServer, std
@@ -20,12 +22,7 @@ class ServerNamespace(argparse.Namespace):
 
 
 args: ServerNamespace = ServerNamespace.parse_args()
-headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "*",
-}
-app: GreyCatServer = GreyCatServer(
-    __name__, args.greycat_abi_path, headers=headers)
+app: GreyCatServer = GreyCatServer(__name__, args.greycat_abi_path)
 
 
 @app.route("/project::get_csv")
@@ -46,6 +43,17 @@ def get_csv():
     print("\t%.6fs" % (end - start))
 
     return table
+
+
+@app.route("/", methods=["GET"])
+def root():
+    return flask.send_from_directory(os.path.join(os.getcwd(), "demo", "js", "webroot"), "index.html")
+
+
+@app.route("/<path:path>", methods=["GET"])
+def web(path):
+    print(path)
+    return flask.send_from_directory(os.path.join(os.getcwd(), "demo", "js", "webroot"), path)
 
 
 app.run()
