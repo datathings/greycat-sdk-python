@@ -15,7 +15,7 @@ class ClientNamespace(argparse.Namespace):
         args_parser: argparse.ArgumentParser = argparse.ArgumentParser(
             add_help=False)
         args_parser.add_argument(
-            "-u", "--url", type=str, default="http://localhost:8080")
+            "-u", "--url", type=str, default="http://localhost:5000")
         return args_parser.parse_args()
 
 

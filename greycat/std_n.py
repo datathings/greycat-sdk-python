@@ -1073,7 +1073,7 @@ class std_n:
                                 e = self.data[row, col]
                                 if e is not None:
                                     stream.write_bool(e)
-                        elif c_char is unique_type:
+                        elif c_char is unique_type:  # TODO: numpy.(u)byte?
                             stream.write_i8(PrimitiveType.CHAR)
                             stream.write_i8(0)  # TODO: manage monotonic
                             for row in range(rows):

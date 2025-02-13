@@ -20,7 +20,12 @@ class ServerNamespace(argparse.Namespace):
 
 
 args: ServerNamespace = ServerNamespace.parse_args()
-app: GreyCatServer = GreyCatServer(__name__, args.greycat_abi_path)
+headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "*",
+}
+app: GreyCatServer = GreyCatServer(
+    __name__, args.greycat_abi_path, headers=headers)
 
 
 @app.route("/project::get_csv")
