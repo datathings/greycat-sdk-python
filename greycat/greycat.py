@@ -31,7 +31,6 @@ try:
             super().__init__(import_name=import_name, static_url_path=static_url_path,
                              static_folder=static_folder, **kwargs)
             self.abi_path = gc_abi_path
-            self.before_request_funcs = {None: [self.unwrap_payload]}
             if None not in [static_url_path, static_folder]:
                 self.add_url_rule(
                     f"/{static_url_path}", view_func=lambda: self.send_static_file("index.html"))
@@ -42,29 +41,28 @@ try:
             self.stream: GreyCat._Stream = GreyCat._Stream(
                 GreyCat(gc_abi_path), self.bio)
 
-        @override
-        def make_response(self, rv: flask.typing.ResponseReturnValue) -> flask.Response:
-            if not isinstance(rv, flask.Response):
-                self.stream.write_abi_header()
-                self.stream.write(rv)
-                rv = super().make_response(self.bio.getvalue())
-                rv.headers["Content-Type"] = "application/octet-stream"
-                self.bio.seek(0)
-                self.bio.truncate(0)
-            return rv
-
-        def unwrap_payload(self) -> flask.typing.ResponseReturnValue | None:
+        def unwrap_payload(self) -> list[Any]:
             request: GreyCatServer.Request = GreyCatServer.request()
             payload_len = len(request.data)
+            unwrapped_payload = []
             if 0 < payload_len:
                 self.bio.write(request.data)
                 self.bio.seek(0)
                 self.stream.read_abi_header()
-                request.gcargs = []
                 while payload_len > self.bio.tell():
-                    request.gcargs.append(self.stream.read())
+                    unwrapped_payload.append(self.stream.read())
                 self.bio.seek(0)
                 self.bio.truncate(0)
+            return unwrapped_payload
+
+        def wrap_response(self, rv: flask.typing.ResponseReturnValue) -> flask.Response:
+            self.stream.write_abi_header()
+            self.stream.write(rv)
+            rv = super().make_response(self.bio.getvalue())
+            rv.headers["Content-Type"] = "application/octet-stream"
+            self.bio.seek(0)
+            self.bio.truncate(0)
+            return rv
 
         def runtime_abi(self) -> flask.Response:
             response: flask.Response
@@ -72,6 +70,21 @@ try:
                 response = super().make_response(abi.read())
             response.headers["Content-Type"] = "application/octet-stream"
             return response
+
+        def expose(self, rule: str, **options: Any):
+            options["methods"] = ["POST"]
+
+            def decorator(f):
+                endpoint = options.pop("endpoint", None)
+
+                def wrapped_f():
+                    args = self.unwrap_payload()
+                    return self.wrap_response(f(*args))
+
+                self.add_url_rule(rule, endpoint, wrapped_f, **options)
+                return wrapped_f
+
+            return decorator
 
 
 except ModuleNotFoundError:

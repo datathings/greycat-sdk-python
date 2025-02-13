@@ -26,23 +26,10 @@ app: GreyCatServer = GreyCatServer(__name__, args.greycat_abi_path, static_url_p
                                    static_folder=os.path.join(os.getcwd(), "demo", "js", "webroot"))
 
 
-@app.route("/project::get_csv", methods=["POST"])
-def get_csv():
-    csv_path: str
-    csv_path, = GreyCatServer.request().gcargs
-
-    print(f"Pandas read_csv(\"{csv_path}\")…")
-    start = time.time()
+@app.expose("/project::get_csv")
+def get_csv(csv_path: str):
     df = pandas.read_csv(csv_path)
-    end = time.time()
-    print("\t%.6fs" % (end - start))
-
-    print(f"GC Table from_pandas…")
-    start = time.time()
     table = std.core.Table.from_pandas(app.gc, df)
-    end = time.time()
-    print("\t%.6fs" % (end - start))
-
     return table
 
 

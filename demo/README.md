@@ -9,8 +9,15 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 mkdir -p data
 python -m demo.generate_data
+head -n11 data/huge.csv > data/tiny.csv
 mkdir -p demo/js/webroot/web
 curl -L https://get.greycat.io/files/sdk/web/dev/7.0/7.0.301-dev.js -o demo/js/webroot/web/greycat.js
+```
+
+### Generate ABI
+
+```bash
+greycat build
 ```
 
 ### Start server
