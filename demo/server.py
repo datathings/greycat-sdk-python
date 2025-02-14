@@ -24,7 +24,7 @@ app: GreyCatServer = GreyCatServer(__name__, args.greycat_abi_path, static_url_p
                                    static_folder=os.path.join(os.getcwd(), "demo", "js", "webroot"))
 
 
-@app.expose("/project::get_csv")
+@app.expose()
 def get_csv(csv_path: str):
     df = pandas.read_csv(csv_path)
     table = std.core.Table.from_pandas(app.gc, df)

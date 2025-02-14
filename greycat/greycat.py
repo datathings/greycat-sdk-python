@@ -27,7 +27,7 @@ try:
         def request() -> GreyCatServer.Request:
             return flask.request
 
-        def __init__(self, import_name: str, gc_abi_path: str, static_url_path: str | None, static_folder: str | os.PathLike[str] | None, **kwargs):
+        def __init__(self, import_name: str, gc_abi_path: str, static_url_path: str | None, static_folder: str | os.PathLike[str] | None, project_name: str = "project", **kwargs):
             super().__init__(import_name=import_name, static_url_path=static_url_path,
                              static_folder=static_folder, **kwargs)
             self.abi_path = gc_abi_path
@@ -37,6 +37,7 @@ try:
                               view_func=self.runtime_abi)
             self.bio: BytesIO = BytesIO()
             self.gc = GreyCat(gc_abi_path)
+            self.project_name = project_name
             self.stream: GreyCat._Stream = GreyCat._Stream(
                 GreyCat(gc_abi_path), self.bio)
 
@@ -47,15 +48,17 @@ try:
             response.headers["Content-Type"] = "application/octet-stream"
             return response
 
-        def expose(self, rule: str, **options: Any):
-            options["methods"] = list(set(options.get("methods", [])) | {"POST"})
+        def expose(self, **options: Any):
+            options["methods"] = list(
+                set(options.get("methods", [])) | {"POST"})
 
-            def decorator(f):
-                endpoint = options.pop("endpoint", None)
+            def decorator(f: Callable[..., Any]) -> Callable[[], flask.Response]:
+                f_name = f.__name__
+                endpoint = options.pop("endpoint", f_name)
+                rule = f"/{self.project_name}::{f_name}"
 
                 def wrapped_f():
-                    args = self.unwrap_payload()
-                    return self.wrap_response(f(*args))
+                    return self.wrap_response(f(*self.unwrap_payload()))
 
                 self.add_url_rule(rule, endpoint, wrapped_f, **options)
                 return wrapped_f
