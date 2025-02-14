@@ -19,54 +19,65 @@ try:
 
     class GreyCatServer(flask.Flask):
 
-        class Request(flask.Request):
-            def __init__(self):
-                self.gcargs: list
-
-        @staticmethod
-        def request() -> GreyCatServer.Request:
-            return flask.request
-
-        def __init__(self, import_name: str, gc_abi_path: str, static_url_path: str | None, static_folder: str | os.PathLike[str] | None, project_name: str = "project", **kwargs):
+        def __init__(
+            self,
+            import_name: str,
+            gc_abi_path: str,
+            static_url_path: str | None,
+            static_folder: str | os.PathLike[str] | None,
+            project_name: str = "project",
+            **kwargs
+        ):
             super().__init__(import_name=import_name, static_url_path=static_url_path,
                              static_folder=static_folder, **kwargs)
-            self.abi_path = gc_abi_path
+            self.abi_path: str = gc_abi_path
             self.add_url_rule(
-                f"/{"" if static_url_path is None else static_url_path}", view_func=lambda: self.send_static_file("index.html"))
-            self.add_url_rule("/runtime::Runtime::abi", methods=["POST"],
-                              view_func=self.runtime_abi)
+                f"/{"" if static_url_path is None else static_url_path}",
+                endpoint="index",
+                view_func=lambda: self.send_static_file("index.html"),
+            )
+            self.add_url_rule(
+                "/runtime::Runtime::abi",
+                methods=["POST"],
+                view_func=self.__runtime_abi,
+            )
             self.bio: BytesIO = BytesIO()
-            self.gc = GreyCat(gc_abi_path)
-            self.project_name = project_name
+            self.gc: GreyCat = GreyCat(gc_abi_path)
+            self.project_name: str = project_name
             self.stream: GreyCat._Stream = GreyCat._Stream(
                 GreyCat(gc_abi_path), self.bio)
 
-        def runtime_abi(self) -> flask.Response:
-            response: flask.Response
+        def __runtime_abi(self) -> flask.Response:
             with open(os.path.join(self.abi_path, "gcdata", "abi"), "rb") as abi:
-                response = super().make_response(abi.read())
-            response.headers["Content-Type"] = "application/octet-stream"
-            return response
+                return super().make_response((abi.read(), {"Content-Type": "application/octet-stream"}))
 
         def expose(self, **options: Any):
             options["methods"] = list(
                 set(options.get("methods", [])) | {"POST"})
 
-            def decorator(f: Callable[..., Any]) -> Callable[[], flask.Response]:
+            def decorator(f: Callable[..., Any]) -> flask.typing.RouteCallable:
                 f_name = f.__name__
                 endpoint = options.pop("endpoint", f_name)
                 rule = f"/{self.project_name}::{f_name}"
 
                 def wrapped_f():
-                    return self.wrap_response(f(*self.unwrap_payload()))
+                    return self.__wrap_response(f(*self.__unwrap_payload()))
 
                 self.add_url_rule(rule, endpoint, wrapped_f, **options)
                 return wrapped_f
 
             return decorator
 
-        def unwrap_payload(self) -> list[Any]:
-            request: GreyCatServer.Request = GreyCatServer.request()
+        class __Request(flask.Request):
+            def __init__(self):
+                self.gcargs: list
+
+        @staticmethod
+        def __request() -> GreyCatServer.__Request:
+            return flask.request
+
+        def __unwrap_payload(self) -> list[Any]:
+            request: GreyCatServer.__Request = GreyCatServer.__request()
             payload_len = len(request.data)
             unwrapped_payload = []
             if 0 < payload_len:
@@ -79,7 +90,7 @@ try:
                 self.bio.truncate(0)
             return unwrapped_payload
 
-        def wrap_response(self, rv: flask.typing.ResponseReturnValue) -> flask.Response:
+        def __wrap_response(self, rv: flask.typing.ResponseReturnValue) -> flask.Response:
             self.stream.write_abi_header()
             self.stream.write(rv)
             rv = super().make_response(self.bio.getvalue())
