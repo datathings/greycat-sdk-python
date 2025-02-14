@@ -45,11 +45,11 @@ try:
                 methods=["POST"],
                 view_func=self.__runtime_abi,
             )
-            self.bio: BytesIO = BytesIO()
+            # self.bio: BytesIO = BytesIO()
             self.gc: GreyCat = GreyCat(gc_abi_path)
             self.project_name: str = project_name
-            self.stream: GreyCat._Stream = GreyCat._Stream(
-                GreyCat(gc_abi_path), self.bio)
+            # self.stream: GreyCat._Stream = GreyCat._Stream(
+            #     GreyCat(gc_abi_path), self.bio)
 
         def __runtime_abi(self) -> flask.Response:
             with open(os.path.join(self.abi_path, "gcdata", "abi"), "rb") as abi:
@@ -87,23 +87,25 @@ try:
             payload_len = len(request.data)
             unwrapped_payload = []
             if 0 < payload_len:
-                self.bio.write(request.data)
-                self.bio.seek(0)
-                self.stream.read_abi_header()
-                while payload_len > self.bio.tell():
-                    unwrapped_payload.append(self.stream.read())
-                self.bio.seek(0)
-                self.bio.truncate(0)
+                (bio, stream) = self.__init_stream()
+                bio.write(request.data)
+                bio.seek(0)
+                stream.read_abi_header()
+                while payload_len > bio.tell():
+                    unwrapped_payload.append(stream.read())
             return unwrapped_payload
 
         def __wrap_response(self, rv: flask.typing.ResponseReturnValue) -> flask.Response:
-            self.stream.write_abi_header()
-            self.stream.write(rv)
-            rv = super().make_response(self.bio.getvalue())
+            (bio, stream) = self.__init_stream()
+            stream.write_abi_header()
+            stream.write(rv)
+            rv = super().make_response(bio.getvalue())
             rv.headers["Content-Type"] = "application/octet-stream"
-            self.bio.seek(0)
-            self.bio.truncate(0)
             return rv
+
+        def __init_stream(self) -> tuple[BytesIO, GreyCat._Stream]:
+            bio: BytesIO = BytesIO()
+            return (bio, GreyCat._Stream(self.gc, bio))
 
 
 except ModuleNotFoundError:
