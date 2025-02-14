@@ -26,10 +26,14 @@ try:
             static_url_path: str | None,
             static_folder: str | os.PathLike[str] | None,
             project_name: str = "project",
-            **kwargs
+            **kwargs,
         ):
-            super().__init__(import_name=import_name, static_url_path=static_url_path,
-                             static_folder=static_folder, **kwargs)
+            super().__init__(
+                import_name=import_name,
+                static_url_path=static_url_path,
+                static_folder=static_folder,
+                **kwargs,
+            )
             self.abi_path: str = gc_abi_path
             self.add_url_rule(
                 f"/{"" if static_url_path is None else static_url_path}",
@@ -51,16 +55,18 @@ try:
             with open(os.path.join(self.abi_path, "gcdata", "abi"), "rb") as abi:
                 return super().make_response((abi.read(), {"Content-Type": "application/octet-stream"}))
 
-        def expose(self, **options: Any):
+        def expose(self, **options) -> Callable[[Callable[..., Any]], flask.typing.RouteCallable]:
             options["methods"] = list(
-                set(options.get("methods", [])) | {"POST"})
+                set(options.get("methods", [])) |
+                {"POST"}
+            )
 
             def decorator(f: Callable[..., Any]) -> flask.typing.RouteCallable:
-                f_name = f.__name__
-                endpoint = options.pop("endpoint", f_name)
-                rule = f"/{self.project_name}::{f_name}"
+                f_name: str = f.__name__
+                endpoint: str = options.pop("endpoint", f_name)
+                rule: str = f"/{self.project_name}::{f_name}"
 
-                def wrapped_f():
+                def wrapped_f() -> flask.Response:
                     return self.__wrap_response(f(*self.__unwrap_payload()))
 
                 self.add_url_rule(rule, endpoint, wrapped_f, **options)
