@@ -4,23 +4,22 @@ const greycat = await gc.sdk.init({ url: URL.parse("http://localhost:5000") });
 const defaultFile = "tiny";
 
 // Elements
-const layout = document.getElementById("layout");
-const guiTable = document.createElement("gui-table");
-const getCsv = (file) => greycat.call("project::get_csv", [`data/${file}.csv`]).then((table) => guiTable.value = table)
+const fileTable = document.getElementById("file-table");
+const fileSelect = document.getElementById("file-select");
 
-const select = document.createElement("select");
+const getCsv = (file) => greycat.call("project::get_csv", [`data/${file}.csv`]).then((table) => fileTable.value = table)
+
 for (let file of ["huge", "tiny"]) {
     const option = document.createElement("option");
     option.innerText = file;
     if (defaultFile === file) {
         option.selected = true;
     }
-    select.appendChild(option);
+    fileSelect.appendChild(option);
 }
-select.onchange = (event) => getCsv(event.target.value)
+fileSelect.onchange = (event) => getCsv(event.target.value)
 
 // Render
 await getCsv(defaultFile);
-layout.replaceChildren(select, guiTable);
 
 export { };

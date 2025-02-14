@@ -33,8 +33,8 @@ app: GreyCatServer = GreyCatServer(
 
 @app.expose()
 def get_csv(csv_path: str):
-    df = pandas.read_csv(csv_path)
-    table = std.core.Table.from_pandas(app.gc, df)
+    df: pandas.DataFrame = pandas.read_csv(csv_path)
+    table: std.core.Table = std.core.Table.from_pandas(app.gc, df)
     return table
 
 
