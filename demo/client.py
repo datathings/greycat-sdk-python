@@ -13,9 +13,14 @@ class ClientNamespace(argparse.Namespace):
     @staticmethod
     def parse_args() -> ClientNamespace:
         args_parser: argparse.ArgumentParser = argparse.ArgumentParser(
-            add_help=False)
+            add_help=False
+        )
         args_parser.add_argument(
-            "-u", "--url", type=str, default="http://localhost:5000")
+            "-u",
+            "--url",
+            type=str,
+            default="http://localhost:5000"
+        )
         return args_parser.parse_args()
 
 

@@ -14,14 +14,21 @@ class ServerNamespace(argparse.Namespace):
     @staticmethod
     def parse_args() -> ServerNamespace:
         args_parser: argparse.ArgumentParser = argparse.ArgumentParser()
-        args_parser.add_argument("--greycat_abi_path",
-                                 type=str, default=".")
+        args_parser.add_argument(
+            "--greycat_abi_path",
+            type=str,
+            default="."
+        )
         return args_parser.parse_args()
 
 
 args: ServerNamespace = ServerNamespace.parse_args()
-app: GreyCatServer = GreyCatServer(__name__, args.greycat_abi_path, static_url_path="",
-                                   static_folder=os.path.join(os.getcwd(), "demo", "js", "webroot"))
+app: GreyCatServer = GreyCatServer(
+    __name__,
+    args.greycat_abi_path,
+    static_url_path="",
+    static_folder=os.path.join(os.getcwd(), "demo", "js", "webroot")
+)
 
 
 @app.expose()
