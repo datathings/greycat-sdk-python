@@ -45,11 +45,8 @@ try:
                 methods=["POST"],
                 view_func=self.__runtime_abi,
             )
-            # self.bio: BytesIO = BytesIO()
             self.gc: GreyCat = GreyCat(gc_abi_path)
             self.project_name: str = project_name
-            # self.stream: GreyCat._Stream = GreyCat._Stream(
-            #     GreyCat(gc_abi_path), self.bio)
 
         def __runtime_abi(self) -> flask.Response:
             with open(os.path.join(self.abi_path, "gcdata", "abi"), "rb") as abi:
@@ -86,8 +83,10 @@ try:
             request: GreyCatServer.__Request = GreyCatServer.__request()
             payload_len = len(request.data)
             unwrapped_payload = []
+            bio: BytesIO
+            stream: GreyCat._Stream
             if 0 < payload_len:
-                (bio, stream) = self.__init_stream()
+                bio, stream = self.__init_stream()
                 bio.write(request.data)
                 bio.seek(0)
                 stream.read_abi_header()
@@ -96,7 +95,9 @@ try:
             return unwrapped_payload
 
         def __wrap_response(self, rv: flask.typing.ResponseReturnValue) -> flask.Response:
-            (bio, stream) = self.__init_stream()
+            bio: BytesIO
+            stream: GreyCat._Stream
+            bio, stream = self.__init_stream()
             stream.write_abi_header()
             stream.write(rv)
             rv = super().make_response(bio.getvalue())
