@@ -141,7 +141,8 @@ fn write_core(out: GcbWriter) {
   }
   out.write(table);
   table = Table{};
-  for (row, data in [[0], [0]]) {
+  var arr = [0];
+  for (row, data in [[[0]], [[0]]]) {
     for (col, value in data) {
       table.set_cell(row, col, value);
     }

@@ -1143,6 +1143,8 @@ class std_n:
                 rows: Final[int] = stream.read_vu32()
                 cols: Final[int] = stream.read_vu32()
                 cols_data: list[list | numpy.ndarray] = []
+                col_data: list
+                nda: numpy.ndarray
                 for col in range(cols):
                     # Read column metadata
                     nullables: list[bool] | None = None
@@ -1212,10 +1214,9 @@ class std_n:
                                 for row in range(rows)
                             ]
                             if 0 < rows and isinstance(col_data[0], (Sequence, std_n.core._Array)):
-                                arr = numpy.empty(rows, dtype=object)
-                                for row in range(rows):
-                                    arr[row] = col_data[row]
-                                cols_data.append(arr)
+                                nda = numpy.empty(rows, dtype=object)
+                                nda[:] = col_data
+                                cols_data.append(nda)
                             else:
                                 cols_data.append(numpy.array(
                                     col_data,
