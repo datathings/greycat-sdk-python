@@ -140,6 +140,20 @@ fn write_core(out: GcbWriter) {
     }
   }
   out.write(table);
+  table = Table{};
+  for (row, data in [[0], [0]]) {
+    for (col, value in data) {
+      table.set_cell(row, col, value);
+    }
+  }
+  out.write(table);
+  table = Table{};
+  for (row, data in [["test"], [[]]]) {
+    for (col, value in data) {
+      table.set_cell(row, col, value);
+    }
+  }
+  out.write(table);
   // out.write(Tensor::new());
   // var tensor = Tensor::new();
   // tensor.init(TensorType::f64, [3, 3, 3]);

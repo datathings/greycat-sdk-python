@@ -813,13 +813,11 @@ class std_n:
             def __contains__(self, __key: object) -> bool:
                 return __key in self.attributes
 
+            def __repr__(self) -> str:
+                return self.attributes.__repr__()
+
             def __str__(self) -> str:
-                res: str = "["
-                for offset in range(len(self.attributes)):
-                    if offset > 0:
-                        res = f"{res},"
-                    res = f"{res}{self.attributes[offset]}"
-                return f"{res}]"
+                return self.attributes.__str__()
 
             def append(self, __value) -> None:
                 self.attributes.append(__value)
@@ -1153,8 +1151,9 @@ class std_n:
                         for row in range(0, rows, 8):
                             flags = stream.read_i8()
                             for offset in range(min(rows - row, 8)):
-                                nullables[row +
-                                          offset] = 1 == (flags >> offset & 1)
+                                nullables[
+                                    row + offset
+                                ] = 1 == (flags >> offset & 1)
                     col_primitive_type: int = stream.read_i8()
                     col_type: GreyCat.Type | None = None
                     monotonic_value: Any | None = None
@@ -1165,42 +1164,80 @@ class std_n:
                     if PrimitiveType.OBJECT != col_primitive_type and PrimitiveType.UNDEFINED != col_primitive_type:
                         if 1 == stream.read_i8():
                             monotonic_value = GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](
-                                stream)
+                                stream
+                            )
                     # Read column data
                     if monotonic_value is not None or (nullables is not None and all(nullables)):
-                        cols_data.append(numpy.array([monotonic_value] * rows))
+                        cols_data.append(numpy.array(
+                            [monotonic_value] * rows)
+                        )
                     elif PrimitiveType.FLOAT == col_primitive_type:
                         if nullables is None:
                             # GreyCat’s Array<float> is stored the exact same as numpy.array[float64]
                             cols_data.append(numpy.frombuffer(
-                                stream.read_i8_array(8 * rows))),
+                                stream.read_i8_array(8 * rows)
+                            )),
                         else:
-                            cols_data.append(numpy.array(
-                                [None if nullables[row] else stream.read_f64() for row in range(rows)]))
+                            cols_data.append(numpy.array([
+                                None if nullables[row]
+                                else stream.read_f64()
+                                for row in range(rows)
+                            ]))
                     elif col_primitive_type in [PrimitiveType.TIME, PrimitiveType.DURATION]:
-                        cols_data.append(numpy.array([None if nullables is not None and nullables[row] else GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](
-                            stream).to_numpy() for row in range(rows)]))
+                        cols_data.append(numpy.array([
+                            None if nullables is not None and nullables[row]
+                            else GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](stream).to_numpy()
+                            for row in range(rows)
+                        ]))
                     elif PrimitiveType.UNDEFINED == col_primitive_type:
                         cols_data.append(numpy.array([
-                            None if nullables is not None and nullables[row] else
-                            std_n.core._Table.deser(stream.read()) for row in range(rows)
+                            None if nullables is not None and nullables[row]
+                            else std_n.core._Table.deser(stream.read())
+                            for row in range(rows)
                         ], dtype=object))
                     elif PrimitiveType.OBJECT == col_primitive_type or PrimitiveType.STATIC_FIELD == col_primitive_type:
                         if col_type is None:
                             cols_data.append(numpy.array(
-                                [None if nullables is not None and nullables[row] else stream.read_object() for row in range(rows)]))
+                                [
+                                    None if nullables is not None and nullables[row]
+                                    else stream.read_object()
+                                    for row in range(rows)
+                                ],
+                                dtype=object
+                            ))
                         else:
-                            cols_data.append(numpy.array([None if nullables is not None and nullables[row] else col_type.loader(
-                                col_type, stream) for row in range(rows)]))
+                            col_data = [
+                                None if nullables is not None and nullables[row]
+                                else col_type.loader(col_type, stream)
+                                for row in range(rows)
+                            ]
+                            if 0 < rows and isinstance(col_data[0], (Sequence, std_n.core._Array)):
+                                arr = numpy.empty(rows, dtype=object)
+                                for row in range(rows):
+                                    arr[row] = col_data[row]
+                                cols_data.append(arr)
+                            else:
+                                cols_data.append(numpy.array(
+                                    col_data,
+                                    dtype=object
+                                ))
                     else:
-                        cols_data.append(numpy.array([None if nullables is not None and nullables[row]
-                                         else GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](stream) for row in range(rows)]))
+                        cols_data.append(numpy.array([
+                            None if nullables is not None and nullables[row]
+                            else GreyCat._Stream._PRIMITIVE_LOADERS[col_primitive_type](stream)
+                            for row in range(rows)
+                        ]))
                 table: std_n.core._Table = type_.factory(type_, [])
                 if 0 == cols:
                     table.data = numpy.empty((rows, cols), order="F")
                 else:
-                    table.data = numpy.empty((rows, cols), dtype=numpy.result_type(
-                        *[col_data.dtype for col_data in cols_data]), order="F")
+                    table.data = numpy.empty(
+                        (rows, cols),
+                        dtype=numpy.result_type(
+                            *[col_data.dtype for col_data in cols_data]
+                        ),
+                        order="F"
+                    )
                 for col in range(cols):
                     table.data[:, col] = cols_data[col]
                 return table
