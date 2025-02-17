@@ -133,7 +133,7 @@ fn write_core(out: GcbWriter) {
     }
   }
   out.write(table);
-  table = Table{};
+  table = Table{}; // TODO: fix
   for (row, data in [[0, 1.0, "2.0"], [null, "null", "${null}"], [[], Map<any?, any?>{}, Table{}]]) {
     for (col, value in data) {
       table.set_cell(row, col, value);
@@ -263,10 +263,10 @@ fn write_runtime(out: GcbWriter) {
       url: "",
       clientId: "",
     });
-  out.write(UserRole {
-      name: "",
-      permissions: Array<String> {},
-    });
+  // out.write(UserRole { # TODO
+  //     name: "",
+  //     permissions: Array<String> {},
+  //   });
   // out.write(PeriodicTask {
   //     name: "",
   //     user_id: 12,

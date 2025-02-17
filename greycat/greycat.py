@@ -1150,7 +1150,9 @@ class GreyCat:
     class Files:  # TODO?
         pass
 
-    def __init__(self: GreyCat, url: str, libraries: List[GreyCat.Library] = [], username: str | None = None, password: str | None = None, use_cookie: bool = False) -> None:
+    def __init__(self: GreyCat, url: str, libraries: List[GreyCat.Library] = [], username: str | None = None, password: str | None = None, use_cookie: bool = False, set_default: bool = True) -> None:
+        GreyCat._DEFAULT: GreyCat | None = None
+        
         self.__runtime_url: Final[str] = url
         self.__token: str | None = None
         if username is not None and password is not None:
@@ -1403,6 +1405,9 @@ class GreyCat:
         abi_stream.close()
         for lib in self.libs_by_name.values():
             lib.init(self)
+
+        if set_default:
+            GreyCat._DEFAULT: GreyCat = self
 
     def call(self, fqn: str, parameters: List[object] = []) -> object:
         if not (self.__is_remote):
