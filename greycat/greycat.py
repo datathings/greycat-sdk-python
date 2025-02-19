@@ -4,6 +4,7 @@ import base64
 from ctypes import *
 import hashlib
 import http.client
+import http.server
 from io import *
 from itertools import repeat
 import json
@@ -17,7 +18,7 @@ try:
     import flask
     import flask.typing
 
-    class GreyCatServer(flask.Flask):
+    class GreyCatHTTPServer(flask.Flask):
 
         def __init__(
             self,
@@ -76,11 +77,11 @@ try:
                 self.gcargs: list
 
         @staticmethod
-        def __request() -> GreyCatServer.__Request:
+        def __request() -> GreyCatHTTPServer.__Request:
             return flask.request
 
         def __unwrap_payload(self) -> list[Any]:
-            request: GreyCatServer.__Request = GreyCatServer.__request()
+            request: GreyCatHTTPServer.__Request = GreyCatHTTPServer.__request()
             payload_len = len(request.data)
             unwrapped_payload = []
             bio: BytesIO
@@ -111,6 +112,41 @@ try:
 
 except ModuleNotFoundError:
     pass
+
+
+class GreyCatServer:
+    _exposed: dict[str, Callable[..., Any]]
+
+    def __init__(self, abi_path: str, port: int):
+        self.abi_path: str = abi_path
+        self.port: int = port
+
+    def run(self):
+        gc = GreyCat(self.abi_path)
+        srv_sock: socket.socket = socket.create_server(
+            ("localhost", self.port))
+        cli_sock: socket.socket
+        stream: GreyCat._Stream
+        endpoint: str
+        type_name: str
+        while True:
+            cli_sock = srv_sock.accept()
+            stream = GreyCat._Stream(gc, socket.SocketIO(cli_sock, "rwb"))
+            stream.read_abi_header()
+            endpoint = f"{gc.symbols[stream.read_vu32()]}::"  # module name
+            type_name = gc.symbols[stream.read_vu32()]
+            if type_name is not None:
+                endpoint += f"{type_name}::"
+            endpoint += gc.symbols[stream.read_vu32()]  # function name
+            params: greycat.std.core.Array = stream.read()
+            stream.write_abi_header()
+            stream.write(GreyCatServer._exposed[endpoint](*params))
+
+
+def expose(prefix: Sequence[str] = ("project")) -> Callable[[Callable[..., Any]], None]:
+    def decorator(f: Callable[..., Any]) -> None:
+        GreyCatServer._exposed[f"{'::'.join(prefix)}::{f.__name__}"] = f
+    return decorator
 
 
 @final
@@ -1152,7 +1188,7 @@ class GreyCat:
 
     def __init__(self: GreyCat, url: str, libraries: List[GreyCat.Library] = [], username: str | None = None, password: str | None = None, use_cookie: bool = False, set_default: bool = True) -> None:
         GreyCat._DEFAULT: GreyCat | None = None
-        
+
         self.__runtime_url: Final[str] = url
         self.__token: str | None = None
         if username is not None and password is not None:

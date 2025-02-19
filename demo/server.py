@@ -4,7 +4,7 @@ import argparse
 import pandas
 import os
 
-from greycat import GreyCatServer, std
+from greycat import GreyCatHTTPServer, std
 
 
 class ServerNamespace(argparse.Namespace):
@@ -23,7 +23,7 @@ class ServerNamespace(argparse.Namespace):
 
 
 args: ServerNamespace = ServerNamespace.parse_args()
-app: GreyCatServer = GreyCatServer(
+app: GreyCatHTTPServer = GreyCatHTTPServer(
     __name__,
     args.greycat_abi_path,
     static_url_path="",
