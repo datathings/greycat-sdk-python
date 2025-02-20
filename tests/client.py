@@ -11,4 +11,5 @@ from greycat import *
 greycat: GreyCat = GreyCat("http://localhost:8080", username="admin", password="changeme")
 gcb: list[Any | None] = greycat.call("project::get_gcb", [])
 for v in gcb:
+    print(v)
     print(greycat.call("project::display", [v]))

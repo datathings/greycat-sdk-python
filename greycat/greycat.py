@@ -468,7 +468,7 @@ class GreyCat:
             self.write_i16(self.greycat._abi_magic)
             self.write_i32(self.greycat._abi_version)
 
-        def write(self, value: Any) -> None:
+        def write(self, value: Any, type_offset: int | None = None) -> None:
             if value is None:
                 self.write_i8(PrimitiveType.NULL)
             elif type(value) is bool:
@@ -494,7 +494,7 @@ class GreyCat:
                 self.write_string(value)
             elif issubclass(type(value), greycat.GreyCat.Object):
                 o: GreyCat.Object = value
-                o._save_type(self)
+                o._save_type(self, type_offset)
                 o._save(self)
 
         def write_string(self, s: str, skip_type: bool = False) -> None:
@@ -816,8 +816,9 @@ class GreyCat:
         _PRIMITIVE_LOADERS[PrimitiveType.STRING_LIT] = __string_lit_loader
 
     class Function:
-        def __init__(self: GreyCat.Function, name: str) -> None:
+        def __init__(self: GreyCat.Function, name: str, params: list[tuple[bool, int, int]]) -> None:
             self.name: Final[str] = name
+            self.params: list[tuple[bool, int, int]] = params
 
     class Type:
         class Attribute:
@@ -1041,9 +1042,10 @@ class GreyCat:
         def _set(self, offset: int, value: Any | None) -> None:
             self.attributes[offset] = value
 
-        def _save_type(self, stream: GreyCat._Stream) -> None:
+        def _save_type(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
             stream.write_i8(PrimitiveType.OBJECT)
-            stream.write_vu32(self.type_.offset)
+            stream.write_vu32(
+                self.type_.offset if type_offset is None else type_offset)
 
         def _save(self, stream: GreyCat._Stream) -> None:
             nullable_bitset: bytearray = bytearray(
@@ -1164,7 +1166,7 @@ class GreyCat:
             self.value: Any = attributes[2]
 
         @final
-        def _save_type(self, stream: GreyCat._Stream) -> None:
+        def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
             stream.write_i8(PrimitiveType.STATIC_FIELD)
             stream.write_vu32(self.type_.offset)
 
@@ -1341,7 +1343,7 @@ class GreyCat:
         # step 3: create all functions
         functions_bytes: Final[int] = abi_stream.read_i64()
         functions_size: Final[int] = abi_stream.read_i32()
-        self.functions_by_name: Final[dict] = {}
+        self.functions_by_name: Final[dict[str, GreyCat.Function]] = {}
         function_offset: int
         for function_offset in range(functions_size):
             module_name: str = self.symbols[abi_stream.read_vu32()]
@@ -1351,14 +1353,16 @@ class GreyCat:
             fqn: str = f'{"" if module_name is None else f"{module_name}::"}{
                 "" if type_name is None else f"{type_name}::"}{function_name}'
             nb_params: int = abi_stream.read_vu32()
+            params: list[tuple[bool, int, int]] = [None] * nb_params
             param_offset: int
             for param_offset in range(nb_params):
-                abi_stream.read_i8()
-                abi_stream.read_vu32()
-                abi_stream.read_vu32()
+                nullable = abi_stream.read_bool()
+                type_offset = abi_stream.read_vu32()
+                symbol_offset = abi_stream.read_vu32()
+                params[param_offset] = (nullable, type_offset, symbol_offset)
             abi_stream.read_vu32()
             abi_stream.read_i8()
-            fn: GreyCat.Function = GreyCat.Function(fqn)
+            fn: GreyCat.Function = GreyCat.Function(fqn, params)
             self.functions_by_name[fqn] = fn
         # pre-resolve String type avoid runtime over-head
         tmp: GreyCat.Type = self.types_by_name["core::any"]
@@ -1479,12 +1483,14 @@ class GreyCat:
             raise ValueError("wrong state")
         body: bytes | None = None
         stream: GreyCat._Stream
+        fn: GreyCat.Function = self.functions_by_name[fqn]
         if len(parameters) > 0:
             b = bytearray()
             stream = GreyCat._Stream(self, ByteArrayIO(b))
             stream.write_abi_header()
-            for parameter in parameters:
-                stream.write(parameter)
+            for index, parameter in enumerate(parameters):
+                param_type = fn.params[index][1]
+                stream.write(parameter, None if param_type is self.type_offset_core_any else param_type)
             stream.close()
             body: bytes = bytes(b)
         headers: dict[str, str] = {

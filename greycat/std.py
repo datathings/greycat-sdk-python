@@ -3,7 +3,10 @@ from __future__ import annotations
 from ctypes import *
 from typing import *
 from greycat.greycat import GreyCat
-from greycat.std_n import std_n
+try:
+    from greycat.std_n import std_n
+except ModuleNotFoundError:
+    pass
 
 
 @final

@@ -44,7 +44,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
                 stream.write_i8(PrimitiveType.DURATION)
 
             @final
@@ -102,7 +102,7 @@ class std_n:
                     self.lns = lng
 
             @final
-            def _save_type(self, stream: GreyCat._Stream) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
                 stream.write_i8(PrimitiveType.GEO)
 
             @final
@@ -224,7 +224,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
                 stream.write_i8(PrimitiveType.NODE)
 
             @final
@@ -243,7 +243,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
                 stream.write_i8(PrimitiveType.NODE_GEO)
 
             @final
@@ -262,7 +262,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
                 stream.write_i8(PrimitiveType.NODE_INDEX)
 
             @final
@@ -281,7 +281,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
                 stream.write_i8(PrimitiveType.NODE_LIST)
 
             @final
@@ -300,7 +300,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
                 stream.write_i8(PrimitiveType.NODE_TIME)
 
             @final
@@ -326,7 +326,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
                 stream.write_i8(PrimitiveType.T2)
 
             @final
@@ -360,7 +360,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
                 stream.write_i8(PrimitiveType.T2F)
 
             @final
@@ -403,7 +403,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
                 stream.write_i8(PrimitiveType.T3)
 
             @final
@@ -451,7 +451,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
                 stream.write_i8(PrimitiveType.T3F)
 
             @final
@@ -498,7 +498,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
                 stream.write_i8(PrimitiveType.T4)
 
             @final
@@ -544,7 +544,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
                 stream.write_i8(PrimitiveType.T4F)
 
             @final
@@ -596,7 +596,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
                 stream.write_i8(PrimitiveType.TIME)
 
             @final
