@@ -151,20 +151,18 @@ class GreyCatNative:
         GreyCatNative._gc = GreyCat(abi_path)
 
 
-def expose(prefix: Sequence[str] = ("project")) -> Callable[[Callable[..., Any]], None]:
-    def decorator(f: Callable[..., Any]) -> None:
-        def wrapped_f(mv: memoryview[bytes]) -> memoryview:
-            in_stream: GreyCat._Stream = GreyCat._Stream(
-                GreyCatNative._gc, BytesIO(mv.obj))
-            out: BytesIO = BytesIO()
-            out_stream = GreyCat._Stream(GreyCatNative._gc, out)
-            in_stream.read_abi_header()
-            out_stream.write_abi_header()
-            out_stream.write(f(*in_stream.read()))
-            return out.getbuffer()
-        GreyCatNative._exposed[f"{'::'.join(prefix)}::{f.__name__}"] = wrapped_f
-        GreyCatServer._exposed[f"{'::'.join(prefix)}::{f.__name__}"] = f
-    return decorator
+def expose(f: Callable[..., Any]) -> None:
+    def wrapped_f(mv: memoryview[bytes]) -> memoryview:
+        in_stream: GreyCat._Stream = GreyCat._Stream(
+            GreyCatNative._gc, BytesIO(mv.obj))
+        out: BytesIO = BytesIO()
+        out_stream = GreyCat._Stream(GreyCatNative._gc, out)
+        in_stream.read_abi_header()
+        out_stream.write_abi_header()
+        out_stream.write(f(*in_stream.read()))
+        return out.getbuffer()
+    GreyCatNative._exposed[f.__name__] = wrapped_f
+    GreyCatServer._exposed[f.__name__] = f
 
 
 @final
@@ -1166,7 +1164,7 @@ class GreyCat:
             self.value: Any = attributes[2]
 
         @final
-        def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
+        def _save_type(self, stream: GreyCat._Stream, _=None) -> None:
             stream.write_i8(PrimitiveType.STATIC_FIELD)
             stream.write_vu32(self.type_.offset)
 
@@ -1490,7 +1488,8 @@ class GreyCat:
             stream.write_abi_header()
             for index, parameter in enumerate(parameters):
                 param_type = fn.params[index][1]
-                stream.write(parameter, None if param_type is self.type_offset_core_any else param_type)
+                stream.write(
+                    parameter, None if param_type is self.type_offset_core_any else param_type)
             stream.close()
             body: bytes = bytes(b)
         headers: dict[str, str] = {
