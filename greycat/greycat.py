@@ -4,7 +4,6 @@ import base64
 from ctypes import *
 import hashlib
 import http.client
-import http.server
 from io import *
 from itertools import repeat
 import json
@@ -143,8 +142,27 @@ class GreyCatServer:
             stream.write(GreyCatServer._exposed[endpoint](*params))
 
 
+class GreyCatNative:
+    _exposed: dict[str, Callable[[memoryview[bytes]], memoryview]]
+    _gc: GreyCat
+
+    @staticmethod
+    def init(abi_path: str = "."):
+        GreyCatNative._gc = GreyCat(abi_path)
+
+
 def expose(prefix: Sequence[str] = ("project")) -> Callable[[Callable[..., Any]], None]:
     def decorator(f: Callable[..., Any]) -> None:
+        def wrapped_f(mv: memoryview[bytes]) -> memoryview:
+            in_stream: GreyCat._Stream = GreyCat._Stream(
+                GreyCatNative._gc, BytesIO(mv.obj))
+            out: BytesIO = BytesIO()
+            out_stream = GreyCat._Stream(GreyCatNative._gc, out)
+            in_stream.read_abi_header()
+            out_stream.write_abi_header()
+            out_stream.write(f(*in_stream.read()))
+            return out.getbuffer()
+        GreyCatNative._exposed[f"{'::'.join(prefix)}::{f.__name__}"] = wrapped_f
         GreyCatServer._exposed[f"{'::'.join(prefix)}::{f.__name__}"] = f
     return decorator
 
