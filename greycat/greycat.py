@@ -144,7 +144,7 @@ class GreyCatServer:
 
 class GreyCatNative:
     _exposed: dict[str, Callable[[memoryview[bytes]], memoryview]]
-    _gc: GreyCat
+    _gc: GreyCat | None = None
 
     @staticmethod
     def init(abi_path: str = "."):
@@ -1465,7 +1465,7 @@ class GreyCat:
         if set_default:
             GreyCat._DEFAULT: GreyCat = self
 
-    def call(self, fqn: str, parameters: List[object] = []) -> object:
+    def call(self, fqn: str, parameters: List[object] = [], task: bool = False) -> object:
         if not (self.__is_remote):
             raise RuntimeError(
                 "Remote calls are not available on local GreyCat handles"
@@ -1498,6 +1498,8 @@ class GreyCat:
         }
         if self.__token is not None:
             headers["Authorization"] = self.__token
+        if task:
+            headers["task"] = ""
         connection.request(
             "POST",
             f"/{fqn}",
