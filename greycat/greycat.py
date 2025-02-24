@@ -46,6 +46,7 @@ class GreyCatServer:
 @final
 class GreyCatNative:
     _gc: GreyCat | None = None
+    _exposed: Final[dict[str, Callable[..., Any]]] = {}
 
     def __init__(self):
         raise Exception("Static class")
@@ -69,7 +70,7 @@ class GreyCatNative:
             if type_name is not None:
                 fqn += f"::{type_name}"
             fqn += f"::{GreyCatNative._gc.symbols[sin.read_vu32()]}"
-            f = GreyCatNative._gc.functions_by_name[fqn]
+            f = GreyCatNative._exposed[fqn]
             params = list(repeat(None, sin.read_i64()))
             for offset in len(params):
                 params[offset] = sin.read()
@@ -81,18 +82,11 @@ class GreyCatNative:
                 return out.getbuffer()
 
 
-def expose(f_name: str) -> Callable[[Callable[..., Any]], None]:
-    def decorator(f: Callable[..., Any]) -> None:
-        # GreyCatServer
-        GreyCatServer._exposed[f_name] = f
-        # GreyCatNative
-        if GreyCatNative._gc is None:
-            GreyCatNative._init()
-        gcf: GreyCat.Function = GreyCatNative._gc.functions_by_name[f_name]
-        if gcf is None:
-            raise Exception(f"Unknown function name: {f_name}")
-        gcf.f = f
-    return decorator
+def expose(f: Callable[..., Any]) -> None:
+    # GreyCatServer
+    GreyCatServer._exposed[f.__name__] = f
+    # GreyCatNative
+    GreyCatNative._exposed[f.__name__] = f
 
 
 @final
