@@ -13,105 +13,6 @@ from struct import pack, unpack
 from typing import *
 import greycat
 
-try:
-    import flask
-    import flask.typing
-
-    class GreyCatHTTPServer(flask.Flask):
-
-        def __init__(
-            self,
-            import_name: str,
-            gc_abi_path: str,
-            static_url_path: str | None,
-            static_folder: str | os.PathLike[str] | None,
-            project_name: str = "project",
-            **kwargs,
-        ):
-            super().__init__(
-                import_name=import_name,
-                static_url_path=static_url_path,
-                static_folder=static_folder,
-                **kwargs,
-            )
-            self.abi_path: str = gc_abi_path
-            self.add_url_rule(
-                f"/{"" if static_url_path is None else static_url_path}",
-                endpoint="index",
-                view_func=lambda: self.send_static_file("index.html"),
-            )
-            self.add_url_rule(
-                "/runtime::Runtime::abi",
-                methods=["POST"],
-                view_func=self.__runtime_abi,
-            )
-            self.gc: GreyCat = GreyCat(gc_abi_path)
-            self.project_name: str = project_name
-
-        def __runtime_abi(self) -> flask.Response:
-            with open(os.path.join(self.abi_path, "gcdata", "abi"), "rb") as abi:
-                return super().make_response((abi.read(), {"Content-Type": "application/octet-stream"}))
-
-        def expose(self, **options) -> Callable[[Callable[..., Any]], flask.typing.RouteCallable]:
-            options["methods"] = list(
-                set(options.get("methods", [])) |
-                {"POST"}
-            )
-
-            def decorator(f: Callable[..., Any]) -> flask.typing.RouteCallable:
-                f_name: str = f.__name__
-                endpoint: str = options.pop("endpoint", f_name)
-                rule: str = f"/{self.project_name}::{f_name}"
-
-                def wrapped_f() -> flask.Response:
-                    return self.__wrap_response(f(*self.__unwrap_payload()))
-
-                self.add_url_rule(rule, endpoint, wrapped_f, **options)
-                return wrapped_f
-
-            return decorator
-
-        class __Request(flask.Request):
-            def __init__(self):
-                self.gcargs: list
-
-        @staticmethod
-        def __request() -> GreyCatHTTPServer.__Request:
-            return flask.request
-
-        def __unwrap_payload(self) -> list[Any]:
-            request: GreyCatHTTPServer.__Request = GreyCatHTTPServer.__request()
-            payload_len = len(request.data)
-            unwrapped_payload = []
-            bio: BytesIO
-            stream: GreyCat._Stream
-            if 0 < payload_len:
-                bio, stream = self.__init_stream()
-                bio.write(request.data)
-                bio.seek(0)
-                stream.read_abi_header()
-                while payload_len > bio.tell():
-                    unwrapped_payload.append(stream.read())
-            return unwrapped_payload
-
-        def __wrap_response(self, rv: flask.typing.ResponseReturnValue) -> flask.Response:
-            bio: BytesIO
-            stream: GreyCat._Stream
-            bio, stream = self.__init_stream()
-            stream.write_abi_header()
-            stream.write(rv)
-            rv = super().make_response(bio.getvalue())
-            rv.headers["Content-Type"] = "application/octet-stream"
-            return rv
-
-        def __init_stream(self) -> tuple[BytesIO, GreyCat._Stream]:
-            bio: BytesIO = BytesIO()
-            return (bio, GreyCat._Stream(self.gc, bio))
-
-
-except ModuleNotFoundError:
-    pass
-
 
 class GreyCatServer:
     _exposed: dict[str, Callable[..., Any]]
@@ -142,27 +43,56 @@ class GreyCatServer:
             stream.write(GreyCatServer._exposed[endpoint](*params))
 
 
+@final
 class GreyCatNative:
-    _exposed: dict[str, Callable[[memoryview[bytes]], memoryview]]
     _gc: GreyCat | None = None
 
+    def __init__(self):
+        raise Exception("Static class")
+
     @staticmethod
-    def init(abi_path: str = "."):
-        GreyCatNative._gc = GreyCat(abi_path)
+    def _init():
+        GreyCatNative._gc = GreyCat(os.getenv("GC_PY_PROJECT_HOME", "."))
+
+    @staticmethod
+    def _call(mvin: memoryview) -> memoryview:
+        if GreyCatNative._gc is None:
+            GreyCatNative._init()
+        sin: GreyCat._Stream
+        fqn: str
+        type_name: str | None
+        f: GreyCat.Function
+        params: list
+        with GreyCat._Stream(GreyCatNative._gc, BytesIO(mvin.obj)) as sin:
+            fqn = GreyCatNative._gc.symbols[sin.read_vu32()]
+            type_name = GreyCatNative._gc.symbols[sin.read_vu32()]
+            if type_name is not None:
+                fqn += f"::{type_name}"
+            fqn += f"::{GreyCatNative._gc.symbols[sin.read_vu32()]}"
+            f = GreyCatNative._gc.functions_by_name[fqn]
+            params = list(repeat(None, sin.read_i64()))
+            for offset in len(params):
+                params[offset] = sin.read()
+        out: BytesIO
+        sout: GreyCat._Stream
+        with BytesIO() as out:
+            with GreyCat._Stream(GreyCatNative._gc, out) as sout:
+                sout.write(f(*params))
+                return out.getbuffer()
 
 
-def expose(f: Callable[..., Any]) -> None:
-    def wrapped_f(mv: memoryview[bytes]) -> memoryview:
-        in_stream: GreyCat._Stream = GreyCat._Stream(
-            GreyCatNative._gc, BytesIO(mv.obj))
-        out: BytesIO = BytesIO()
-        out_stream = GreyCat._Stream(GreyCatNative._gc, out)
-        in_stream.read_abi_header()
-        out_stream.write_abi_header()
-        out_stream.write(f(*in_stream.read()))
-        return out.getbuffer()
-    GreyCatNative._exposed[f.__name__] = wrapped_f
-    GreyCatServer._exposed[f.__name__] = f
+def expose(f_name: str) -> Callable[[Callable[..., Any]], None]:
+    def decorator(f: Callable[..., Any]) -> None:
+        # GreyCatServer
+        GreyCatServer._exposed[f_name] = f
+        # GreyCatNative
+        if GreyCatNative._gc is None:
+            GreyCatNative._init()
+        gcf: GreyCat.Function = GreyCatNative._gc.functions_by_name[f_name]
+        if gcf is None:
+            raise Exception(f"Unknown function name: {f_name}")
+        gcf.f = f
+    return decorator
 
 
 @final
@@ -814,9 +744,10 @@ class GreyCat:
         _PRIMITIVE_LOADERS[PrimitiveType.STRING_LIT] = __string_lit_loader
 
     class Function:
-        def __init__(self: GreyCat.Function, name: str, params: list[tuple[bool, int, int]]) -> None:
+        def __init__(self: GreyCat.Function, name: str, params: list[tuple[bool, int, int]], f: Callable[..., Any] | None = None) -> None:
             self.name: Final[str] = name
             self.params: list[tuple[bool, int, int]] = params
+            self.f: Callable[..., Any] | None = f
 
     class Type:
         class Attribute:
