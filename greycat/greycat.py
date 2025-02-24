@@ -15,7 +15,7 @@ import greycat
 
 
 class GreyCatServer:
-    _exposed: dict[str, Callable[..., Any]]
+    _exposed: Final[dict[str, Callable[..., Any]]] = {}
 
     def __init__(self, abi_path: str, port: int):
         self.abi_path: str = abi_path
@@ -27,26 +27,32 @@ class GreyCatServer:
             ("localhost", self.port))
         cli_sock: socket.socket
         stream: GreyCat._Stream
-        endpoint: str
+        fqn: str
         type_name: str
         while True:
             cli_sock = srv_sock.accept()
             stream = GreyCat._Stream(gc, socket.SocketIO(cli_sock, "rwb"))
             stream.read_abi_header()
-            endpoint = f"{gc.symbols[stream.read_vu32()]}::"  # module name
+            fqn = f"{gc.symbols[stream.read_vu32()]}::"  # module name
             type_name = gc.symbols[stream.read_vu32()]
             if type_name is not None:
-                endpoint += f"{type_name}::"
-            endpoint += gc.symbols[stream.read_vu32()]  # function name
+                fqn += f"{type_name}::"
+            fqn += gc.symbols[stream.read_vu32()]  # function name
             params: greycat.std.core.Array = stream.read()
             stream.write_abi_header()
-            stream.write(GreyCatServer._exposed[endpoint](*params))
+            stream.write(GreyCatServer._exposed[fqn](*params))
+
+
+def expose(fqn: str) -> Callable[[Callable[..., Any]], None]:
+    def decorator(f: Callable[..., Any]) -> None:
+        GreyCatServer._exposed[fqn] = f
+    return decorator
 
 
 @final
 class GreyCatNative:
     _gc: GreyCat | None = None
-    _exposed: Final[dict[str, Callable[..., Any]]] = {}
+    _natives: Final[dict[str, Callable[..., Any]]] = {}
 
     def __init__(self):
         raise Exception("Static class")
@@ -63,14 +69,14 @@ class GreyCatNative:
         fqn: str
         type_name: str | None
         f: GreyCat.Function
-        params: list
+        params: list[Any | None]
         with GreyCat._Stream(GreyCatNative._gc, BytesIO(mvin.obj)) as sin:
             fqn = GreyCatNative._gc.symbols[sin.read_vu32()]
             type_name = GreyCatNative._gc.symbols[sin.read_vu32()]
             if type_name is not None:
-                fqn += f"__{type_name}"
-            fqn += f"__{GreyCatNative._gc.symbols[sin.read_vu32()]}"
-            f = GreyCatNative._exposed[fqn]
+                fqn += f"::{type_name}"
+            fqn += f"::{GreyCatNative._gc.symbols[sin.read_vu32()]}"
+            f = GreyCatNative._natives[fqn]
             params = list(repeat(None, sin.read_i64()))
             for offset in len(params):
                 params[offset] = sin.read()
@@ -82,11 +88,10 @@ class GreyCatNative:
                 return out.getbuffer()
 
 
-def expose(f: Callable[..., Any]) -> None:
-    # GreyCatServer
-    GreyCatServer._exposed[f.__name__] = f
-    # GreyCatNative
-    GreyCatNative._exposed[f.__name__] = f
+def gc_native(fqn: str) -> Callable[[Callable[..., Any]], None]:
+    def decorator(f: Callable[..., Any]) -> None:
+        GreyCatNative._natives[fqn] = f
+    return decorator
 
 
 @final
