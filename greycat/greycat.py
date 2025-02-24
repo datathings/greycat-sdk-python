@@ -68,8 +68,8 @@ class GreyCatNative:
             fqn = GreyCatNative._gc.symbols[sin.read_vu32()]
             type_name = GreyCatNative._gc.symbols[sin.read_vu32()]
             if type_name is not None:
-                fqn += f"::{type_name}"
-            fqn += f"::{GreyCatNative._gc.symbols[sin.read_vu32()]}"
+                fqn += f"__{type_name}"
+            fqn += f"__{GreyCatNative._gc.symbols[sin.read_vu32()]}"
             f = GreyCatNative._exposed[fqn]
             params = list(repeat(None, sin.read_i64()))
             for offset in len(params):
