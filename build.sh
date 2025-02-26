@@ -11,4 +11,4 @@ python -m build -w
 
 PY_BUILT_VERSION=$(echo ${VERSION} | sed 's/-/./g')
 
-mv "dist/GreyCat-${PY_BUILT_VERSION}-py3-none-any.whl" "dist/greycat-${VERSION}-py3-none-any.whl"
+# mv "dist/GreyCat-${PY_BUILT_VERSION}-py3-none-any.whl" "dist/greycat-${VERSION}-py3-none-any.whl"
