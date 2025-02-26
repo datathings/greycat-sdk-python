@@ -84,7 +84,7 @@ class GreyCatNative:
         out: BytesIO
         sout: GreyCat._Stream
         with BytesIO() as out:
-            sout = GreyCat._Stream(GreyCatNative._gc, out) as sout:
+            sout = GreyCat._Stream(GreyCatNative._gc, out)
             sout.write(f(*params))
             res = out.getbuffer()
             out.close()
