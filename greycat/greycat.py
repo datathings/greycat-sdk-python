@@ -62,7 +62,7 @@ class GreyCatNative:
         GreyCatNative._gc = GreyCat(os.getenv("GC_PY_PROJECT_HOME", "."))
 
     @staticmethod
-    def _call(mvin: memoryview) -> memoryview:
+    def _call(bin: bytes) -> bytes:
         if GreyCatNative._gc is None:
             GreyCatNative._init()
         sin: GreyCat._Stream
@@ -70,25 +70,26 @@ class GreyCatNative:
         type_name: str | None
         f: GreyCat.Function
         params: list[Any | None]
-        sin = GreyCat._Stream(GreyCatNative._gc, BytesIO(mvin.obj))
+        sin = GreyCat._Stream(GreyCatNative._gc, BytesIO(bin))
+        assert PrimitiveType.FUNCTION == sin.read_i8()
         fqn = GreyCatNative._gc.symbols[sin.read_vu32()]
         type_name = GreyCatNative._gc.symbols[sin.read_vu32()]
         if type_name is not None:
             fqn += f"::{type_name}"
         fqn += f"::{GreyCatNative._gc.symbols[sin.read_vu32()]}"
         f = GreyCatNative._natives[fqn]
-        params = list(repeat(None, sin.read_i64()))
-        for offset in len(params):
+        assert PrimitiveType.INT == sin.read_i8()
+        n_params = sin.read_vi64()
+        params = list(repeat(None, n_params))
+        for offset in range(n_params):
             params[offset] = sin.read()
         sin.close()
-        out: BytesIO
-        sout: GreyCat._Stream
-        with BytesIO() as out:
-            sout = GreyCat._Stream(GreyCatNative._gc, out)
-            sout.write(f(*params))
-            res = out.getbuffer()
-            out.close()
-            return res
+        out: BytesIO = BytesIO()
+        sout: GreyCat._Stream = GreyCat._Stream(GreyCatNative._gc, out)
+        sout.write(f(*params))
+        res = out.getbuffer().tobytes()
+        sout.close()
+        return res
 
 
 def gc_native(fqn: str) -> Callable[[Callable[..., Any]], None]:
