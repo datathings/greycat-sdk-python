@@ -70,22 +70,25 @@ class GreyCatNative:
         type_name: str | None
         f: GreyCat.Function
         params: list[Any | None]
-        with GreyCat._Stream(GreyCatNative._gc, BytesIO(mvin.obj)) as sin:
-            fqn = GreyCatNative._gc.symbols[sin.read_vu32()]
-            type_name = GreyCatNative._gc.symbols[sin.read_vu32()]
-            if type_name is not None:
-                fqn += f"::{type_name}"
-            fqn += f"::{GreyCatNative._gc.symbols[sin.read_vu32()]}"
-            f = GreyCatNative._natives[fqn]
-            params = list(repeat(None, sin.read_i64()))
-            for offset in len(params):
-                params[offset] = sin.read()
+        sin = GreyCat._Stream(GreyCatNative._gc, BytesIO(mvin.obj))
+        fqn = GreyCatNative._gc.symbols[sin.read_vu32()]
+        type_name = GreyCatNative._gc.symbols[sin.read_vu32()]
+        if type_name is not None:
+            fqn += f"::{type_name}"
+        fqn += f"::{GreyCatNative._gc.symbols[sin.read_vu32()]}"
+        f = GreyCatNative._natives[fqn]
+        params = list(repeat(None, sin.read_i64()))
+        for offset in len(params):
+            params[offset] = sin.read()
+        sin.close()
         out: BytesIO
         sout: GreyCat._Stream
         with BytesIO() as out:
-            with GreyCat._Stream(GreyCatNative._gc, out) as sout:
-                sout.write(f(*params))
-                return out.getbuffer()
+            sout = GreyCat._Stream(GreyCatNative._gc, out) as sout:
+            sout.write(f(*params))
+            res = out.getbuffer()
+            out.close()
+            return res
 
 
 def gc_native(fqn: str) -> Callable[[Callable[..., Any]], None]:
