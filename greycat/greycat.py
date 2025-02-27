@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import abc
+import atexit
 import base64
 from ctypes import *
 import hashlib
@@ -60,7 +61,14 @@ class GreyCatServer(abc.ABC):
 class GreyCatInetServer(GreyCatServer):
     def __init__(self, abi_path: str, port: int, host: str = "localhost"):
         super.__init__(self, abi_path)
+        atexit.register(self.__clean)
         self._srv_sock: socket.socket = socket.create_server((host, port))
+
+    def __clean(self):
+        try:
+            self._srv_sock.close()
+        except AttributeError:
+            pass
 
 
 class GreyCatUnixServer(GreyCatServer):
@@ -68,9 +76,18 @@ class GreyCatUnixServer(GreyCatServer):
         super.__init__(self, abi_path)
         if not os.path.isabs(sock_path):
             sock_path = os.path.join(os.getcwd(), "gcdata", sock_path)
+        self.__sockpath: str = sock_path
+        atexit.register(self.__clean)
         self._srv_sock: socket.socket = socket.socket(socket.AF_UNIX)
         self._srv_sock.bind(sock_path)
         self._srv_sock.listen()
+
+    def __clean(self):
+        os.unlink(self.__sockpath)
+        try:
+            self._srv_sock.close()
+        except AttributeError:
+            pass
 
 
 def expose(fqn: str) -> Callable[[Callable[..., Any]], None]:
