@@ -76,6 +76,8 @@ class GreyCatUnixServer(GreyCatServer):
         super.__init__(self, abi_path)
         if not os.path.isabs(sock_path):
             sock_path = os.path.join(os.getcwd(), "gcdata", sock_path)
+        if os.path.exists(sock_path):
+            os.unlink(sock_path)
         self.__sockpath: str = sock_path
         atexit.register(self.__clean)
         self._srv_sock: socket.socket = socket.socket(socket.AF_UNIX)
