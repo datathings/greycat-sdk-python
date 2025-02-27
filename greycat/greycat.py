@@ -16,7 +16,7 @@ from typing import *
 import greycat
 
 
-def abstract(abstract_cls):
+def __abstract(abstract_cls: type) -> type:
     __new__ = abstract_cls.__new__
 
     def abstracted_new(cls, *args, **kwargs):
@@ -28,7 +28,7 @@ def abstract(abstract_cls):
     return abstract_cls
 
 
-@abstract
+@__abstract
 class GreyCatServer(abc.ABC):
     _exposed: Final[dict[str, Callable[..., Any]]] = {}
 
