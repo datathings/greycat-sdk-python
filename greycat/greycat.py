@@ -16,6 +16,19 @@ from typing import *
 import greycat
 
 
+def abstract(abstract_cls):
+    __new__ = abstract_cls.__new__
+
+    def abstracted_new(cls, *args, **kwargs):
+        if cls is abstract_cls:
+            raise TypeError(f"{cls.__name__} is abstract; cannot be instantiated")
+        return __new__(cls, *args, **kwargs)
+
+    abstract_cls.__new__ = abstracted_new
+    return abstract_cls
+
+
+@abstract
 class GreyCatServer(abc.ABC):
     _exposed: Final[dict[str, Callable[..., Any]]] = {}
 
@@ -23,6 +36,7 @@ class GreyCatServer(abc.ABC):
         self.__abi_path: str = abi_path
         self.__gc: GreyCat | None
         self._srv_sock: socket.socket
+        atexit.register(self._clean)
 
     @final
     @property
@@ -57,18 +71,17 @@ class GreyCatServer(abc.ABC):
             stream.write(GreyCatServer._exposed[fqn](*params))
             cli_sock.close()
 
-
-class GreyCatInetServer(GreyCatServer):
-    def __init__(self, abi_path: str, port: int, host: str = "localhost"):
-        super.__init__(self, abi_path)
-        atexit.register(self.__clean)
-        self._srv_sock: socket.socket = socket.create_server((host, port))
-
-    def __clean(self):
+    def _clean(self):
         try:
             self._srv_sock.close()
         except AttributeError:
             pass
+
+
+class GreyCatInetServer(GreyCatServer):
+    def __init__(self, abi_path: str, port: int, host: str = "localhost"):
+        super.__init__(self, abi_path)
+        self._srv_sock: socket.socket = socket.create_server((host, port))
 
 
 class GreyCatUnixServer(GreyCatServer):
@@ -79,17 +92,14 @@ class GreyCatUnixServer(GreyCatServer):
         if os.path.exists(sock_path):
             os.unlink(sock_path)
         self.__sockpath: str = sock_path
-        atexit.register(self.__clean)
         self._srv_sock: socket.socket = socket.socket(socket.AF_UNIX)
         self._srv_sock.bind(sock_path)
         self._srv_sock.listen()
 
-    def __clean(self):
+    @override
+    def _clean(self):
         os.unlink(self.__sockpath)
-        try:
-            self._srv_sock.close()
-        except AttributeError:
-            pass
+        super()._clean()
 
 
 def expose(fqn: str) -> Callable[[Callable[..., Any]], None]:
