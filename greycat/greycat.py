@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import abc
 import base64
 from ctypes import *
 import hashlib
@@ -14,33 +15,62 @@ from typing import *
 import greycat
 
 
-class GreyCatServer:
+class GreyCatServer(abc.ABC):
     _exposed: Final[dict[str, Callable[..., Any]]] = {}
 
-    def __init__(self, abi_path: str, port: int):
-        self.abi_path: str = abi_path
-        self.port: int = port
+    def __init__(self, abi_path: str):
+        self.__abi_path: str = abi_path
+        self.__gc: GreyCat | None
+        self._srv_sock: socket.socket
 
+    @final
+    @property
+    def _gc(self) -> GreyCat:
+        if self.__gc is None:
+            self.__gc = GreyCat(self.__abi_path)
+        return self.__gc
+
+    @final
     def run(self):
-        gc = GreyCat(self.abi_path)
-        srv_sock: socket.socket = socket.create_server(
-            ("localhost", self.port))
         cli_sock: socket.socket
-        stream: GreyCat._Stream
-        fqn: str
-        type_name: str
         while True:
-            cli_sock = srv_sock.accept()
-            stream = GreyCat._Stream(gc, socket.SocketIO(cli_sock, "rwb"))
+            cli_sock, = self._srv_sock.accept()
+            stream = GreyCat._Stream(
+                self._gc,
+                socket.SocketIO(cli_sock, "rwb")
+            )
             stream.read_abi_header()
-            fqn = f"{gc.symbols[stream.read_vu32()]}::"  # module name
-            type_name = gc.symbols[stream.read_vu32()]
+            assert PrimitiveType.FUNCTION == stream.read_i8()
+            fqn: str = self._gc.symbols[stream.read_vu32()]
+            type_name: str = self._gc.symbols[stream.read_vu32()]
             if type_name is not None:
-                fqn += f"{type_name}::"
-            fqn += gc.symbols[stream.read_vu32()]  # function name
-            params: greycat.std.core.Array = stream.read()
+                fqn += f"::{type_name}"
+            fqn += f"::{self._gc.symbols[stream.read_vu32()]}"
+            assert PrimitiveType.INT == stream.read_i8()
+            params_size: int = stream.read_vi64()
+            params: list = list(repeat(None, params_size))
+            offset: int
+            for offset in range(params_size):
+                params[offset] = stream.read()
             stream.write_abi_header()
             stream.write(GreyCatServer._exposed[fqn](*params))
+            cli_sock.close()
+
+
+class GreyCatInetServer(GreyCatServer):
+    def __init__(self, abi_path: str, port: int, host: str = "localhost"):
+        super.__init__(self, abi_path)
+        self._srv_sock: socket.socket = socket.create_server((host, port))
+
+
+class GreyCatUnixServer(GreyCatServer):
+    def __init__(self, abi_path: str, sock_path: str = "pysock"):
+        super.__init__(self, abi_path)
+        if not os.path.isabs(sock_path):
+            sock_path = os.path.join(os.getcwd(), "gcdata", sock_path)
+        self._srv_sock: socket.socket = socket.socket(socket.AF_UNIX)
+        self._srv_sock.bind(sock_path)
+        self._srv_sock.listen()
 
 
 def expose(fqn: str) -> Callable[[Callable[..., Any]], None]:
@@ -55,7 +85,7 @@ class GreyCatNative:
     _natives: Final[dict[str, Callable[..., Any]]] = {}
 
     def __init__(self):
-        raise Exception("Static class")
+        raise Exception("Static-only class")
 
     @staticmethod
     def _init():
@@ -87,7 +117,7 @@ class GreyCatNative:
         out: BytesIO = BytesIO()
         sout: GreyCat._Stream = GreyCat._Stream(GreyCatNative._gc, out)
         sout.write(f(*params))
-        res = out.getbuffer().tobytes()
+        res: bytes = out.getbuffer().tobytes()
         sout.close()
         return res
 
