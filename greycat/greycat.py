@@ -1197,7 +1197,7 @@ class GreyCat:
     class Files:  # TODO?
         pass
 
-    def __init__(self: GreyCat, url: str, libraries: List[GreyCat.Library] = [], username: str | None = None, password: str | None = None, use_cookie: bool = False, set_default: bool = True) -> None:
+    def __init__(self: GreyCat, url: str, username: str | None = None, password: str | None = None, use_cookie: bool = False, set_default: bool = True) -> None:
         GreyCat._DEFAULT: GreyCat | None = None
 
         self.__runtime_url: Final[str] = url
@@ -1210,9 +1210,13 @@ class GreyCat:
         self.__is_remote: bool = False
         library_offset: int
         # for declarations
+        cls: type[GreyCat.Library]
         lib: GreyCat.Library
-        for lib in libraries:
-            self.libs_by_name[lib.name()] = lib
+        for cls in GreyCat.Library.__subclasses__():
+            if cls is greycat.std:
+                continue
+            lib: GreyCat.Library = cls()
+            self.libs_by_name(lib.name()) = lib
         loaders: Final[dict[str, GreyCat.Loader]] = {}
         factories: Final[dict[str, GreyCat.Factory]] = {}
         for lib in self.libs_by_name.values():
