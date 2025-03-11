@@ -4,7 +4,7 @@
 /dist/
 /files/
 /gcdata/
-/src/greycat/project.py
+/greycat/project.py
 
 /*.gcb
 /project.gcp
@@ -12,6 +12,3 @@
 /data
 /sandbox.gcl
 /tests/sandbox.py
-
-/demo/js/lib
-/demo/js/webroot/web

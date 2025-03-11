@@ -21,7 +21,8 @@ def __abstract(abstract_cls: type) -> type:
 
     def abstracted_new(cls, *args, **kwargs):
         if cls is abstract_cls:
-            raise TypeError(f"{cls.__name__} is abstract; cannot be instantiated")
+            raise TypeError(
+                f"{cls.__name__} is abstract; cannot be instantiated")
         return __new__(cls, *args, **kwargs)
 
     abstract_cls.__new__ = abstracted_new
@@ -149,6 +150,10 @@ class GreyCatNative:
         res: bytes = out.getbuffer().tobytes()
         sout.close()
         return res
+
+    @staticmethod
+    def _list_natives() -> list[Callable[..., Any]]:
+        return GreyCatNative._natives.values()
 
 
 def gc_native(fqn: str) -> Callable[[Callable[..., Any]], None]:
