@@ -1222,7 +1222,7 @@ class GreyCat:
             if cls is greycat.std:
                 continue
             lib: GreyCat.Library = cls()
-            self.libs_by_name(lib.name()) = lib
+            self.libs_by_name[lib.name()] = lib
         loaders: Final[dict[str, GreyCat.Loader]] = {}
         factories: Final[dict[str, GreyCat.Factory]] = {}
         for lib in self.libs_by_name.values():
