@@ -139,17 +139,27 @@ class GreyCatNative:
         fqn += f"::{GreyCatNative._gc.symbols[sin.read_vu32()]}"
         f = GreyCatNative._natives[fqn]
         assert PrimitiveType.INT == sin.read_i8()
+        type_desc = sin.read_vi64()
+        assert PrimitiveType.INT == sin.read_i8()
         n_params = sin.read_vi64()
         params = list(repeat(None, n_params))
         for offset in range(n_params):
             params[offset] = sin.read()
         sin.close()
+        nullable_result: bool = 0 != (type_desc & 1)
+        result_type_offset = (type_desc >> 1) - 1  # TODO: fix realign
         out: BytesIO = BytesIO()
         sout: GreyCat._Stream = GreyCat._Stream(GreyCatNative._gc, out)
-        sout.write(f(*params))
-        res: bytes = out.getbuffer().tobytes()
+        res = f(*params)
+        if not nullable_result and res is None:
+            pass # TODO: error
+        sout.write(
+            res,
+            None if GreyCatNative._gc.type_offset_core_any == result_type_offset else result_type_offset
+        )
+        bout: bytes = out.getbuffer().tobytes()
         sout.close()
-        return res
+        return bout
 
     @staticmethod
     def _list_natives() -> list[Callable[..., Any]]:
