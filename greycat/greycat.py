@@ -202,6 +202,7 @@ class ByteArrayIO(BufferedIOBase):
 @final
 class GreyCat:
     ABI_PROTO: Final[int] = 2
+    _DEFAULT: GreyCat | None = None
 
     @final
     class SocketServer:
