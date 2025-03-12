@@ -2,8 +2,12 @@
 /**/*.egg-info/
 /build/
 /dist/
+/files/
 /gcdata/
-/src/greycat/project_lib.py
 
 /*.gcb
 /project.gcp
+
+/data
+/sandbox.gcl
+/tests/sandbox.py
