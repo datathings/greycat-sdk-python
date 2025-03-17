@@ -61,7 +61,9 @@ class std_n:
                 return numpy.timedelta64(self.value, "us")
 
             @staticmethod
-            def from_numpy(greycat: GreyCat, td: numpy.timedelta64) -> std_n.core._duration:
+            def from_numpy(td: numpy.timedelta64, greycat: GreyCat | None = None) -> std_n.core._duration:
+                if greycat is None:
+                    greycat = GreyCat._DEFAULT
                 duration = std_n.core._duration(
                     greycat.type_offset_core_duration)
                 duration.value = td.astype(int) if numpy.datetime_data(td)[0] in [
@@ -613,7 +615,9 @@ class std_n:
                 return numpy.datetime64(self.value, "us")
 
             @staticmethod
-            def from_numpy(greycat: GreyCat, dt: numpy.datetime64) -> std_n.core._time:
+            def from_numpy(dt: numpy.datetime64, greycat: GreyCat | None = None) -> std_n.core._time:
+                if greycat is None:
+                    greycat = GreyCat._DEFAULT
                 time = std_n.core._time(
                     greycat.types[greycat.type_offset_core_time])
                 time.value = dt.astype(int) if numpy.datetime_data(dt)[0] in [
@@ -826,7 +830,9 @@ class std_n:
                 self.attributes.extend(__iterable)
 
             @staticmethod
-            def from_list(greycat: GreyCat, l: list) -> std_n.core._Array:
+            def from_list(l: list, greycat: GreyCat | None = None) -> std_n.core._Array:
+                if greycat is None:
+                    greycat = GreyCat._DEFAULT
                 array: std_n.core._Array = std_n.core._Array(
                     greycat.types_by_name["core::Array"])
                 array.extend(l)
@@ -1280,8 +1286,11 @@ class std_n:
 
                 @staticmethod
                 def from_pandas(
-                    greycat: GreyCat, df: pandas.DataFrame
+                    df: pandas.DataFrame,
+                    greycat: GreyCat | None = None,
                 ) -> std_n.core._Table:
+                    if greycat is None:
+                        greycat = GreyCat._DEFAULT
                     return std_n.core._Table.from_numpy(greycat, df.to_numpy())
 
             if "tensorflow" in sys.modules:
@@ -1290,7 +1299,9 @@ class std_n:
                     return tensorflow.constant(self.to_numpy())
 
                 @staticmethod
-                def from_tf_tensor(greycat: GreyCat, tf_tensor: tensorflow.Tensor, session: tensorflow.compat.v1.Session | None = None) -> std_n.core._Table:
+                def from_tf_tensor(tf_tensor: tensorflow.Tensor, session: tensorflow.compat.v1.Session | None = None, greycat: GreyCat | None = None) -> std_n.core._Table:
+                    if greycat is None:
+                        greycat = GreyCat._DEFAULT
                     if tensorflow.executing_eagerly():
                         return std_n.core._Table.from_numpy(greycat, tf_tensor.numpy())
                     if session is not None:
@@ -1447,7 +1458,9 @@ class std_n:
                     return tensorflow.constant(numpy.frombuffer(self.data, dtype=dtype), [dim.value for dim in self.shape])
 
                 @staticmethod
-                def from_tf_tensor(greycat: GreyCat, tf_tensor: tensorflow.Tensor, tf_session: tensorflow.compat.v1.Session | None = None) -> std_n.core._Tensor:
+                def from_tf_tensor(tf_tensor: tensorflow.Tensor, tf_session: tensorflow.compat.v1.Session | None = None, greycat: GreyCat | None = None) -> std_n.core._Tensor:
+                    if greycat is None:
+                        greycat = GreyCat._DEFAULT
                     if tensorflow.executing_eagerly():
                         return std_n.core._Tensor.from_numpy(greycat, tf_tensor.numpy())
                     if tf_session is not None:
