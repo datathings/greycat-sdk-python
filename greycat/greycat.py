@@ -450,7 +450,7 @@ class GreyCat:
             return value
 
         def read_f64(self) -> float:
-            return unpack("d", pack("q", self.read_i64()))[0]
+            return unpack("d", pack("Q", self.read_i64()))[0]
 
         def read_string(self, len_: int) -> str:
             return self.read_i8_array(len_).decode("utf-8")
