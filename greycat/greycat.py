@@ -1314,8 +1314,6 @@ class GreyCat:
                         mapped,
                     )
                 )
-            if is_volatile:
-                continue
             factory: GreyCat.Factory | None = None
             loader: GreyCat.Loader | None = None
             if 0 == generic_abi_type:
