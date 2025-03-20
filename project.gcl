@@ -304,17 +304,17 @@ fn write_runtime(out: GcbWriter) {
   //     end: 37_time,
   //     max_memory: 42,
   //   });
-  out.write(StoreStat {
-      capacity_bytes: 13,
-      allocated_bytes: 37,
-      allocated_ratio: 13.37,
-      remained_bytes: 12,
-      remained_ratio: 4.20,
-      used_bytes: 42,
-      used_ratio: 0.1,
-      available_bytes: 0,
-      available_ratio: 0.2,
-    });
+  // out.write(StoreStat {
+  //     capacity_bytes: 13,
+  //     allocated_bytes: 37,
+  //     allocated_ratio: 13.37,
+  //     remained_bytes: 12,
+  //     remained_ratio: 4.20,
+  //     used_bytes: 42,
+  //     used_ratio: 0.1,
+  //     available_bytes: 0,
+  //     available_ratio: 0.2,
+  //   });
   out.write(System {});
   out.write(SecurityPolicy {});
 }
