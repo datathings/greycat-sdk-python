@@ -44,7 +44,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _=None) -> None:
                 stream.write_i8(PrimitiveType.DURATION)
 
             @final
@@ -104,7 +104,7 @@ class std_n:
                     self.lns = lng
 
             @final
-            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _=None) -> None:
                 stream.write_i8(PrimitiveType.GEO)
 
             @final
@@ -226,7 +226,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _=None) -> None:
                 stream.write_i8(PrimitiveType.NODE)
 
             @final
@@ -245,7 +245,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _=None) -> None:
                 stream.write_i8(PrimitiveType.NODE_GEO)
 
             @final
@@ -264,7 +264,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _=None) -> None:
                 stream.write_i8(PrimitiveType.NODE_INDEX)
 
             @final
@@ -283,7 +283,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _=None) -> None:
                 stream.write_i8(PrimitiveType.NODE_LIST)
 
             @final
@@ -302,7 +302,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _=None) -> None:
                 stream.write_i8(PrimitiveType.NODE_TIME)
 
             @final
@@ -328,7 +328,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _=None) -> None:
                 stream.write_i8(PrimitiveType.T2)
 
             @final
@@ -362,7 +362,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _=None) -> None:
                 stream.write_i8(PrimitiveType.T2F)
 
             @final
@@ -405,7 +405,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _=None) -> None:
                 stream.write_i8(PrimitiveType.T3)
 
             @final
@@ -453,7 +453,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _=None) -> None:
                 stream.write_i8(PrimitiveType.T3F)
 
             @final
@@ -500,7 +500,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _=None) -> None:
                 stream.write_i8(PrimitiveType.T4)
 
             @final
@@ -546,7 +546,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _=None) -> None:
                 stream.write_i8(PrimitiveType.T4F)
 
             @final
@@ -598,7 +598,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save_type(self, stream: GreyCat._Stream, _ = None) -> None:
+            def _save_type(self, stream: GreyCat._Stream, _=None) -> None:
                 stream.write_i8(PrimitiveType.TIME)
 
             @final
@@ -636,12 +636,139 @@ class std_n:
             def __init__(self, type: GreyCat.Type) -> None:
                 super().__init__(type, [])
 
+            def __save_typed(self, stream: GreyCat._Stream, type_offset: int, type_nullable: bool) -> None:
+                nullables: bytearray | None = None
+                if type_nullable:
+                    for offset, e in enumerate(self):
+                        if e is None:
+                            if nullables is None:
+                                nullables = bytearray(
+                                    repeat(0, math.ceil(len(self) / 8)))
+                            nullables[offset >> 3] |= 1 << (offset & 7)
+                    stream.write_i8(0 if nullables is None else 1)
+                    if nullables is not None:
+                        stream.write_i8_array(nullables, 0, len(nullables))
+                else:
+                    stream.write_i8(0)
+                b: bool
+                char: c_char
+                c: c_ubyte
+                i: int
+                f: float
+                o: GreyCat.Object
+                if stream.greycat.type_offset_core_bool == type_offset:
+                    stream.write_i8(PrimitiveType.BOOL)
+                    stream.write_i8(0)  # TODO: manage monotonic
+                    if type_nullable:
+                        for b in self:
+                            if b is not None:
+                                stream.write_i8(1 if b else 0)
+                    else:
+                        for b in self:
+                            stream.write_i8(1 if b else 0)
+                elif stream.greycat.type_offset_core_char == type_offset:
+                    stream.write_i8(PrimitiveType.CHAR)
+                    stream.write_i8(0)  # TODO: manage monotonic
+                    if type_nullable:
+                        for char in self:
+                            if char is None:
+                                continue
+                            c = c_ubyte(char.value)
+                            if c > GreyCat._Stream.ASCII_MAX:
+                                raise ValueError(
+                                    f"Only ASCII characters are allowed: {c}")
+                            stream.write_i8(c)
+                    else:
+                        for char in self:
+                            c = c_ubyte(char.value)
+                            if c > GreyCat._Stream.ASCII_MAX:
+                                raise ValueError(
+                                    f"Only ASCII characters are allowed: {c}")
+                            stream.write_i8(c)
+                elif stream.greycat.type_offset_core_int == type_offset:
+                    stream.write_i8(PrimitiveType.INT)
+                    stream.write_i8(0)  # TODO: manage monotonic
+                    if type_nullable:
+                        for i in self:
+                            if i is not None:
+                                stream.write_vi64(i)
+                    else:
+                        for i in self:
+                            stream.write_vi64(i)
+                elif stream.greycat.type_offset_core_float == type_offset:
+                    stream.write_i8(PrimitiveType.FLOAT)
+                    stream.write_i8(0)  # TODO: manage monotonic
+                    if type_nullable:
+                        for f in self:
+                            if f is not None:
+                                stream.write_f64(f)
+                    else:
+                        for f in self:
+                            stream.write_f64(f)
+                else:
+                    if stream.greycat.type_offset_core_node == type_offset:
+                        stream.write_i8(PrimitiveType.NODE)
+                        stream.write_i8(0)  # TODO: manage monotonic
+                    elif stream.greycat.type_offset_core_node_time == type_offset:
+                        stream.write_i8(PrimitiveType.NODE_TIME)
+                        stream.write_i8(0)  # TODO: manage monotonic
+                    elif stream.greycat.type_offset_core_node_index == type_offset:
+                        stream.write_i8(PrimitiveType.NODE_INDEX)
+                        stream.write_i8(0)  # TODO: manage monotonic
+                    elif stream.greycat.type_offset_core_node_list == type_offset:
+                        stream.write_i8(PrimitiveType.NODE_LIST)
+                        stream.write_i8(0)  # TODO: manage monotonic
+                    elif stream.greycat.type_offset_core_node_geo == type_offset:
+                        stream.write_i8(PrimitiveType.NODE_GEO)
+                        stream.write_i8(0)  # TODO: manage monotonic
+                    elif stream.greycat.type_offset_core_geo == type_offset:
+                        stream.write_i8(PrimitiveType.GEO)
+                        stream.write_i8(0)  # TODO: manage monotonic
+                    elif stream.greycat.type_offset_core_time == type_offset:
+                        stream.write_i8(PrimitiveType.TIME)
+                        stream.write_i8(0)  # TODO: manage monotonic
+                    elif stream.greycat.type_offset_core_duration == type_offset:
+                        stream.write_i8(PrimitiveType.DURATION)
+                        stream.write_i8(0)  # TODO: manage monotonic
+                    elif stream.greycat.type_offset_core_t2 == type_offset:
+                        stream.write_i8(PrimitiveType.T2)
+                        stream.write_i8(0)  # TODO: manage monotonic
+                    elif stream.greycat.type_offset_core_t3 == type_offset:
+                        stream.write_i8(PrimitiveType.T3)
+                        stream.write_i8(0)  # TODO: manage monotonic
+                    elif stream.greycat.type_offset_core_t4 == type_offset:
+                        stream.write_i8(PrimitiveType.T4)
+                        stream.write_i8(0)  # TODO: manage monotonic
+                    elif stream.greycat.type_offset_core_t2f == type_offset:
+                        stream.write_i8(PrimitiveType.T2F)
+                        stream.write_i8(0)  # TODO: manage monotonic
+                    elif stream.greycat.type_offset_core_t3f == type_offset:
+                        stream.write_i8(PrimitiveType.T3F)
+                        stream.write_i8(0)  # TODO: manage monotonic
+                    elif stream.greycat.type_offset_core_t4f == type_offset:
+                        stream.write_i8(PrimitiveType.T4F)
+                        stream.write_i8(0)  # TODO: manage monotonic
+                    # elif […] TODO: other types
+                    else:
+                        stream.write_i8(PrimitiveType.OBJECT)
+                        stream.write_vu32(type_offset)
+                    if type_nullable:
+                        for o in self:
+                            if o is not None:
+                                o._save(stream, type_offset)
+                    else:
+                        for o in self:
+                            o._save(stream, type_offset)
+
             @final
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 if (self.attributes is None or 0 == len(self)):
                     stream.write_vu32(0)
                     return
                 stream.write_vu32(len(self))
+                if type_offset is not None and 0 != stream.greycat.types[type_offset].genericAbiType:
+                    g1AbiTypeDesc = stream.greycat.types[type_offset].g1AbiTypeDesc
+                    return self.__save_typed(stream, g1AbiTypeDesc >> 1, 1 == g1AbiTypeDesc & 1)
                 nullables: bytearray | None = None
                 type_is_unique: bool = False
                 unique_type: type | None = None

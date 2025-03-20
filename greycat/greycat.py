@@ -501,7 +501,7 @@ class GreyCat:
             elif issubclass(type(value), greycat.GreyCat.Object):
                 o: GreyCat.Object = value
                 o._save_type(self, type_offset)
-                o._save(self)
+                o._save(self, type_offset)
 
         def write_string(self, s: str, skip_type: bool = False) -> None:
             if s in self.greycat._symbols_off_by_value:
@@ -1054,7 +1054,7 @@ class GreyCat:
             stream.write_vu32(
                 self.type_.offset if type_offset is None else type_offset)
 
-        def _save(self, stream: GreyCat._Stream) -> None:
+        def _save(self, stream: GreyCat._Stream, _: int | None = None) -> None:
             nullable_bitset: bytearray = bytearray(
                 self.type_.nullable_nb_bytes)
             nullable_offset: int = 0
@@ -1378,6 +1378,30 @@ class GreyCat:
         if tmp is None:
             raise ValueError("wrong state")
         self.type_offset_core_any: Final[int] = tmp.offset
+
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_any: Final[int] = tmp.offset
+
+        tmp = self.types_by_name["core::bool"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_bool: Final[int] = tmp.offset
+
+        tmp = self.types_by_name["core::char"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_char: Final[int] = tmp.offset
+
+        tmp = self.types_by_name["core::int"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_int: Final[int] = tmp.offset
+
+        tmp = self.types_by_name["core::float"]
+        if tmp is None:
+            raise ValueError("wrong state")
+        self.type_offset_core_float: Final[int] = tmp.offset
 
         tmp = self.types_by_name["core::String"]
         if tmp is None:
