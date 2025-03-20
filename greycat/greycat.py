@@ -1054,7 +1054,7 @@ class GreyCat:
             stream.write_vu32(
                 self.type_.offset if type_offset is None else type_offset)
 
-        def _save(self, stream: GreyCat._Stream, _: int | None = None) -> None:
+        def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
             nullable_bitset: bytearray = bytearray(
                 self.type_.nullable_nb_bytes)
             nullable_offset: int = 0
@@ -1147,7 +1147,9 @@ class GreyCat:
                         o: GreyCat.Object = value
                         if field.abi_type != o.type_.offset and self.type_.greycat.types[field.abi_type].genericAbiType != o.type_.offset:
                             stream.write_vu32(o.type_.offset)
-                        o._save(stream)
+                            o._save(stream, None)
+                        else:
+                            o._save(stream, field.abi_type)
                 # elif field.sbi_type == PrimitiveType.BLOCK_REF: # TODO
                 # elif field.sbi_type == PrimitiveType.FUNCTION: # TODO
                 elif field.sbi_type == PrimitiveType.UNDEFINED:
