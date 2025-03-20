@@ -8,8 +8,8 @@ setup(
     license="https://www.apache.org/licenses/LICENSE-2.0.html",
     package_dir={"": "."},
     packages=find_packages(where="."),
-    python_requires=">=3.8",
-    install_requires=["numpy>=1.24,<2"],
+    python_requires=">=3.9",
+    install_requires=["numpy>=2.1"],
     extras_require={
         "pandas": ["pandas>=2.0,<3"],
         "tensorflow": ["tensorflow>=2.13.1,<3"],
