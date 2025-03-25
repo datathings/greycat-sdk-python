@@ -48,7 +48,7 @@ class std_n:
                 stream.write_i8(PrimitiveType.DURATION)
 
             @final
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 stream.write_vi64(self.value)
 
             @staticmethod
@@ -108,7 +108,7 @@ class std_n:
                 stream.write_i8(PrimitiveType.GEO)
 
             @final
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 stream.write_i64(self.geocode)
 
             @staticmethod
@@ -230,7 +230,7 @@ class std_n:
                 stream.write_i8(PrimitiveType.NODE)
 
             @final
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 stream.write_vu64(self.ref)
 
             @staticmethod
@@ -249,7 +249,7 @@ class std_n:
                 stream.write_i8(PrimitiveType.NODE_GEO)
 
             @final
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 stream.write_vu64(self.ref)
 
             @staticmethod
@@ -268,7 +268,7 @@ class std_n:
                 stream.write_i8(PrimitiveType.NODE_INDEX)
 
             @final
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 stream.write_vu64(self.ref)
 
             @staticmethod
@@ -287,7 +287,7 @@ class std_n:
                 stream.write_i8(PrimitiveType.NODE_LIST)
 
             @final
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 stream.write_vu64(self.ref)
 
             @staticmethod
@@ -306,7 +306,7 @@ class std_n:
                 stream.write_i8(PrimitiveType.NODE_TIME)
 
             @final
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 stream.write_vu64(self.ref)
 
             @staticmethod
@@ -332,7 +332,7 @@ class std_n:
                 stream.write_i8(PrimitiveType.T2)
 
             @final
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 stream.write_i64(self.__interleave())
 
             @staticmethod
@@ -366,7 +366,7 @@ class std_n:
                 stream.write_i8(PrimitiveType.T2F)
 
             @final
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 stream.write_i64(self.__interleave())
 
             @staticmethod
@@ -409,7 +409,7 @@ class std_n:
                 stream.write_i8(PrimitiveType.T3)
 
             @final
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 stream.write_i64(self.__interleave())
 
             @staticmethod
@@ -457,7 +457,7 @@ class std_n:
                 stream.write_i8(PrimitiveType.T3F)
 
             @final
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 stream.write_i64(self.__interleave())
 
             @staticmethod
@@ -504,7 +504,7 @@ class std_n:
                 stream.write_i8(PrimitiveType.T4)
 
             @final
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 stream.write_i64(self.__interleave())
 
             @staticmethod
@@ -550,7 +550,7 @@ class std_n:
                 stream.write_i8(PrimitiveType.T4F)
 
             @final
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 stream.write_i64(self.__interleave())
 
             @staticmethod
@@ -602,7 +602,7 @@ class std_n:
                 stream.write_i8(PrimitiveType.TIME)
 
             @final
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 stream.write_vi64(self.value)
 
             @staticmethod
@@ -768,7 +768,8 @@ class std_n:
                 stream.write_vu32(len(self))
                 if type_offset is not None and 0 != stream.greycat.types[type_offset].genericAbiType:
                     g1AbiTypeDesc = stream.greycat.types[type_offset].g1AbiTypeDesc
-                    return self.__save_typed(stream, g1AbiTypeDesc >> 1, 1 == g1AbiTypeDesc & 1)
+                    self.__save_typed(stream, g1AbiTypeDesc >> 1, 1 == g1AbiTypeDesc & 1)
+                    return
                 nullables: bytearray | None = None
                 type_is_unique: bool = False
                 unique_type: type | None = None
@@ -970,7 +971,7 @@ class std_n:
                 self.data: bytes
                 super().__init__(type, None)
 
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 stream.write_vu32(len(self.data))
                 stream.write_i8_array(self.data, 0, len(self.data))
 
@@ -988,7 +989,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 stream.write_vi64(self.localized_epoch_s)
                 stream.write_vi64(self.epoch_us)
                 stream.write_vu32(self.time_zone)
@@ -1010,7 +1011,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 stream.write_vu32(c_uint32(self.code))
                 stream.write_vu32(c_uint32(len(self.frames)))
                 bs: Final[bytes] = self.msg.encode("utf-8")
@@ -1073,8 +1074,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save(self, stream: GreyCat._Stream) -> None:
-                stream.write_vu32(len(self))
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 key: std_n.core.__T
                 value: std_n.core.__U
                 for key, value in self.items():
@@ -1149,7 +1149,7 @@ class std_n:
             def shape(self):
                 return self.data.shape
 
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 rows = self.data.shape[0]
                 cols = self.data.shape[1]
                 stream.write_vu32(rows)
@@ -1446,7 +1446,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 stream.write_i8(c_byte(len(self.shape)))
                 stream.write_i8(self.tensor_type)
                 dim: c_uint32
@@ -1660,7 +1660,7 @@ class std_n:
                 super().__init__(type, None)
 
             @final
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 attribute: Any
                 if self.attributes is None:
                     stream.write_i32(0)
@@ -1846,7 +1846,7 @@ class std_n:
                 self.max_bound: c_double
                 super().__init__(type, None)
 
-            def _save(self, stream: GreyCat._Stream) -> None:
+            def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 stream.write_f64(self.sum)
                 stream.write_f64(self.sum_sq)
                 stream.write_vi64(self.size)
