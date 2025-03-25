@@ -1075,6 +1075,7 @@ class std_n:
 
             @final
             def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
+                stream.write_vu32(len(self))
                 key: std_n.core.__T
                 value: std_n.core.__U
                 for key, value in self.items():
