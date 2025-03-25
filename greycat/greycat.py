@@ -147,7 +147,7 @@ class GreyCatNative:
             params[offset] = sin.read()
         sin.close()
         nullable_result: bool = 0 != (type_desc & 1)
-        result_type_offset = (type_desc >> 1) - 1  # TODO: fix realign
+        result_type_offset = type_desc >> 1
         out: BytesIO = BytesIO()
         sout: GreyCat._Stream = GreyCat._Stream(GreyCatNative._gc, out)
         res = f(*params)
