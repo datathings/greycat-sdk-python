@@ -768,7 +768,11 @@ class std_n:
                 stream.write_vu32(len(self))
                 if type_offset is not None and 0 != stream.greycat.types[type_offset].genericAbiType:
                     g1AbiTypeDesc = stream.greycat.types[type_offset].g1AbiTypeDesc
-                    self.__save_typed(stream, g1AbiTypeDesc >> 1, 1 == g1AbiTypeDesc & 1)
+                    self.__save_typed(
+                        stream,
+                        g1AbiTypeDesc >> 1,
+                        1 == g1AbiTypeDesc & 1
+                    )
                     return
                 nullables: bytearray | None = None
                 type_is_unique: bool = False
@@ -1078,9 +1082,16 @@ class std_n:
                 stream.write_vu32(len(self))
                 key: std_n.core.__T
                 value: std_n.core.__U
+                key_type_offset: int | None = None
+                value_type_offset: int | None = None
+                if type_offset is not None:
+                    type_: GreyCat.Type = stream.greycat.types[type_offset]
+                    if 0 != type_.genericAbiType:
+                        key_type_offset = type_.g1AbiTypeDesc >> 1
+                        value_type_offset = type_.g2AbiTypeDesc >> 1
                 for key, value in self.items():
-                    stream.write(key)
-                    stream.write(value)
+                    stream.write(key, type_offset=key_type_offset)
+                    stream.write(value, type_offset=value_type_offset)
 
             @staticmethod
             def load(type: GreyCat.Type, stream: GreyCat._Stream) -> Any:
@@ -1150,11 +1161,157 @@ class std_n:
             def shape(self):
                 return self.data.shape
 
+            def __save_typed(self, stream: GreyCat._Stream, type_offset: int, type_nullable: bool) -> None:
+                rows = self.data.shape[0]
+                cols = self.data.shape[1]
+                nullables: bytearray | None
+                b: bool
+                char: c_char
+                c: c_ubyte
+                i: int
+                f: float
+                o: GreyCat.Object
+                for col in range(cols):
+                    nullables = None
+                    if type_nullable:
+                        for row in range(rows):
+                            e = self.data[row, col]
+                            if e is None:
+                                if nullables is None:
+                                    nullables = bytearray(repeat(
+                                        0,
+                                        math.ceil(rows / 8)
+                                    ))
+                                nullables[row >> 3] |= 1 << (row & 7)
+                        stream.write_i8(0 if nullables is None else 1)
+                        if nullables is not None:
+                            stream.write_i8_array(nullables, 0, len(nullables))
+                    else:
+                        stream.write_i8(0)
+                    if stream.greycat.type_offset_core_bool == type_offset:
+                        stream.write_i8(PrimitiveType.BOOL)
+                        stream.write_i8(0)  # TODO: manage monotonic
+                        if type_nullable:
+                            for row in range(rows):
+                                b = self.data[row, col]
+                                if b is not None:
+                                    stream.write_i8(1 if b else 0)
+                        else:
+                            for row in range(rows):
+                                b = self.data[row, col]
+                                stream.write_i8(1 if b else 0)
+                    elif stream.greycat.type_offset_core_char == type_offset:
+                        stream.write_i8(PrimitiveType.CHAR)
+                        stream.write_i8(0)  # TODO: manage monotonic
+                        if type_nullable:
+                            for row in range(rows):
+                                char = self.data[row, col]
+                                if char is None:
+                                    continue
+                                c = c_ubyte(char.value)
+                                if c > GreyCat._Stream.ASCII_MAX:
+                                    raise ValueError(
+                                        f"Only ASCII characters are allowed: {c}")
+                                stream.write_i8(c)
+                        else:
+                            for row in range(rows):
+                                char = self.data[row, col]
+                                c = c_ubyte(char.value)
+                                if c > GreyCat._Stream.ASCII_MAX:
+                                    raise ValueError(
+                                        f"Only ASCII characters are allowed: {c}")
+                                stream.write_i8(c)
+                    elif stream.greycat.type_offset_core_int == type_offset:
+                        stream.write_i8(PrimitiveType.INT)
+                        stream.write_i8(0)  # TODO: manage monotonic
+                        if type_nullable:
+                            for row in range(rows):
+                                i = self.data[row, col]
+                                if i is not None:
+                                    stream.write_vi64(i)
+                        else:
+                            for row in range(rows):
+                                i = self.data[row, col]
+                                stream.write_vi64(i)
+                    elif stream.greycat.type_offset_core_float == type_offset:
+                        stream.write_i8(PrimitiveType.FLOAT)
+                        stream.write_i8(0)  # TODO: manage monotonic
+                        if type_nullable:
+                            for row in range(rows):
+                                f = self.data[row, col]
+                                if f is not None:
+                                    stream.write_f64(f)
+                        else:
+                            for row in range(rows):
+                                f = self.data[row, col]
+                                stream.write_f64(f)
+                    else:
+                        if stream.greycat.type_offset_core_node == type_offset:
+                            stream.write_i8(PrimitiveType.NODE)
+                            stream.write_i8(0)  # TODO: manage monotonic
+                        elif stream.greycat.type_offset_core_node_time == type_offset:
+                            stream.write_i8(PrimitiveType.NODE_TIME)
+                            stream.write_i8(0)  # TODO: manage monotonic
+                        elif stream.greycat.type_offset_core_node_index == type_offset:
+                            stream.write_i8(PrimitiveType.NODE_INDEX)
+                            stream.write_i8(0)  # TODO: manage monotonic
+                        elif stream.greycat.type_offset_core_node_list == type_offset:
+                            stream.write_i8(PrimitiveType.NODE_LIST)
+                            stream.write_i8(0)  # TODO: manage monotonic
+                        elif stream.greycat.type_offset_core_node_geo == type_offset:
+                            stream.write_i8(PrimitiveType.NODE_GEO)
+                            stream.write_i8(0)  # TODO: manage monotonic
+                        elif stream.greycat.type_offset_core_geo == type_offset:
+                            stream.write_i8(PrimitiveType.GEO)
+                            stream.write_i8(0)  # TODO: manage monotonic
+                        elif stream.greycat.type_offset_core_time == type_offset:
+                            stream.write_i8(PrimitiveType.TIME)
+                            stream.write_i8(0)  # TODO: manage monotonic
+                        elif stream.greycat.type_offset_core_duration == type_offset:
+                            stream.write_i8(PrimitiveType.DURATION)
+                            stream.write_i8(0)  # TODO: manage monotonic
+                        elif stream.greycat.type_offset_core_t2 == type_offset:
+                            stream.write_i8(PrimitiveType.T2)
+                            stream.write_i8(0)  # TODO: manage monotonic
+                        elif stream.greycat.type_offset_core_t3 == type_offset:
+                            stream.write_i8(PrimitiveType.T3)
+                            stream.write_i8(0)  # TODO: manage monotonic
+                        elif stream.greycat.type_offset_core_t4 == type_offset:
+                            stream.write_i8(PrimitiveType.T4)
+                            stream.write_i8(0)  # TODO: manage monotonic
+                        elif stream.greycat.type_offset_core_t2f == type_offset:
+                            stream.write_i8(PrimitiveType.T2F)
+                            stream.write_i8(0)  # TODO: manage monotonic
+                        elif stream.greycat.type_offset_core_t3f == type_offset:
+                            stream.write_i8(PrimitiveType.T3F)
+                            stream.write_i8(0)  # TODO: manage monotonic
+                        elif stream.greycat.type_offset_core_t4f == type_offset:
+                            stream.write_i8(PrimitiveType.T4F)
+                            stream.write_i8(0)  # TODO: manage monotonic
+                        # elif […] TODO: other types
+                        else:
+                            stream.write_i8(PrimitiveType.OBJECT)
+                            stream.write_vu32(type_offset)
+                        if type_nullable:
+                            for row in range(rows):
+                                o = self.data[row, col]
+                                if o is not None:
+                                    o._save(stream, type_offset)
+                        else:
+                            for row in range(rows):
+                                o = self.data[row, col]
+                                o._save(stream, type_offset)
+
             def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
                 rows = self.data.shape[0]
                 cols = self.data.shape[1]
                 stream.write_vu32(rows)
                 stream.write_vu32(cols)
+                if type_offset is not None and 0 != stream.greycat.types[type_offset].genericAbiType:
+                    g1AbiTypeDesc = stream.greycat.types[type_offset].g1AbiTypeDesc
+                    self.__save_typed(stream, g1AbiTypeDesc >>
+                                      1, 1 == g1AbiTypeDesc & 1)
+                    return
                 for col in range(cols):
                     nullables: bytearray | None = None
                     type_is_unique: bool = False
@@ -1387,7 +1544,9 @@ class std_n:
                 return self.data
 
             @staticmethod
-            def from_numpy(gc: GreyCat, nda: numpy.ndarray) -> std_n.core._Table:
+            def from_numpy(nda: numpy.ndarray, gc: GreyCat | None = None) -> std_n.core._Table:
+                if gc is None:
+                    gc = GreyCat._DEFAULT
                 type_: GreyCat.Type = gc.types_by_name["core::Table"]
                 table: std_n.core._Table = type_.factory(type_, None)
                 table.data = nda
