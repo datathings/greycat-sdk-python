@@ -1,3 +1,5 @@
+@library("std", "7.0.1730-testing");
+
 fn main() {
   var user: User = User {
     id: 0,

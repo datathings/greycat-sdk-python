@@ -1180,7 +1180,7 @@ class GreyCat:
             stream.write_vu32(self.type_.offset)
 
         @final
-        def _save(self, stream: GreyCat._Stream) -> None:
+        def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
             stream.write_vu32(self.offset)
 
         def __str__(self) -> str:
