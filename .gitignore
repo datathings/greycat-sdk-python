@@ -1,9 +1,11 @@
 /**/__pycache__/
 /**/*.egg-info/
+/bin/
 /build/
 /dist/
 /files/
 /gcdata/
+/lib/
 
 /*.gcb
 /project.gcp

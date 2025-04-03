@@ -25,11 +25,11 @@ class core:
     GeoBox = std.core.GeoBox
     t4f = std.core.t4f
     ErrorFrame = std.core.ErrorFrame
-    CalendarUnit = std.core.CalendarUnit
     field = std.core.field
+    CalendarUnit = std.core.CalendarUnit
     Buffer = std.core.Buffer
-    Array = std.core.Array
     nodeList = std.core.nodeList
+    Array = std.core.Array
     GeoPoly = std.core.GeoPoly
     FloatPrecision = std.core.FloatPrecision
     nodeTime = std.core.nodeTime
@@ -41,14 +41,14 @@ class core:
     SortOrder = std.core.SortOrder
     NodeInfo = std.core.NodeInfo
     function = std.core.function
-    t3f = std.core.t3f
     MathConstants = std.core.MathConstants
+    t3f = std.core.t3f
     str = std.core.str
     type = std.core.type
-    geo = std.core.geo
     SamplingMode = std.core.SamplingMode
-    Map = std.core.Map
+    geo = std.core.geo
     Error = std.core.Error
+    Map = std.core.Map
 
 
 @final
@@ -71,8 +71,8 @@ class io:
     Http = std.io.Http
     CsvWriter = std.io.CsvWriter
     TextReader = std.io.TextReader
-    JsonWriter = std.io.JsonWriter
     CsvStatistics = std.io.CsvStatistics
+    JsonWriter = std.io.JsonWriter
     JsonReader = std.io.JsonReader
     Json = std.io.Json
     Csv = std.io.Csv
@@ -85,8 +85,8 @@ class io:
 class runtime:
     Variable = std.runtime.Variable
     OpenIDConnect = std.runtime.OpenIDConnect
-    License = std.runtime.License
     UserGroupPolicy = std.runtime.UserGroupPolicy
+    License = std.runtime.License
     User = std.runtime.User
     LogLevel = std.runtime.LogLevel
     Job = std.runtime.Job
@@ -97,8 +97,8 @@ class runtime:
     Frame = std.runtime.Frame
     UserGroup = std.runtime.UserGroup
     CallPerf = std.runtime.CallPerf
-    SecurityEntity = std.runtime.SecurityEntity
     SecurityPolicy = std.runtime.SecurityPolicy
+    SecurityEntity = std.runtime.SecurityEntity
     Runtime = std.runtime.Runtime
     Debug = std.runtime.Debug
     PeriodicTask = std.runtime.PeriodicTask
@@ -113,23 +113,24 @@ class runtime:
 
 @final
 class util:
-    Queue = std.util.Queue
-    Random = std.util.Random
-    Gaussian = std.util.Gaussian
-    LogQuantizer = std.util.LogQuantizer
-    Stack = std.util.Stack
-    Plot = std.util.Plot
-    GaussianProfileSlot = std.util.GaussianProfileSlot
-    HistogramStats = std.util.HistogramStats
-    TimeWindow = std.util.TimeWindow
-    GaussianProfile = std.util.GaussianProfile
-    QuantizerSlotBound = std.util.QuantizerSlotBound
-    ProgressTracker = std.util.ProgressTracker
-    Histogram = std.util.Histogram
-    SlidingWindow = std.util.SlidingWindow
-    Assert = std.util.Assert
-    Crypto = std.util.Crypto
     LinearQuantizer = std.util.LinearQuantizer
-    CustomQuantizer = std.util.CustomQuantizer
-    Quantizer = std.util.Quantizer
+    Gaussian = std.util.Gaussian
+    Stack = std.util.Stack
+    GaussianProfile = std.util.GaussianProfile
+    ProgressTracker = std.util.ProgressTracker
+    Assert = std.util.Assert
     MultiQuantizer = std.util.MultiQuantizer
+    HistogramStats = std.util.HistogramStats
+    Crypto = std.util.Crypto
+    TimeWindow = std.util.TimeWindow
+    Plot = std.util.Plot
+    LogQuantizer = std.util.LogQuantizer
+    QuantizerSlotBound = std.util.QuantizerSlotBound
+    GaussianProfileSlot = std.util.GaussianProfileSlot
+    SlidingWindow = std.util.SlidingWindow
+    HistogramBin = std.util.HistogramBin
+    Random = std.util.Random
+    CustomQuantizer = std.util.CustomQuantizer
+    Histogram = std.util.Histogram
+    Quantizer = std.util.Quantizer
+    Queue = std.util.Queue
