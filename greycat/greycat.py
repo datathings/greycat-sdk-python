@@ -1133,16 +1133,13 @@ class GreyCat:
                 elif field.sbi_type == PrimitiveType.OBJECT:
                     if type(value) is str:
                         string: str = value
-                        symbol_offset: int | None = (
-                            self.type_.greycat._symbols_off_by_value[string]
-                        )
-                        if not (symbol_offset is None):
-                            stream.write_vu32(
-                                (symbol_offset << 1) | 1)
-                        else:
-                            data: bytes = string.encode("u%-8")
-                            stream.write_vu32(len(data))
-                            stream.write_i8_array(bytes, 0, len(data))
+                        try:
+                            symbol_offset: int = self.type_.greycat._symbols_off_by_value[string]
+                            stream.write_vu32((symbol_offset << 1) | 1)
+                        except KeyError:
+                            data: bytes = string.encode("utf-8")
+                            stream.write_vu32(len(data) << 1)
+                            stream.write_i8_array(data, 0, len(data))
                     else:
                         o: GreyCat.Object = value
                         if field.abi_type != o.type_.offset and self.type_.greycat.types[field.abi_type].genericAbiType != o.type_.offset:
