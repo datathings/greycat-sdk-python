@@ -1604,7 +1604,7 @@ class GreyCat:
         body = json.dumps([credentials, use_cookie])
         connection.request(
             "POST",
-            "runtime::User::login",
+            "/runtime::User::login",
             body,
             {
                 "Content-Type": "application/json",
