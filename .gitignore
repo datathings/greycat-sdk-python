@@ -1,13 +1,15 @@
 /**/__pycache__/
 /**/*.egg-info/
-/build
-/data
-/dist
-/gcdata
-/sdk-demo
-
-/src/greycat/project_lib.py
-/sandbox.gcl
+/bin/
+/build/
+/dist/
+/files/
+/gcdata/
+/lib/
 
 /*.gcb
 /project.gcp
+
+/data
+/sandbox.gcl
+/tests/sandbox.py
