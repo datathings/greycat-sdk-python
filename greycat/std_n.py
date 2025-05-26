@@ -655,6 +655,7 @@ class std_n:
                 c: c_ubyte
                 i: int
                 f: float
+                s: str
                 o: GreyCat.Object
                 if stream.greycat.type_offset_core_bool == type_offset:
                     stream.write_i8(PrimitiveType.BOOL)
@@ -705,6 +706,20 @@ class std_n:
                     else:
                         for f in self:
                             stream.write_f64(f)
+                elif stream.greycat.type_offset_core_string == type_offset:
+                    stream.write_i8(PrimitiveType.OBJECT)
+                    stream.write_vu32(type_offset)
+                    if type_nullable:
+                        for s in self:
+                            if s is  not None:
+                                data = s.encode("utf8")
+                                stream.write_vu32(len(data) << 1)
+                                stream.write_i8_array(data, 0, len(data))
+                    else:
+                        for s in self:
+                            data = s.encode("utf8")
+                            stream.write_vu32(len(data) << 1)
+                            stream.write_i8_array(data, 0, len(data))
                 else:
                     if stream.greycat.type_offset_core_node == type_offset:
                         stream.write_i8(PrimitiveType.NODE)
