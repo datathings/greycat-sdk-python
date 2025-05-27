@@ -152,7 +152,7 @@ class GreyCatNative:
         sout: GreyCat._Stream = GreyCat._Stream(GreyCatNative._gc, out)
         res = f(*params)
         if not nullable_result and res is None:
-            pass # TODO: error
+            pass  # TODO: error
         sout.write(
             res,
             None if GreyCatNative._gc.type_offset_core_any == result_type_offset else result_type_offset
@@ -1024,7 +1024,8 @@ class GreyCat:
             name_offset: int
             for name_offset in range(0, len(args), 2):
                 resolved: int | None = self.attribute_off_by_name.get(
-                    args[name_offset])
+                    args[name_offset]
+                )
                 if resolved is None:
                     raise ValueError(
                         "unmapped generated field, please re-generate this code!"
@@ -1185,12 +1186,9 @@ class GreyCat:
                 return f"{self.type_.name}.{self.key}"
             return f"{self.type_.name}.{self.key}{{value={self.value}}}"
 
-    Loader: Final[type[Callable[[Type, _Stream], Any]]
-                  ] = Callable[[Type, _Stream], Any]
+    Loader: TypeAlias = Callable[[Type, _Stream], Any]
 
-    Factory: Final[type[Callable[[Type, List[Any]], Any]]] = Callable[
-        [Type, List[object]], Any
-    ]
+    Factory: TypeAlias = Callable[[Type, List[object]], Any]
 
     class Library:
         def __init__(self: GreyCat.Library) -> None:
@@ -1220,18 +1218,14 @@ class GreyCat:
         if username is not None and password is not None:
             self.login(username, password, use_cookie)
         self.libs_by_name: Final[dict[str, GreyCat.Library]] = {}
-        std_: greycat.std = greycat.std()
-        self.libs_by_name[std_.name()] = std_
-        self.__is_remote: bool = False
-        library_offset: int
         # for declarations
         cls: type[GreyCat.Library]
         lib: GreyCat.Library
         for cls in GreyCat.Library.__subclasses__():
-            if cls is greycat.std:
-                continue
             lib: GreyCat.Library = cls()
             self.libs_by_name[lib.name()] = lib
+        self.__is_remote: bool = False
+        library_offset: int
         loaders: Final[dict[str, GreyCat.Loader]] = {}
         factories: Final[dict[str, GreyCat.Factory]] = {}
         for lib in self.libs_by_name.values():
