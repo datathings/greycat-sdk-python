@@ -930,97 +930,6 @@ class core:
                 GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[22]
             super().__init__(type, *attributes)
 
-        @staticmethod
-        def e(greycat: GreyCat | None = None) -> float:
-            if greycat is None:
-                greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name_].mapped[22]
-            return t.static_values[0]
-
-        @staticmethod
-        def log_2e(greycat: GreyCat | None = None) -> float:
-            if greycat is None:
-                greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name_].mapped[22]
-            return t.static_values[1]
-
-        @staticmethod
-        def log_10e(greycat: GreyCat | None = None) -> float:
-            if greycat is None:
-                greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name_].mapped[22]
-            return t.static_values[2]
-
-        @staticmethod
-        def ln2(greycat: GreyCat | None = None) -> float:
-            if greycat is None:
-                greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name_].mapped[22]
-            return t.static_values[3]
-
-        @staticmethod
-        def ln10(greycat: GreyCat | None = None) -> float:
-            if greycat is None:
-                greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name_].mapped[22]
-            return t.static_values[4]
-
-        @staticmethod
-        def pi(greycat: GreyCat | None = None) -> float:
-            if greycat is None:
-                greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name_].mapped[22]
-            return t.static_values[5]
-
-        @staticmethod
-        def pi_2(greycat: GreyCat | None = None) -> float:
-            if greycat is None:
-                greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name_].mapped[22]
-            return t.static_values[6]
-
-        @staticmethod
-        def pi_4(greycat: GreyCat | None = None) -> float:
-            if greycat is None:
-                greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name_].mapped[22]
-            return t.static_values[7]
-
-        @staticmethod
-        def m1_pi(greycat: GreyCat | None = None) -> float:
-            if greycat is None:
-                greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name_].mapped[22]
-            return t.static_values[8]
-
-        @staticmethod
-        def m2_pi(greycat: GreyCat | None = None) -> float:
-            if greycat is None:
-                greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name_].mapped[22]
-            return t.static_values[9]
-
-        @staticmethod
-        def m2_sqrt_pi(greycat: GreyCat | None = None) -> float:
-            if greycat is None:
-                greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name_].mapped[22]
-            return t.static_values[10]
-
-        @staticmethod
-        def sqrt2(greycat: GreyCat | None = None) -> float:
-            if greycat is None:
-                greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name_].mapped[22]
-            return t.static_values[11]
-
-        @staticmethod
-        def sqrt1_2(greycat: GreyCat | None = None) -> float:
-            if greycat is None:
-                greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name_].mapped[22]
-            return t.static_values[12]
-
     @final
     class type(std_n.core._type):
         name_: Final[str] = "core::type"
@@ -1569,20 +1478,6 @@ class io:
 
         def set_date_formats(self, v: io.CsvAnalysisConfig) -> None:
             self._set(self.type_.generated_offsets[8], v)
-
-        @staticmethod
-        def enumerable_limit_default(greycat: GreyCat | None = None) -> int:
-            if greycat is None:
-                greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name_].mapped[47]
-            return t.static_values[0]
-
-        @staticmethod
-        def date_check_limit_default(greycat: GreyCat | None = None) -> int:
-            if greycat is None:
-                greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name_].mapped[47]
-            return t.static_values[1]
 
     @final
     class Writer(Generic[__T], GreyCat.Object):
