@@ -928,6 +928,9 @@ class std_n:
                     for offset in range(size):
                         array[offset] = None if nullables is not None and nullables[
                             offset] else GreyCat._Stream._PRIMITIVE_LOADERS[array_primitive_type](stream)
+                else:
+                    for offset in range(size):
+                        array[offset] = monotonic_value
                 return array
 
             def __len__(self) -> int:
