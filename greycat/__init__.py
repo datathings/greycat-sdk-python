@@ -24,7 +24,7 @@ class core:
             "runtime_error": 5,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[0]
             super().__init__(type, *attributes)
@@ -42,7 +42,7 @@ class core:
     class t4(std_n.core._t4):
         name_: Final[str] = "core::t4"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[1]
             super().__init__(type)
@@ -51,7 +51,7 @@ class core:
     class Table(Generic[__T], std_n.core._Table[__T]):
         name_: Final[str] = "core::Table"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[2]
             super().__init__(type)
@@ -60,7 +60,7 @@ class core:
     class t3(std_n.core._t3):
         name_: Final[str] = "core::t3"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[3]
             super().__init__(type)
@@ -69,7 +69,7 @@ class core:
     class nodeIndex(Generic[__K, __V], std_n.core._nodeIndex[__K, __V]):
         name_: Final[str] = "core::nodeIndex"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[4]
             super().__init__(type)
@@ -78,7 +78,7 @@ class core:
     class GeoCircle(GreyCat.Object):
         name_: Final[str] = "core::GeoCircle"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[5]
             super().__init__(type, *attributes)
@@ -699,7 +699,7 @@ class core:
             "Zulu": 597,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[6]
             super().__init__(type, *attributes)
@@ -717,7 +717,7 @@ class core:
     class t2(std_n.core._t2):
         name_: Final[str] = "core::t2"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[7]
             super().__init__(type)
@@ -726,7 +726,7 @@ class core:
     class String(std_n.core._String):
         name_: Final[str] = "core::String"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[8]
             super().__init__(type)
@@ -735,7 +735,7 @@ class core:
     class GeoBox(GreyCat.Object):
         name_: Final[str] = "core::GeoBox"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[9]
             super().__init__(type, *attributes)
@@ -756,7 +756,7 @@ class core:
     class t4f(std_n.core._t4f):
         name_: Final[str] = "core::t4f"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[10]
             super().__init__(type)
@@ -765,7 +765,7 @@ class core:
     class field(std_n.core._field):
         name_: Final[str] = "core::field"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[11]
             super().__init__(type)
@@ -783,7 +783,7 @@ class core:
             "microsecond": 6,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[12]
             super().__init__(type, *attributes)
@@ -801,7 +801,7 @@ class core:
     class Buffer(std_n.core._Buffer):
         name_: Final[str] = "core::Buffer"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[13]
             super().__init__(type)
@@ -810,7 +810,7 @@ class core:
     class nodeList(Generic[__T], std_n.core._nodeList[__T]):
         name_: Final[str] = "core::nodeList"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[14]
             super().__init__(type)
@@ -819,7 +819,7 @@ class core:
     class nodeTime(Generic[__T], std_n.core._nodeTime[__T]):
         name_: Final[str] = "core::nodeTime"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[15]
             super().__init__(type)
@@ -828,7 +828,7 @@ class core:
     class duration(std_n.core._duration):
         name_: Final[str] = "core::duration"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[16]
             super().__init__(type)
@@ -837,7 +837,7 @@ class core:
     class Tensor(std_n.core._Tensor):
         name_: Final[str] = "core::Tensor"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[17]
             super().__init__(type)
@@ -846,7 +846,7 @@ class core:
     class nodeTimeSingleton(GreyCat.Object):
         name_: Final[str] = "core::nodeTimeSingleton"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[18]
             super().__init__(type, *attributes)
@@ -867,7 +867,7 @@ class core:
     class NodeInfo(Generic[__T], GreyCat.Object):
         name_: Final[str] = "core::NodeInfo"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[19]
             super().__init__(type, *attributes)
@@ -898,7 +898,7 @@ class core:
             "desc": 1,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[20]
             super().__init__(type, *attributes)
@@ -916,7 +916,7 @@ class core:
     class t3f(std_n.core._t3f):
         name_: Final[str] = "core::t3f"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[21]
             super().__init__(type)
@@ -925,7 +925,7 @@ class core:
     class MathConstants(GreyCat.Object):
         name_: Final[str] = "core::MathConstants"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[22]
             super().__init__(type, *attributes)
@@ -934,7 +934,7 @@ class core:
     class type(std_n.core._type):
         name_: Final[str] = "core::type"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[23]
             super().__init__(type)
@@ -949,7 +949,7 @@ class core:
             "dense": 3,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[24]
             super().__init__(type, *attributes)
@@ -967,7 +967,7 @@ class core:
     class geo(std_n.core._geo):
         name_: Final[str] = "core::geo"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[25]
             super().__init__(type)
@@ -976,7 +976,7 @@ class core:
     class Map(Generic[__K, __V], std_n.core._Map[__K, __V]):
         name_: Final[str] = "core::Map"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[26]
             super().__init__(type)
@@ -985,7 +985,7 @@ class core:
     class Error(GreyCat.Object):
         name_: Final[str] = "core::Error"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[27]
             super().__init__(type, *attributes)
@@ -1006,7 +1006,7 @@ class core:
     class nodeTimeCursor(Generic[__T], GreyCat.Object):
         name_: Final[str] = "core::nodeTimeCursor"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[28]
             super().__init__(type, *attributes)
@@ -1027,7 +1027,7 @@ class core:
     class nodeGeo(Generic[__T], std_n.core._nodeGeo[__T]):
         name_: Final[str] = "core::nodeGeo"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[29]
             super().__init__(type)
@@ -1036,7 +1036,7 @@ class core:
     class node(Generic[__T], std_n.core._node[__T]):
         name_: Final[str] = "core::node"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[30]
             super().__init__(type)
@@ -1053,7 +1053,7 @@ class core:
             "days": 5,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[31]
             super().__init__(type, *attributes)
@@ -1071,7 +1071,7 @@ class core:
     class TableColumnMapping(GreyCat.Object):
         name_: Final[str] = "core::TableColumnMapping"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[32]
             super().__init__(type, *attributes)
@@ -1100,7 +1100,7 @@ class core:
             "c128": 5,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[33]
             super().__init__(type, *attributes)
@@ -1118,7 +1118,7 @@ class core:
     class Tuple(Generic[__T, __U], GreyCat.Object):
         name_: Final[str] = "core::Tuple"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[34]
             super().__init__(type, *attributes)
@@ -1139,7 +1139,7 @@ class core:
     class time(std_n.core._time):
         name_: Final[str] = "core::time"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[35]
             super().__init__(type)
@@ -1148,7 +1148,7 @@ class core:
     class ErrorFrame(GreyCat.Object):
         name_: Final[str] = "core::ErrorFrame"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[36]
             super().__init__(type, *attributes)
@@ -1181,7 +1181,7 @@ class core:
     class Array(Generic[__T], std_n.core._Array[__T]):
         name_: Final[str] = "core::Array"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[37]
             super().__init__(type)
@@ -1190,7 +1190,7 @@ class core:
     class GeoPoly(GreyCat.Object):
         name_: Final[str] = "core::GeoPoly"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[38]
             super().__init__(type, *attributes)
@@ -1218,7 +1218,7 @@ class core:
             "p10000000000": 10,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[39]
             super().__init__(type, *attributes)
@@ -1236,7 +1236,7 @@ class core:
     class t2f(std_n.core._t2f):
         name_: Final[str] = "core::t2f"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[40]
             super().__init__(type)
@@ -1245,7 +1245,7 @@ class core:
     class Date(GreyCat.Object):
         name_: Final[str] = "core::Date"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[41]
             super().__init__(type, *attributes)
@@ -1302,7 +1302,7 @@ class core:
     class function(std_n.core._function):
         name_: Final[str] = "core::function"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[42]
             super().__init__(type)
@@ -1311,7 +1311,7 @@ class core:
     class str(std_n.core._str):
         name_: Final[str] = "core::str"
 
-        def __init__(self, type: Optional[GreyCat.Type], *_):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[43]
             super().__init__(type)
@@ -1330,7 +1330,7 @@ class io:
             "login": 2,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[44]
             super().__init__(type, *attributes)
@@ -1348,7 +1348,7 @@ class io:
     class Url(GreyCat.Object):
         name_: Final[str] = "io::Url"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[45]
             super().__init__(type, *attributes)
@@ -1393,7 +1393,7 @@ class io:
     class File(GreyCat.Object):
         name_: Final[str] = "io::File"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[46]
             super().__init__(type, *attributes)
@@ -1420,7 +1420,7 @@ class io:
     class CsvAnalysisConfig(GreyCat.Object):
         name_: Final[str] = "io::CsvAnalysisConfig"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[47]
             super().__init__(type, *attributes)
@@ -1483,7 +1483,7 @@ class io:
     class Writer(Generic[__T], GreyCat.Object):
         name_: Final[str] = "io::Writer"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[48]
             super().__init__(type, *attributes)
@@ -1504,7 +1504,7 @@ class io:
     class GcbWriter(Generic[__T], GreyCat.Object):
         name_: Final[str] = "io::GcbWriter"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[49]
             super().__init__(type, *attributes)
@@ -1525,7 +1525,7 @@ class io:
     class TextWriter(Generic[__T], GreyCat.Object):
         name_: Final[str] = "io::TextWriter"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[50]
             super().__init__(type, *attributes)
@@ -1546,7 +1546,7 @@ class io:
     class GcbReader(Generic[__T], GreyCat.Object):
         name_: Final[str] = "io::GcbReader"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[51]
             super().__init__(type, *attributes)
@@ -1572,7 +1572,7 @@ class io:
             "starttls": 2,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[52]
             super().__init__(type, *attributes)
@@ -1590,7 +1590,7 @@ class io:
     class CsvColumnStatistics(GreyCat.Object):
         name_: Final[str] = "io::CsvColumnStatistics"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[53]
             super().__init__(type, *attributes)
@@ -1665,7 +1665,7 @@ class io:
     class CsvFormat(GreyCat.Object):
         name_: Final[str] = "io::CsvFormat"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[54]
             super().__init__(type, *attributes)
@@ -1734,7 +1734,7 @@ class io:
     class CsvSharding(GreyCat.Object):
         name_: Final[str] = "io::CsvSharding"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[55]
             super().__init__(type, *attributes)
@@ -1761,7 +1761,7 @@ class io:
     class Email(GreyCat.Object):
         name_: Final[str] = "io::Email"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[56]
             super().__init__(type, *attributes)
@@ -1812,7 +1812,7 @@ class io:
     class CsvReader(Generic[__T], GreyCat.Object):
         name_: Final[str] = "io::CsvReader"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[57]
             super().__init__(type, *attributes)
@@ -1845,7 +1845,7 @@ class io:
     class Reader(Generic[__T], GreyCat.Object):
         name_: Final[str] = "io::Reader"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[58]
             super().__init__(type, *attributes)
@@ -1866,7 +1866,7 @@ class io:
     class Http(GreyCat.Object):
         name_: Final[str] = "io::Http"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[59]
             super().__init__(type, *attributes)
@@ -1875,7 +1875,7 @@ class io:
     class CsvWriter(Generic[__T], GreyCat.Object):
         name_: Final[str] = "io::CsvWriter"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[60]
             super().__init__(type, *attributes)
@@ -1902,7 +1902,7 @@ class io:
     class TextReader(GreyCat.Object):
         name_: Final[str] = "io::TextReader"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[61]
             super().__init__(type, *attributes)
@@ -1923,7 +1923,7 @@ class io:
     class CsvStatistics(GreyCat.Object):
         name_: Final[str] = "io::CsvStatistics"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[62]
             super().__init__(type, *attributes)
@@ -1986,7 +1986,7 @@ class io:
     class JsonWriter(Generic[__T], GreyCat.Object):
         name_: Final[str] = "io::JsonWriter"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[63]
             super().__init__(type, *attributes)
@@ -2007,7 +2007,7 @@ class io:
     class JsonReader(Generic[__T], GreyCat.Object):
         name_: Final[str] = "io::JsonReader"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[64]
             super().__init__(type, *attributes)
@@ -2028,7 +2028,7 @@ class io:
     class Json(Generic[__T], GreyCat.Object):
         name_: Final[str] = "io::Json"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[65]
             super().__init__(type, *attributes)
@@ -2037,7 +2037,7 @@ class io:
     class Csv(GreyCat.Object):
         name_: Final[str] = "io::Csv"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[66]
             super().__init__(type, *attributes)
@@ -2064,7 +2064,7 @@ class io:
     class Smtp(GreyCat.Object):
         name_: Final[str] = "io::Smtp"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[67]
             super().__init__(type, *attributes)
@@ -2109,7 +2109,7 @@ class io:
     class FileWalker(GreyCat.Object):
         name_: Final[str] = "io::FileWalker"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[68]
             super().__init__(type, *attributes)
@@ -2124,7 +2124,7 @@ class io:
     class HttpHeader(GreyCat.Object):
         name_: Final[str] = "io::HttpHeader"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[69]
             super().__init__(type, *attributes)
@@ -2157,7 +2157,7 @@ class runtime:
             "trace": 4,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[70]
             super().__init__(type, *attributes)
@@ -2175,7 +2175,7 @@ class runtime:
     class RuntimeInfo(GreyCat.Object):
         name_: Final[str] = "runtime::RuntimeInfo"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[71]
             super().__init__(type, *attributes)
@@ -2250,7 +2250,7 @@ class runtime:
     class SecurityEntity(GreyCat.Object):
         name_: Final[str] = "runtime::SecurityEntity"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[72]
             super().__init__(type, *attributes)
@@ -2289,7 +2289,7 @@ class runtime:
     class Debug(GreyCat.Object):
         name_: Final[str] = "runtime::Debug"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[73]
             super().__init__(type, *attributes)
@@ -2334,7 +2334,7 @@ class runtime:
     class Role(GreyCat.Object):
         name_: Final[str] = "runtime::Role"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[74]
             super().__init__(type, *attributes)
@@ -2361,7 +2361,7 @@ class runtime:
     class Log(GreyCat.Object):
         name_: Final[str] = "runtime::Log"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[75]
             super().__init__(type, *attributes)
@@ -2418,7 +2418,7 @@ class runtime:
     class Variable(GreyCat.Object):
         name_: Final[str] = "runtime::Variable"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[76]
             super().__init__(type, *attributes)
@@ -2439,7 +2439,7 @@ class runtime:
     class OpenIDConnect(GreyCat.Object):
         name_: Final[str] = "runtime::OpenIDConnect"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[77]
             super().__init__(type, *attributes)
@@ -2466,7 +2466,7 @@ class runtime:
     class License(GreyCat.Object):
         name_: Final[str] = "runtime::License"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[78]
             super().__init__(type, *attributes)
@@ -2523,7 +2523,7 @@ class runtime:
     class UserGroupPolicy(GreyCat.Object):
         name_: Final[str] = "runtime::UserGroupPolicy"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[79]
             super().__init__(type, *attributes)
@@ -2544,7 +2544,7 @@ class runtime:
     class User(GreyCat.Object):
         name_: Final[str] = "runtime::User"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[80]
             super().__init__(type, *attributes)
@@ -2655,7 +2655,7 @@ class runtime:
     class Job(Generic[__T], GreyCat.Object):
         name_: Final[str] = "runtime::Job"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[81]
             super().__init__(type, *attributes)
@@ -2676,7 +2676,7 @@ class runtime:
     class SecurityFields(GreyCat.Object):
         name_: Final[str] = "runtime::SecurityFields"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[82]
             super().__init__(type, *attributes)
@@ -2743,7 +2743,7 @@ class runtime:
             "ended_with_errors": 7,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[83]
             super().__init__(type, *attributes)
@@ -2766,7 +2766,7 @@ class runtime:
             "testing": 2,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[84]
             super().__init__(type, *attributes)
@@ -2784,7 +2784,7 @@ class runtime:
     class Frame(GreyCat.Object):
         name_: Final[str] = "runtime::Frame"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[85]
             super().__init__(type, *attributes)
@@ -2835,7 +2835,7 @@ class runtime:
     class UserGroup(GreyCat.Object):
         name_: Final[str] = "runtime::UserGroup"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[86]
             super().__init__(type, *attributes)
@@ -2862,7 +2862,7 @@ class runtime:
     class CallPerf(GreyCat.Object):
         name_: Final[str] = "runtime::CallPerf"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[87]
             super().__init__(type, *attributes)
@@ -2907,7 +2907,7 @@ class runtime:
     class SecurityPolicy(GreyCat.Object):
         name_: Final[str] = "runtime::SecurityPolicy"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[88]
             super().__init__(type, *attributes)
@@ -2946,7 +2946,7 @@ class runtime:
     class Runtime(GreyCat.Object):
         name_: Final[str] = "runtime::Runtime"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[89]
             super().__init__(type, *attributes)
@@ -2973,7 +2973,7 @@ class runtime:
     class PeriodicTask(GreyCat.Object):
         name_: Final[str] = "runtime::PeriodicTask"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[90]
             super().__init__(type, *attributes)
@@ -3029,7 +3029,7 @@ class runtime:
             "execute": 2,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[91]
             super().__init__(type, *attributes)
@@ -3047,7 +3047,7 @@ class runtime:
     class System(GreyCat.Object):
         name_: Final[str] = "runtime::System"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[92]
             super().__init__(type, *attributes)
@@ -3056,7 +3056,7 @@ class runtime:
     class UserCredential(GreyCat.Object):
         name_: Final[str] = "runtime::UserCredential"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[93]
             super().__init__(type, *attributes)
@@ -3077,7 +3077,7 @@ class runtime:
     class Permission(GreyCat.Object):
         name_: Final[str] = "runtime::Permission"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[94]
             super().__init__(type, *attributes)
@@ -3104,7 +3104,7 @@ class runtime:
     class Task(GreyCat.Object):
         name_: Final[str] = "runtime::Task"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[95]
             super().__init__(type, *attributes)
@@ -3202,7 +3202,7 @@ class util:
     class LinearQuantizer(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::LinearQuantizer"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[96]
             super().__init__(type, *attributes)
@@ -3235,7 +3235,7 @@ class util:
     class Gaussian(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::Gaussian"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[97]
             super().__init__(type, *attributes)
@@ -3274,7 +3274,7 @@ class util:
     class Stack(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::Stack"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[98]
             super().__init__(type, *attributes)
@@ -3289,7 +3289,7 @@ class util:
     class GaussianProfile(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::GaussianProfile"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[99]
             super().__init__(type, *attributes)
@@ -3328,7 +3328,7 @@ class util:
     class ProgressTracker(GreyCat.Object):
         name_: Final[str] = "util::ProgressTracker"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[100]
             super().__init__(type, *attributes)
@@ -3379,7 +3379,7 @@ class util:
     class Assert(GreyCat.Object):
         name_: Final[str] = "util::Assert"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[101]
             super().__init__(type, *attributes)
@@ -3388,7 +3388,7 @@ class util:
     class MultiQuantizer(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::MultiQuantizer"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[102]
             super().__init__(type, *attributes)
@@ -3403,7 +3403,7 @@ class util:
     class HistogramStats(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::HistogramStats"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[103]
             super().__init__(type, *attributes)
@@ -3526,7 +3526,7 @@ class util:
     class Crypto(GreyCat.Object):
         name_: Final[str] = "util::Crypto"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[104]
             super().__init__(type, *attributes)
@@ -3535,7 +3535,7 @@ class util:
     class TimeWindow(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::TimeWindow"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[105]
             super().__init__(type, *attributes)
@@ -3574,7 +3574,7 @@ class util:
     class Plot(GreyCat.Object):
         name_: Final[str] = "util::Plot"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[106]
             super().__init__(type, *attributes)
@@ -3583,7 +3583,7 @@ class util:
     class LogQuantizer(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::LogQuantizer"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[107]
             super().__init__(type, *attributes)
@@ -3616,7 +3616,7 @@ class util:
     class QuantizerSlotBound(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::QuantizerSlotBound"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[108]
             super().__init__(type, *attributes)
@@ -3643,7 +3643,7 @@ class util:
     class GaussianProfileSlot(GreyCat.Object):
         name_: Final[str] = "util::GaussianProfileSlot"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[109]
             super().__init__(type, *attributes)
@@ -3670,7 +3670,7 @@ class util:
     class SlidingWindow(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::SlidingWindow"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[110]
             super().__init__(type, *attributes)
@@ -3709,7 +3709,7 @@ class util:
     class HistogramBin(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::HistogramBin"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[111]
             super().__init__(type, *attributes)
@@ -3748,7 +3748,7 @@ class util:
     class Random(GreyCat.Object):
         name_: Final[str] = "util::Random"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[112]
             super().__init__(type, *attributes)
@@ -3769,7 +3769,7 @@ class util:
     class CustomQuantizer(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::CustomQuantizer"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[113]
             super().__init__(type, *attributes)
@@ -3802,7 +3802,7 @@ class util:
     class Histogram(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::Histogram"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[114]
             super().__init__(type, *attributes)
@@ -3859,7 +3859,7 @@ class util:
     class Quantizer(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::Quantizer"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[115]
             super().__init__(type, *attributes)
@@ -3868,7 +3868,7 @@ class util:
     class Queue(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::Queue"
 
-        def __init__(self, type: Optional[GreyCat.Type], *attributes):
+        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
             if type is None:
                 GreyCat._DEFAULT.libs_by_name[_std.name()].mapped[116]
             super().__init__(type, *attributes)
