@@ -24,10 +24,10 @@ class core:
             "runtime_error": 5,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[0]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[0]
+            super().__init__(type, *attributes)
 
         def __class_getitem__(cls, key) -> core.ErrorCode:
             greycat: GreyCat
@@ -35,35 +35,35 @@ class core:
                 key, greycat = key
             else:
                 greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[_std._name].mapped[0]
+            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name()].mapped[0]
             return t.enum_values[t.generated_offsets[core.ErrorCode.__indices_by_values[key]]]
 
     @final
     class Table(Generic[__T], std_n.core._Table[__T]):
         name_: Final[str] = "core::Table"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[1]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[1]
             super().__init__(type)
 
     @final
     class nodeIndex(Generic[__K, __V], std_n.core._nodeIndex[__K, __V]):
         name_: Final[str] = "core::nodeIndex"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[2]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[2]
             super().__init__(type)
 
     @final
     class GeoCircle(GreyCat.Object):
         name_: Final[str] = "core::GeoCircle"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[3]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[3]
+            super().__init__(type, *attributes)
 
         def center(self) -> core.GeoCircle:
             return self._get(self.type_.generated_offsets[0])
@@ -681,10 +681,10 @@ class core:
             "Zulu": 597,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[4]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[4]
+            super().__init__(type, *attributes)
 
         def __class_getitem__(cls, key) -> core.TimeZone:
             greycat: GreyCat
@@ -692,26 +692,26 @@ class core:
                 key, greycat = key
             else:
                 greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[_std._name].mapped[4]
+            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name()].mapped[4]
             return t.enum_values[t.generated_offsets[core.TimeZone.__indices_by_values[key]]]
 
     @final
     class String(std_n.core._String):
         name_: Final[str] = "core::String"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[5]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[5]
             super().__init__(type)
 
     @final
     class GeoBox(GreyCat.Object):
         name_: Final[str] = "core::GeoBox"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[6]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[6]
+            super().__init__(type, *attributes)
 
         def sw(self) -> core.GeoBox:
             return self._get(self.type_.generated_offsets[0])
@@ -729,18 +729,18 @@ class core:
     class MathConstants(GreyCat.Object):
         name_: Final[str] = "core::MathConstants"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[7]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[7]
+            super().__init__(type, *attributes)
 
     @final
     class field(std_n.core._field):
         name_: Final[str] = "core::field"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[8]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[8]
             super().__init__(type)
 
     @final
@@ -756,10 +756,10 @@ class core:
             "microsecond": 6,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[9]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[9]
+            super().__init__(type, *attributes)
 
         def __class_getitem__(cls, key) -> core.CalendarUnit:
             greycat: GreyCat
@@ -767,71 +767,71 @@ class core:
                 key, greycat = key
             else:
                 greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[_std._name].mapped[9]
+            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name()].mapped[9]
             return t.enum_values[t.generated_offsets[core.CalendarUnit.__indices_by_values[key]]]
 
     @final
     class Buffer(std_n.core._Buffer):
         name_: Final[str] = "core::Buffer"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[10]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[10]
             super().__init__(type)
 
     @final
     class nodeList(Generic[__T], std_n.core._nodeList[__T]):
         name_: Final[str] = "core::nodeList"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[11]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[11]
             super().__init__(type)
 
     @final
     class nodeTime(Generic[__T], std_n.core._nodeTime[__T]):
         name_: Final[str] = "core::nodeTime"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[12]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[12]
             super().__init__(type)
 
     @final
     class t3(std_n.core._t3):
         name_: Final[str] = "core::t3"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[13]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[13]
             super().__init__(type)
 
     @final
     class duration(std_n.core._duration):
         name_: Final[str] = "core::duration"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[14]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[14]
             super().__init__(type)
 
     @final
     class Tensor(std_n.core._Tensor):
         name_: Final[str] = "core::Tensor"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[15]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[15]
             super().__init__(type)
 
     @final
     class nodeTimeSingleton(GreyCat.Object):
         name_: Final[str] = "core::nodeTimeSingleton"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[16]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[16]
+            super().__init__(type, *attributes)
 
         def t(self) -> core.nodeTimeSingleton:
             return self._get(self.type_.generated_offsets[0])
@@ -849,10 +849,10 @@ class core:
     class NodeInfo(Generic[__T], GreyCat.Object):
         name_: Final[str] = "core::NodeInfo"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[17]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[17]
+            super().__init__(type, *attributes)
 
         def size(self) -> core.NodeInfo:
             return self._get(self.type_.generated_offsets[0])
@@ -880,10 +880,10 @@ class core:
             "desc": 1,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[18]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[18]
+            super().__init__(type, *attributes)
 
         def __class_getitem__(cls, key) -> core.SortOrder:
             greycat: GreyCat
@@ -891,25 +891,25 @@ class core:
                 key, greycat = key
             else:
                 greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[_std._name].mapped[18]
+            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name()].mapped[18]
             return t.enum_values[t.generated_offsets[core.SortOrder.__indices_by_values[key]]]
 
     @final
     class t4f(std_n.core._t4f):
         name_: Final[str] = "core::t4f"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[19]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[19]
             super().__init__(type)
 
     @final
     class type(std_n.core._type):
         name_: Final[str] = "core::type"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[20]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[20]
             super().__init__(type)
 
     @final
@@ -922,10 +922,10 @@ class core:
             "dense": 3,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[21]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[21]
+            super().__init__(type, *attributes)
 
         def __class_getitem__(cls, key) -> core.SamplingMode:
             greycat: GreyCat
@@ -933,26 +933,26 @@ class core:
                 key, greycat = key
             else:
                 greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[_std._name].mapped[21]
+            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name()].mapped[21]
             return t.enum_values[t.generated_offsets[core.SamplingMode.__indices_by_values[key]]]
 
     @final
     class geo(std_n.core._geo):
         name_: Final[str] = "core::geo"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[22]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[22]
             super().__init__(type)
 
     @final
     class Error(GreyCat.Object):
         name_: Final[str] = "core::Error"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[23]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[23]
+            super().__init__(type, *attributes)
 
         def message(self) -> core.Error:
             return self._get(self.type_.generated_offsets[0])
@@ -970,19 +970,19 @@ class core:
     class Map(Generic[__K, __V], std_n.core._Map[__K, __V]):
         name_: Final[str] = "core::Map"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[24]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[24]
             super().__init__(type)
 
     @final
     class nodeTimeCursor(Generic[__T], GreyCat.Object):
         name_: Final[str] = "core::nodeTimeCursor"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[25]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[25]
+            super().__init__(type, *attributes)
 
         def n(self) -> core.nodeTimeCursor:
             return self._get(self.type_.generated_offsets[0])
@@ -1000,18 +1000,18 @@ class core:
     class nodeGeo(Generic[__T], std_n.core._nodeGeo[__T]):
         name_: Final[str] = "core::nodeGeo"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[26]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[26]
             super().__init__(type)
 
     @final
     class node(Generic[__T], std_n.core._node[__T]):
         name_: Final[str] = "core::node"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[27]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[27]
             super().__init__(type)
 
     @final
@@ -1026,10 +1026,10 @@ class core:
             "days": 5,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[28]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[28]
+            super().__init__(type, *attributes)
 
         def __class_getitem__(cls, key) -> core.DurationUnit:
             greycat: GreyCat
@@ -1037,17 +1037,17 @@ class core:
                 key, greycat = key
             else:
                 greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[_std._name].mapped[28]
+            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name()].mapped[28]
             return t.enum_values[t.generated_offsets[core.DurationUnit.__indices_by_values[key]]]
 
     @final
     class TableColumnMapping(GreyCat.Object):
         name_: Final[str] = "core::TableColumnMapping"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[29]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[29]
+            super().__init__(type, *attributes)
 
         def column(self) -> core.TableColumnMapping:
             return self._get(self.type_.generated_offsets[0])
@@ -1073,10 +1073,10 @@ class core:
             "c128": 5,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[30]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[30]
+            super().__init__(type, *attributes)
 
         def __class_getitem__(cls, key) -> core.TensorType:
             greycat: GreyCat
@@ -1084,17 +1084,17 @@ class core:
                 key, greycat = key
             else:
                 greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[_std._name].mapped[30]
+            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name()].mapped[30]
             return t.enum_values[t.generated_offsets[core.TensorType.__indices_by_values[key]]]
 
     @final
     class Tuple(Generic[__T, __U], GreyCat.Object):
         name_: Final[str] = "core::Tuple"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[31]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[31]
+            super().__init__(type, *attributes)
 
         def x(self) -> core.Tuple:
             return self._get(self.type_.generated_offsets[0])
@@ -1112,28 +1112,28 @@ class core:
     class time(std_n.core._time):
         name_: Final[str] = "core::time"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[32]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[32]
             super().__init__(type)
 
     @final
     class t2(std_n.core._t2):
         name_: Final[str] = "core::t2"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[33]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[33]
             super().__init__(type)
 
     @final
     class ErrorFrame(GreyCat.Object):
         name_: Final[str] = "core::ErrorFrame"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[34]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[34]
+            super().__init__(type, *attributes)
 
         def module(self) -> core.ErrorFrame:
             return self._get(self.type_.generated_offsets[0])
@@ -1163,28 +1163,28 @@ class core:
     class t4(std_n.core._t4):
         name_: Final[str] = "core::t4"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[35]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[35]
             super().__init__(type)
 
     @final
     class Array(Generic[__T], std_n.core._Array[__T]):
         name_: Final[str] = "core::Array"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[36]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[36]
             super().__init__(type)
 
     @final
     class GeoPoly(GreyCat.Object):
         name_: Final[str] = "core::GeoPoly"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[37]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[37]
+            super().__init__(type, *attributes)
 
         def points(self) -> core.GeoPoly:
             return self._get(self.type_.generated_offsets[0])
@@ -1209,10 +1209,10 @@ class core:
             "p10000000000": 10,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[38]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[38]
+            super().__init__(type, *attributes)
 
         def __class_getitem__(cls, key) -> core.FloatPrecision:
             greycat: GreyCat
@@ -1220,35 +1220,35 @@ class core:
                 key, greycat = key
             else:
                 greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[_std._name].mapped[38]
+            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name()].mapped[38]
             return t.enum_values[t.generated_offsets[core.FloatPrecision.__indices_by_values[key]]]
 
     @final
     class t3f(std_n.core._t3f):
         name_: Final[str] = "core::t3f"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[39]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[39]
             super().__init__(type)
 
     @final
     class str(std_n.core._str):
         name_: Final[str] = "core::str"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[40]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[40]
             super().__init__(type)
 
     @final
     class Date(GreyCat.Object):
         name_: Final[str] = "core::Date"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[41]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[41]
+            super().__init__(type, *attributes)
 
         def year(self) -> core.Date:
             return self._get(self.type_.generated_offsets[0])
@@ -1302,18 +1302,18 @@ class core:
     class function(std_n.core._function):
         name_: Final[str] = "core::function"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[42]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[42]
             super().__init__(type)
 
     @final
     class t2f(std_n.core._t2f):
         name_: Final[str] = "core::t2f"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *_):
+        def __init__(self, type: Optional[GreyCat.Type], *_):
             if type is None:
-                GreyCat._DEFAULT.libs_by_name[_std._name].mapped[43]
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[43]
             super().__init__(type)
 
 
@@ -1325,10 +1325,10 @@ class io:
     class File(GreyCat.Object):
         name_: Final[str] = "io::File"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[44]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[44]
+            super().__init__(type, *attributes)
 
         def path(self) -> io.File:
             return self._get(self.type_.generated_offsets[0])
@@ -1352,10 +1352,10 @@ class io:
     class GcbReader(Generic[__T], GreyCat.Object):
         name_: Final[str] = "io::GcbReader"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[45]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[45]
+            super().__init__(type, *attributes)
 
         def path(self) -> io.GcbReader:
             return self._get(self.type_.generated_offsets[0])
@@ -1373,10 +1373,10 @@ class io:
     class Smtp(GreyCat.Object):
         name_: Final[str] = "io::Smtp"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[46]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[46]
+            super().__init__(type, *attributes)
 
         def host(self) -> io.Smtp:
             return self._get(self.type_.generated_offsets[0])
@@ -1418,10 +1418,10 @@ class io:
     class Writer(Generic[__T], GreyCat.Object):
         name_: Final[str] = "io::Writer"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[47]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[47]
+            super().__init__(type, *attributes)
 
         def path(self) -> io.Writer:
             return self._get(self.type_.generated_offsets[0])
@@ -1439,10 +1439,10 @@ class io:
     class TextReader(GreyCat.Object):
         name_: Final[str] = "io::TextReader"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[48]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[48]
+            super().__init__(type, *attributes)
 
         def path(self) -> io.TextReader:
             return self._get(self.type_.generated_offsets[0])
@@ -1465,10 +1465,10 @@ class io:
             "starttls": 2,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[49]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[49]
+            super().__init__(type, *attributes)
 
         def __class_getitem__(cls, key) -> io.SmtpMode:
             greycat: GreyCat
@@ -1476,7 +1476,7 @@ class io:
                 key, greycat = key
             else:
                 greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[_std._name].mapped[49]
+            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name()].mapped[49]
             return t.enum_values[t.generated_offsets[io.SmtpMode.__indices_by_values[key]]]
 
     @final
@@ -1488,10 +1488,10 @@ class io:
             "login": 2,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[50]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[50]
+            super().__init__(type, *attributes)
 
         def __class_getitem__(cls, key) -> io.SmtpAuth:
             greycat: GreyCat
@@ -1499,17 +1499,17 @@ class io:
                 key, greycat = key
             else:
                 greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[_std._name].mapped[50]
+            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name()].mapped[50]
             return t.enum_values[t.generated_offsets[io.SmtpAuth.__indices_by_values[key]]]
 
     @final
     class TextWriter(Generic[__T], GreyCat.Object):
         name_: Final[str] = "io::TextWriter"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[51]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[51]
+            super().__init__(type, *attributes)
 
         def path(self) -> io.TextWriter:
             return self._get(self.type_.generated_offsets[0])
@@ -1527,10 +1527,10 @@ class io:
     class CsvColumnStatistics(GreyCat.Object):
         name_: Final[str] = "io::CsvColumnStatistics"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[52]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[52]
+            super().__init__(type, *attributes)
 
         def name(self) -> io.CsvColumnStatistics:
             return self._get(self.type_.generated_offsets[0])
@@ -1602,10 +1602,10 @@ class io:
     class CsvFormat(GreyCat.Object):
         name_: Final[str] = "io::CsvFormat"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[53]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[53]
+            super().__init__(type, *attributes)
 
         def header_lines(self) -> io.CsvFormat:
             return self._get(self.type_.generated_offsets[0])
@@ -1671,10 +1671,10 @@ class io:
     class CsvStatistics(GreyCat.Object):
         name_: Final[str] = "io::CsvStatistics"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[54]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[54]
+            super().__init__(type, *attributes)
 
         def header_lines(self) -> io.CsvStatistics:
             return self._get(self.type_.generated_offsets[0])
@@ -1734,10 +1734,10 @@ class io:
     class Reader(Generic[__T], GreyCat.Object):
         name_: Final[str] = "io::Reader"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[55]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[55]
+            super().__init__(type, *attributes)
 
         def path(self) -> io.Reader:
             return self._get(self.type_.generated_offsets[0])
@@ -1755,10 +1755,10 @@ class io:
     class CsvSharding(GreyCat.Object):
         name_: Final[str] = "io::CsvSharding"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[56]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[56]
+            super().__init__(type, *attributes)
 
         def id(self) -> io.CsvSharding:
             return self._get(self.type_.generated_offsets[0])
@@ -1782,10 +1782,10 @@ class io:
     class FileWalker(GreyCat.Object):
         name_: Final[str] = "io::FileWalker"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[57]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[57]
+            super().__init__(type, *attributes)
 
         def path(self) -> io.FileWalker:
             return self._get(self.type_.generated_offsets[0])
@@ -1797,19 +1797,19 @@ class io:
     class Http(GreyCat.Object):
         name_: Final[str] = "io::Http"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[58]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[58]
+            super().__init__(type, *attributes)
 
     @final
     class CsvReader(Generic[__T], GreyCat.Object):
         name_: Final[str] = "io::CsvReader"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[59]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[59]
+            super().__init__(type, *attributes)
 
         def path(self) -> io.CsvReader:
             return self._get(self.type_.generated_offsets[0])
@@ -1839,10 +1839,10 @@ class io:
     class Url(GreyCat.Object):
         name_: Final[str] = "io::Url"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[60]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[60]
+            super().__init__(type, *attributes)
 
         def protocol(self) -> io.Url:
             return self._get(self.type_.generated_offsets[0])
@@ -1884,10 +1884,10 @@ class io:
     class HttpHeader(GreyCat.Object):
         name_: Final[str] = "io::HttpHeader"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[61]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[61]
+            super().__init__(type, *attributes)
 
         def name(self) -> io.HttpHeader:
             return self._get(self.type_.generated_offsets[0])
@@ -1905,10 +1905,10 @@ class io:
     class CsvWriter(Generic[__T], GreyCat.Object):
         name_: Final[str] = "io::CsvWriter"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[62]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[62]
+            super().__init__(type, *attributes)
 
         def path(self) -> io.CsvWriter:
             return self._get(self.type_.generated_offsets[0])
@@ -1932,10 +1932,10 @@ class io:
     class XmlReader(Generic[__T], GreyCat.Object):
         name_: Final[str] = "io::XmlReader"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[63]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[63]
+            super().__init__(type, *attributes)
 
         def path(self) -> io.XmlReader:
             return self._get(self.type_.generated_offsets[0])
@@ -1953,10 +1953,10 @@ class io:
     class JsonWriter(Generic[__T], GreyCat.Object):
         name_: Final[str] = "io::JsonWriter"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[64]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[64]
+            super().__init__(type, *attributes)
 
         def path(self) -> io.JsonWriter:
             return self._get(self.type_.generated_offsets[0])
@@ -1974,10 +1974,10 @@ class io:
     class GcbWriter(Generic[__T], GreyCat.Object):
         name_: Final[str] = "io::GcbWriter"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[65]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[65]
+            super().__init__(type, *attributes)
 
         def path(self) -> io.GcbWriter:
             return self._get(self.type_.generated_offsets[0])
@@ -1995,10 +1995,10 @@ class io:
     class Csv(GreyCat.Object):
         name_: Final[str] = "io::Csv"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[66]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[66]
+            super().__init__(type, *attributes)
 
         @staticmethod
         def sample(reader: io.CsvReader, max_lines: int, __greycat: Optional[GreyCat] = None) -> core.Table:
@@ -2022,10 +2022,10 @@ class io:
     class JsonReader(Generic[__T], GreyCat.Object):
         name_: Final[str] = "io::JsonReader"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[67]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[67]
+            super().__init__(type, *attributes)
 
         def path(self) -> io.JsonReader:
             return self._get(self.type_.generated_offsets[0])
@@ -2043,19 +2043,19 @@ class io:
     class Json(Generic[__T], GreyCat.Object):
         name_: Final[str] = "io::Json"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[68]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[68]
+            super().__init__(type, *attributes)
 
     @final
     class Email(GreyCat.Object):
         name_: Final[str] = "io::Email"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[69]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[69]
+            super().__init__(type, *attributes)
 
         def from_(self) -> io.Email:
             return self._get(self.type_.generated_offsets[0])
@@ -2103,10 +2103,10 @@ class io:
     class CsvAnalysisConfig(GreyCat.Object):
         name_: Final[str] = "io::CsvAnalysisConfig"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[70]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[70]
+            super().__init__(type, *attributes)
 
         def header_lines(self) -> io.CsvAnalysisConfig:
             return self._get(self.type_.generated_offsets[0])
@@ -2176,10 +2176,10 @@ class runtime:
             "last_wins": 2,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[71]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[71]
+            super().__init__(type, *attributes)
 
         def __class_getitem__(cls, key) -> runtime.MergeStrategy:
             greycat: GreyCat
@@ -2187,17 +2187,17 @@ class runtime:
                 key, greycat = key
             else:
                 greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[_std._name].mapped[71]
+            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name()].mapped[71]
             return t.enum_values[t.generated_offsets[runtime.MergeStrategy.__indices_by_values[key]]]
 
     @final
     class SecurityPolicy(GreyCat.Object):
         name_: Final[str] = "runtime::SecurityPolicy"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[72]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[72]
+            super().__init__(type, *attributes)
 
         def entities(self) -> runtime.SecurityPolicy:
             return self._get(self.type_.generated_offsets[0])
@@ -2233,10 +2233,10 @@ class runtime:
     class RuntimeInfo(GreyCat.Object):
         name_: Final[str] = "runtime::RuntimeInfo"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[73]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[73]
+            super().__init__(type, *attributes)
 
         def version(self) -> runtime.RuntimeInfo:
             return self._get(self.type_.generated_offsets[0])
@@ -2308,10 +2308,10 @@ class runtime:
     class OpenIDConnect(GreyCat.Object):
         name_: Final[str] = "runtime::OpenIDConnect"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[74]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[74]
+            super().__init__(type, *attributes)
 
         def url(self) -> runtime.OpenIDConnect:
             return self._get(self.type_.generated_offsets[0])
@@ -2340,10 +2340,10 @@ class runtime:
             "execute": 2,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[75]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[75]
+            super().__init__(type, *attributes)
 
         def __class_getitem__(cls, key) -> runtime.UserGroupPolicyType:
             greycat: GreyCat
@@ -2351,17 +2351,17 @@ class runtime:
                 key, greycat = key
             else:
                 greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[_std._name].mapped[75]
+            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name()].mapped[75]
             return t.enum_values[t.generated_offsets[runtime.UserGroupPolicyType.__indices_by_values[key]]]
 
     @final
     class SecurityFields(GreyCat.Object):
         name_: Final[str] = "runtime::SecurityFields"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[76]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[76]
+            super().__init__(type, *attributes)
 
         def email(self) -> runtime.SecurityFields:
             return self._get(self.type_.generated_offsets[0])
@@ -2415,10 +2415,10 @@ class runtime:
     class Task(GreyCat.Object):
         name_: Final[str] = "runtime::Task"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[77]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[77]
+            super().__init__(type, *attributes)
 
         def user_id(self) -> runtime.Task:
             return self._get(self.type_.generated_offsets[0])
@@ -2508,10 +2508,10 @@ class runtime:
     class Debug(GreyCat.Object):
         name_: Final[str] = "runtime::Debug"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[78]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[78]
+            super().__init__(type, *attributes)
 
         def id(self) -> runtime.Debug:
             return self._get(self.type_.generated_offsets[0])
@@ -2560,10 +2560,10 @@ class runtime:
             "trace": 4,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[79]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[79]
+            super().__init__(type, *attributes)
 
         def __class_getitem__(cls, key) -> runtime.LogLevel:
             greycat: GreyCat
@@ -2571,17 +2571,17 @@ class runtime:
                 key, greycat = key
             else:
                 greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[_std._name].mapped[79]
+            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name()].mapped[79]
             return t.enum_values[t.generated_offsets[runtime.LogLevel.__indices_by_values[key]]]
 
     @final
     class LogDataUsage(GreyCat.Object):
         name_: Final[str] = "runtime::LogDataUsage"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[80]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[80]
+            super().__init__(type, *attributes)
 
         def read_bytes(self) -> runtime.LogDataUsage:
             return self._get(self.type_.generated_offsets[0])
@@ -2629,10 +2629,10 @@ class runtime:
     class UserCredential(GreyCat.Object):
         name_: Final[str] = "runtime::UserCredential"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[81]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[81]
+            super().__init__(type, *attributes)
 
         def offset(self) -> runtime.UserCredential:
             return self._get(self.type_.generated_offsets[0])
@@ -2650,10 +2650,10 @@ class runtime:
     class Job(Generic[__T], GreyCat.Object):
         name_: Final[str] = "runtime::Job"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[82]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[82]
+            super().__init__(type, *attributes)
 
         def function(self) -> runtime.Job:
             return self._get(self.type_.generated_offsets[0])
@@ -2671,19 +2671,19 @@ class runtime:
     class System(GreyCat.Object):
         name_: Final[str] = "runtime::System"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[83]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[83]
+            super().__init__(type, *attributes)
 
     @final
     class Frame(GreyCat.Object):
         name_: Final[str] = "runtime::Frame"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[84]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[84]
+            super().__init__(type, *attributes)
 
         def module(self) -> runtime.Frame:
             return self._get(self.type_.generated_offsets[0])
@@ -2731,10 +2731,10 @@ class runtime:
     class PeriodicTask(GreyCat.Object):
         name_: Final[str] = "runtime::PeriodicTask"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[85]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[85]
+            super().__init__(type, *attributes)
 
         def function(self) -> runtime.PeriodicTask:
             return self._get(self.type_.generated_offsets[0])
@@ -2782,10 +2782,10 @@ class runtime:
     class Variable(GreyCat.Object):
         name_: Final[str] = "runtime::Variable"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[86]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[86]
+            super().__init__(type, *attributes)
 
         def name(self) -> runtime.Variable:
             return self._get(self.type_.generated_offsets[0])
@@ -2803,10 +2803,10 @@ class runtime:
     class Runtime(GreyCat.Object):
         name_: Final[str] = "runtime::Runtime"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[87]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[87]
+            super().__init__(type, *attributes)
 
         @staticmethod
         def root(__greycat: Optional[GreyCat] = None) -> Any:
@@ -2830,10 +2830,10 @@ class runtime:
     class UserGroup(GreyCat.Object):
         name_: Final[str] = "runtime::UserGroup"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[88]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[88]
+            super().__init__(type, *attributes)
 
         def id(self) -> runtime.UserGroup:
             return self._get(self.type_.generated_offsets[0])
@@ -2857,10 +2857,10 @@ class runtime:
     class UserGroupPolicy(GreyCat.Object):
         name_: Final[str] = "runtime::UserGroupPolicy"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[89]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[89]
+            super().__init__(type, *attributes)
 
         def group_id(self) -> runtime.UserGroupPolicy:
             return self._get(self.type_.generated_offsets[0])
@@ -2883,10 +2883,10 @@ class runtime:
             "testing": 2,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[90]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[90]
+            super().__init__(type, *attributes)
 
         def __class_getitem__(cls, key) -> runtime.LicenseType:
             greycat: GreyCat
@@ -2894,17 +2894,17 @@ class runtime:
                 key, greycat = key
             else:
                 greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[_std._name].mapped[90]
+            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name()].mapped[90]
             return t.enum_values[t.generated_offsets[runtime.LicenseType.__indices_by_values[key]]]
 
     @final
     class Role(GreyCat.Object):
         name_: Final[str] = "runtime::Role"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[91]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[91]
+            super().__init__(type, *attributes)
 
         def name(self) -> runtime.Role:
             return self._get(self.type_.generated_offsets[0])
@@ -2928,10 +2928,10 @@ class runtime:
     class SecurityEntity(GreyCat.Object):
         name_: Final[str] = "runtime::SecurityEntity"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[92]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[92]
+            super().__init__(type, *attributes)
 
         def id(self) -> runtime.SecurityEntity:
             return self._get(self.type_.generated_offsets[0])
@@ -2967,10 +2967,10 @@ class runtime:
     class License(GreyCat.Object):
         name_: Final[str] = "runtime::License"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[93]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[93]
+            super().__init__(type, *attributes)
 
         def name(self) -> runtime.License:
             return self._get(self.type_.generated_offsets[0])
@@ -3024,10 +3024,10 @@ class runtime:
     class User(GreyCat.Object):
         name_: Final[str] = "runtime::User"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[94]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[94]
+            super().__init__(type, *attributes)
 
         def id(self) -> runtime.User:
             return self._get(self.type_.generated_offsets[0])
@@ -3135,10 +3135,10 @@ class runtime:
     class Permission(GreyCat.Object):
         name_: Final[str] = "runtime::Permission"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[95]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[95]
+            super().__init__(type, *attributes)
 
         def name(self) -> runtime.Permission:
             return self._get(self.type_.generated_offsets[0])
@@ -3162,10 +3162,10 @@ class runtime:
     class Log(GreyCat.Object):
         name_: Final[str] = "runtime::Log"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[96]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[96]
+            super().__init__(type, *attributes)
 
         def level(self) -> runtime.Log:
             return self._get(self.type_.generated_offsets[0])
@@ -3223,10 +3223,10 @@ class runtime:
             "ended_with_errors": 7,
         }
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[97]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[97]
+            super().__init__(type, *attributes)
 
         def __class_getitem__(cls, key) -> runtime.TaskStatus:
             greycat: GreyCat
@@ -3234,7 +3234,7 @@ class runtime:
                 key, greycat = key
             else:
                 greycat = GreyCat._DEFAULT
-            t: Final[GreyCat.Type] = greycat.libs_by_name[_std._name].mapped[97]
+            t: Final[GreyCat.Type] = greycat.libs_by_name[__std.name()].mapped[97]
             return t.enum_values[t.generated_offsets[runtime.TaskStatus.__indices_by_values[key]]]
 
 
@@ -3246,10 +3246,10 @@ class util:
     class LogQuantizer(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::LogQuantizer"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[98]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[98]
+            super().__init__(type, *attributes)
 
         def min(self) -> util.LogQuantizer:
             return self._get(self.type_.generated_offsets[0])
@@ -3279,10 +3279,10 @@ class util:
     class Random(GreyCat.Object):
         name_: Final[str] = "util::Random"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[99]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[99]
+            super().__init__(type, *attributes)
 
         def seed(self) -> util.Random:
             return self._get(self.type_.generated_offsets[0])
@@ -3300,10 +3300,10 @@ class util:
     class CustomQuantizer(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::CustomQuantizer"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[100]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[100]
+            super().__init__(type, *attributes)
 
         def min(self) -> util.CustomQuantizer:
             return self._get(self.type_.generated_offsets[0])
@@ -3333,10 +3333,10 @@ class util:
     class GaussianProfile(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::GaussianProfile"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[101]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[101]
+            super().__init__(type, *attributes)
 
         def quantizer(self) -> util.GaussianProfile:
             return self._get(self.type_.generated_offsets[0])
@@ -3372,10 +3372,10 @@ class util:
     class MultiQuantizer(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::MultiQuantizer"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[102]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[102]
+            super().__init__(type, *attributes)
 
         def quantizers(self) -> util.MultiQuantizer:
             return self._get(self.type_.generated_offsets[0])
@@ -3387,10 +3387,10 @@ class util:
     class HistogramStats(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::HistogramStats"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[103]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[103]
+            super().__init__(type, *attributes)
 
         def min(self) -> util.HistogramStats:
             return self._get(self.type_.generated_offsets[0])
@@ -3510,10 +3510,10 @@ class util:
     class LinearQuantizer(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::LinearQuantizer"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[104]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[104]
+            super().__init__(type, *attributes)
 
         def min(self) -> util.LinearQuantizer:
             return self._get(self.type_.generated_offsets[0])
@@ -3543,19 +3543,19 @@ class util:
     class Crypto(GreyCat.Object):
         name_: Final[str] = "util::Crypto"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[105]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[105]
+            super().__init__(type, *attributes)
 
     @final
     class ProgressTracker(GreyCat.Object):
         name_: Final[str] = "util::ProgressTracker"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[106]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[106]
+            super().__init__(type, *attributes)
 
         def start(self) -> util.ProgressTracker:
             return self._get(self.type_.generated_offsets[0])
@@ -3603,10 +3603,10 @@ class util:
     class Gaussian(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::Gaussian"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[107]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[107]
+            super().__init__(type, *attributes)
 
         def sum(self) -> util.Gaussian:
             return self._get(self.type_.generated_offsets[0])
@@ -3642,28 +3642,28 @@ class util:
     class Assert(GreyCat.Object):
         name_: Final[str] = "util::Assert"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[108]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[108]
+            super().__init__(type, *attributes)
 
     @final
     class Plot(GreyCat.Object):
         name_: Final[str] = "util::Plot"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[109]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[109]
+            super().__init__(type, *attributes)
 
     @final
     class Queue(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::Queue"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[110]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[110]
+            super().__init__(type, *attributes)
 
         def values(self) -> util.Queue:
             return self._get(self.type_.generated_offsets[0])
@@ -3681,10 +3681,10 @@ class util:
     class GaussianProfileSlot(GreyCat.Object):
         name_: Final[str] = "util::GaussianProfileSlot"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[111]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[111]
+            super().__init__(type, *attributes)
 
         def sum(self) -> util.GaussianProfileSlot:
             return self._get(self.type_.generated_offsets[0])
@@ -3708,19 +3708,19 @@ class util:
     class Quantizer(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::Quantizer"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[112]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[112]
+            super().__init__(type, *attributes)
 
     @final
     class TimeWindow(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::TimeWindow"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[113]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[113]
+            super().__init__(type, *attributes)
 
         def values(self) -> util.TimeWindow:
             return self._get(self.type_.generated_offsets[0])
@@ -3756,10 +3756,10 @@ class util:
     class QuantizerSlotBound(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::QuantizerSlotBound"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[114]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[114]
+            super().__init__(type, *attributes)
 
         def min(self) -> util.QuantizerSlotBound:
             return self._get(self.type_.generated_offsets[0])
@@ -3783,10 +3783,10 @@ class util:
     class Stack(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::Stack"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[115]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[115]
+            super().__init__(type, *attributes)
 
         def values(self) -> util.Stack:
             return self._get(self.type_.generated_offsets[0])
@@ -3798,10 +3798,10 @@ class util:
     class Histogram(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::Histogram"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[116]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[116]
+            super().__init__(type, *attributes)
 
         def quantizer(self) -> util.Histogram:
             return self._get(self.type_.generated_offsets[0])
@@ -3855,10 +3855,10 @@ class util:
     class HistogramBin(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::HistogramBin"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[117]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[117]
+            super().__init__(type, *attributes)
 
         def bin(self) -> util.HistogramBin:
             return self._get(self.type_.generated_offsets[0])
@@ -3894,10 +3894,10 @@ class util:
     class SlidingWindow(Generic[__T], GreyCat.Object):
         name_: Final[str] = "util::SlidingWindow"
 
-        def __init__(self, type: Optional[GreyCat.Type] = None, *attributes):
+        def __init__(self, type: Optional[GreyCat.Type], *attributes):
             if type is None:
-                type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[118]
-            super().__init__(type, [*attributes])
+                GreyCat._DEFAULT.libs_by_name[__std.name()].mapped[118]
+            super().__init__(type, *attributes)
 
         def values(self) -> util.SlidingWindow:
             return self._get(self.type_.generated_offsets[0])
@@ -3931,180 +3931,178 @@ class util:
 
 
 @final
-class _std(GreyCat.Library):
-    _name = "std"
-
+class __std(GreyCat.Library):
     def name(self) -> str:
-        return _std._name
+        return "std"
 
     def configure(self, loaders: dict[str, GreyCat.Loader], factories: dict[str, GreyCat.Factory]) -> None:
-        factories[core.ErrorCode.name_] = lambda type, attributes: core.ErrorCode(type, *attributes)
-        factories[core.Table.name_] = lambda type, attributes: core.Table(type, *attributes)
+        factories[core.ErrorCode.name_] = lambda type, attributes: core.ErrorCode(type, attributes)
+        factories[core.Table.name_] = lambda type, attributes: core.Table(type, attributes)
         loaders[core.Table.name_] = lambda type, stream: std_n.core._Table.load(type, stream)
 
-        factories[core.nodeIndex.name_] = lambda type, attributes: core.nodeIndex(type, *attributes)
+        factories[core.nodeIndex.name_] = lambda type, attributes: core.nodeIndex(type, attributes)
         loaders[core.nodeIndex.name_] = lambda type, stream: std_n.core._nodeIndex.load(type, stream)
 
-        factories[core.GeoCircle.name_] = lambda type, attributes: core.GeoCircle(type, *attributes)
-        factories[core.TimeZone.name_] = lambda type, attributes: core.TimeZone(type, *attributes)
-        factories[core.String.name_] = lambda type, attributes: core.String(type, *attributes)
+        factories[core.GeoCircle.name_] = lambda type, attributes: core.GeoCircle(type, attributes)
+        factories[core.TimeZone.name_] = lambda type, attributes: core.TimeZone(type, attributes)
+        factories[core.String.name_] = lambda type, attributes: core.String(type, attributes)
         loaders[core.String.name_] = lambda type, stream: std_n.core._String.load(type, stream)
 
-        factories[core.GeoBox.name_] = lambda type, attributes: core.GeoBox(type, *attributes)
-        factories[core.MathConstants.name_] = lambda type, attributes: core.MathConstants(type, *attributes)
-        factories[core.field.name_] = lambda type, attributes: core.field(type, *attributes)
+        factories[core.GeoBox.name_] = lambda type, attributes: core.GeoBox(type, attributes)
+        factories[core.MathConstants.name_] = lambda type, attributes: core.MathConstants(type, attributes)
+        factories[core.field.name_] = lambda type, attributes: core.field(type, attributes)
         loaders[core.field.name_] = lambda type, stream: std_n.core._field.load(type, stream)
 
-        factories[core.CalendarUnit.name_] = lambda type, attributes: core.CalendarUnit(type, *attributes)
-        factories[core.Buffer.name_] = lambda type, attributes: core.Buffer(type, *attributes)
+        factories[core.CalendarUnit.name_] = lambda type, attributes: core.CalendarUnit(type, attributes)
+        factories[core.Buffer.name_] = lambda type, attributes: core.Buffer(type, attributes)
         loaders[core.Buffer.name_] = lambda type, stream: std_n.core._Buffer.load(type, stream)
 
-        factories[core.nodeList.name_] = lambda type, attributes: core.nodeList(type, *attributes)
+        factories[core.nodeList.name_] = lambda type, attributes: core.nodeList(type, attributes)
         loaders[core.nodeList.name_] = lambda type, stream: std_n.core._nodeList.load(type, stream)
 
-        factories[core.nodeTime.name_] = lambda type, attributes: core.nodeTime(type, *attributes)
+        factories[core.nodeTime.name_] = lambda type, attributes: core.nodeTime(type, attributes)
         loaders[core.nodeTime.name_] = lambda type, stream: std_n.core._nodeTime.load(type, stream)
 
-        factories[core.t3.name_] = lambda type, attributes: core.t3(type, *attributes)
+        factories[core.t3.name_] = lambda type, attributes: core.t3(type, attributes)
         loaders[core.t3.name_] = lambda type, stream: std_n.core._t3.load(type, stream)
 
-        factories[core.duration.name_] = lambda type, attributes: core.duration(type, *attributes)
+        factories[core.duration.name_] = lambda type, attributes: core.duration(type, attributes)
         loaders[core.duration.name_] = lambda type, stream: std_n.core._duration.load(type, stream)
 
-        factories[core.Tensor.name_] = lambda type, attributes: core.Tensor(type, *attributes)
+        factories[core.Tensor.name_] = lambda type, attributes: core.Tensor(type, attributes)
         loaders[core.Tensor.name_] = lambda type, stream: std_n.core._Tensor.load(type, stream)
 
-        factories[core.nodeTimeSingleton.name_] = lambda type, attributes: core.nodeTimeSingleton(type, *attributes)
-        factories[core.NodeInfo.name_] = lambda type, attributes: core.NodeInfo(type, *attributes)
-        factories[core.SortOrder.name_] = lambda type, attributes: core.SortOrder(type, *attributes)
-        factories[core.t4f.name_] = lambda type, attributes: core.t4f(type, *attributes)
+        factories[core.nodeTimeSingleton.name_] = lambda type, attributes: core.nodeTimeSingleton(type, attributes)
+        factories[core.NodeInfo.name_] = lambda type, attributes: core.NodeInfo(type, attributes)
+        factories[core.SortOrder.name_] = lambda type, attributes: core.SortOrder(type, attributes)
+        factories[core.t4f.name_] = lambda type, attributes: core.t4f(type, attributes)
         loaders[core.t4f.name_] = lambda type, stream: std_n.core._t4f.load(type, stream)
 
-        factories[core.type.name_] = lambda type, attributes: core.type(type, *attributes)
+        factories[core.type.name_] = lambda type, attributes: core.type(type, attributes)
         loaders[core.type.name_] = lambda type, stream: std_n.core._type.load(type, stream)
 
-        factories[core.SamplingMode.name_] = lambda type, attributes: core.SamplingMode(type, *attributes)
-        factories[core.geo.name_] = lambda type, attributes: core.geo(type, *attributes)
+        factories[core.SamplingMode.name_] = lambda type, attributes: core.SamplingMode(type, attributes)
+        factories[core.geo.name_] = lambda type, attributes: core.geo(type, attributes)
         loaders[core.geo.name_] = lambda type, stream: std_n.core._geo.load(type, stream)
 
-        factories[core.Error.name_] = lambda type, attributes: core.Error(type, *attributes)
-        factories[core.Map.name_] = lambda type, attributes: core.Map(type, *attributes)
+        factories[core.Error.name_] = lambda type, attributes: core.Error(type, attributes)
+        factories[core.Map.name_] = lambda type, attributes: core.Map(type, attributes)
         loaders[core.Map.name_] = lambda type, stream: std_n.core._Map.load(type, stream)
 
-        factories[core.nodeTimeCursor.name_] = lambda type, attributes: core.nodeTimeCursor(type, *attributes)
-        factories[core.nodeGeo.name_] = lambda type, attributes: core.nodeGeo(type, *attributes)
+        factories[core.nodeTimeCursor.name_] = lambda type, attributes: core.nodeTimeCursor(type, attributes)
+        factories[core.nodeGeo.name_] = lambda type, attributes: core.nodeGeo(type, attributes)
         loaders[core.nodeGeo.name_] = lambda type, stream: std_n.core._nodeGeo.load(type, stream)
 
-        factories[core.node.name_] = lambda type, attributes: core.node(type, *attributes)
+        factories[core.node.name_] = lambda type, attributes: core.node(type, attributes)
         loaders[core.node.name_] = lambda type, stream: std_n.core._node.load(type, stream)
 
-        factories[core.DurationUnit.name_] = lambda type, attributes: core.DurationUnit(type, *attributes)
-        factories[core.TableColumnMapping.name_] = lambda type, attributes: core.TableColumnMapping(type, *attributes)
-        factories[core.TensorType.name_] = lambda type, attributes: core.TensorType(type, *attributes)
-        factories[core.Tuple.name_] = lambda type, attributes: core.Tuple(type, *attributes)
-        factories[core.time.name_] = lambda type, attributes: core.time(type, *attributes)
+        factories[core.DurationUnit.name_] = lambda type, attributes: core.DurationUnit(type, attributes)
+        factories[core.TableColumnMapping.name_] = lambda type, attributes: core.TableColumnMapping(type, attributes)
+        factories[core.TensorType.name_] = lambda type, attributes: core.TensorType(type, attributes)
+        factories[core.Tuple.name_] = lambda type, attributes: core.Tuple(type, attributes)
+        factories[core.time.name_] = lambda type, attributes: core.time(type, attributes)
         loaders[core.time.name_] = lambda type, stream: std_n.core._time.load(type, stream)
 
-        factories[core.t2.name_] = lambda type, attributes: core.t2(type, *attributes)
+        factories[core.t2.name_] = lambda type, attributes: core.t2(type, attributes)
         loaders[core.t2.name_] = lambda type, stream: std_n.core._t2.load(type, stream)
 
-        factories[core.ErrorFrame.name_] = lambda type, attributes: core.ErrorFrame(type, *attributes)
-        factories[core.t4.name_] = lambda type, attributes: core.t4(type, *attributes)
+        factories[core.ErrorFrame.name_] = lambda type, attributes: core.ErrorFrame(type, attributes)
+        factories[core.t4.name_] = lambda type, attributes: core.t4(type, attributes)
         loaders[core.t4.name_] = lambda type, stream: std_n.core._t4.load(type, stream)
 
-        factories[core.Array.name_] = lambda type, attributes: core.Array(type, *attributes)
+        factories[core.Array.name_] = lambda type, attributes: core.Array(type, attributes)
         loaders[core.Array.name_] = lambda type, stream: std_n.core._Array.load(type, stream)
 
-        factories[core.GeoPoly.name_] = lambda type, attributes: core.GeoPoly(type, *attributes)
-        factories[core.FloatPrecision.name_] = lambda type, attributes: core.FloatPrecision(type, *attributes)
-        factories[core.t3f.name_] = lambda type, attributes: core.t3f(type, *attributes)
+        factories[core.GeoPoly.name_] = lambda type, attributes: core.GeoPoly(type, attributes)
+        factories[core.FloatPrecision.name_] = lambda type, attributes: core.FloatPrecision(type, attributes)
+        factories[core.t3f.name_] = lambda type, attributes: core.t3f(type, attributes)
         loaders[core.t3f.name_] = lambda type, stream: std_n.core._t3f.load(type, stream)
 
-        factories[core.str.name_] = lambda type, attributes: core.str(type, *attributes)
+        factories[core.str.name_] = lambda type, attributes: core.str(type, attributes)
         loaders[core.str.name_] = lambda type, stream: std_n.core._str.load(type, stream)
 
-        factories[core.Date.name_] = lambda type, attributes: core.Date(type, *attributes)
-        factories[core.function.name_] = lambda type, attributes: core.function(type, *attributes)
+        factories[core.Date.name_] = lambda type, attributes: core.Date(type, attributes)
+        factories[core.function.name_] = lambda type, attributes: core.function(type, attributes)
         loaders[core.function.name_] = lambda type, stream: std_n.core._function.load(type, stream)
 
-        factories[core.t2f.name_] = lambda type, attributes: core.t2f(type, *attributes)
+        factories[core.t2f.name_] = lambda type, attributes: core.t2f(type, attributes)
         loaders[core.t2f.name_] = lambda type, stream: std_n.core._t2f.load(type, stream)
 
-        factories[io.File.name_] = lambda type, attributes: io.File(type, *attributes)
-        factories[io.GcbReader.name_] = lambda type, attributes: io.GcbReader(type, *attributes)
-        factories[io.Smtp.name_] = lambda type, attributes: io.Smtp(type, *attributes)
-        factories[io.Writer.name_] = lambda type, attributes: io.Writer(type, *attributes)
-        factories[io.TextReader.name_] = lambda type, attributes: io.TextReader(type, *attributes)
-        factories[io.SmtpMode.name_] = lambda type, attributes: io.SmtpMode(type, *attributes)
-        factories[io.SmtpAuth.name_] = lambda type, attributes: io.SmtpAuth(type, *attributes)
-        factories[io.TextWriter.name_] = lambda type, attributes: io.TextWriter(type, *attributes)
-        factories[io.CsvColumnStatistics.name_] = lambda type, attributes: io.CsvColumnStatistics(type, *attributes)
-        factories[io.CsvFormat.name_] = lambda type, attributes: io.CsvFormat(type, *attributes)
-        factories[io.CsvStatistics.name_] = lambda type, attributes: io.CsvStatistics(type, *attributes)
-        factories[io.Reader.name_] = lambda type, attributes: io.Reader(type, *attributes)
-        factories[io.CsvSharding.name_] = lambda type, attributes: io.CsvSharding(type, *attributes)
-        factories[io.FileWalker.name_] = lambda type, attributes: io.FileWalker(type, *attributes)
-        factories[io.Http.name_] = lambda type, attributes: io.Http(type, *attributes)
-        factories[io.CsvReader.name_] = lambda type, attributes: io.CsvReader(type, *attributes)
-        factories[io.Url.name_] = lambda type, attributes: io.Url(type, *attributes)
-        factories[io.HttpHeader.name_] = lambda type, attributes: io.HttpHeader(type, *attributes)
-        factories[io.CsvWriter.name_] = lambda type, attributes: io.CsvWriter(type, *attributes)
-        factories[io.XmlReader.name_] = lambda type, attributes: io.XmlReader(type, *attributes)
-        factories[io.JsonWriter.name_] = lambda type, attributes: io.JsonWriter(type, *attributes)
-        factories[io.GcbWriter.name_] = lambda type, attributes: io.GcbWriter(type, *attributes)
-        factories[io.Csv.name_] = lambda type, attributes: io.Csv(type, *attributes)
-        factories[io.JsonReader.name_] = lambda type, attributes: io.JsonReader(type, *attributes)
-        factories[io.Json.name_] = lambda type, attributes: io.Json(type, *attributes)
-        factories[io.Email.name_] = lambda type, attributes: io.Email(type, *attributes)
-        factories[io.CsvAnalysisConfig.name_] = lambda type, attributes: io.CsvAnalysisConfig(type, *attributes)
-        factories[runtime.MergeStrategy.name_] = lambda type, attributes: runtime.MergeStrategy(type, *attributes)
-        factories[runtime.SecurityPolicy.name_] = lambda type, attributes: runtime.SecurityPolicy(type, *attributes)
-        factories[runtime.RuntimeInfo.name_] = lambda type, attributes: runtime.RuntimeInfo(type, *attributes)
-        factories[runtime.OpenIDConnect.name_] = lambda type, attributes: runtime.OpenIDConnect(type, *attributes)
-        factories[runtime.UserGroupPolicyType.name_] = lambda type, attributes: runtime.UserGroupPolicyType(type, *attributes)
-        factories[runtime.SecurityFields.name_] = lambda type, attributes: runtime.SecurityFields(type, *attributes)
-        factories[runtime.Task.name_] = lambda type, attributes: runtime.Task(type, *attributes)
-        factories[runtime.Debug.name_] = lambda type, attributes: runtime.Debug(type, *attributes)
-        factories[runtime.LogLevel.name_] = lambda type, attributes: runtime.LogLevel(type, *attributes)
-        factories[runtime.LogDataUsage.name_] = lambda type, attributes: runtime.LogDataUsage(type, *attributes)
-        factories[runtime.UserCredential.name_] = lambda type, attributes: runtime.UserCredential(type, *attributes)
-        factories[runtime.Job.name_] = lambda type, attributes: runtime.Job(type, *attributes)
-        factories[runtime.System.name_] = lambda type, attributes: runtime.System(type, *attributes)
-        factories[runtime.Frame.name_] = lambda type, attributes: runtime.Frame(type, *attributes)
-        factories[runtime.PeriodicTask.name_] = lambda type, attributes: runtime.PeriodicTask(type, *attributes)
-        factories[runtime.Variable.name_] = lambda type, attributes: runtime.Variable(type, *attributes)
-        factories[runtime.Runtime.name_] = lambda type, attributes: runtime.Runtime(type, *attributes)
-        factories[runtime.UserGroup.name_] = lambda type, attributes: runtime.UserGroup(type, *attributes)
-        factories[runtime.UserGroupPolicy.name_] = lambda type, attributes: runtime.UserGroupPolicy(type, *attributes)
-        factories[runtime.LicenseType.name_] = lambda type, attributes: runtime.LicenseType(type, *attributes)
-        factories[runtime.Role.name_] = lambda type, attributes: runtime.Role(type, *attributes)
-        factories[runtime.SecurityEntity.name_] = lambda type, attributes: runtime.SecurityEntity(type, *attributes)
-        factories[runtime.License.name_] = lambda type, attributes: runtime.License(type, *attributes)
-        factories[runtime.User.name_] = lambda type, attributes: runtime.User(type, *attributes)
-        factories[runtime.Permission.name_] = lambda type, attributes: runtime.Permission(type, *attributes)
-        factories[runtime.Log.name_] = lambda type, attributes: runtime.Log(type, *attributes)
-        factories[runtime.TaskStatus.name_] = lambda type, attributes: runtime.TaskStatus(type, *attributes)
-        factories[util.LogQuantizer.name_] = lambda type, attributes: util.LogQuantizer(type, *attributes)
-        factories[util.Random.name_] = lambda type, attributes: util.Random(type, *attributes)
-        factories[util.CustomQuantizer.name_] = lambda type, attributes: util.CustomQuantizer(type, *attributes)
-        factories[util.GaussianProfile.name_] = lambda type, attributes: util.GaussianProfile(type, *attributes)
-        factories[util.MultiQuantizer.name_] = lambda type, attributes: util.MultiQuantizer(type, *attributes)
-        factories[util.HistogramStats.name_] = lambda type, attributes: util.HistogramStats(type, *attributes)
-        factories[util.LinearQuantizer.name_] = lambda type, attributes: util.LinearQuantizer(type, *attributes)
-        factories[util.Crypto.name_] = lambda type, attributes: util.Crypto(type, *attributes)
-        factories[util.ProgressTracker.name_] = lambda type, attributes: util.ProgressTracker(type, *attributes)
-        factories[util.Gaussian.name_] = lambda type, attributes: util.Gaussian(type, *attributes)
-        factories[util.Assert.name_] = lambda type, attributes: util.Assert(type, *attributes)
-        factories[util.Plot.name_] = lambda type, attributes: util.Plot(type, *attributes)
-        factories[util.Queue.name_] = lambda type, attributes: util.Queue(type, *attributes)
-        factories[util.GaussianProfileSlot.name_] = lambda type, attributes: util.GaussianProfileSlot(type, *attributes)
-        factories[util.Quantizer.name_] = lambda type, attributes: util.Quantizer(type, *attributes)
-        factories[util.TimeWindow.name_] = lambda type, attributes: util.TimeWindow(type, *attributes)
-        factories[util.QuantizerSlotBound.name_] = lambda type, attributes: util.QuantizerSlotBound(type, *attributes)
-        factories[util.Stack.name_] = lambda type, attributes: util.Stack(type, *attributes)
-        factories[util.Histogram.name_] = lambda type, attributes: util.Histogram(type, *attributes)
-        factories[util.HistogramBin.name_] = lambda type, attributes: util.HistogramBin(type, *attributes)
-        factories[util.SlidingWindow.name_] = lambda type, attributes: util.SlidingWindow(type, *attributes)
+        factories[io.File.name_] = lambda type, attributes: io.File(type, attributes)
+        factories[io.GcbReader.name_] = lambda type, attributes: io.GcbReader(type, attributes)
+        factories[io.Smtp.name_] = lambda type, attributes: io.Smtp(type, attributes)
+        factories[io.Writer.name_] = lambda type, attributes: io.Writer(type, attributes)
+        factories[io.TextReader.name_] = lambda type, attributes: io.TextReader(type, attributes)
+        factories[io.SmtpMode.name_] = lambda type, attributes: io.SmtpMode(type, attributes)
+        factories[io.SmtpAuth.name_] = lambda type, attributes: io.SmtpAuth(type, attributes)
+        factories[io.TextWriter.name_] = lambda type, attributes: io.TextWriter(type, attributes)
+        factories[io.CsvColumnStatistics.name_] = lambda type, attributes: io.CsvColumnStatistics(type, attributes)
+        factories[io.CsvFormat.name_] = lambda type, attributes: io.CsvFormat(type, attributes)
+        factories[io.CsvStatistics.name_] = lambda type, attributes: io.CsvStatistics(type, attributes)
+        factories[io.Reader.name_] = lambda type, attributes: io.Reader(type, attributes)
+        factories[io.CsvSharding.name_] = lambda type, attributes: io.CsvSharding(type, attributes)
+        factories[io.FileWalker.name_] = lambda type, attributes: io.FileWalker(type, attributes)
+        factories[io.Http.name_] = lambda type, attributes: io.Http(type, attributes)
+        factories[io.CsvReader.name_] = lambda type, attributes: io.CsvReader(type, attributes)
+        factories[io.Url.name_] = lambda type, attributes: io.Url(type, attributes)
+        factories[io.HttpHeader.name_] = lambda type, attributes: io.HttpHeader(type, attributes)
+        factories[io.CsvWriter.name_] = lambda type, attributes: io.CsvWriter(type, attributes)
+        factories[io.XmlReader.name_] = lambda type, attributes: io.XmlReader(type, attributes)
+        factories[io.JsonWriter.name_] = lambda type, attributes: io.JsonWriter(type, attributes)
+        factories[io.GcbWriter.name_] = lambda type, attributes: io.GcbWriter(type, attributes)
+        factories[io.Csv.name_] = lambda type, attributes: io.Csv(type, attributes)
+        factories[io.JsonReader.name_] = lambda type, attributes: io.JsonReader(type, attributes)
+        factories[io.Json.name_] = lambda type, attributes: io.Json(type, attributes)
+        factories[io.Email.name_] = lambda type, attributes: io.Email(type, attributes)
+        factories[io.CsvAnalysisConfig.name_] = lambda type, attributes: io.CsvAnalysisConfig(type, attributes)
+        factories[runtime.MergeStrategy.name_] = lambda type, attributes: runtime.MergeStrategy(type, attributes)
+        factories[runtime.SecurityPolicy.name_] = lambda type, attributes: runtime.SecurityPolicy(type, attributes)
+        factories[runtime.RuntimeInfo.name_] = lambda type, attributes: runtime.RuntimeInfo(type, attributes)
+        factories[runtime.OpenIDConnect.name_] = lambda type, attributes: runtime.OpenIDConnect(type, attributes)
+        factories[runtime.UserGroupPolicyType.name_] = lambda type, attributes: runtime.UserGroupPolicyType(type, attributes)
+        factories[runtime.SecurityFields.name_] = lambda type, attributes: runtime.SecurityFields(type, attributes)
+        factories[runtime.Task.name_] = lambda type, attributes: runtime.Task(type, attributes)
+        factories[runtime.Debug.name_] = lambda type, attributes: runtime.Debug(type, attributes)
+        factories[runtime.LogLevel.name_] = lambda type, attributes: runtime.LogLevel(type, attributes)
+        factories[runtime.LogDataUsage.name_] = lambda type, attributes: runtime.LogDataUsage(type, attributes)
+        factories[runtime.UserCredential.name_] = lambda type, attributes: runtime.UserCredential(type, attributes)
+        factories[runtime.Job.name_] = lambda type, attributes: runtime.Job(type, attributes)
+        factories[runtime.System.name_] = lambda type, attributes: runtime.System(type, attributes)
+        factories[runtime.Frame.name_] = lambda type, attributes: runtime.Frame(type, attributes)
+        factories[runtime.PeriodicTask.name_] = lambda type, attributes: runtime.PeriodicTask(type, attributes)
+        factories[runtime.Variable.name_] = lambda type, attributes: runtime.Variable(type, attributes)
+        factories[runtime.Runtime.name_] = lambda type, attributes: runtime.Runtime(type, attributes)
+        factories[runtime.UserGroup.name_] = lambda type, attributes: runtime.UserGroup(type, attributes)
+        factories[runtime.UserGroupPolicy.name_] = lambda type, attributes: runtime.UserGroupPolicy(type, attributes)
+        factories[runtime.LicenseType.name_] = lambda type, attributes: runtime.LicenseType(type, attributes)
+        factories[runtime.Role.name_] = lambda type, attributes: runtime.Role(type, attributes)
+        factories[runtime.SecurityEntity.name_] = lambda type, attributes: runtime.SecurityEntity(type, attributes)
+        factories[runtime.License.name_] = lambda type, attributes: runtime.License(type, attributes)
+        factories[runtime.User.name_] = lambda type, attributes: runtime.User(type, attributes)
+        factories[runtime.Permission.name_] = lambda type, attributes: runtime.Permission(type, attributes)
+        factories[runtime.Log.name_] = lambda type, attributes: runtime.Log(type, attributes)
+        factories[runtime.TaskStatus.name_] = lambda type, attributes: runtime.TaskStatus(type, attributes)
+        factories[util.LogQuantizer.name_] = lambda type, attributes: util.LogQuantizer(type, attributes)
+        factories[util.Random.name_] = lambda type, attributes: util.Random(type, attributes)
+        factories[util.CustomQuantizer.name_] = lambda type, attributes: util.CustomQuantizer(type, attributes)
+        factories[util.GaussianProfile.name_] = lambda type, attributes: util.GaussianProfile(type, attributes)
+        factories[util.MultiQuantizer.name_] = lambda type, attributes: util.MultiQuantizer(type, attributes)
+        factories[util.HistogramStats.name_] = lambda type, attributes: util.HistogramStats(type, attributes)
+        factories[util.LinearQuantizer.name_] = lambda type, attributes: util.LinearQuantizer(type, attributes)
+        factories[util.Crypto.name_] = lambda type, attributes: util.Crypto(type, attributes)
+        factories[util.ProgressTracker.name_] = lambda type, attributes: util.ProgressTracker(type, attributes)
+        factories[util.Gaussian.name_] = lambda type, attributes: util.Gaussian(type, attributes)
+        factories[util.Assert.name_] = lambda type, attributes: util.Assert(type, attributes)
+        factories[util.Plot.name_] = lambda type, attributes: util.Plot(type, attributes)
+        factories[util.Queue.name_] = lambda type, attributes: util.Queue(type, attributes)
+        factories[util.GaussianProfileSlot.name_] = lambda type, attributes: util.GaussianProfileSlot(type, attributes)
+        factories[util.Quantizer.name_] = lambda type, attributes: util.Quantizer(type, attributes)
+        factories[util.TimeWindow.name_] = lambda type, attributes: util.TimeWindow(type, attributes)
+        factories[util.QuantizerSlotBound.name_] = lambda type, attributes: util.QuantizerSlotBound(type, attributes)
+        factories[util.Stack.name_] = lambda type, attributes: util.Stack(type, attributes)
+        factories[util.Histogram.name_] = lambda type, attributes: util.Histogram(type, attributes)
+        factories[util.HistogramBin.name_] = lambda type, attributes: util.HistogramBin(type, attributes)
+        factories[util.SlidingWindow.name_] = lambda type, attributes: util.SlidingWindow(type, attributes)
 
     def init(self, greycat: GreyCat) -> None:
         self.mapped: list[GreyCat.Type] = [
