@@ -1566,8 +1566,7 @@ class std_n:
                 if gc is None:
                     gc = GreyCat._DEFAULT
                 type_: GreyCat.Type = gc.types_by_name["core::Table"]
-                table: std_n.core._Table = type_.factory(type_, None)
-                table.data = nda
+                table: std_n.core._Table = type_.factory(type_, nda)
                 return table
 
             @staticmethod
