@@ -198,12 +198,13 @@ class PrimitiveType:
     T3F: int = 21
     T4F: int = 22
     BLOCK_REF: int = 23
-    FUNCTION: int = 24
-    UNDEFINED: int = 25
-    TYPE: int = 26
-    FIELD: int = 27
-    STRING_LIT: int = 28
-    SIZE: int = 29
+    BLOCK_INLINE: int = 24
+    FUNCTION: int = 25
+    UNDEFINED: int = 26
+    TYPE: int = 27
+    FIELD: int = 28
+    STRING_LIT: int = 29
+    SIZE: int = 30
 
 
 class ByteArrayIO(BufferedIOBase):

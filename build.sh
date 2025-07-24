@@ -7,7 +7,7 @@ rm -rf build dist greycat/GreyCat.egg-info
 
 sed -i -e "s/version=\"0.0.0\",/version=\"${VERSION}\",/" setup.py
 
-python -m build -w
+python3 -m build -w
 
 PY_BUILT_VERSION=$(echo ${VERSION} | sed 's/-/./g')
 
