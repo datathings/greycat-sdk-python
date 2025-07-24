@@ -7,12 +7,15 @@ stages:
   - publish
 
 before_script:
-  - export VERSION=`git2version -s`
+  - export PROJECT_VERSION_MAJOR_MINOR=`cat VERSION`
+  - export VERSION=`greycat build-version`
 
 build:
   stage: build
   tags: [ linux ]
   script:
+    - greycat install
+    - GREYCAT_CORE=1 bin/greycat codegen python
     - ./build.sh
   artifacts:
     when: on_success
