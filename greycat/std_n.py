@@ -1439,7 +1439,6 @@ class std_n:
                         elif issubclass(unique_type, GreyCat.Object):
                             object = monotonic_value
                             object._save_type(stream)
-                            stream.write_i8(0)  # TODO: manage monotonic
                             for row in range(rows):
                                 object = self.data[row, col]
                                 if object is not None:
@@ -1566,7 +1565,8 @@ class std_n:
                 if gc is None:
                     gc = GreyCat._DEFAULT
                 type_: GreyCat.Type = gc.types_by_name["core::Table"]
-                table: std_n.core._Table = type_.factory(type_, nda)
+                table: std_n.core._Table = type_.factory(type_, None)
+                table.data = nda
                 return table
 
             @staticmethod

@@ -1271,6 +1271,7 @@ class GreyCat:
             g2_abi_type_desc: Final[int] = abi_stream.read_vu32()
             # TODO: use?
             parent_type_id: Final[int] = abi_stream.read_vu32()
+            companion_type_id: Final[int] = abi_stream.read_vu32()
             attributes_len: int = abi_stream.read_vu32()
             abi_stream.read_vu32()  # unused field
             abi_stream.read_vu32()  # unused field
@@ -1520,7 +1521,9 @@ class GreyCat:
                 stream.write(
                     parameter, None if param_type is self.type_offset_core_any else param_type)
             stream.close()
+            print(f"DEBUG: {fqn}: {[byte for byte in b]}")
             body: bytes = bytes(b)
+            print(f"DEBUG: {fqn}: {[byte for byte in body]}")
         headers: dict[str, str] = {
             "Content-Type": "application/octet-stream",
             "Accept": "application/octet-stream",
@@ -1535,6 +1538,8 @@ class GreyCat:
             body,
             headers,
         )
+        if body is not None:
+            print(f"DEBUG: {fqn}: {[byte for byte in body]}")
         response: http.client.HTTPResponse = connection.getresponse()
         status: int = response.status
         stream = GreyCat._Stream(self, response)
@@ -1545,6 +1550,8 @@ class GreyCat:
         # if len(response.read(1)) > 0:
         #     raise IOError('Remaining unread bytes')
         stream.close()
+        if body is not None:
+            print(f"DEBUG: {fqn}: {[byte for byte in body]}")
         return res
 
     def fetch(self, path: str) -> object:
