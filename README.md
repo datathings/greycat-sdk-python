@@ -19,3 +19,22 @@ In some operating systems python executable is exposed as `python3` and others `
     python3 -m pip install https://get.greycat.io/files/sdk/python/testing/6.1/greycat-6.1.32+testing-py3-none-any.whl
     ```
     As the version above is doomed to be outdated, more recent versions can be checked at https://get.greycat.io/files/sdk/python/testing/
+
+## Clean
+
+```bash
+rm -rf bin/ files/ gcdata/ lib/
+```
+
+## Test
+
+- In a first terminal:
+  ```bash
+  GREYCAT_CORE= greycat codegen python
+  greycat install
+  greycat serve
+  ```
+- In a second terminal:
+  ```bash
+  python -m tests.client
+  ```
