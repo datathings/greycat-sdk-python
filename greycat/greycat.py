@@ -1008,7 +1008,7 @@ class GreyCat:
             else:
                 self.loader = GreyCat.Type.__object_loader
             self.static_values: List[Any] = []
-            self.generated_offsets: List[int] | None = None
+            self.generated_offsets: List[int] = []
 
         def resolve_generated_offsets(self, *args: str) -> None:
             self.generated_offsets: List[int] = []
