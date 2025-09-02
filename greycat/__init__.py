@@ -37,7 +37,8 @@ class core:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[1]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def __class_getitem__(cls, key) -> core.CalendarUnit:
             greycat: GreyCat
@@ -55,7 +56,8 @@ class core:
         def __init__(self, column: int, extractors: core.Array, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[2]
-            super().__init__(_type, [column, extractors])
+            attributes: list = [column, extractors]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def column(self) -> int:
             return self._get(self.type_.generated_offsets[0])
@@ -94,7 +96,8 @@ class core:
         def __init__(self, key: core.__K, value: core.__V, next: core.nodeIndexBucket, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[5]
-            super().__init__(_type, [key, value, next])
+            attributes: list = [key, value, next]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def key(self) -> core.__K:
             return self._get(self.type_.generated_offsets[0])
@@ -138,7 +141,8 @@ class core:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[7]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def __class_getitem__(cls, key) -> core.TensorType:
             greycat: GreyCat
@@ -178,7 +182,8 @@ class core:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[9]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def __class_getitem__(cls, key) -> core.FloatPrecision:
             greycat: GreyCat
@@ -227,7 +232,8 @@ class core:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[13]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def __class_getitem__(cls, key) -> core.SortOrder:
             greycat: GreyCat
@@ -845,7 +851,8 @@ class core:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[14]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def __class_getitem__(cls, key) -> core.TimeZone:
             greycat: GreyCat
@@ -878,7 +885,8 @@ class core:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[16]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def __class_getitem__(cls, key) -> core.SamplingMode:
             greycat: GreyCat
@@ -905,7 +913,8 @@ class core:
         def __init__(self, module: str, function: str, line: int, column: int, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[18]
-            super().__init__(_type, [module, function, line, column])
+            attributes: list = [module, function, line, column]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def module(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -938,7 +947,8 @@ class core:
         def __init__(self, sw: core.geo, ne: core.geo, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[19]
-            super().__init__(_type, [sw, ne])
+            attributes: list = [sw, ne]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def sw(self) -> core.geo:
             return self._get(self.type_.generated_offsets[0])
@@ -968,7 +978,8 @@ class core:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[21]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
     @final
     class Buffer(std_n.core._Buffer):
@@ -1003,7 +1014,8 @@ class core:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[24]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def __class_getitem__(cls, key) -> core.DurationUnit:
             greycat: GreyCat
@@ -1056,7 +1068,8 @@ class core:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[28]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def __class_getitem__(cls, key) -> core.ErrorCode:
             greycat: GreyCat
@@ -1092,7 +1105,8 @@ class core:
         def __init__(self, year: int, month: int, day: int, hour: int, minute: int, second: int, microsecond: int, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[31]
-            super().__init__(_type, [year, month, day, hour, minute, second, microsecond])
+            attributes: list = [year, month, day, hour, minute, second, microsecond]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def year(self) -> int:
             return self._get(self.type_.generated_offsets[0])
@@ -1158,7 +1172,8 @@ class core:
         def __init__(self, x: core.__T, y: core.__U, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[33]
-            super().__init__(_type, [x, y])
+            attributes: list = [x, y]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def x(self) -> core.__T:
             return self._get(self.type_.generated_offsets[0])
@@ -1188,7 +1203,8 @@ class core:
         def __init__(self, center: core.geo, radius: float, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[35]
-            super().__init__(_type, [center, radius])
+            attributes: list = [center, radius]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def center(self) -> core.geo:
             return self._get(self.type_.generated_offsets[0])
@@ -1218,7 +1234,8 @@ class core:
         def __init__(self, points: core.Array, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[37]
-            super().__init__(_type, [points])
+            attributes: list = [points]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def points(self) -> core.Array:
             return self._get(self.type_.generated_offsets[0])
@@ -1233,7 +1250,8 @@ class core:
         def __init__(self, n: core.nodeTime, req_time: core.time, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[38]
-            super().__init__(_type, [n, req_time])
+            attributes: list = [n, req_time]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def n(self) -> core.nodeTime:
             return self._get(self.type_.generated_offsets[0])
@@ -1272,7 +1290,8 @@ class core:
         def __init__(self, message: str, stack: core.Array, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[41]
-            super().__init__(_type, [message, stack])
+            attributes: list = [message, stack]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def message(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -1302,7 +1321,8 @@ class core:
         def __init__(self, size: int, from_: core.__T, to: core.__T, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[43]
-            super().__init__(_type, [size, from_, to])
+            attributes: list = [size, from_, to]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def size(self) -> int:
             return self._get(self.type_.generated_offsets[0])
@@ -1345,7 +1365,8 @@ class io:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[44]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def __class_getitem__(cls, key) -> io.HttpMethod:
             greycat: GreyCat
@@ -1363,7 +1384,8 @@ class io:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[45]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         @staticmethod
         def sample(reader: io.CsvReader, max_lines: int, __greycat: Optional[GreyCat] = None) -> core.Table:
@@ -1390,7 +1412,8 @@ class io:
         def __init__(self, id: int, column: int, modulo: int, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[46]
-            super().__init__(_type, [id, column, modulo])
+            attributes: list = [id, column, modulo]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def id(self) -> int:
             return self._get(self.type_.generated_offsets[0])
@@ -1417,7 +1440,8 @@ class io:
         def __init__(self, header_lines: int, separator: c_char, string_delimiter: c_char, decimal_separator: c_char, thousands_separator: c_char, columns: core.Array, line_count: int, fail_count: int, file_count: int, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[47]
-            super().__init__(_type, [header_lines, separator, string_delimiter, decimal_separator, thousands_separator, columns, line_count, fail_count, file_count])
+            attributes: list = [header_lines, separator, string_delimiter, decimal_separator, thousands_separator, columns, line_count, fail_count, file_count]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def header_lines(self) -> int:
             return self._get(self.type_.generated_offsets[0])
@@ -1480,7 +1504,8 @@ class io:
         def __init__(self, header_lines: int, separator: c_char, string_delimiter: c_char, decimal_separator: c_char, thousands_separator: c_char, trim: bool, format: str, tz: core.TimeZone, strict: bool, nearest_time: bool, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[48]
-            super().__init__(_type, [header_lines, separator, string_delimiter, decimal_separator, thousands_separator, trim, format, tz, strict, nearest_time])
+            attributes: list = [header_lines, separator, string_delimiter, decimal_separator, thousands_separator, trim, format, tz, strict, nearest_time]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def header_lines(self) -> int:
             return self._get(self.type_.generated_offsets[0])
@@ -1549,7 +1574,8 @@ class io:
         def __init__(self, status_code: int, headers: core.Map, content: io.__T, error_msg: str, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[49]
-            super().__init__(_type, [status_code, headers, content, error_msg])
+            attributes: list = [status_code, headers, content, error_msg]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def status_code(self) -> int:
             return self._get(self.type_.generated_offsets[0])
@@ -1587,7 +1613,8 @@ class io:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[50]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def __class_getitem__(cls, key) -> io.SmtpAuth:
             greycat: GreyCat
@@ -1605,7 +1632,8 @@ class io:
         def __init__(self, path: str, size: int, last_modification: core.time, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[51]
-            super().__init__(_type, [path, size, last_modification])
+            attributes: list = [path, size, last_modification]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def path(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -1632,7 +1660,8 @@ class io:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[52]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
     @final
     class Http(Generic[__T], GreyCat.Object):
@@ -1641,7 +1670,8 @@ class io:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[53]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
     @final
     class FileWalker(GreyCat.Object):
@@ -1650,7 +1680,8 @@ class io:
         def __init__(self, path: str, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[54]
-            super().__init__(_type, [path])
+            attributes: list = [path]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def path(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -1665,7 +1696,8 @@ class io:
         def __init__(self, method: io.HttpMethod, url: str, headers: core.Map, body: str, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[55]
-            super().__init__(_type, [method, url, headers, body])
+            attributes: list = [method, url, headers, body]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def method(self) -> io.HttpMethod:
             return self._get(self.type_.generated_offsets[0])
@@ -1698,7 +1730,8 @@ class io:
         def __init__(self, path: str, pos: int, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[56]
-            super().__init__(_type, [path, pos])
+            attributes: list = [path, pos]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def path(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -1719,7 +1752,8 @@ class io:
         def __init__(self, from_: str, subject: str, body: str, body_is_html: bool, to: core.Array, cc: core.Array, bcc: core.Array, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[57]
-            super().__init__(_type, [from_, subject, body, body_is_html, to, cc, bcc])
+            attributes: list = [from_, subject, body, body_is_html, to, cc, bcc]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def from_(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -1770,7 +1804,8 @@ class io:
         def __init__(self, protocol: str, host: str, port: int, path: str, params: core.Map, hash: str, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[58]
-            super().__init__(_type, [protocol, host, port, path, params, hash])
+            attributes: list = [protocol, host, port, path, params, hash]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def protocol(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -1815,7 +1850,8 @@ class io:
         def __init__(self, path: str, pos: int, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[59]
-            super().__init__(_type, [path, pos])
+            attributes: list = [path, pos]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def path(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -1836,7 +1872,8 @@ class io:
         def __init__(self, path: str, pos: int, format: io.CsvFormat, sharding: io.CsvSharding, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[60]
-            super().__init__(_type, [path, pos, format, sharding])
+            attributes: list = [path, pos, format, sharding]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def path(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -1869,7 +1906,8 @@ class io:
         def __init__(self, path: str, pos: int, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[61]
-            super().__init__(_type, [path, pos])
+            attributes: list = [path, pos]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def path(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -1890,7 +1928,8 @@ class io:
         def __init__(self, path: str, append: bool, format: io.CsvFormat, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[62]
-            super().__init__(_type, [path, append, format])
+            attributes: list = [path, append, format]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def path(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -1917,7 +1956,8 @@ class io:
         def __init__(self, path: str, pos: int, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[63]
-            super().__init__(_type, [path, pos])
+            attributes: list = [path, pos]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def path(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -1938,7 +1978,8 @@ class io:
         def __init__(self, path: str, append: bool, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[64]
-            super().__init__(_type, [path, append])
+            attributes: list = [path, append]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def path(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -1959,7 +2000,8 @@ class io:
         def __init__(self, path: str, append: bool, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[65]
-            super().__init__(_type, [path, append])
+            attributes: list = [path, append]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def path(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -1980,7 +2022,8 @@ class io:
         def __init__(self, path: str, append: bool, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[66]
-            super().__init__(_type, [path, append])
+            attributes: list = [path, append]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def path(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -2001,7 +2044,8 @@ class io:
         def __init__(self, header_lines: int, separator: c_char, string_delimiter: c_char, decimal_separator: c_char, thousands_separator: c_char, row_limit: int, enumerable_limit: int, date_check_limit: int, date_formats: core.Array, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[67]
-            super().__init__(_type, [header_lines, separator, string_delimiter, decimal_separator, thousands_separator, row_limit, enumerable_limit, date_check_limit, date_formats])
+            attributes: list = [header_lines, separator, string_delimiter, decimal_separator, thousands_separator, row_limit, enumerable_limit, date_check_limit, date_formats]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def header_lines(self) -> int:
             return self._get(self.type_.generated_offsets[0])
@@ -2064,7 +2108,8 @@ class io:
         def __init__(self, host: str, port: int, mode: io.SmtpMode, authenticate: io.SmtpAuth, user: str, pass_: str, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[68]
-            super().__init__(_type, [host, port, mode, authenticate, user, pass_])
+            attributes: list = [host, port, mode, authenticate, user, pass_]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def host(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -2109,7 +2154,8 @@ class io:
         def __init__(self, path: str, pos: int, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[69]
-            super().__init__(_type, [path, pos])
+            attributes: list = [path, pos]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def path(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -2130,7 +2176,8 @@ class io:
         def __init__(self, name: str, example: Any, null_count: int, bool_count: int, int_count: int, float_count: int, string_count: int, date_count: int, date_format_count: core.Map, enumerable_count: core.Map, profile: util.Gaussian, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[70]
-            super().__init__(_type, [name, example, null_count, bool_count, int_count, float_count, string_count, date_count, date_format_count, enumerable_count, profile])
+            attributes: list = [name, example, null_count, bool_count, int_count, float_count, string_count, date_count, date_format_count, enumerable_count, profile]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def name(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -2205,7 +2252,8 @@ class io:
         def __init__(self, path: str, append: bool, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[71]
-            super().__init__(_type, [path, append])
+            attributes: list = [path, append]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def path(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -2231,7 +2279,8 @@ class io:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[72]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def __class_getitem__(cls, key) -> io.SmtpMode:
             greycat: GreyCat
@@ -2254,7 +2303,8 @@ class runtime:
         def __init__(self, module: str, type: str, function: str, src: str, line: int, column: int, scope: core.Array, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[73]
-            super().__init__(_type, [module, type, function, src, line, column, scope])
+            attributes: list = [module, type, function, src, line, column, scope]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def module(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -2305,7 +2355,8 @@ class runtime:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[74]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
     @final
     class Permission(GreyCat.Object):
@@ -2314,7 +2365,8 @@ class runtime:
         def __init__(self, name: str, description: str, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[75]
-            super().__init__(_type, [name, description])
+            attributes: list = [name, description]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def name(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -2341,7 +2393,8 @@ class runtime:
         def __init__(self, offset: int, pass_: str, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[76]
-            super().__init__(_type, [offset, pass_])
+            attributes: list = [offset, pass_]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def offset(self) -> int:
             return self._get(self.type_.generated_offsets[0])
@@ -2362,7 +2415,8 @@ class runtime:
         def __init__(self, id: int, name: str, activated: bool, full_name: str, email: str, role: str, groups: core.Array, groups_flags: int, external: bool, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[77]
-            super().__init__(_type, [id, name, activated, full_name, email, role, groups, groups_flags, external])
+            attributes: list = [id, name, activated, full_name, email, role, groups, groups_flags, external]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def id(self) -> int:
             return self._get(self.type_.generated_offsets[0])
@@ -2473,7 +2527,8 @@ class runtime:
         def __init__(self, read_bytes: int, read_hits: int, read_wasted: int, write_bytes: int, write_hits: int, cache_bytes: int, cache_hits: int, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[78]
-            super().__init__(_type, [read_bytes, read_hits, read_wasted, write_bytes, write_hits, cache_bytes, cache_hits])
+            attributes: list = [read_bytes, read_hits, read_wasted, write_bytes, write_hits, cache_bytes, cache_hits]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def read_bytes(self) -> int:
             return self._get(self.type_.generated_offsets[0])
@@ -2524,7 +2579,8 @@ class runtime:
         def __init__(self, days: core.Array, daily: runtime.DailyPeriodicity, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[79]
-            super().__init__(_type, [days, daily])
+            attributes: list = [days, daily]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def days(self) -> core.Array:
             return self._get(self.type_.generated_offsets[0])
@@ -2545,7 +2601,8 @@ class runtime:
         def __init__(self, days: core.Array, daily: runtime.DailyPeriodicity, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[80]
-            super().__init__(_type, [days, daily])
+            attributes: list = [days, daily]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def days(self) -> core.Array:
             return self._get(self.type_.generated_offsets[0])
@@ -2566,7 +2623,8 @@ class runtime:
         def __init__(self, dates: core.Array, timezone: core.TimeZone, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[81]
-            super().__init__(_type, [dates, timezone])
+            attributes: list = [dates, timezone]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def dates(self) -> core.Array:
             return self._get(self.type_.generated_offsets[0])
@@ -2587,7 +2645,8 @@ class runtime:
         def __init__(self, version: str, program_version: str, arch: str, timezone: core.TimeZone, license: runtime.License, io_threads: int, bg_threads: int, fg_threads: int, mem_total: int, mem_worker: int, disk_data_bytes: int, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[82]
-            super().__init__(_type, [version, program_version, arch, timezone, license, io_threads, bg_threads, fg_threads, mem_total, mem_worker, disk_data_bytes])
+            attributes: list = [version, program_version, arch, timezone, license, io_threads, bg_threads, fg_threads, mem_total, mem_worker, disk_data_bytes]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def version(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -2662,7 +2721,8 @@ class runtime:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[83]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         @staticmethod
         def deactivate(function: core.function, __greycat: Optional[GreyCat] = None) -> bool:
@@ -2701,7 +2761,8 @@ class runtime:
         def __init__(self, user_id: int, task_id: int, mod: str, type: str, fun: str, creation: core.time, start: core.time, duration: core.duration, status: runtime.TaskStatus, progress: float, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[84]
-            super().__init__(_type, [user_id, task_id, mod, type, fun, creation, start, duration, status, progress])
+            attributes: list = [user_id, task_id, mod, type, fun, creation, start, duration, status, progress]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def user_id(self) -> int:
             return self._get(self.type_.generated_offsets[0])
@@ -2794,7 +2855,8 @@ class runtime:
         def __init__(self, day: int, month: runtime.Month, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[85]
-            super().__init__(_type, [day, month])
+            attributes: list = [day, month]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def day(self) -> int:
             return self._get(self.type_.generated_offsets[0])
@@ -2820,7 +2882,8 @@ class runtime:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[86]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def __class_getitem__(cls, key) -> runtime.UserGroupPolicyType:
             greycat: GreyCat
@@ -2838,7 +2901,8 @@ class runtime:
         def __init__(self, every: core.duration, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[87]
-            super().__init__(_type, [every])
+            attributes: list = [every]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def every(self) -> core.duration:
             return self._get(self.type_.generated_offsets[0])
@@ -2853,7 +2917,8 @@ class runtime:
         def __init__(self, name: str, value: Any, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[88]
-            super().__init__(_type, [name, value])
+            attributes: list = [name, value]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def name(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -2874,7 +2939,8 @@ class runtime:
         def __init__(self, id: int, name: str, activated: bool, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[89]
-            super().__init__(_type, [id, name, activated])
+            attributes: list = [id, name, activated]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def id(self) -> int:
             return self._get(self.type_.generated_offsets[0])
@@ -2901,7 +2967,8 @@ class runtime:
         def __init__(self, name: str, start: core.time, end: core.time, company: str, max_memory: int, extra_1: int, extra_2: int, type: runtime.LicenseType, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[90]
-            super().__init__(_type, [name, start, end, company, max_memory, extra_1, extra_2, type])
+            attributes: list = [name, start, end, company, max_memory, extra_1, extra_2, type]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def name(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -2958,7 +3025,8 @@ class runtime:
         def __init__(self, activated: bool, start: core.time, max_duration: core.duration, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[91]
-            super().__init__(_type, [activated, start, max_duration])
+            attributes: list = [activated, start, max_duration]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def activated(self) -> bool:
             return self._get(self.type_.generated_offsets[0])
@@ -2999,7 +3067,8 @@ class runtime:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[92]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def __class_getitem__(cls, key) -> runtime.Month:
             greycat: GreyCat
@@ -3017,7 +3086,8 @@ class runtime:
         def __init__(self, id: int, name: str, activated: bool, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[93]
-            super().__init__(_type, [id, name, activated])
+            attributes: list = [id, name, activated]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def id(self) -> int:
             return self._get(self.type_.generated_offsets[0])
@@ -3056,7 +3126,8 @@ class runtime:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[94]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         @staticmethod
         def root(__greycat: Optional[GreyCat] = None) -> Any:
@@ -3089,7 +3160,8 @@ class runtime:
         def __init__(self, group_id: int, type: runtime.UserGroupPolicyType, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[95]
-            super().__init__(_type, [group_id, type])
+            attributes: list = [group_id, type]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def group_id(self) -> int:
             return self._get(self.type_.generated_offsets[0])
@@ -3110,7 +3182,8 @@ class runtime:
         def __init__(self, function: core.function, periodicity: runtime.Periodicity, options: runtime.PeriodicOptions, is_active: bool, next_execution: core.time, execution_count: int, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[96]
-            super().__init__(_type, [function, periodicity, options, is_active, next_execution, execution_count])
+            attributes: list = [function, periodicity, options, is_active, next_execution, execution_count]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def function(self) -> core.function:
             return self._get(self.type_.generated_offsets[0])
@@ -3155,7 +3228,8 @@ class runtime:
         def __init__(self, url: str, clientId: str, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[97]
-            super().__init__(_type, [url, clientId])
+            attributes: list = [url, clientId]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def url(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -3189,7 +3263,8 @@ class runtime:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[98]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def __class_getitem__(cls, key) -> runtime.LogLevel:
             greycat: GreyCat
@@ -3207,7 +3282,8 @@ class runtime:
         def __init__(self, level: runtime.LogLevel, time: core.time, user_id: int, id: int, id2: int, src: core.function, data: Any, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[99]
-            super().__init__(_type, [level, time, user_id, id, id2, src, data])
+            attributes: list = [level, time, user_id, id, id2, src, data]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def level(self) -> runtime.LogLevel:
             return self._get(self.type_.generated_offsets[0])
@@ -3267,7 +3343,8 @@ class runtime:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[100]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def __class_getitem__(cls, key) -> runtime.DayOfWeek:
             greycat: GreyCat
@@ -3290,7 +3367,8 @@ class runtime:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[101]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def __class_getitem__(cls, key) -> runtime.MergeStrategy:
             greycat: GreyCat
@@ -3308,7 +3386,8 @@ class runtime:
         def __init__(self, id: int, frames: core.Array, root: Any, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[102]
-            super().__init__(_type, [id, frames, root])
+            attributes: list = [id, frames, root]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def id(self) -> int:
             return self._get(self.type_.generated_offsets[0])
@@ -3353,7 +3432,8 @@ class runtime:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[103]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
     @final
     class SecurityFields(GreyCat.Object):
@@ -3362,7 +3442,8 @@ class runtime:
         def __init__(self, email: str, name: str, first_name: str, last_name: str, roles: core.Map, groups: core.Map, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[104]
-            super().__init__(_type, [email, name, first_name, last_name, roles, groups])
+            attributes: list = [email, name, first_name, last_name, roles, groups]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def email(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -3419,7 +3500,8 @@ class runtime:
         def __init__(self, entities: core.Array, credentials: core.Map, fields: runtime.SecurityFields, keys: core.Map, keys_last_refresh: core.time, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[105]
-            super().__init__(_type, [entities, credentials, fields, keys, keys_last_refresh])
+            attributes: list = [entities, credentials, fields, keys, keys_last_refresh]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def entities(self) -> core.Array:
             return self._get(self.type_.generated_offsets[0])
@@ -3468,7 +3550,8 @@ class runtime:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[106]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def __class_getitem__(cls, key) -> runtime.TaskStatus:
             greycat: GreyCat
@@ -3486,7 +3569,8 @@ class runtime:
         def __init__(self, name: str, permissions: core.Array, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[107]
-            super().__init__(_type, [name, permissions])
+            attributes: list = [name, permissions]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def name(self) -> str:
             return self._get(self.type_.generated_offsets[0])
@@ -3513,7 +3597,8 @@ class runtime:
         def __init__(self, function: core.function, arguments: core.Array, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[108]
-            super().__init__(_type, [function, arguments])
+            attributes: list = [function, arguments]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def function(self) -> core.function:
             return self._get(self.type_.generated_offsets[0])
@@ -3539,7 +3624,8 @@ class runtime:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[109]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def __class_getitem__(cls, key) -> runtime.LicenseType:
             greycat: GreyCat
@@ -3557,7 +3643,8 @@ class runtime:
         def __init__(self, hour: int, minute: int, second: int, timezone: core.TimeZone, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[110]
-            super().__init__(_type, [hour, minute, second, timezone])
+            attributes: list = [hour, minute, second, timezone]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def hour(self) -> int:
             return self._get(self.type_.generated_offsets[0])
@@ -3595,7 +3682,8 @@ class util:
         def __init__(self, quantizer: util.Quantizer, precision: core.FloatPrecision, bins: core.Table, value_min: float, nb_rejected: int, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[111]
-            super().__init__(_type, [quantizer, precision, bins, value_min, nb_rejected])
+            attributes: list = [quantizer, precision, bins, value_min, nb_rejected]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def quantizer(self) -> util.Quantizer:
             return self._get(self.type_.generated_offsets[0])
@@ -3634,7 +3722,8 @@ class util:
         def __init__(self, quantizers: core.Array, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[112]
-            super().__init__(_type, [quantizers])
+            attributes: list = [quantizers]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def quantizers(self) -> core.Array:
             return self._get(self.type_.generated_offsets[0])
@@ -3649,7 +3738,8 @@ class util:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[113]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
     @final
     class SlidingWindow(Generic[__T], GreyCat.Object):
@@ -3658,7 +3748,8 @@ class util:
         def __init__(self, values: core.Array, span: int, sum: float, sumsq: float, field: core.field, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[114]
-            super().__init__(_type, [values, span, sum, sumsq, field])
+            attributes: list = [values, span, sum, sumsq, field]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def values(self) -> core.Array:
             return self._get(self.type_.generated_offsets[0])
@@ -3697,7 +3788,8 @@ class util:
         def __init__(self, bin: util.QuantizerSlotBound, count: int, ratio: float, cumulative_count: int, cumulative_ratio: float, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[115]
-            super().__init__(_type, [bin, count, ratio, cumulative_count, cumulative_ratio])
+            attributes: list = [bin, count, ratio, cumulative_count, cumulative_ratio]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def bin(self) -> util.QuantizerSlotBound:
             return self._get(self.type_.generated_offsets[0])
@@ -3736,7 +3828,8 @@ class util:
         def __init__(self, sum: int, sumsq: int, count: int, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[116]
-            super().__init__(_type, [sum, sumsq, count])
+            attributes: list = [sum, sumsq, count]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def sum(self) -> int:
             return self._get(self.type_.generated_offsets[0])
@@ -3763,7 +3856,8 @@ class util:
         def __init__(self, values: core.Table, span: core.duration, sum: float, sumsq: float, field: core.field, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[117]
-            super().__init__(_type, [values, span, sum, sumsq, field])
+            attributes: list = [values, span, sum, sumsq, field]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def values(self) -> core.Table:
             return self._get(self.type_.generated_offsets[0])
@@ -3802,7 +3896,8 @@ class util:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[118]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
     @final
     class Histogram(Generic[__T], GreyCat.Object):
@@ -3811,7 +3906,8 @@ class util:
         def __init__(self, quantizer: util.Quantizer, bins: core.Array, nb_rejected: int, nb_accepted: int, min: util.__T, max: util.__T, sum: float, sumsq: float, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[119]
-            super().__init__(_type, [quantizer, bins, nb_rejected, nb_accepted, min, max, sum, sumsq])
+            attributes: list = [quantizer, bins, nb_rejected, nb_accepted, min, max, sum, sumsq]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def quantizer(self) -> util.Quantizer:
             return self._get(self.type_.generated_offsets[0])
@@ -3868,7 +3964,8 @@ class util:
         def __init__(self, sum: float, sumsq: float, count: int, min: util.__T, max: util.__T, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[120]
-            super().__init__(_type, [sum, sumsq, count, min, max])
+            attributes: list = [sum, sumsq, count, min, max]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def sum(self) -> float:
             return self._get(self.type_.generated_offsets[0])
@@ -3907,7 +4004,8 @@ class util:
         def __init__(self, min: util.__T, max: util.__T, whisker_low: util.__T, whisker_high: util.__T, percentile1: util.__T, percentile5: util.__T, percentile10: util.__T, percentile20: util.__T, percentile25: util.__T, percentile50: util.__T, percentile75: util.__T, percentile80: util.__T, percentile90: util.__T, percentile95: util.__T, percentile99: util.__T, sum: float, avg: util.__T, std: util.__T, size: int, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[121]
-            super().__init__(_type, [min, max, whisker_low, whisker_high, percentile1, percentile5, percentile10, percentile20, percentile25, percentile50, percentile75, percentile80, percentile90, percentile95, percentile99, sum, avg, std, size])
+            attributes: list = [min, max, whisker_low, whisker_high, percentile1, percentile5, percentile10, percentile20, percentile25, percentile50, percentile75, percentile80, percentile90, percentile95, percentile99, sum, avg, std, size]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def min(self) -> util.__T:
             return self._get(self.type_.generated_offsets[0])
@@ -4030,7 +4128,8 @@ class util:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[122]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
     @final
     class CustomQuantizer(Generic[__T], GreyCat.Object):
@@ -4039,7 +4138,8 @@ class util:
         def __init__(self, min: util.__T, max: util.__T, step_starts: core.Array, open: bool, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[123]
-            super().__init__(_type, [min, max, step_starts, open])
+            attributes: list = [min, max, step_starts, open]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def min(self) -> util.__T:
             return self._get(self.type_.generated_offsets[0])
@@ -4072,7 +4172,8 @@ class util:
         def __init__(self, seed: int, v: float, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[124]
-            super().__init__(_type, [seed, v])
+            attributes: list = [seed, v]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def seed(self) -> int:
             return self._get(self.type_.generated_offsets[0])
@@ -4093,7 +4194,8 @@ class util:
         def __init__(self, min: util.__T, max: util.__T, bins: int, open: bool, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[125]
-            super().__init__(_type, [min, max, bins, open])
+            attributes: list = [min, max, bins, open]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def min(self) -> util.__T:
             return self._get(self.type_.generated_offsets[0])
@@ -4126,7 +4228,8 @@ class util:
         def __init__(self, start: core.time, total: int, counter: int, duration: core.duration, progress: float, speed: float, remaining: core.duration, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[126]
-            super().__init__(_type, [start, total, counter, duration, progress, speed, remaining])
+            attributes: list = [start, total, counter, duration, progress, speed, remaining]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def start(self) -> core.time:
             return self._get(self.type_.generated_offsets[0])
@@ -4177,7 +4280,8 @@ class util:
         def __init__(self, min: util.__T, max: util.__T, bins: int, open: bool, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[127]
-            super().__init__(_type, [min, max, bins, open])
+            attributes: list = [min, max, bins, open]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def min(self) -> util.__T:
             return self._get(self.type_.generated_offsets[0])
@@ -4210,7 +4314,8 @@ class util:
         def __init__(self, values: core.Array, capacity: int, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[128]
-            super().__init__(_type, [values, capacity])
+            attributes: list = [values, capacity]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def values(self) -> core.Array:
             return self._get(self.type_.generated_offsets[0])
@@ -4231,7 +4336,8 @@ class util:
         def __init__(self, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[129]
-            super().__init__(_type, [])
+            attributes: list = []
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
     @final
     class QuantizerSlotBound(Generic[__T], GreyCat.Object):
@@ -4240,7 +4346,8 @@ class util:
         def __init__(self, min: util.__T, max: util.__T, center: util.__T, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[130]
-            super().__init__(_type, [min, max, center])
+            attributes: list = [min, max, center]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def min(self) -> util.__T:
             return self._get(self.type_.generated_offsets[0])
@@ -4267,7 +4374,8 @@ class util:
         def __init__(self, values: core.Array, *, _type: Optional[GreyCat.Type] = None):
             if _type is None:
                 _type = GreyCat._DEFAULT.libs_by_name[_std._name].mapped[131]
-            super().__init__(_type, [values])
+            attributes: list = [values]
+            super().__init__(_type, [attributes[offset] for offset in _type.generated_offsets])
 
         def values(self) -> core.Array:
             return self._get(self.type_.generated_offsets[0])
