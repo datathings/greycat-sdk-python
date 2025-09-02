@@ -970,51 +970,37 @@ class GreyCat:
             self.greycat: Final[GreyCat] = greycat
             self.factory: GreyCat.Factory | None = None
             self.enum_values: Final[List[GreyCat.Enum]] | None
-            if offset == mapped_type_off:
-                if self.is_enum:
-                    self.enum_values = []
-                    enum_offset: int
-                    for enum_offset in range(len(type_attributes)):
-                        attributes: List[Any] = [
-                            enum_offset,
-                            type_attributes[enum_offset].name,
-                            None,
-                        ]
-                        if self.factory is None:
-                            self.enum_values.append(
-                                GreyCat.Enum(self, attributes))
-                        else:
-                            self.enum_values.append(
-                                self.factory(self, attributes))
-                else:
-                    self.enum_values = None
-            else:
-                self.enum_values = None
             self.loader: GreyCat.Loader | None = None
             self.static_values: List[Any] = []
             self.generated_offsets: List[int] = []
-
-# generic_abi_type: int = abi_type.genericAbiType
-# if 0 == generic_abi_type:
-#     fqn: str = abi_type.name
-#     if fqn in factories:
-#         factory = factories[fqn]
-#     if fqn in loaders:
-#         loader = loaders[fqn]
-# else:
-#     super_fqn: str = self.types[generic_abi_type].name
-#     if super_fqn in factories:
-#         factory = factories[super_fqn]
-#     if super_fqn in loaders:
-#         loader = loaders[super_fqn]
 
         def resolve_factory(self, factories: dict[str, GreyCat.Factory]) -> None:
             if 0 == self.genericAbiType and self.name in factories:
                 self.factory = factories[self.name]
             else:
                 self.factory = GreyCat.Type.__monomorphic_factory
+            if self.offset == self.mapped_type_off:
+                if self.is_enum:
+                    self.enum_values = []
+                    enum_offset: int
+                    for enum_offset in range(len(self.attributes)):
+                        enum_attributes: List[Any] = [
+                            enum_offset,
+                            self.attributes[enum_offset].name,
+                            None,
+                        ]
+                        if self.factory is None:
+                            self.enum_values.append(
+                                GreyCat.Enum(self, enum_attributes))
+                        else:
+                            self.enum_values.append(
+                                self.factory(self, enum_attributes))
+                else:
+                    self.enum_values = None
+            else:
+                self.enum_values = None
 
-        def resolve_loader(self, loaders: dict[str, GreyCat.Loader])-> None:
+        def resolve_loader(self, loaders: dict[str, GreyCat.Loader]) -> None:
             if 0 != self.genericAbiType:
                 self.loader = GreyCat.Type.__monomorphic_loader
             else:
