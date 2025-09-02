@@ -944,8 +944,6 @@ class GreyCat:
             is_enum: bool,
             is_native: bool,
             type_attributes: List[GreyCat.Type.Attribute],
-            factory: GreyCat.Factory | None,
-            loader: GreyCat.Loader | None,
             greycat: GreyCat,
         ) -> None:
             self.offset: Final[int] = offset
@@ -970,11 +968,7 @@ class GreyCat:
                     type_attributes[att_offset].name
                 ] = att_offset
             self.greycat: Final[GreyCat] = greycat
-            self.factory: Final[GreyCat.Factory]
-            if 0 == genericAbiType:
-                self.factory = factory
-            else:
-                self.factory = GreyCat.Type.__monomorphic_factory
+            self.factory: GreyCat.Factory | None = None
             self.enum_values: Final[List[GreyCat.Enum]] | None
             if offset == mapped_type_off:
                 if self.is_enum:
@@ -996,19 +990,43 @@ class GreyCat:
                     self.enum_values = None
             else:
                 self.enum_values = None
-            self.loader: Final[GreyCat.Loader]
-            if 0 != genericAbiType:
-                self.loader = GreyCat.Type.__monomorphic_loader
-            elif loader is not None:
-                self.loader = loader
-            elif self.is_native:
-                self.loader = GreyCat.Type.__error_loader
-            elif self.is_enum:
-                self.loader = GreyCat.Type.__enum_loader
-            else:
-                self.loader = GreyCat.Type.__object_loader
+            self.loader: GreyCat.Loader | None = None
             self.static_values: List[Any] = []
             self.generated_offsets: List[int] = []
+
+# generic_abi_type: int = abi_type.genericAbiType
+# if 0 == generic_abi_type:
+#     fqn: str = abi_type.name
+#     if fqn in factories:
+#         factory = factories[fqn]
+#     if fqn in loaders:
+#         loader = loaders[fqn]
+# else:
+#     super_fqn: str = self.types[generic_abi_type].name
+#     if super_fqn in factories:
+#         factory = factories[super_fqn]
+#     if super_fqn in loaders:
+#         loader = loaders[super_fqn]
+
+        def resolve_factory(self, factories: dict[str, GreyCat.Factory]) -> None:
+            if 0 == self.genericAbiType and self.name in factories:
+                self.factory = factories[self.name]
+            else:
+                self.factory = GreyCat.Type.__monomorphic_factory
+
+        def resolve_loader(self, loaders: dict[str, GreyCat.Loader])-> None:
+            if 0 != self.genericAbiType:
+                self.loader = GreyCat.Type.__monomorphic_loader
+            else:
+                loader: GreyCat.Loader | None = loaders[self.name] if self.name in loaders else None
+                if loader is not None:
+                    self.loader = loader
+                elif self.is_native:
+                    self.loader = GreyCat.Type.__error_loader
+                elif self.is_enum:
+                    self.loader = GreyCat.Type.__enum_loader
+                else:
+                    self.loader = GreyCat.Type.__object_loader
 
         def resolve_generated_offsets(self, *args: str) -> None:
             self.generated_offsets: List[int] = []
@@ -1309,19 +1327,6 @@ class GreyCat:
                         mapped,
                     )
                 )
-            factory: GreyCat.Factory | None = None
-            loader: GreyCat.Loader | None = None
-            if 0 == generic_abi_type:
-                if fqn in factories:
-                    factory = factories[fqn]
-                if fqn in loaders:
-                    loader = loaders[fqn]
-            else:
-                super_fqn: str = self.types[generic_abi_type].name
-                if super_fqn in factories:
-                    factory = factories[super_fqn]
-                if super_fqn in loaders:
-                    loader = loaders[super_fqn]
             abi_type: GreyCat.Type = GreyCat.Type(
                 type_offset,
                 fqn,
@@ -1337,13 +1342,15 @@ class GreyCat:
                 is_enum,
                 is_native,
                 type_attributes,
-                factory,
-                loader,
                 self,
             )
             if abi_type.mapped_type_off == type_offset and len(fqn) != 0:
                 self.types_by_name[abi_type.name] = abi_type
             self.types.append(abi_type)
+        abi_type: GreyCat.Type
+        for abi_type in self.types:
+            abi_type.resolve_factory(factories)
+            abi_type.resolve_loader(loaders)
         # step 3: create all functions
         functions_bytes: Final[int] = abi_stream.read_i64()
         functions_size: Final[int] = abi_stream.read_i32()
