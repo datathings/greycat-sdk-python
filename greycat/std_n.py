@@ -1628,17 +1628,17 @@ class std_n:
                 stream.write_i8(self.tensor_type)
                 dim: c_uint32
                 for dim in self.shape:
-                    stream.write_i32(dim)
-                stream.write_i32(self.size)
+                    stream.write_i64(dim)
+                stream.write_i64(self.size)
                 stream.write_i8_array(self.data)
 
             @staticmethod
             def load(type_: GreyCat.Type, stream: GreyCat._Stream) -> Any:
                 nb_dim: Final[int] = stream.read_i8()
                 tensor_type: Final[c_byte] = stream.read_i8()
-                shape: list[c_uint32] = [stream.read_i32()
+                shape: list[c_uint32] = [stream.read_i64()
                                          for _ in repeat(None, nb_dim)]
-                size: c_uint32 = stream.read_i32()
+                size: c_uint32 = stream.read_i64()
                 dtype = type_.greycat.types_by_name[greycat.core.TensorType.name_].enum_values[tensor_type]
                 format_: str
                 if dtype == greycat.core.TensorType[("i32", type_.greycat)]:
