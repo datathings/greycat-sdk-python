@@ -982,7 +982,7 @@ class GreyCat:
         def resolve_factory(self, factories: dict[str, GreyCat.Factory]) -> None:
             if 0 == self.genericAbiType and self.name in factories:
                 self.factory = factories[self.name]
-            elif 0 == self.is_enum:
+            elif self.is_enum:
                 self.factory = GreyCat.Type.__enum_factory
             else:
                 self.factory = GreyCat.Type.__monomorphic_factory
