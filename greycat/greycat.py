@@ -918,6 +918,11 @@ class GreyCat:
 
         @staticmethod
         @final
+        def __enum_factory(type: GreyCat.Type, parameters: list[Any]) -> GreyCat.Enum:
+            return GreyCat.Enum(type, parameters)
+
+        @staticmethod
+        @final
         def __monomorphic_factory(type: GreyCat.Type, parameters: list[Any]) -> Any:
             genericType: Final[GreyCat.Type] = type.greycat.types[type.genericAbiType]
             return genericType.factory(genericType, parameters)
@@ -977,6 +982,8 @@ class GreyCat:
         def resolve_factory(self, factories: dict[str, GreyCat.Factory]) -> None:
             if 0 == self.genericAbiType and self.name in factories:
                 self.factory = factories[self.name]
+            elif 0 == self.is_enum:
+                self.factory = GreyCat.Type.__enum_factory
             else:
                 self.factory = GreyCat.Type.__monomorphic_factory
             if self.offset == self.mapped_type_off:
