@@ -1614,9 +1614,9 @@ class std_n:
 
         class _Tensor(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
-                self.shape: list[c_uint32]
+                self.shape: list[int]
                 self.tensor_type: c_byte
-                self.size: c_uint32
+                self.size: int
                 self.data: bytes
                 self.dtype: greycat.core.TensorType
                 self.format: str
@@ -1636,10 +1636,10 @@ class std_n:
             def load(type_: GreyCat.Type, stream: GreyCat._Stream) -> Any:
                 nb_dim: Final[int] = stream.read_i8()
                 tensor_type: Final[c_byte] = stream.read_i8()
-                shape: list[c_uint32] = [stream.read_i64()
+                shape: list[int] = [stream.read_i64()
                                          for _ in repeat(None, nb_dim)]
-                size: c_uint32 = stream.read_i64()
-                dtype = type_.greycat.types_by_name[greycat.core.TensorType.name_].enum_values[tensor_type]
+                size: int = stream.read_i64()
+                dtype: greycat.core.TensorType = type_.greycat.types_by_name[greycat.core.TensorType.name_].enum_values[tensor_type]
                 format_: str
                 if dtype == greycat.core.TensorType[("i32", type_.greycat)]:
                     format_ = "=i"
@@ -1672,7 +1672,7 @@ class std_n:
                 for index, dim_key in enumerate(key):
                     if index < len(self.shape) - 1:
                         offset += dim_key * \
-                            sum(dim.value for dim in self.shape[index + 1:])
+                            sum(dim for dim in self.shape[index + 1:])
                     else:
                         offset += dim_key
                 unpacked: Tuple = unpack(self.format, self.data[slice(
@@ -1697,7 +1697,7 @@ class std_n:
                     dtype = numpy.dtype('complex128')
                 else:
                     raise ValueError(f"${self.tensor_type}")
-                return numpy.frombuffer(self.data, dtype=dtype).reshape([dim.value for dim in self.shape])
+                return numpy.frombuffer(self.data, dtype=dtype).reshape([dim for dim in self.shape])
 
             @staticmethod
             def from_numpy(greycat_: GreyCat, nda: numpy.ndarray) -> std_n.core._Table:
@@ -1759,7 +1759,7 @@ class std_n:
                         dtype = numpy.dtype('complex128')
                     else:
                         raise ValueError(f"${self.tensor_type}")
-                    return tensorflow.constant(numpy.frombuffer(self.data, dtype=dtype), [dim.value for dim in self.shape])
+                    return tensorflow.constant(numpy.frombuffer(self.data, dtype=dtype), [dim for dim in self.shape])
 
                 @staticmethod
                 def from_tf_tensor(tf_tensor: tensorflow.Tensor, tf_session: tensorflow.compat.v1.Session | None = None, greycat: GreyCat | None = None) -> std_n.core._Tensor:
@@ -1788,7 +1788,7 @@ class std_n:
                         dtype = torch.complex128
                     else:
                         raise ValueError(f"${self.tensor_type}")
-                    return torch.frombuffer(self.data, dtype=dtype, requires_grad=requires_grad).reshape([dim.value for dim in self.shape])
+                    return torch.frombuffer(self.data, dtype=dtype, requires_grad=requires_grad).reshape([dim for dim in self.shape])
 
                 @staticmethod
                 def from_torch_tensor(greycat_: GreyCat, torch_tensor: torch.Tensor) -> std_n.core._Table:
