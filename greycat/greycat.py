@@ -838,6 +838,7 @@ class GreyCat:
                 mapped_any_offset: int,
                 mapped_att_offset: int,
                 sbi_type: int,
+                precision: int,
                 nullable: bool,
                 mapped: bool,
             ):
@@ -847,8 +848,23 @@ class GreyCat:
                 self.mapped_any_offset: Final[int] = mapped_any_offset
                 self.mapped_att_offset: Final[int] = mapped_att_offset
                 self.sbi_type: Final[int] = sbi_type
+                self.precision = precision
                 self.nullable: Final[bool] = nullable
                 self.mapped: Final[bool] = mapped
+
+        f64_u64_dividers: list[float] = [
+            1.0,
+            10.0,
+            100.0,
+            1000.0,
+            10000.0,
+            100000.0,
+            1000000.0,
+            10000000.0,
+            100000000.0,
+            1000000000.0,
+            10000000000.0,
+        ]
 
         @staticmethod
         @final
@@ -905,6 +921,9 @@ class GreyCat:
                     if field_type.is_ambiguous or type.greycat.type_offset_core_any == field_type.offset or ((not field_type.is_native) and att.sbi_type == PrimitiveType.UNDEFINED):
                         field_type = type.greycat.types[stream.read_vu32()]
                     loaded_field = field_type.loader(field_type, stream)
+                elif PrimitiveType.FLOAT == load_type and att.precision != 0:
+                    loaded_field = float(stream.read_vu64()) / \
+                        GreyCat.Type.f64_u64_dividers[att.precision]
                 else:
                     loaded_field = GreyCat._Stream._PRIMITIVE_LOADERS[
                         load_type
@@ -1104,10 +1123,17 @@ class GreyCat:
                     else:
                         stream.write_vi64(value)
                 elif field.sbi_type == PrimitiveType.FLOAT:
-                    if type(value) is c_double:
-                        stream.write_f64(value.value)
+                    if 0 == field.precision:
+                        if type(value) is c_double:
+                            stream.write_f64(value.value)
+                        else:
+                            stream.write_f64(value)
                     else:
-                        stream.write_f64(value)
+                        if type(value) is c_double:
+                            stream.write_vu64(
+                                int(value.value / field.precision))
+                        else:
+                            stream.write_vu64(int(value / field.precision))
                 elif field.sbi_type == PrimitiveType.NODE:
                     o._save(stream)
                 elif field.sbi_type == PrimitiveType.NODE_TIME:
@@ -1316,6 +1342,7 @@ class GreyCat:
                         mapped_any_offset,
                         mapped_att_offset,
                         sbi_type,
+                        precision,
                         nullable,
                         mapped,
                     )
