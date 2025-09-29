@@ -11,6 +11,6 @@
 /project.gcp
 
 /data
-/sandbox.gcl
-/tests/sandbox.py
+/project_types.py
+/tests/debug.py
 .idea

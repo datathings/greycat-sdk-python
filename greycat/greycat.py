@@ -1181,7 +1181,7 @@ class GreyCat:
                             stream.write_i8_array(data, 0, len(data))
                     else:
                         o: GreyCat.Object = value
-                        if field.abi_type != o.type_.offset and self.type_.greycat.types[field.abi_type].genericAbiType != o.type_.offset:
+                        if self.type_.greycat.types[field.abi_type].is_ambiguous:
                             stream.write_vu32(o.type_.offset)
                             o._save(stream, None)
                         else:
