@@ -1,16 +1,5 @@
 @library("std", "7.2.293-stable");
 
-@volatile
-type Foo {
-    a: Map<String, any?>;
-}
-
-@expose
-fn foo(test: Foo) {
-    println(test);
-}
-
-
 fn main() {
   var user: User = User {
     id: 0,
