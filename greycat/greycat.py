@@ -1248,13 +1248,30 @@ class GreyCat:
     class Files:  # TODO?
         pass
 
-    def __init__(self: GreyCat, url: str, username: str | None = None, password: str | None = None, use_cookie: bool = False, set_default: bool = True) -> None:
-        GreyCat._DEFAULT: GreyCat | None = None
+    class __Credentials:
+        username: str
+        password: str
+
+        def __init__(self, d: dict):
+            self.__dict__.update(d)
+
+    """
+    GreyCat.__init__
+    - url: URL to GreyCat server or local file.
+    - login: supports both username+password as dict `GreyCat(url, login={"username": "user, "password": "changeme"})` and token as str `GreyCat(url, login="...")`.
+    - use_cookie: on login, get GreyCat token in header, in addition to the response payload; unused.
+    - set_default: set GreyCat._DEFAULT to self
+    """
+    def __init__(self: GreyCat, url: str, login: dict | str | None = None, use_cookie: bool = False, set_default: bool = True) -> None:
 
         self.__runtime_url: Final[str] = url
         self.__token: str | None = None
-        if username is not None and password is not None:
-            self.login(username, password, use_cookie)
+        if isinstance(login, str):
+            self.token_login(login, use_cookie)
+        elif isinstance(login, dict):
+            self.login(GreyCat.__Credentials(login), use_cookie)
+        elif login is not None:
+            pass  # TODO: warn
         self.libs_by_name: Final[dict[str, GreyCat.Library]] = {}
         # for declarations
         cls: type[GreyCat.Library]
@@ -1610,7 +1627,7 @@ class GreyCat:
         stream.close()
         return res
 
-    def login(self, username: str, password: str, use_cookie: bool = False) -> None:
+    def token_login(self, token: str, use_cookie: bool = False) -> None:
         connection: http.client.HTTPConnection | http.client.HTTPSConnection
         if self.__runtime_url.startswith("http://"):
             connection: http.client.HTTPConnection = http.client.HTTPConnection(
@@ -1622,9 +1639,37 @@ class GreyCat:
             )
         else:
             raise ValueError
-        credentials = base64.b64encode(
-            f"{username}:{hashlib.sha256(password.encode('utf-8')).hexdigest()}".encode("utf-8")).decode("utf-8")
-        body = json.dumps([credentials, use_cookie])
+        body = json.dumps([token, use_cookie])
+        connection.request(
+            "POST",
+            "/runtime::User::tokenLogin",
+            body,
+            {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+        )
+        response: http.client.HTTPResponse = connection.getresponse()
+        status: int = response.status
+        if 200 > status or 300 <= status:
+            raise RuntimeError(f'HTTP {status}: {response.reason}"')
+        self.__token = json.loads(response.read().decode("utf-8"))
+
+    def login(self, credentials: GreyCat.__Credentials, use_cookie: bool = False) -> None:
+        connection: http.client.HTTPConnection | http.client.HTTPSConnection
+        if self.__runtime_url.startswith("http://"):
+            connection: http.client.HTTPConnection = http.client.HTTPConnection(
+                self.__runtime_url.replace("http://", "")
+            )
+        elif self.__runtime_url.startswith("https://"):
+            connection: http.client.HTTPSConnection = http.client.HTTPSConnection(
+                self.__runtime_url.replace("https://", "")
+            )
+        else:
+            raise ValueError
+        encoded_credentials = base64.b64encode(
+            f"{credentials.username}:{hashlib.sha256(credentials.password.encode('utf-8')).hexdigest()}".encode("utf-8")).decode("utf-8")
+        body = json.dumps([encoded_credentials, use_cookie])
         connection.request(
             "POST",
             "/runtime::User::login",
