@@ -13,6 +13,7 @@ import os
 import socket
 from struct import pack, unpack
 from typing import *
+from urllib.parse import urlencode, urlparse
 import greycat
 
 
@@ -1759,3 +1760,142 @@ class GreyCat:
             return self.__get_remote_abi(runtime_url)
         else:
             return self.__get_local_abi(runtime_url)
+        
+    def put_file(self, remote_path: str, local_path: str) -> None:
+        connection: http.client.HTTPConnection | http.client.HTTPSConnection
+        if self.__runtime_url.startswith("http://"):
+            connection: http.client.HTTPConnection = http.client.HTTPConnection(
+                self.__runtime_url.replace("http://", "")
+            )
+        elif self.__runtime_url.startswith("https://"):
+            connection: http.client.HTTPSConnection = http.client.HTTPSConnection(
+                self.__runtime_url.replace("https://", "")
+            )
+        else:
+            raise ValueError
+        
+        route = f"/files/{remote_path}"
+        
+        file_size = os.path.getsize(local_path)
+        
+        headers: dict[str, str] = {
+            "Accept": "application/octet-stream",
+            "Content-Length": str(file_size)
+        }
+        if self.__token is not None:
+            headers["Authorization"] = self.__token
+        
+        connection.request(
+            "PUT",
+            route,
+            None,
+            headers,
+        )
+        
+        with open(local_path, "rb") as f:
+            chunk_size = 8192
+            while True:
+                chunk = f.read(chunk_size)
+                if not chunk:
+                    break
+                connection.send(chunk)
+        
+        response: http.client.HTTPResponse = connection.getresponse()
+        status: int = response.status
+        
+        if 200 > status or 300 <= status:
+            raise RuntimeError(f'HTTP {status}: {response.reason}"')
+        
+    def delete_file(self, remote_path: str) -> None:
+        connection: http.client.HTTPConnection | http.client.HTTPSConnection
+        if self.__runtime_url.startswith("http://"):
+            connection: http.client.HTTPConnection = http.client.HTTPConnection(
+                self.__runtime_url.replace("http://", "")
+            )
+        elif self.__runtime_url.startswith("https://"):
+            connection: http.client.HTTPSConnection = http.client.HTTPSConnection(
+                self.__runtime_url.replace("https://", "")
+            )
+        else:
+            raise ValueError
+        
+        route = f"/files/{remote_path}"
+        
+        headers: dict[str, str] = {
+            "Accept": "application/octet-stream",
+        }
+        
+        if self.__token is not None:
+            headers["Authorization"] = self.__token
+        
+        connection.request(
+            "DELETE",
+            route,
+            None,
+            headers,
+        )
+        
+        response: http.client.HTTPResponse = connection.getresponse()
+        status: int = response.status
+        
+        if 200 > status or 300 <= status:
+            raise RuntimeError(f'HTTP {status}: {response.reason}"')
+        
+    def get_file_response(self, remote_path:str, offset: int | None = None, max_: int | None = None) -> http.client.HTTPResponse:
+        connection: http.client.HTTPConnection | http.client.HTTPSConnection
+        if self.__runtime_url.startswith("http://"):
+            connection: http.client.HTTPConnection = http.client.HTTPConnection(
+                self.__runtime_url.replace("http://", "")
+            )
+        elif self.__runtime_url.startswith("https://"):
+            connection: http.client.HTTPSConnection = http.client.HTTPSConnection(
+                self.__runtime_url.replace("https://", "")
+            )
+        else:
+            raise ValueError
+        
+        route = f"/files/{remote_path}"
+        query_params = {}
+        if offset is not None:
+            query_params['offset'] = str(offset)
+        if max_ is not None:
+            query_params['max'] = str(max_)
+        query_string = f"?{urlencode(query_params)}" if query_params else ""
+        
+        headers: dict[str, str] = {}
+        
+        full_path = route + query_string
+        
+        if self.__token is not None:
+            headers["Authorization"] = self.__token
+        
+        connection.request(
+            "GET", 
+            full_path,
+            None,
+            headers
+        )
+        
+        response: http.client.HTTPResponse = connection.getresponse()
+        
+        if response.status == 200:
+            return response
+        elif response.status == 404:
+            raise FileNotFoundError(f"file '{remote_path}' not found")
+        elif response.status == 403:
+            raise PermissionError(f"file '{remote_path}' access forbidden")
+        elif response.status == 401:
+            raise PermissionError("unauthorized")
+        else:
+            raise RuntimeError(f"unexpected error while getting file '{remote_path}' (status {response.status})")
+        
+    def get_file(self, remote_path: str, offset: int | None = None, max_: int | None = None):
+        response = self.get_file_response(remote_path, offset, max_)
+        data = response.read()
+        if remote_path.endswith(".json"):
+            return json.loads(data)
+        elif remote_path.endswith(".gcb"):
+            stream = GreyCat._Stream(self, BufferedReader(BytesIO(data)))
+            stream.read_abi_header()
+            return GreyCat.AbiReader(stream).read()
+        return data.decode()
