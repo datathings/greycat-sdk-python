@@ -1131,9 +1131,9 @@ class GreyCat:
                     else:
                         if type(value) is c_double:
                             stream.write_vu64(
-                                int(value.value / field.precision))
+                                int(value.value * GreyCat.Type.f64_u64_dividers[field.precision]))
                         else:
-                            stream.write_vu64(int(value / field.precision))
+                            stream.write_vu64(int(value * GreyCat.Type.f64_u64_dividers[field.precision]))
                 elif field.sbi_type == PrimitiveType.NODE:
                     o._save(stream)
                 elif field.sbi_type == PrimitiveType.NODE_TIME:
