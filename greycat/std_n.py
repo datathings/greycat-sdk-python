@@ -1615,7 +1615,7 @@ class std_n:
         class _Tensor(GreyCat.Object):
             def __init__(self, type: GreyCat.Type) -> None:
                 self.shape: list[int]
-                self.tensor_type: c_byte
+                self.tensor_type: int
                 self.size: int
                 self.data: bytes
                 self.dtype: greycat.core.TensorType
@@ -1624,13 +1624,13 @@ class std_n:
 
             @final
             def _save(self, stream: GreyCat._Stream, type_offset: int | None = None) -> None:
-                stream.write_i8(c_byte(len(self.shape)))
+                stream.write_i8(len(self.shape))
                 stream.write_i8(self.tensor_type)
-                dim: c_uint32
+                dim: int
                 for dim in self.shape:
                     stream.write_i64(dim)
                 stream.write_i64(self.size)
-                stream.write_i8_array(self.data)
+                stream.write_i8_array(self.data, 0, len(self.data))
 
             @staticmethod
             def load(type_: GreyCat.Type, stream: GreyCat._Stream) -> Any:
@@ -1733,9 +1733,9 @@ class std_n:
                     raise ValueError(
                         f"Only int, float and complex dtypes are allowed: {nda.dtype}")
                 type_: GreyCat.Type = greycat_.types_by_name["core::Tensor"]
-                tensor: std_n.core._Tensor = type_.factory(type_, None)
-                tensor.shape = [c_uint32(dim) for dim in nda.shape]
-                tensor.tensor_type = c_byte(dtype.offset)
+                tensor: std_n.core._Tensor = type_.factory(type_, [])
+                tensor.shape = [dim for dim in nda.shape]
+                tensor.tensor_type = dtype.offset
                 tensor.dtype = dtype
                 tensor.format = format_
                 tensor.data = nda.tobytes()
@@ -1823,8 +1823,8 @@ class std_n:
                             f"Only int, float and complex dtypes are allowed: {torch_tensor.dtype}")
                     type_: GreyCat.Type = greycat_.types_by_name["core::Tensor"]
                     tensor: std_n.core._Tensor = type_.factory(type_, None)
-                    tensor.shape = [c_uint32(dim) for dim in tensor.shape]
-                    tensor.tensor_type = c_byte(dtype.offset)
+                    tensor.shape = [dim for dim in tensor.shape]
+                    tensor.tensor_type = dtype.offset
                     tensor.dtype = dtype
                     tensor.format = format_
                     tensor.data = bytes(
