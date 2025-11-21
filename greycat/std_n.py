@@ -1822,7 +1822,7 @@ class std_n:
                         raise ValueError(
                             f"Only int, float and complex dtypes are allowed: {torch_tensor.dtype}")
                     type_: GreyCat.Type = greycat_.types_by_name["core::Tensor"]
-                    tensor: std_n.core._Tensor = type_.factory(type_, None)
+                    tensor: std_n.core._Tensor = type_.factory(type_, [])
                     tensor.shape = [dim for dim in tensor.shape]
                     tensor.tensor_type = dtype.offset
                     tensor.dtype = dtype
