@@ -1,4 +1,4 @@
-@library("std", "7.5.0-dev");
+@library("std", "7.5.122-dev");
 
 fn main() {
   var user: User = User {
