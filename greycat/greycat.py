@@ -192,21 +192,14 @@ class PrimitiveType:
     CUBIC: int = 13
     STATIC_FIELD: int = 14
     OBJECT: int = 15
-    T2: int = 16
-    T3: int = 17
-    T4: int = 18
-    STR: int = 19
-    T2F: int = 20
-    T3F: int = 21
-    T4F: int = 22
-    BLOCK_REF: int = 23
-    BLOCK_INLINE: int = 24
-    FUNCTION: int = 25
-    UNDEFINED: int = 26
-    TYPE: int = 27
-    FIELD: int = 28
-    STRING_LIT: int = 29
-    SIZE: int = 30
+    BLOCK_REF: int = 16
+    BLOCK_INLINE: int = 17
+    FUNCTION: int = 18
+    UNDEFINED: int = 19
+    TYPE: int = 20
+    FIELD: int = 21
+    STRING_LIT: int = 22
+    SIZE: int = 23
 
 
 class ByteArrayIO(BufferedIOBase):
@@ -734,48 +727,6 @@ class GreyCat:
             stream.read_object()
         )
 
-        __t2_loader: Final[Callable[[GreyCat._Stream], object]] = lambda stream: (
-            GreyCat._Stream.__type_loader(
-                stream, stream.greycat.types[stream.greycat.type_offset_core_t2]
-            )
-        )
-
-        __t3_loader: Final[Callable[[GreyCat._Stream], object]] = lambda stream: (
-            GreyCat._Stream.__type_loader(
-                stream, stream.greycat.types[stream.greycat.type_offset_core_t3]
-            )
-        )
-
-        __t4_loader: Final[Callable[[GreyCat._Stream], object]] = lambda stream: (
-            GreyCat._Stream.__type_loader(
-                stream, stream.greycat.types[stream.greycat.type_offset_core_t4]
-            )
-        )
-
-        __str_loader: Final[Callable[[GreyCat._Stream], object]] = lambda stream: (
-            GreyCat._Stream.__type_loader(
-                stream, stream.greycat.types[stream.greycat.type_offset_core_str]
-            )
-        )
-
-        __t2f_loader: Final[Callable[[GreyCat._Stream], object]] = lambda stream: (
-            GreyCat._Stream.__type_loader(
-                stream, stream.greycat.types[stream.greycat.type_offset_core_t2f]
-            )
-        )
-
-        __t3f_loader: Final[Callable[[GreyCat._Stream], object]] = lambda stream: (
-            GreyCat._Stream.__type_loader(
-                stream, stream.greycat.types[stream.greycat.type_offset_core_t3f]
-            )
-        )
-
-        __t4f_loader: Final[Callable[[GreyCat._Stream], object]] = lambda stream: (
-            GreyCat._Stream.__type_loader(
-                stream, stream.greycat.types[stream.greycat.type_offset_core_t4f]
-            )
-        )
-
         ___type_loader: Final[Callable[[GreyCat._Stream], object]] = lambda stream: (
             GreyCat._Stream.__type_loader(
                 stream, stream.greycat.types[stream.greycat.type_offset_core_type]
@@ -813,13 +764,6 @@ class GreyCat:
         _PRIMITIVE_LOADERS[PrimitiveType.DURATION] = __duration_loader
         _PRIMITIVE_LOADERS[PrimitiveType.STATIC_FIELD] = __object_loader
         _PRIMITIVE_LOADERS[PrimitiveType.OBJECT] = __object_loader
-        _PRIMITIVE_LOADERS[PrimitiveType.T2] = __t2_loader
-        _PRIMITIVE_LOADERS[PrimitiveType.T3] = __t3_loader
-        _PRIMITIVE_LOADERS[PrimitiveType.T4] = __t4_loader
-        _PRIMITIVE_LOADERS[PrimitiveType.STR] = __str_loader
-        _PRIMITIVE_LOADERS[PrimitiveType.T2F] = __t2f_loader
-        _PRIMITIVE_LOADERS[PrimitiveType.T3F] = __t3f_loader
-        _PRIMITIVE_LOADERS[PrimitiveType.T4F] = __t4f_loader
         _PRIMITIVE_LOADERS[PrimitiveType.TYPE] = ___type_loader
         _PRIMITIVE_LOADERS[PrimitiveType.FIELD] = __field_loader
         _PRIMITIVE_LOADERS[PrimitiveType.BLOCK_REF] = __error_loader
@@ -1524,41 +1468,6 @@ class GreyCat:
         if tmp is None:
             raise ValueError("wrong state")
         self.type_offset_core_node: Final[int] = tmp.offset
-
-        tmp = self.types_by_name["core::t2"]
-        if tmp is None:
-            raise ValueError("wrong state")
-        self.type_offset_core_t2: Final[int] = tmp.offset
-
-        tmp = self.types_by_name["core::t3"]
-        if tmp is None:
-            raise ValueError("wrong state")
-        self.type_offset_core_t3: Final[int] = tmp.offset
-
-        tmp = self.types_by_name["core::t4"]
-        if tmp is None:
-            raise ValueError("wrong state")
-        self.type_offset_core_t4: Final[int] = tmp.offset
-
-        tmp = self.types_by_name["core::str"]
-        if tmp is None:
-            raise ValueError("wrong state")
-        self.type_offset_core_str: Final[int] = tmp.offset
-
-        tmp = self.types_by_name["core::t2f"]
-        if tmp is None:
-            raise ValueError("wrong state")
-        self.type_offset_core_t2f: Final[int] = tmp.offset
-
-        tmp = self.types_by_name["core::t3f"]
-        if tmp is None:
-            raise ValueError("wrong state")
-        self.type_offset_core_t3f: Final[int] = tmp.offset
-
-        tmp = self.types_by_name["core::t4f"]
-        if tmp is None:
-            raise ValueError("wrong state")
-        self.type_offset_core_t4f: Final[int] = tmp.offset
 
         tmp = self.types_by_name["core::type"]
         if tmp is None:
