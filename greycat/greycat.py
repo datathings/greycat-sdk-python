@@ -1120,15 +1120,6 @@ class GreyCat:
                 elif field.sbi_type == PrimitiveType.GEO:
                     o = value
                     o._save(stream)
-                elif field.sbi_type == PrimitiveType.T2:
-                    o = value
-                    o._save(stream)
-                elif field.sbi_type == PrimitiveType.T3:
-                    o = value
-                    o._save(stream)
-                elif field.sbi_type == PrimitiveType.T4:
-                    o = value
-                    o._save(stream)
                 elif field.sbi_type == PrimitiveType.TIME:
                     o = value
                     o._save(stream)
